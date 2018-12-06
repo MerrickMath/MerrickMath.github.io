@@ -14,7 +14,7 @@ Welcome to my website. This is a collection of material that I have compiled ove
 
 
 # Undergraduate Mathematics 
-## [Calculus](Calculs.md) 
+## [Calculus](Calculus.md) 
 ## [Linear Algebra](LinearAlgebra.md)
 ## [Discrete Math](DiscreteMath.md)
 
