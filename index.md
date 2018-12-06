@@ -1,11 +1,15 @@
-## High School Mathematics 
-# Math 10C
-# Math 20-1
-# Math 20-2
-# Math 30-1
-# Math 30-2
-# Math 30-3 
-# Math 31 
+# High School Mathematics 
+## Math 10C
+## Math 20-1
+## Math 20-2
+## Math 30-1
+## Math 30-2
+## Math 30-3 
+## Math 31 
+
+# Undergraduate Mathematics 
+## Statistics 
+## Calculus 
 
 You can use the [editor on GitHub](https://github.com/MrFanning/MrFanning.github.io/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
 
