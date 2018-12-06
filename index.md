@@ -11,10 +11,11 @@
 ## Math 31 
 
 # Undergraduate Mathematics 
-## Statistics 
 ## Calculus 
+## Discrete Math 
+
+# Undergraduate Statistics 
+
 
 [editor on GitHub](https://github.com/MrFanning/MrFanning.github.io/edit/master/index.md) 
 
-
-[GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
