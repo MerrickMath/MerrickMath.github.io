@@ -12,5 +12,5 @@
 
 ## Python Project
 
-* <a href="https://mrfanning.github.io/Math10/AN/AN2/AN2I.pdf"> Python Project </a> 
-* <a href="https://mrfanning.github.io/Math10/AN/AN2/AN2I.pdf"> Python Project Cheat Sheet </a> 
+* <a href="https://mrfanning.github.io/Math10/ProjectPython/ProjectSolutions.pdf"> Python Project </a> 
+* <a href="https://mrfanning.github.io/Math10/ProjectPython/CheatSheet.pdf"> Python Project Cheat Sheet </a> 
