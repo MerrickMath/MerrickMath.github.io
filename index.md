@@ -1,4 +1,4 @@
-Welcome to my website. This is a collection of material that I have compiled over the years I have worked as an educator.
+Welcome to my website. This is a collection of material that I have compiled over the time I have worked as an educator.
 
 # High School Mathematics 
 
