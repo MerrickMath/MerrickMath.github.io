@@ -1,3 +1,7 @@
 theme: jekyll-theme-cayman
 title: A Naive Bae  
 description: A Space For Mathematics And Statistics Education 
+
+
+include: 
+- _pages
