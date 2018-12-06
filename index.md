@@ -1,7 +1,7 @@
 Welcome to my website. This is a collection of material that I have compiled over the years I have worked as an educator.
 
 # High School Mathematics 
-## Math 10C
+## <a href="http://example.com/" target="_blank"> Math 10C </a>
 [editor on GitHub](https://github.com/MrFanning/MrFanning.github.io/edit/master/index.md) 
 ### Measurement 
 ### Algebra And Number 
@@ -13,7 +13,7 @@ Welcome to my website. This is a collection of material that I have compiled ove
 ## Math 30-3 
 ## Math 31 
 
-<a href="http://example.com/" target="_blank">Hello, world!</a>
+
 
 # Undergraduate Mathematics 
 ## Calculus 
