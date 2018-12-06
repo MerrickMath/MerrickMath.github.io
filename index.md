@@ -3,22 +3,20 @@ Welcome to my website. This is a collection of material that I have compiled ove
 # High School Mathematics 
 
 ## [Math 10C](Math10c.md) 
-
-### Measurement 
-### Algebra And Number 
-### Relations and Functions 
 ## [Math 20-1](Math201.md)
-## Math 20-2
-## Math 30-1
-## Math 30-2
-## Math 30-3 
-## Math 31 
+## [Math 20-2](Math202.md)
+
+## [Math 30-1](Math301.md)
+## [Math 30-2](Math302.md)
+## [Math 30-3](Math303.md)
+## [Math 31](Math31.md)
 
 
 
 # Undergraduate Mathematics 
-## Calculus 
-## Discrete Math 
+## [Calculus](Calculs.md) 
+## [Linear Algebra](LinearAlgebra.md)
+## [Discrete Math](DiscreteMath.md)
 
 # Undergraduate Statistics 
 
