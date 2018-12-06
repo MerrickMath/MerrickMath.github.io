@@ -8,6 +8,7 @@
 * <a href="https://mrfanning.github.io/Math10/AN/AN2/AN2Review.pdf"> AN2 Review </a>
 
 ## Relations And Functions 
+* Relations Vs. Functions  
 
 ## Python Project
 
