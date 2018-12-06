@@ -2,11 +2,9 @@ Welcome to my website. This is a collection of material that I have compiled ove
 
 # High School Mathematics 
 
-## <a href="http://example.com/" target="_blank"> Math 10C </a>
-[editor on GitHub](https://github.com/MrFanning/MrFanning.github.io/edit/master/index.md) 
+## [Math 10C](.md) 
 
 ### Measurement 
-[a relative link](another-page.md)
 ### Algebra And Number 
 ### Relations and Functions 
 ## Math 20-1
