@@ -2,6 +2,7 @@ Welcome to my website. This is a collection of material that I have compiled ove
 
 # High School Mathematics 
 ## Math 10C
+[editor on GitHub](https://github.com/MrFanning/MrFanning.github.io/edit/master/index.md) 
 ### Measurement 
 ### Algebra And Number 
 ### Relations and Functions 
@@ -18,6 +19,4 @@ Welcome to my website. This is a collection of material that I have compiled ove
 
 # Undergraduate Statistics 
 
-
-[editor on GitHub](https://github.com/MrFanning/MrFanning.github.io/edit/master/index.md) 
 
