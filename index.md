@@ -3,6 +3,7 @@ Welcome to my website. This is a collection of material that I have compiled ove
 # High School Mathematics 
 
 ## [Math 10C](Math10C.md)
+<hr />
 ## [Math 20-1](Math201.md)
 ## [Math 20-2](Math202.md)
 
