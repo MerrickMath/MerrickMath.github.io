@@ -1,3 +1,5 @@
+Welcome to my website. This is a collection of material that I have compiled over the time I have worked as an educator of mathematics and statistics.
+
 # High School Mathematics 
 
 ## [Math 10C](Math10c.md) 
