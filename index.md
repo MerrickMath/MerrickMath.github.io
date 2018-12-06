@@ -2,7 +2,7 @@ Welcome to my website. This is a collection of material that I have compiled ove
 
 # High School Mathematics 
 
-## [Math 10C](.md) 
+## [Math 10C](index.md) 
 
 ### Measurement 
 ### Algebra And Number 
