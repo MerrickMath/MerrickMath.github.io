@@ -3,6 +3,9 @@
 ## Measurement 
 ## Algebra And Number 
 ### Outcome 1 
+* Prime Factorization 
+* Greatest Common Factor/Lowest Common Multiple
+* Square Roots/Cube Roots 
 ### Outcome 2
 * <a href="https://mrfanning.github.io/Math10/AN/AN2/AN2I.pdf"> Irrational Numbers And Radical Conversions </a>
 * <a href="https://mrfanning.github.io/Math10/AN/AN2/AN2II.pdf"> Approximating Radicals </a>
