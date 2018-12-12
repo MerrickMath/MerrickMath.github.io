@@ -27,6 +27,4 @@
 * Relations Vs. Functions  
 
 ## Python Project
-
-* <a href="https://mrfanning.github.io/Math10/ProjectPython/ProjectStudents.pdf"> Python Project </a> 
-* <a href="https://mrfanning.github.io/Math10/ProjectPython/CheatSheet.pdf"> Python Project Cheat Sheet </a> 
+* <a href="https://mrfanning.github.io/MrFanning.github.io-PythonProject/"> Python Project </a> 
