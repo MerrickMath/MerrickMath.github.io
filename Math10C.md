@@ -26,5 +26,7 @@
 ## Relations And Functions 
 * Relations Vs. Functions  
 
-## Python Project
+## Projects
 * <a href="https://mrfanning.github.io/MrFanning.github.io-PythonProject/"> Python Project </a> 
+
+## Assignments 
