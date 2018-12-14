@@ -3,6 +3,7 @@
 # Measurement 
 
 ### Assignments
+### Videos
 
 # Algebra And Number 
 
@@ -25,11 +26,13 @@
 ### Outcome 5
 ### Outcome 6
 ### Assignments
+### Videos
 
 # Relations And Functions 
 * Relations Vs. Functions
 
 ### Assignments
+### Videos
 
 # Projects
 * <a href="https://mrfanning.github.io/MrFanning.github.io-PythonProject/"> Python Project </a> 
