@@ -4,7 +4,7 @@
 ### Notes
 ### Assignments
 ### Videos
-
+---
 # Algebra And Number 
 ### Notes 
 #### Outcome 1 
