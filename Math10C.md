@@ -28,10 +28,13 @@
 ### Assignments
 ### Videos
 ---
-# Relations And Functions 
+# Relations And Functions
+
 ### Notes 
 * Relations Vs. Functions
+
 ### Assignments
+
 ### Videos
 ---
 # Projects
