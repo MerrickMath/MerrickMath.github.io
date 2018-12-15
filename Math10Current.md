@@ -1,1 +1,1 @@
-Welcome to Math 10. This page will contain all the materials we will be using over the course of the class. Materials covered in class will be added after they have been convered. 
+Welcome to Math 10. This page will contain all the materials we will be using over the course of the class. Materials covered in class will be added after they have been convered. If you wish to work ahead visit the filled in math 10 page. 
