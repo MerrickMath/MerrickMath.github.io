@@ -1,13 +1,13 @@
 # Math 10C 
 
 # Measurement 
-
+### Notes
 ### Assignments
 ### Videos
 
 # Algebra And Number 
-
-### Outcome 1 
+### Notes 
+#### Outcome 1 
 * Prime Factorization 
 * Greatest Common Factor/Lowest Common Multiple
 * Square Roots/Cube Roots 
