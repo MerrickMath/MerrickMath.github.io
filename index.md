@@ -1,4 +1,4 @@
-# Corrently Teaching 
+# Currently Teaching 
 ## [Math 10C](Math10C.md)
 
 # High School Mathematics 
