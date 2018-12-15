@@ -1,5 +1,5 @@
 # Math 10C 
-
+---
 # Measurement 
 ### Notes
 ### Assignments
@@ -27,13 +27,13 @@
 #### Outcome 6
 ### Assignments
 ### Videos
-
+---
 # Relations And Functions 
 ### Notes 
 * Relations Vs. Functions
 ### Assignments
 ### Videos
-
+---
 # Projects
 * <a href="https://mrfanning.github.io/MrFanning.github.io-PythonProject/"> Python Project </a> 
 
