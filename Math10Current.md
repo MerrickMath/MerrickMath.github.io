@@ -2,18 +2,6 @@ Welcome to Math 10. This page will contain all the materials we will be using ov
 
 ---
 
-# Measurement 
-### Notes
-### Assignments
-### Videos
----
-# Algebra And Number 
-### Notes 
-#### Outcome 1 
-* Prime Factorization 
-* Greatest Common Factor/Lowest Common Multiple
-* Square Roots/Cube Roots 
-
 #### Outcome 2
 * <a href="https://mrfanning.github.io/Math10/AN/AN2/AN2I.pdf"> Irrational Numbers And Radical Conversions </a>
 * <a href="https://mrfanning.github.io/Math10/AN/AN2/AN2II.pdf"> Approximating Radicals </a>
