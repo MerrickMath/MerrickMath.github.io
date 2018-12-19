@@ -25,4 +25,4 @@ Welcome to Math 10. This page will contain all the materials we will be using ov
 * <a href="https://mrfanning.github.io/Math10/AN/AN3/AN3Proofs.pdf"> Exponent Law Proof Assignment </a>
 
 # Projects
-
+* <a href="https://mrfanning.github.io/MrFanning.github.io-PythonProject/"> Python Project </a> 
