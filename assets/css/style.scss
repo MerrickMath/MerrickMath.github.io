@@ -3,17 +3,19 @@
 
 .white-color {
     fill: white;
+    padding-right: 5px;
+    padding-left: 5px;
+    width: 50px;
+    height: 50px;
 }
 
-// Headers
-$header-heading-color: #fff !default;
-$header-bg-color: #159957 !default;
-$header-bg-color-secondary: #155799 !default;
+$header-bg-color: #156D9A !default;
+$header-bg-color-secondary: #76159A !default;
+$section-headings-color: #156D9A !default;
 
-// Text
 $section-headings-color: #159957 !default;
 $body-text-color: #606c71 !default;
-$body-link-color: #1e6bb8 !default;
+$body-link-color: #76159A !default;
 $blockquote-text-color: #819198 !default;
 
 @import 'jekyll-theme-cayman';
