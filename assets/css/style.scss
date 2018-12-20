@@ -1,3 +1,17 @@
 ---
 ---
 
+.white-color {
+    fill: white;
+}
+
+.profile {
+   padding:1px;
+   border:1px solid #3E3A9E;
+}
+
+$header-bg-color: #3948CE;
+$header-bg-color-secondary: #08D5DC;
+$section-headings-color: #3948CE;
+
+@import 'jekyll-theme-cayman';
