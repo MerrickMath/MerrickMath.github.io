@@ -15,11 +15,4 @@
 ---
 
 
-# Undergraduate Mathematics 
-## [Calculus](Calculus.md) 
-## [Linear Algebra](LinearAlgebra.md)
-## [Discrete Math](DiscreteMath.md)
----
-# Undergraduate Statistics 
-
 
