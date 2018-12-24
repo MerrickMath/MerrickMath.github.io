@@ -1,19 +1,14 @@
 # Math 10C 
 ---
 # Measurement 
-### Notes
-Coming Soon 
-### Assignments
-Coming Soon 
-### Videos
-Coming Soon 
+*Coming Soon ... 
 
 ---
 # Algebra And Number 
 ### Notes 
-Coming Soon 
+*Coming Soon ... 
 #### Outcome 1 
-Coming Soon 
+*Coming Soon ... 
 
 #### Outcome 2
 * <a href="https://mrfanning.github.io/Math10/AN/AN2/AN2I.pdf"> Irrational Numbers And Radical Conversions </a>
@@ -38,15 +33,7 @@ Coming Soon
 
 ---
 # Relations And Functions
-
-### Notes 
-Coming Soon 
-
-### Assignments
-Coming Soon 
-
-### Videos
-Coming Soon 
+*Coming Soon ... 
 
 ---
 # Projects
