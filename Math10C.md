@@ -2,18 +2,18 @@
 ---
 # Measurement 
 ### Notes
-In Development
+Coming Soon 
 ### Assignments
-In Development
+Coming Soon 
 ### Videos
-In Development
+Coming Soon 
 
 ---
 # Algebra And Number 
 ### Notes 
-In Development
+Coming Soon 
 #### Outcome 1 
-In Development
+Coming Soon 
 
 #### Outcome 2
 * <a href="https://mrfanning.github.io/Math10/AN/AN2/AN2I.pdf"> Irrational Numbers And Radical Conversions </a>
@@ -26,27 +26,27 @@ In Development
 * <a href="https://mrfanning.github.io/Math10/AN/AN3/AN3Proofs.pdf"> Exponent Law Proof Assignment </a>
 
 #### Outcome 4
-In Development
+Coming Soon 
 #### Outcome 5
-In Development
+Coming Soon 
 #### Outcome 6
-In Development
+Coming Soon 
 ### Assignments
-In Development
+Coming Soon 
 ### Videos
-In Development
+Coming Soon 
 
 ---
 # Relations And Functions
 
 ### Notes 
-In Development
+Coming Soon 
 
 ### Assignments
-In Development
+Coming Soon 
 
 ### Videos
-In Development
+Coming Soon 
 
 ---
 # Projects
