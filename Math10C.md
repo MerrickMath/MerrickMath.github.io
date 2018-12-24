@@ -6,9 +6,8 @@
 ---
 # Algebra And Number 
 ### Notes 
-*Coming Soon ... 
 #### Outcome 1 
-*Coming Soon ... 
+<i> Coming Soon ... </i>
 
 #### Outcome 2
 * <a href="https://mrfanning.github.io/Math10/AN/AN2/AN2I.pdf"> Irrational Numbers And Radical Conversions </a>
@@ -21,19 +20,19 @@
 * <a href="https://mrfanning.github.io/Math10/AN/AN3/AN3Proofs.pdf"> Exponent Law Proof Assignment </a>
 
 #### Outcome 4
-Coming Soon 
+<i> Coming Soon ... </i>
 #### Outcome 5
-Coming Soon 
+<i> Coming Soon ... </i>
 #### Outcome 6
-Coming Soon 
+<i> Coming Soon ... </i>
 ### Assignments
-Coming Soon 
+<i> Coming Soon ... </i>
 ### Videos
-Coming Soon 
+<i> Coming Soon ... </i>
 
 ---
 # Relations And Functions
-*Coming Soon ... 
+<i> Coming Soon ... </i>
 
 ---
 # Projects
