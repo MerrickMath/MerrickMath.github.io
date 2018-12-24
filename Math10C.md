@@ -1,7 +1,7 @@
 # Math 10C 
 ---
 # Measurement 
-*Coming Soon ... 
+<i Coming Soon ... </i>
 
 ---
 # Algebra And Number 
