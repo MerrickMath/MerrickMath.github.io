@@ -14,3 +14,4 @@ Welcome to Math 10. This page will contain all the materials we will be using ov
 
 # Projects
 * <a href="https://mrfanning.github.io/MrFanning.github.io-PythonProject/"> Python Project </a> 
+* <a href="https://mrfanning.github.io/Math10/LogicReasoning/LogicReasoning.pdf"> Logic and Reasoning Puzzles </a>
