@@ -3,5 +3,9 @@
 ## [Math 10C](Math10Current.md)
 ---
 
+# Projects 
+## [Python Project]()
+---
+
 
 
