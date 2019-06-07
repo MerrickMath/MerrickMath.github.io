@@ -4,7 +4,7 @@
 ---
 
 # Projects 
-* <a href="https://mrfanning.github.io/MrFanning.github.io-PythonProject/"> Python Project </a> 
+* <a href="https://MerrickMath.github.io/MerrickMath.github.io-PythonProject/"> Python Project </a> 
 ---
 
 
