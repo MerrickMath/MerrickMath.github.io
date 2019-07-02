@@ -1,2 +1,2 @@
-# Math 30-1
+# Math 30
 In Development
