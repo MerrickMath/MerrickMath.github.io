@@ -1,4 +1,4 @@
-# Math 10C 
+# Math 10
 ---
 # Measurement 
 <i> Coming Soon ... </i>
