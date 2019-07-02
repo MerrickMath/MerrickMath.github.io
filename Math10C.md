@@ -36,6 +36,6 @@
 
 ---
 # Projects
-* <a href="https://merrickmath.github.io/merrickmath.github.io-PythonProject/"> Python Project </a> 
+* <a href="https://MerrickMath.github.io/MerrickMath.github.io-PythonProject/"> Python Project </a> 
 
  
