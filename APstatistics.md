@@ -1,3 +1,3 @@
-#AP Statistics
+# AP Statistics
 
-##Notes 
+## Notes 
