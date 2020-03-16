@@ -4,7 +4,6 @@
 * [Grade 1](grade1.md)
 * [Grade 2/3](grade23.md)
 * [Grade 4](grade4.md)
-* [AP Statistics](APstatistics.md)
 
 # Projects
 
