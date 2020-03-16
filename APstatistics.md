@@ -2,5 +2,5 @@
 
 ## Assignments
 
-## Notes 
+## Challenges
 
