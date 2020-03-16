@@ -1,4 +1,4 @@
 # Grade 4 Mathematics
 ## Materials 
-* [Shape Algebra](/grade4/shape algebra practice.pdf)
+* <a href="https://MerrickMath.github.io/grade4/shapealgebra.pdf"> Shape Algebra </a>
 ## Projects 
