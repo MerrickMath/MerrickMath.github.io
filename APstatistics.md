@@ -1,3 +1,6 @@
 # AP Statistics
 
+## Assignments
+
 ## Notes 
+
