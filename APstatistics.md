@@ -4,7 +4,7 @@
 * <a href="https://MerrickMath.github.io/APStatistics/assignment6.pdf"> Assignment 6 </a> 
 
 ## Challenges
-* <a href="https://www.merrickmath.github.io/merrickmath.github.io-PokemonChallenge"> Pokemon Challenge </a> 
+* <a href="https://merrickmath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge </a> 
 
 ## Resources
 * <a href="https://www.jbstatistics.com"> JBStatistics </a> 
