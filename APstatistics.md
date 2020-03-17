@@ -1,6 +1,6 @@
 # AP Statistics
 ## Assignments
-* <a href="https://MerrickMath.github.io/APStatistics/assignment6.pdf"> Assignment 6 </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/assignment6.pdf"> Assignment 6 </a> (March 16-23) 
 
 ## Challenges
 * <a href="https://merrickmath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge </a> 
