@@ -4,6 +4,7 @@
 
 ## Challenges
 * <a href="https://merrickmath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/DataChallenge.pdf"> Data Challenge </a> 
 
 ## Resources
 * <a href="https://www.jbstatistics.com"> JBStatistics </a> 
