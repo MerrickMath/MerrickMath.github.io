@@ -3,4 +3,4 @@
 
 ## Resources
 * <a href="https://datacamp.com"> Data Camp</a> 
-<a href="https://www.kaggle.com"> Kaggle </a> 
+* <a href="https://www.kaggle.com"> Kaggle </a> 
