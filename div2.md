@@ -1,4 +1,4 @@
-# Grade 4 Mathematics
+# Division 2 Mathematics
 ## Materials 
 * <a href="https://MerrickMath.github.io/grade4/shapealgebra.pdf"> Shape Algebra </a>
 
