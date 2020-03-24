@@ -3,7 +3,7 @@
 ## Classes 
 * [Grade 1 Math](grade1.md)
 * [Grade 2/3 Math](grade23.md)
-* [Division 2 Math](Div2.md)
+* [Division 2 Math](div2.md)
 * [AP Statistics](APstatistics.md)
 * [AP Calculus](Calculus.md)
 * [Data Challenge](datachallenge.md)
