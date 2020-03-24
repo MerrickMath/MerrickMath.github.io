@@ -2,6 +2,9 @@
 "The sun will come out **tomorrow**" -Annie 
 
 ### Materials 
-* Improper Integrals I (March 23-24)
+* Improper Integrals (March 23-24)
+
+### Assignments
+* Assignment I 
 
 ### Challenges
