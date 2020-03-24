@@ -1,5 +1,5 @@
 ### Welcome to Calculust 
-"The sun will come out **tomorrow**" -Annie 
+- "The sun will come out, **tomorrow**" -Annie 
 
 ### Materials 
 * Improper Integrals (March 23-24)
