@@ -5,6 +5,7 @@
 * [Grade 2/3](grade23.md)
 * [Grade 4](grade4.md)
 * [AP Statistics](APstatistics.md)
+* [AP Calculus](Calculus.md)
 * [Data Challenge](datachallenge.md)
 
 ## Projects
