@@ -1,5 +1,8 @@
 # Grade 1 Mathematics
-### Materials 
-* <a href="https://mathkangaroo.ca/api/v1/media/2014/2014gr0102e.pdf"> 2014 Kangaroo Math Form (from https://mathkangaroo.ca/samples/2014/en)</a> 
+### Check In
+* <a href="https://docs.google.com/forms/d/e/1FAIpQLSeviGZXD-I1-lmsXGWwYWfL_DmVxuQQzj5bI48VIIiUeSqjFg/viewform?usp=sf_link"> Let me know where you are at</a> 
 
-### Projects 
+### Materials 
+
+## Challenges 
+* <a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge</a> 
