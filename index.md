@@ -13,8 +13,5 @@
 * <a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge</a> 
 
 
-<iframe src="https://docs.google.com/forms/d/e/1FAIpQLScu8gTgpGzh5IlB8DjHv3FwC8BW87Q7UFtOfm1HkfaUdQjbEQ/viewform?embedded=true" width="640" height="1732" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
----
-
 
 
