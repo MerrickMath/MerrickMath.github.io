@@ -7,6 +7,7 @@
 * [AP Statistics](APstatistics.md)
 * [AP Calculus](Calculus.md)
 * [Data Challenge](datachallenge.md)
+* [Bright Minds](Brightminds.md)
 
 ## Projects
 
