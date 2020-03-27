@@ -1,2 +1,2 @@
-## Brightminds Materials 
-* Shape Algebra
+### Materials 
+
