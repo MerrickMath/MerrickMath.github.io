@@ -4,7 +4,4 @@
 ### Materials 
 * Improper Integrals (March 23-24)
 
-### Assignments
-* Assignment I 
-
 ### Challenges
