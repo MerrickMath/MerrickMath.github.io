@@ -18,7 +18,7 @@
 ---
 
 
-## Projects
+## Challenges
 
 * <a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge</a> 
 
