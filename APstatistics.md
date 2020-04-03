@@ -1,6 +1,6 @@
 # Statistics
 ## Exam 
-The AP Statistics exam will be held on May 22, at 12PM. More information found <a href="https://MerrickMath.github.io/Statistics/exam2020.pdf"> here </a>.
+The AP Statistics exam will be held on May 22, at 12PM. More information found <a href="https://MerrickMath.github.io/APStatistics/exam2020.pdf"> here </a>.
 
 ## Assignments
 * <a href="https://MerrickMath.github.io/APStatistics/assignment6.pdf"> Assignment 6 </a> (March 16-30) 
