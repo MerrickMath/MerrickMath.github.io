@@ -5,10 +5,6 @@ The AP Statistics exam will be held on May 22, at 12PM. More information found <
 ## Assignments
 * <a href="https://MerrickMath.github.io/APStatistics/assignment6.pdf"> Assignment 6 </a> (March 16-30) 
 
-## Challenges
-* <a href="https://merrickmath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge </a> 
-* <a href="https://MerrickMath.github.io/APStatistics/DataChallenge.pdf"> Data Challenge </a> 
-
 ## Resources
 * <a href="https://www.jbstatistics.com"> JBStatistics </a> 
 * <a href="https://www.khanacademy.org/math/ap-statistics"> Khan Academy AP Statistics </a> 
@@ -18,6 +14,9 @@ The AP Statistics exam will be held on May 22, at 12PM. More information found <
 ## Assignment Dropbox 
 * <a href="https://docs.google.com/forms/d/e/1FAIpQLScXmZFZJ5-1mWDZmzPoqg5YrWaF-CSFYX_UupotY9yPE7rlNQ/viewform?usp=sf_link"> Assignment Dropbox </a>  
 
+## Challenges
+* <a href="https://merrickmath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/DataChallenge.pdf"> Data Challenge </a> 
 ---
 
 
