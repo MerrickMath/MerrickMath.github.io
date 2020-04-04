@@ -1,4 +1,4 @@
-# Statistics
+# AP Statistics
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
 ## Exam 
