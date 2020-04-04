@@ -8,8 +8,6 @@
 
 ## Assignments
 * <a href="https://MerrickMath.github.io/APStatistics/assignment6.pdf"> Assignment 6 </a> (March 16-30) 
-
-### Assignment Dropbox 
 * <a href="https://docs.google.com/forms/d/e/1FAIpQLScXmZFZJ5-1mWDZmzPoqg5YrWaF-CSFYX_UupotY9yPE7rlNQ/viewform?usp=sf_link"> Assignment Dropbox </a>  
 
 ## Resources
