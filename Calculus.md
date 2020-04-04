@@ -1,11 +1,12 @@
 ### Welcome to Calculust 
 "The sun will come out, **tomorrow**" -Annie 
 
+* <a href="https://MerrickMath.github.io/Calculus/CalcTopics.pdf"> Course at a glance</a>.
+
 ### Notes 
 * <a href="https://MerrickMath.github.io/Calculus/Notes/ImproperIntegrals.pdf"> Improper Integrals (March 22-27) </a>
 
 ### Challenges 
-
 * <a href="https://MerrickMath.github.io/Calculus/Projects/PiazzaFun.pdf"> Piazza Fun </a>
 
 ---
