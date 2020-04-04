@@ -1,6 +1,10 @@
 # Statistics
+* <a href="https://MerrickMath.github.io/APStatistics/FormulaSheets2020.pdf"> Course at a glance</a>.
+
 ## Exam 
-The AP Statistics exam will be held on May 22, at 12PM. More information found <a href="https://MerrickMath.github.io/APStatistics/exam2020.pdf"> here </a>.
+* The AP Statistics exam will be held on May 22, at 12PM. More information found <a href="https://MerrickMath.github.io/APStatistics/exam2020.pdf"> here </a>.
+* <a href="https://MerrickMath.github.io/APStatistics/FormulaSheets2020.pdf"> Exam Formula Sheet</a>.
+
 
 ## Assignments
 * <a href="https://MerrickMath.github.io/APStatistics/assignment6.pdf"> Assignment 6 </a> (March 16-30) 
@@ -17,6 +21,7 @@ The AP Statistics exam will be held on May 22, at 12PM. More information found <
 ## Challenges
 * <a href="https://merrickmath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge </a> 
 * <a href="https://MerrickMath.github.io/APStatistics/DataChallenge.pdf"> Data Challenge </a> 
+
 ---
 
 
