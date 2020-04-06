@@ -14,7 +14,6 @@
 
 ### Bright Minds
 * [Bright Minds](Brightminds.md)
-* [Test](test.md)
 
 ---
 
