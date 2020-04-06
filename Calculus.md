@@ -1,3 +1,10 @@
+---
+layout: coursepage
+title: AP Calculus
+description: Questions, links, materials, and more 
+show_downloads: TRUE
+---
+
 ### Welcome to Calculust 
 "The sun will come out, **tomorrow**" -Annie 
 
