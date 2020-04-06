@@ -2,7 +2,7 @@
 layout: coursepage
 title: Grade 2/3 Mathematics 
 description: Questions, links, materials, and more for Mr. Merrick's class
-show_downloads: TRUE
+show_downloads: FALSE
 
 ---
 
