@@ -2,7 +2,8 @@
 layout: coursepage
 title: Grade 1 Mathematics 
 description: Questions, links, materials, and more for Mr. Merrick's class
-show downloads: TRUE
+show_downloads: TRUE
+
 ---
 
 ### Check In
