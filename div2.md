@@ -1,4 +1,10 @@
-# Division 2 Mathematics
+---
+layout: coursepage
+title: Grade 1 Mathematics 
+description: Questions, links, materials, and more for Mr. Merrick's class
+show_downloads: TRUE
+---
+
 ### Check In
 * <a href="https://docs.google.com/forms/d/e/1FAIpQLScu8gTgpGzh5IlB8DjHv3FwC8BW87Q7UFtOfm1HkfaUdQjbEQ/viewform?usp=sf_link"> Let me know where you are at</a>: Complete this form once-twice a week so I know where you are at in your book, and if you have any questions.
 * <a href="https://docs.google.com/forms/d/e/1FAIpQLSfoR0zEo7vHGlPeS87qulHUP0V8IVT2TtWafFXE6Cy-YKDGNA/viewform?usp=sf_link"> Questions</a>: Complete this form if you have any **QUESTIONS**. This lets me know what topics we still need to explore. 
