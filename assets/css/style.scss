@@ -37,6 +37,10 @@
   text-align: center;
 }
 
+.responsive {
+  max-width: 100%;
+  height: auto;
+}
 
 $header-bg-color: #156D9A !default;
 $header-bg-color-secondary: #76159A !default;
