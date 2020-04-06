@@ -2,7 +2,7 @@
 layout: coursepage
 title: Data Challenge
 description: Questions, links, materials, and more
-show_downloads: TRUE
+show_downloads: FALSE
 
 ---
 
