@@ -2,7 +2,8 @@
 layout: coursepage
 title: Division 2 Mathematics 
 description: Questions, links, materials, and more for Mr. Merrick's class
-show_downloads: TRUE
+show_downloads: FALSE
+
 ---
 
 ### Check In
