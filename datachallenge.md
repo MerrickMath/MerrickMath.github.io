@@ -1,3 +1,10 @@
+---
+layout: coursepage
+title: Data Challenge
+description: Questions, links, materials, and more
+show downloads: TRUE
+---
+
 ## Challenges 
 * <a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge</a> 
 
