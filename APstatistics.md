@@ -1,4 +1,10 @@
-# AP Statistics
+---
+layout: coursepage
+title: AP Statistics
+description: Questions, links, materials, and more
+show_downloads: TRUE
+---
+
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
 ## Exam 
