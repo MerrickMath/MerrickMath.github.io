@@ -1,6 +1,7 @@
 ---
 layout: coursepage
 title: BrightMinds with Mr. Merrick 
+description: Materials, links, questions and more 
 ---
 
 
