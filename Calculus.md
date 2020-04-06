@@ -2,7 +2,8 @@
 layout: coursepage
 title: AP Calculus
 description: Questions, links, materials, and more 
-show_downloads: TRUE
+show_downloads: FALSE
+
 ---
 
 ### Welcome to Calculust 
