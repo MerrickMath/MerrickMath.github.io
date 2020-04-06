@@ -1,6 +1,6 @@
 ---
 layout: coursepage
-title: Grade 1 Mathematics 
+title: Division 2 Mathematics 
 description: Questions, links, materials, and more for Mr. Merrick's class
 show_downloads: TRUE
 ---
