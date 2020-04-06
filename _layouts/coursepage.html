@@ -14,7 +14,9 @@
     <header class="page-header" role="banner">
       <h1 class="project-name">{{ title | default: "missing" }}</h1>
       <h2 class="project-tagline">{{ description | default: site.github.project_tagline }}</h2>
+      {% if show_downloads %}
       <a href="https://MerrickMath.github.io" class="btn"> home </a> 
+      {% endif %}
       </br>
       
       <!-- email icon -->
