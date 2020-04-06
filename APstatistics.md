@@ -2,7 +2,8 @@
 layout: coursepage
 title: AP Statistics
 description: Questions, links, materials, and more
-show_downloads: TRUE
+show_downloads: FALSE
+
 ---
 ### Welcome to AP Statistics
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
