@@ -25,7 +25,7 @@
     <h2> Bright Minds </h2>
     <p>
       <ul>
-        <li><a href="https://MerrickMath.github.io/Brightminds.md"> Bright Minds </a> </li>
+        <li><a href="https://MerrickMath.github.io/Brightminds.html"> Bright Minds </a> </li>
       </ul> 
     </p>
   </div>
