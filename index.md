@@ -25,7 +25,7 @@
     <h2>Bright Minds</h2>
     <p>
       <ul>
-        <li>Coure Page</li>
+        <li>Course Page</li>
       </ul> 
     </p>
   </div>
