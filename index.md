@@ -32,19 +32,6 @@
 </div>
 
 
-### Mathematics 
-* [Grade 1 Math](grade1.md)
-* [Grade 2/3 Math](grade23.md)
-* [Division 2 Math](div2.md)
-* [AP Calculus](Calculus.md)
-
-### Statistics
-* [AP Statistics](APstatistics.md)
-* [Data Challenge](datachallenge.md)
-
-### Bright Minds
-* [Bright Minds](Brightminds.md)
-
 ---
 
 
