@@ -8,7 +8,7 @@
         <li><a href="https://MerrickMath.github.io/grade1.html"> Grade 1 Mathematics</a> </li>
         <li><a href="https://MerrickMath.github.io/grade23.html"> Grade 2/3 Mathematics</a> </li>
         <li><a href="https://MerrickMath.github.io/div2.html"> Division 2 Mathematics </a> </li>
-        <li><a href="https://MerrickMath.github.io/APCalculus.html"> AP Calculus</a> </li>
+        <li><a href="https://MerrickMath.github.io/Calculus.html"> AP Calculus</a> </li>
       </ul> 
     </p>
   </div>
