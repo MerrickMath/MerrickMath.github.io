@@ -12,6 +12,7 @@
       </ul> 
     </p>
   </div>
+  
   <div class="column">
     <h2> Statistics </h2>
     <p>
@@ -21,11 +22,21 @@
       </ul> 
     </p>
   </div>
+  
   <div class="column">
     <h2> Bright Minds </h2>
     <p>
       <ul>
         <li><a href="https://MerrickMath.github.io/Brightminds.html"> Bright Minds </a> </li>
+      </ul> 
+    </p>
+  </div>
+  
+  <div class="column">
+    <h2> Challenges </h2>
+    <p>
+      <ul>
+        <li> <a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge</a>  </li>
       </ul> 
     </p>
   </div>
@@ -36,25 +47,12 @@
 
 <div class="row">
   <div class="column">
-    <h2> Challenges </h2>
-    <p>
-      <ul>
-        <li> <a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge</a>  </li>
-      </ul> 
-    </p>
-  </div>
-  <div class="column">
     <h2> Cool Stuff </h2>
     <p>
       <ul>
         <li><a href="https://krazydad.com/tablet/puzzles.php"> Krazy Dad Interactive Puzzles </a> </li>
         <li><a href="https://www.3blue1brown.com"> 3 Blue 1 Brown </a> </li>
       </ul> 
-    </p>
-  </div>
-  <div class="column">
-    <h2> </h2>
-    <p>
     </p>
   </div>
 </div>
