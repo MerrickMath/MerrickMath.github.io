@@ -16,7 +16,8 @@
     <h2> Statistics </h2>
     <p>
       <ul>
-
+        <li><a href="https://MerrickMath.github.io/APstatistics.html"> AP Statistics </a> </li>
+        <li><a href="https://MerrickMath.github.io/datachallenge.html"> Data Science Challenge </a> </li>
       </ul> 
     </p>
   </div>
