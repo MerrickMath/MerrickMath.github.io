@@ -48,6 +48,7 @@
     <p>
       <ul>
         <li><a href="https://krazydad.com/tablet/puzzles.php"> Krazy Dad Interactive Puzzles </a> </li>
+        <li><a href="https://www.3blue1brown.com"> 3 Blue 1 Brown </a> </li>
       </ul> 
     </p>
   </div>
