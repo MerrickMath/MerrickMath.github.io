@@ -14,8 +14,6 @@ show_downloads: FALSE
 ### Notes 
 * <a href="https://MerrickMath.github.io/Calculus/Notes/ImproperIntegrals.pdf"> Improper Integrals (March 22-27) </a>
 
-### Challenges 
-* <a href="https://MerrickMath.github.io/Calculus/Projects/PiazzaFun.pdf"> Piazza Fun </a>
 
 ---
 
