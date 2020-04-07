@@ -1,12 +1,13 @@
 *"The enchanting charms of this sublime science reveal only to those who have the courage to go deeply into it."* - Carl Friedrich Gauss 
 
 <div class="row">
-  <div class="column"></div>
-  Hello 
-  <div class="column"></div>
-  Hello
-  <div class="column"></div>
-  Hello
+  <div class="column">
+hello world 
+  </div>
+  
+  <div class="column"> hello world </div>
+  
+  <div class="column"> hello world </div>
 </div>
 
 ### Mathematics 
