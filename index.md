@@ -1,17 +1,33 @@
 *"The enchanting charms of this sublime science reveal only to those who have the courage to go deeply into it."* - Carl Friedrich Gauss 
 
 <div class="row">
-  <div class="column" style="background-color:#aaa;">
-    <h2>Column 1</h2>
-    <p>Some text..</p>
+  <div class="column">
+    <h2> Mathematics </h2>
+    <p>
+      <ul>
+        <li>Grade 1</li>
+        <li>Grade 2/3</li>
+        <li>Division 2</li>
+        <li> AP Calculus </li>
+      </ul> 
+    </p>
   </div>
-  <div class="column" style="background-color:#bbb;">
-    <h2>Column 2</h2>
-    <p>Some text..</p>
+  <div class="column">
+    <h2> Statistics </h2>
+    <p>
+      <ul>
+        <li>AP Statistics</li>
+        <li>Data Science Challenge</li>
+      </ul> 
+    </p>
   </div>
-  <div class="column" style="background-color:#ccc;">
-    <h2>Column 3</h2>
-    <p>Some text..</p>
+  <div class="column">
+    <h2>Bright Minds</h2>
+    <p>
+      <ul>
+        <li>Coure Page</li>
+      </ul> 
+    </p>
   </div>
 </div>
 
