@@ -47,7 +47,7 @@
     <h2> Cool Stuff </h2>
     <p>
       <ul>
-        <li><a href="https://MerrickMath.github.io/APstatistics.html"> Krazy Dad Interactive Puzzles </a> </li>
+        <li><a href="https://krazydad.com/tablet/puzzles.php"> Krazy Dad Interactive Puzzles </a> </li>
       </ul> 
     </p>
   </div>
@@ -58,15 +58,8 @@
   </div>
 </div>
 
-
 ---
 
-
-## Challenges
-
-* <a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge</a> 
-
----
 
 ### Exponential Growth and Epidemics (Brought to you by <a href="https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw"> 3 Blue 1 Brown</a>)
 <p align="center"> 
