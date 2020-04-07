@@ -5,10 +5,10 @@
     <h2> Mathematics </h2>
     <p>
       <ul>
-        <li>Grade 1</li>
-        <li>Grade 2/3</li>
-        <li>Division 2</li>
-        <li> AP Calculus </li>
+        <li><a href="https://MerrickMath.github.io/grade1.md/"> Grade 1 Mathematics</a> </li>
+        <li><a href="https://MerrickMath.github.io/grade23.md/"> Grade 2/3 Mathematics</a> </li>
+        <li><a href="https://MerrickMath.github.io/div2.md/"> Division 2 Mathematics </a> </li>
+        <li><a href="https://MerrickMath.github.io/APCalculus.md/"> AP Calculus</a> </li>
       </ul> 
     </p>
   </div>
@@ -16,13 +16,13 @@
     <h2> Statistics </h2>
     <p>
       <ul>
-        <li>AP Statistics</li>
-        <li>Data Science Challenge</li>
+        <li><a href="https://MerrickMath.github.io/APStatistics.md/"> AP Statistics </a> </li>
+        <li><a href="https://MerrickMath.github.io/DataChallenge.md/"> Data Science Challenge </a> </li>
       </ul> 
     </p>
   </div>
   <div class="column">
-    <h2>Bright Minds</h2>
+    <li><a href="https://MerrickMath.github.io/BrightMinds.md/"> Course Page </a> </li>
     <p>
       <ul>
         <li>Course Page</li>
