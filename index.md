@@ -34,6 +34,33 @@
 
 ---
 
+<div class="row">
+  <div class="column">
+    <h2> Challenges </h2>
+    <p>
+      <ul>
+        <li> <a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge</a>  </li>
+      </ul> 
+    </p>
+  </div>
+  <div class="column">
+    <h2> Cool Stuff </h2>
+    <p>
+      <ul>
+        <li><a href="https://MerrickMath.github.io/APstatistics.html"> Krazy Dad Interactive Puzzles </a> </li>
+      </ul> 
+    </p>
+  </div>
+  <div class="column">
+    <h2> </h2>
+    <p>
+    </p>
+  </div>
+</div>
+
+
+---
+
 
 ## Challenges
 
