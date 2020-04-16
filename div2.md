@@ -19,6 +19,7 @@ show_downloads: FALSE
 ### Projects 
 * <a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge</a> 
 
-### Puzzles
-* <a href="https://krazydad.com"> Krazy Dad Puzzles</a> 
+### Fun and Games
+* <a href="https://krazydad.com"> Krazy Dad Puzzles</a>
+* <a href="https://www.mathplayground.com/math-games.html"> Math Playground</a>
 
