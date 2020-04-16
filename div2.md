@@ -5,6 +5,10 @@ description: Questions, links, materials, and more for Mr. Merrick's class
 show_downloads: FALSE
 
 ---
+### Office Hours
+Office hours are a dedicated time for any questions you may have in your book. Times are as follows: 
+* **Tuesday 3:30 PM**
+* **Thursday 3:30 PM**
 
 ### Check In
 * <a href="https://docs.google.com/forms/d/e/1FAIpQLScu8gTgpGzh5IlB8DjHv3FwC8BW87Q7UFtOfm1HkfaUdQjbEQ/viewform?usp=sf_link"> Let me know where you are at</a>: Complete this form once-twice a week so I know where you are at in your book, and if you have any questions.
