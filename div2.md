@@ -5,8 +5,7 @@ description: Questions, links, materials, and more for Mr. Merrick's class
 show_downloads: FALSE
 
 ---
-### Office Hours
-Office hours are a dedicated time for any questions you may have in your book. Times are as follows: 
+### Office Hours 
 * **Tuesday 3:30 PM**
 * **Thursday 3:30 PM**
 
