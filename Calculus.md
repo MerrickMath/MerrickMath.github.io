@@ -20,6 +20,12 @@ show_downloads: FALSE
 ### Challenges 
 * <a href="https://MerrickMath.github.io/Calculus/Projects/PiazzaFun.pdf"> Piazza Fun </a>
 
+### Resources 
+* <a href="https://www.khanacademy.org/math/ap-calculus-bc"> Khan Academy </a>
+* <a href="http://tutorial.math.lamar.edu"> Paul's Online Notes </a>
+* <a href="https://activecalculus.org/single/frontmatter.html"> Active Calculus </a>
+* <a href="https://www.youtube.com/watch?v=WUvTyaaNkzM"> The Essence of Calculus (3 Blue 1 Brown) </a>
+
 ---
 
 ### The Exam
