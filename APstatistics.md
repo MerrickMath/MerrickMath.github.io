@@ -13,8 +13,8 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/FormulaSheets.pdf"> Exam Formula Sheet</a>.
 
 ### Notes 
-* <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Correlation and Regresson I</a>
-* <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Correlation and Regression II</a>
+* <a href="https://github.com/MerrickMath/MerrickMath.github.io/blob/master/APStatistics/Notes/Correlation%20and%20Regression.pdf"> Correlation and Regresson I</a>
+* <a href="https://github.com/MerrickMath/MerrickMath.github.io/blob/master/APStatistics/Notes/Correlation%20and%20Regression.pdf"> Correlation and Regression II</a>
 
 ### Assignments
 * <a href="https://MerrickMath.github.io/APStatistics/assignment6.pdf"> Assignment 6 </a> (March 16-30) 
