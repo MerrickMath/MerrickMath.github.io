@@ -12,6 +12,9 @@ show_downloads: FALSE
 * The AP Statistics exam will be held on May 22, at 12PM. More information found <a href="https://MerrickMath.github.io/APStatistics/exam2020.pdf"> here </a>.
 * <a href="https://MerrickMath.github.io/APStatistics/FormulaSheets.pdf"> Exam Formula Sheet</a>.
 
+### Notes 
+* <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Correlation and Regresson I</a>
+* <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Correlation and Regression II</a>
 
 ### Assignments
 * <a href="https://MerrickMath.github.io/APStatistics/assignment6.pdf"> Assignment 6 </a> (March 16-30) 
