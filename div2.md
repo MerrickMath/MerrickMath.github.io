@@ -6,6 +6,7 @@ show_downloads: FALSE
 
 ---
 ### Office Hours 
+Office hours are for asking additional questions and working on homework. If no students arrive in the first 5 minutes of office hours, the session will be cancelled. Times are as follows.
 * **Tuesday 3:30-4:30 PM**
 * **Thursday 3:30-4:00 PM**
 
