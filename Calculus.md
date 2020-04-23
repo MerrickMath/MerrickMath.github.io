@@ -18,6 +18,11 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/Calculus/Notes/Sequences%20and%20Series%201.pdf"> Sequences and Series 1 </a>
 * <a href="https://MerrickMath.github.io/Calculus/Notes/Sequences%20and%20series%202.pdf"> Sequences and Series 2 </a>
 
+### Practice Problems 
+* <a href="https://MerrickMath.github.io/Calculus/Notes/practice1.pdf"> Practice I </a>
+* <a href="https://MerrickMath.github.io/Calculus/Notes/practice2.pdf"> Practice II </a>
+* <a href="https://MerrickMath.github.io/Calculus/Notes/practice3.pdf"> Practice III </a>
+
 ### Resources 
 * <a href="https://www.khanacademy.org/math/ap-calculus-bc"> Khan Academy Calculus BC </a>
 * <a href="http://tutorial.math.lamar.edu"> Paul's Online Notes </a>
