@@ -22,6 +22,7 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/Calculus/Notes/practice1.pdf"> Practice I </a>
 * <a href="https://MerrickMath.github.io/Calculus/Notes/practice2.pdf"> Practice II </a>
 * <a href="https://MerrickMath.github.io/Calculus/Notes/practice3.pdf"> Practice III </a>
+* <a href="https://MerrickMath.github.io/Calculus/Notes/practice4.pdf"> Practice IV </a>
 
 ### Resources 
 * <a href="https://www.khanacademy.org/math/ap-calculus-bc"> Khan Academy Calculus BC </a>
