@@ -22,6 +22,9 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/Assignments/Assignment%207.pdf"> Assignment 7 </a> (April 23-27) 
 * <a href="https://docs.google.com/forms/d/e/1FAIpQLScXmZFZJ5-1mWDZmzPoqg5YrWaF-CSFYX_UupotY9yPE7rlNQ/viewform?usp=sf_link"> Assignment Dropbox </a>  
 
+### Practice 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice1.pdf"> Practice I </a> 
+
 ### Resources
 * <a href="https://www.jbstatistics.com"> JBStatistics </a> 
 * <a href="https://www.khanacademy.org/math/ap-statistics"> Khan Academy AP Statistics </a> 
