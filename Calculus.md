@@ -11,6 +11,8 @@ show_downloads: FALSE
 
 * <a href="https://MerrickMath.github.io/Calculus/CalcTopics.pdf"> Course at a glance</a>.
 * **The Exam:** The AP Calculus exam will be held on May 12, at 12PM. More information found <a href="https://MerrickMath.github.io/Calculus/exam2020.pdf"> here</a>.
+* <a href="https://MerrickMath.github.io/Calculus/testguide.pdf"> AP Testing Guide</a>.
+* <a href="https://MerrickMath.github.io/Calculus/examchecklist.pdf"> AP Student Exam Checklist</a>. 
 
 ### Notes 
 * <a href="https://MerrickMath.github.io/Calculus/Notes/ImproperIntegrals.pdf"> Improper Integrals </a>
