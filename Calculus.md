@@ -22,11 +22,15 @@ show_downloads: FALSE
 
 ### Practice Problems 
 * <a href="https://MerrickMath.github.io/Calculus/Notes/practice1.pdf"> Practice I </a>
+* <a href="https://MerrickMath.github.io/Calculus/Notes/Practice1solutions.pdf"> Practice I Solutions </a>
 * <a href="https://MerrickMath.github.io/Calculus/Notes/practice2.pdf"> Practice II </a>
 * <a href="https://MerrickMath.github.io/Calculus/Notes/practice3.pdf"> Practice III </a>
 * <a href="https://MerrickMath.github.io/Calculus/Notes/Practice4.pdf"> Practice IV </a>
+* <a href="https://MerrickMath.github.io/Calculus/Notes/Practice4solutions.pdf"> Practice IV Solutions </a>
 * <a href="https://MerrickMath.github.io/Calculus/Notes/Practice5.pdf"> Practice V </a>
+* <a href="https://MerrickMath.github.io/Calculus/Notes/Practice5solutions.pdf"> Practice V Solutions </a>
 * <a href="https://MerrickMath.github.io/Calculus/Notes/Practice6.pdf"> Practice VI </a>
+* <a href="https://MerrickMath.github.io/Calculus/Notes/Practice6solutions.pdf"> Practice VI Solutions </a>
 
 ### Resources 
 * <a href="https://www.khanacademy.org/math/ap-calculus-bc"> Khan Academy Calculus BC </a>
