@@ -30,7 +30,6 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/Calculus/Notes/Practice5.pdf"> Practice V </a>
 * <a href="https://MerrickMath.github.io/Calculus/Notes/Practice5solution.pdf"> Practice V Solutions </a>
 * <a href="https://MerrickMath.github.io/Calculus/Notes/Practice6.pdf"> Practice VI </a>
-* <a href="https://MerrickMath.github.io/Calculus/Notes/Practice6solution.pdf"> Practice VI Solutions </a>
 
 ### Resources 
 * <a href="https://www.khanacademy.org/math/ap-calculus-bc"> Khan Academy Calculus BC </a>
