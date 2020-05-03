@@ -20,6 +20,9 @@ show_downloads: FALSE
 * <a href="https://github.com/MerrickMath/MerrickMath.github.io/blob/master/APStatistics/Notes/Correlation%20and%20Regression%202.pdf"> Correlation and Regression II</a>
 * <a href="https://github.com/MerrickMath/MerrickMath.github.io/blob/master/APStatistics/Notes/collectingdata1.pdf"> Collecting Data I </a>
 
+### Practice Problems 
+* <a href="https://github.com/MerrickMath/MerrickMath.github.io/blob/master/APStatistics/Notes/practice1.pdf"> Practice 1</a>
+
 ### Assignments
 * <a href="https://MerrickMath.github.io/APStatistics/assignment6.pdf"> Assignment 6 </a> (March 16-30) 
 * <a href="https://MerrickMath.github.io/APStatistics/Assignments/Assignment%207.pdf"> Assignment 7 </a> (April 23-27) 
