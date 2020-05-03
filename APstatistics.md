@@ -20,9 +20,6 @@ show_downloads: FALSE
 * <a href="https://github.com/MerrickMath/MerrickMath.github.io/blob/master/APStatistics/Notes/Correlation%20and%20Regression%202.pdf"> Correlation and Regression II</a>
 * <a href="https://github.com/MerrickMath/MerrickMath.github.io/blob/master/APStatistics/Notes/collectingdata1.pdf"> Collecting Data I </a>
 
-### Practice Problems 
-* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice1.pdf"> Practice I </a> 
-
 ### Assignments
 * <a href="https://MerrickMath.github.io/APStatistics/assignment6.pdf"> Assignment 6 </a> (March 16-30) 
 * <a href="https://MerrickMath.github.io/APStatistics/Assignments/Assignment%207.pdf"> Assignment 7 </a> (April 23-27) 
@@ -30,15 +27,15 @@ show_downloads: FALSE
 * <a href="https://docs.google.com/forms/d/e/1FAIpQLScXmZFZJ5-1mWDZmzPoqg5YrWaF-CSFYX_UupotY9yPE7rlNQ/viewform?usp=sf_link"> Assignment Dropbox </a>  
 
 ### Practice 
-* <a href="APStatistics/Notes/practice1.pdf/"> Practice I </a> 
-* <a href="APStatistics/Notes/practice2.pdf/"> Practice II </a> 
-* <a href="APStatistics/Notes/practice3.pdf/"> Practice III </a> 
-* <a href="APStatistics/Notes/practice4.pdf/"> Practice IV </a> 
-* <a href="APStatistics/Notes/practice5.pdf/"> Practice V </a> 
-* <a href="APStatistics/Notes/practice6.pdf/"> Practice VI </a> 
-* <a href="APStatistics/Notes/practice7.pdf/"> Practice VII </a> 
-* <a href="APStatistics/Notes/practice8.pdf/"> Practice VIII </a> 
-* <a href="APStatistics/Notes/practice9.pdf/"> Practice IX </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice1.pdf"> Practice I </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice2.pdf"> Practice II </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice3.pdf"> Practice III </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice4.pdf"> Practice IV </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice5.pdf"> Practice V </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice6.pdf"> Practice VI </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice7.pdf"> Practice VII </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice8.pdf"> Practice VIII </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice9.pdf"> Practice IX </a> 
 
 ### Resources
 * <a href="https://www.jbstatistics.com"> JBStatistics </a> 
