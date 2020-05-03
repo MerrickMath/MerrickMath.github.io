@@ -30,7 +30,7 @@ show_downloads: FALSE
 * <a href="https://docs.google.com/forms/d/e/1FAIpQLScXmZFZJ5-1mWDZmzPoqg5YrWaF-CSFYX_UupotY9yPE7rlNQ/viewform?usp=sf_link"> Assignment Dropbox </a>  
 
 ### Practice 
-* <a href="APStatistics/Notes/practice1.pdf"> Practice I </a> 
+* <a href="APStatistics/Notes/practice1.pdf/"> Practice I </a> 
 
 ### Resources
 * <a href="https://www.jbstatistics.com"> JBStatistics </a> 
