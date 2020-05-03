@@ -31,6 +31,14 @@ show_downloads: FALSE
 
 ### Practice 
 * <a href="APStatistics/Notes/practice1.pdf/"> Practice I </a> 
+* <a href="APStatistics/Notes/practice2.pdf/"> Practice II </a> 
+* <a href="APStatistics/Notes/practice3.pdf/"> Practice III </a> 
+* <a href="APStatistics/Notes/practice4.pdf/"> Practice IV </a> 
+* <a href="APStatistics/Notes/practice5.pdf/"> Practice V </a> 
+* <a href="APStatistics/Notes/practice6.pdf/"> Practice VI </a> 
+* <a href="APStatistics/Notes/practice7.pdf/"> Practice VII </a> 
+* <a href="APStatistics/Notes/practice8.pdf/"> Practice VIII </a> 
+* <a href="APStatistics/Notes/practice9.pdf/"> Practice IX </a> 
 
 ### Resources
 * <a href="https://www.jbstatistics.com"> JBStatistics </a> 
