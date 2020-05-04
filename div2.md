@@ -16,6 +16,7 @@ Office hours are for asking additional questions and working on homework. If no 
 
 ### Materials 
 * <a href="https://MerrickMath.github.io/grade4/shapealgebra.pdf"> Shape Algebra </a>
+* <a href="https://MerrickMath.github.io/grade4/witchpuzzle.pdf"> Witch Puzzle </a>
 
 ### Projects 
 * <a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge</a> 
