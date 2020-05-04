@@ -23,6 +23,7 @@ show_downloads: FALSE
 
 ### Assignments
 * <a href="https://MerrickMath.github.io/APStatistics/assignment6.pdf"> Assignment 6 </a> (March 16-30) 
+* <a href="https://MerrickMath.github.io/APStatistics/Assignments/assignment6solutions.pdf"> Assignment 6 Solutions</a> 
 * <a href="https://MerrickMath.github.io/APStatistics/Assignments/Assignment%207.pdf"> Assignment 7 </a> (April 23-27) 
 * <a href="https://MerrickMath.github.io/APStatistics/Assignments/assignment7solutions.pdf"> Assignment 7 Solutions</a> 
 * <a href="https://MerrickMath.github.io/APStatistics/Assignments/assignment8.pdf"> Assignment 8 </a> (April 30 - May 6) 
