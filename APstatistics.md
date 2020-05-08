@@ -41,11 +41,11 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/Notes/practice5.pdf"> Practice V </a> 
 * <a href="https://MerrickMath.github.io/APStatistics/Notes/practice5solutions.pdf"> Practice V Solutions </a>
 * <a href="https://MerrickMath.github.io/APStatistics/Notes/practice6.pdf"> Practice VI </a> 
-* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice6solutions.pdf"> Practice VI Solutions </a>
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice6solution.pdf"> Practice VI Solutions </a>
 * <a href="https://MerrickMath.github.io/APStatistics/Notes/practice7.pdf"> Practice VII </a> 
-* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice7solutions.pdf"> Practice VII Solutions </a>
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice7solution.pdf"> Practice VII Solutions </a>
 * <a href="https://MerrickMath.github.io/APStatistics/Notes/practice8.pdf"> Practice VIII </a> 
-* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice8solutions.pdf"> Practice VII Solutions </a>
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice8solution.pdf"> Practice VII Solutions </a>
 * <a href="https://MerrickMath.github.io/APStatistics/Notes/practice9.pdf"> Practice IX </a> 
 
 ### Resources
