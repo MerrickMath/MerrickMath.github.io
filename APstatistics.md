@@ -31,6 +31,7 @@ show_downloads: FALSE
 
 ### Practice 
 * <a href="https://MerrickMath.github.io/APStatistics/Notes/practice1.pdf"> Practice I </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice1solution.pdf"> Practice I Solutions </a>
 * <a href="https://MerrickMath.github.io/APStatistics/Notes/practice2.pdf"> Practice II </a> 
 * <a href="https://MerrickMath.github.io/APStatistics/Notes/practice3.pdf"> Practice III </a> 
 * <a href="https://MerrickMath.github.io/APStatistics/Notes/practice4.pdf"> Practice IV </a> 
