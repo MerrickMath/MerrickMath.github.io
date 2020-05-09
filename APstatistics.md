@@ -48,6 +48,12 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/Notes/practice8.pdf"> Practice VIII </a> 
 * <a href="https://MerrickMath.github.io/APStatistics/Notes/practice8solution.pdf"> Practice VII Solutions </a>
 * <a href="https://MerrickMath.github.io/APStatistics/Notes/practice9.pdf"> Practice IX </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice10.pdf"> Practice X </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice11.pdf"> Practice XI </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/Practice12.pdf"> Practice XII </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/Practice13.pdf"> Practice XIII </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice14.pdf"> Practice XIV </a> 
+* <a href="https://MerrickMath.github.io/APStatistics/Notes/practice15.pdf"> Practice XV </a> 
 
 ### Resources
 * <a href="https://www.jbstatistics.com"> JBStatistics </a> 
