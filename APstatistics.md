@@ -7,13 +7,24 @@ show_downloads: FALSE
 ---
 ### Welcome to AP Statistics
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
+### Tenatative Schedule
+* **Monday May 11:** Practice Sets 9/10 
+* **Tuesday May 12:** Practice Sets 11/12
+* **Wednesday May 13:** Mock Exam 1 + Review Mock Exam 1
+* **Thursday May 14:** Mock Exam 2, <a href=""> Homework </a>
+* **Friday May 15:** Review Mock Exam 2, <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2017 exam free response questions </a>
+* **May 16-17:** <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2016 exam free response questions </a> 
+* **Monday May 18:** Mock Exam 3 + Review Mock Exam 3
+* **Tuesday May 19:** Practice Set 13/14 <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2015 exam free response questions </a>
+* **Wednesday  May 20:** Practice Set 15 + Additional Problems 
+* **Thursday  May 21:** Practice Set 15 + Additional Problems 
+* **Friday:** EXAM DAY 
 
 ### Exam 
 * The AP Statistics exam will be held on May 22, at 12PM. More information found <a href="https://MerrickMath.github.io/APStatistics/exam2020.pdf"> here </a>.
 * <a href="https://MerrickMath.github.io/APStatistics/FormulaSheets.pdf"> Exam Formula Sheet</a>.
 * <a href="https://MerrickMath.github.io/Calculus/testguide.pdf"> AP Testing Guide</a>.
 * <a href="https://MerrickMath.github.io/Calculus/examchecklist.pdf"> AP Student Exam Checklist</a>. 
-
 
 ### Notes 
 * <a href="https://github.com/MerrickMath/MerrickMath.github.io/blob/master/APStatistics/Notes/Correlation%20and%20Regression.pdf"> Correlation and Regresson I</a>
