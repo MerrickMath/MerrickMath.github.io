@@ -11,10 +11,10 @@ show_downloads: FALSE
 * **Monday May 11:** AP Calculus Prep 
 * **Tuesday May 12:** AP Calculus Exam (No Statistics)
 * **Wednesday May 13:** Practice Set 9/10/11
-* **Thursday May 14:** Mock Exam 1, <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2017 exam free response questions </a>
-* **Friday May 15:** Review Mock Exam 1, <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2016 exam free response questions </a>
+* **Thursday May 14:** Mock Exam 1 (12:00pm-1:00pm), <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2017 exam free response questions </a>
+* **Friday May 15:** Review Mock Exam 1 (10:00am-1:00pm), <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2016 exam free response questions </a>
 * **May 16-17:** <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2015 exam free response questions </a> 
-* **Monday May 18:** Mock Exam 2 + Review Mock Exam 2
+* **Monday May 18:** Mock Exam 2 + Review Mock Exam 2 (10:00am-1:00pm)
 * **Tuesday May 19:** Practice Set 12/13 <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2013 exam free response questions </a>
 * **Wednesday  May 20:** Mock Exam 3 + Review Mock Exam 3 
 * **Thursday  May 21:** Practice Set 14/15
