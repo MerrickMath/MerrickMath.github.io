@@ -10,7 +10,7 @@ show_downloads: FALSE
 ### Tenatative Schedule
 * **Monday May 11:** AP Calculus Prep 
 * **Tuesday May 12:** Practice Set 9
-* **Wednesday May 13:** Practce Set 10/11
+* **Wednesday May 13:** Practice Set 10/11
 * **Thursday May 14:** Mock Exam 1, <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2017 exam free response questions </a>
 * **Friday May 15:** Review Mock Exam 1, <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2016 exam free response questions </a>
 * **May 16-17:** <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2015 exam free response questions </a> 
