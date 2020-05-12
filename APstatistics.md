@@ -8,16 +8,16 @@ show_downloads: FALSE
 ### Welcome to AP Statistics
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 ### Tenatative Schedule
-* **Monday May 11:** Practice Sets 9/10 
-* **Tuesday May 12:** Practice Sets 11/12
-* **Wednesday May 13:** Mock Exam 1 + Review Mock Exam 1
-* **Thursday May 14:** Mock Exam 2, <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2017 exam free response questions </a>
-* **Friday May 15:** Review Mock Exam 2, <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2016 exam free response questions </a>
+* **Monday May 11:** AP Calculus Prep 
+* **Tuesday May 12:** Practice Set 9
+* **Wednesday May 13:** Practce Set 10/11
+* **Thursday May 14:** Mock Exam 1, <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2017 exam free response questions </a>
+* **Friday May 15:** Review Mock Exam 1, <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2016 exam free response questions </a>
 * **May 16-17:** <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2015 exam free response questions </a> 
-* **Monday May 18:** Mock Exam 3 + Review Mock Exam 3
-* **Tuesday May 19:** Practice Set 13/14 <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2013 exam free response questions </a>
-* **Wednesday  May 20:** Practice Set 15 + Additional Problems 
-* **Thursday  May 21:** Practice Set 15 + Additional Problems 
+* **Monday May 18:** Mock Exam 2 + Review Mock Exam 2
+* **Tuesday May 19:** Practice Set 12/13 <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2013 exam free response questions </a>
+* **Wednesday  May 20:** Mock Exam 3 + Review Mock Exam 3 
+* **Thursday  May 21:** Practice Set 14/15
 * **Friday:** EXAM DAY 
 
 ### Exam 
