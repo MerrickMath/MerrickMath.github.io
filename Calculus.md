@@ -6,6 +6,9 @@ show_downloads: FALSE
 
 ---
 
+### Homework 
+* <a href="https://MerrickMath.github.io/Calculus/Notes/IBP.pdf"> Integration by parts (Due Friday, May 29) </a>.
+
 ### Welcome to Calculust 
 "The sun will come out, **tomorrow**" -Annie 
 
