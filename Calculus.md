@@ -6,16 +6,16 @@ show_downloads: FALSE
 
 ---
 
-### Homework 
-* <a href="https://MerrickMath.github.io/Calculus/Notes/IBP.pdf"> Integration by parts (Due Friday, May 29) </a>.
-
-### Welcome to Calculust 
-"The sun will come out, **tomorrow**" -Annie 
+## Welcome to Calculust 
+"The sun will come out, **tomorrow**" -Annie
 
 * <a href="https://MerrickMath.github.io/Calculus/CalcTopics.pdf"> Course at a glance</a>.
 * **The Exam:** The AP Calculus exam will be held on May 12, at 12PM. More information found <a href="https://MerrickMath.github.io/Calculus/exam2020.pdf"> here</a>.
 * <a href="https://MerrickMath.github.io/Calculus/testguide.pdf"> AP Testing Guide</a>.
-* <a href="https://MerrickMath.github.io/Calculus/examchecklist.pdf"> AP Student Exam Checklist</a>. 
+* <a href="https://MerrickMath.github.io/Calculus/examchecklist.pdf"> AP Student Exam Checklist</a>.
+
+### Homework 
+* <a href="https://MerrickMath.github.io/Calculus/Notes/IBP.pdf"> Integration by parts (Due Friday, May 29) </a>.
 
 ### Notes 
 * <a href="https://MerrickMath.github.io/Calculus/Notes/ImproperIntegrals.pdf"> Improper Integrals </a>
