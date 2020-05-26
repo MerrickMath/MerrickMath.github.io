@@ -15,7 +15,7 @@ Onward: <input id='password' type='text'  />
 <a href="https://MerrickMath.github.io/part2.html" onclick="javascript:return validatePass()">  CLick here to submit  </a>
 <script>
 function validatePass(){
-    if(document.getElementById('password').value == 'Tyrannosaurus'){
+    if(document.getElementById('password').value == 'tyrannosaurus'){
         return true;
     }else{
         alert('wrong password!!');
