@@ -12,7 +12,7 @@ show_downloads: FALSE
 So you have made it to part II. I think you'll be needing <a href="https://MerrickMath.github.io/challengedata.csv"> THIS. </a>
 
 Onward: <input id='password' type='text'  />
-<a href="https://MerrickMath.github.io/part2.html" onclick="javascript:return validatePass()">  CLick here to submit  </a>
+<a href="https://MerrickMath.github.io/part2.html" onclick="javascript:return validatePass()">  Click here to submit  </a>
 <script>
 function validatePass(){
     if(document.getElementById('password').value == 'tyrannosaurus'){
