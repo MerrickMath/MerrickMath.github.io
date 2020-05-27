@@ -14,7 +14,7 @@ So you have made it to part II. I think you'll be needing <a href="https://Merri
 #### Nisi bene
 
 Onward: <input id='password' type='text'  />
-<a href="https://MerrickMath.github.io/MerrickMath.github.io-CelebrateMath/StickTogether.md" onclick="javascript:return validatePass()">  Click here to submit  </a>
+<a href="https://MerrickMath.github.io/MerrickMath.github.io-CelebrateMath/StickTogether.html" onclick="javascript:return validatePass()">  Click here to submit  </a>
 <script>
 function validatePass(){
     if(document.getElementById('password').value == 'tyrannosaurus'){
