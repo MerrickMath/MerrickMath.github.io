@@ -7,7 +7,7 @@ show_downloads: FALSE
 
 ### Puzzle 
 
-<div class="tenor-gif-embed" data-postid="13873676" data-share-method="host" data-width="200%" data-aspect-ratio="1.7857142857142858"><a href="https://tenor.com/view/the-office-dwight-schrute-rainn-wilson-doesnt-add-up-doesnt-make-sense-gif-13873676">The Office Dwight Schrute GIF</a> from <a href="https://tenor.com/search/theoffice-gifs">Theoffice GIFs</a></div><script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+<div class="tenor-gif-embed" data-postid="8718500" data-share-method="host" data-width="100%" data-aspect-ratio="1.0"><a href="https://tenor.com/view/b99-captainholt-holt-raymondholt-statistics-gif-8718500">Andre Braugher Statistics Is So Beautiful GIF</a> from <a href="https://tenor.com/search/andrebraugher-gifs">Andrebraugher GIFs</a></div><script type="text/javascript" async src="https://tenor.com/embed.js"></script>
 
 So you have made it to part II. I think you'll be needing <a href="https://MerrickMath.github.io/challengedata1.csv"> THIS. </a>
 
