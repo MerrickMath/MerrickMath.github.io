@@ -1,4 +1,4 @@
-## NXLYYYT 
+## Code: NXLYYYT 
 
 <p align="center"> <img class="prof" src="https://merrickmath.github.io/MerrickMath.github.io-PokemonChallenge/trainer.png">   </p>
 
