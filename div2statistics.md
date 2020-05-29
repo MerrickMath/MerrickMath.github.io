@@ -12,6 +12,7 @@ show_downloads: FALSE
 
 ### Data Adventures Form
 * <a href="https://docs.google.com/forms/d/e/1FAIpQLSdiiwROMkGb32edefPc1YkVwIGFTbH9K_VHht0KiOd5_UD3gg/viewform?usp=sf_link"> Let's Explore </a>
+* <a href="https://docs.google.com/spreadsheets/d/1aQS_ChvUiYjwoT190ut2YNOTcuYCX7rkRVK874ONMKU/edit?usp=sharing"> Ongoing data adventure spread sheet   </a>
 
 ### Challenges 
 
