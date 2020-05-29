@@ -11,7 +11,7 @@ show_downloads: FALSE
 ### Datasets
 
 ### Data Adventures Form
-* <a href="https://docs.google.com/forms/d/e/1FAIpQLSdiiwROMkGb32edefPc1YkVwIGFTbH9K_VHht0KiOd5_UD3gg/viewform?usp=sf_link"> Let me know where you are at</a>: Complete this form once-twice a week so I know where you are at in your book, and if you have any questions.
+* <a href="https://docs.google.com/forms/d/e/1FAIpQLSdiiwROMkGb32edefPc1YkVwIGFTbH9K_VHht0KiOd5_UD3gg/viewform?usp=sf_link"> Let's Explore </a>
 
 ### Challenges 
 
