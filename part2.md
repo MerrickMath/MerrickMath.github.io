@@ -5,7 +5,7 @@ show_downloads: FALSE
 
 ---
 
-### Puzzle 
+### Code: GTSUXLR
 
 <div class="tenor-gif-embed" data-postid="8718500" data-share-method="host" data-width="40%" data-aspect-ratio="1.0"><a href="https://tenor.com/view/b99-captainholt-holt-raymondholt-statistics-gif-8718500">Andre Braugher Statistics Is So Beautiful GIF</a> from <a href="https://tenor.com/search/andrebraugher-gifs">Andrebraugher GIFs</a></div><script type="text/javascript" async src="https://tenor.com/embed.js"></script>
 
