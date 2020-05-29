@@ -6,9 +6,14 @@ show_downloads: FALSE
 
 ---
 
-## Challenges 
-* <a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge</a> 
+<div class="tenor-gif-embed" data-postid="11534183" data-share-method="host" data-width="100%" data-aspect-ratio="1.5"><a href="https://tenor.com/view/kermit-freaking-out-statistics-gif-11534183">Kermit Freaking GIF</a> from <a href="https://tenor.com/search/kermit-gifs">Kermit GIFs</a></div><script type="text/javascript" async src="https://tenor.com/embed.js"></script>'
 
-## Resources
+### Challenges 
+
+### Datasets 
+
+### Data Adventures Form
+
+### Resources
 * <a href="https://datacamp.com"> Datacamp</a> 
 * <a href="https://www.kaggle.com"> Kaggle </a> 
