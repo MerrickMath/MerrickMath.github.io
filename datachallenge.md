@@ -1,6 +1,6 @@
 ---
-layout: coursepage
-title: Data Challenge
+layout: statistics
+title: Division 2 Statistics
 description: Questions, links, materials, and more
 show_downloads: FALSE
 
