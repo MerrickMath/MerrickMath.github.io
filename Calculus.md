@@ -42,6 +42,7 @@ show_downloads: FALSE
 
 ### Challenges 
 * <a href="https://MerrickMath.github.io/Calculus/Projects/PiazzaFun.pdf"> Piazza Fun </a>
+* <a href="https://MerrickMath.github.io/Calculus/Projects/Paintoff.pdf"> Paint OFF </a>
 
 ---
 
