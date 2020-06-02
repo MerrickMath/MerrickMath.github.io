@@ -15,6 +15,7 @@ Office hours are for asking additional questions and working on homework. If no 
 * <a href="https://docs.google.com/forms/d/e/1FAIpQLSfoR0zEo7vHGlPeS87qulHUP0V8IVT2TtWafFXE6Cy-YKDGNA/viewform?usp=sf_link"> Questions</a>: Complete this form if you have any **QUESTIONS**. This lets me know what topics we still need to explore. 
 
 ### Materials 
+* <a href="https://MerrickMath.github.io/grade4/lifesaver.pdf"> Inky Challenge </a>
 * <a href="https://MerrickMath.github.io/grade4/shapealgebra.pdf"> Shape Algebra </a>
 * <a href="https://MerrickMath.github.io/grade4/witchpuzzle.pdf"> Witch Puzzle </a>
 * <a href="https://MerrickMath.github.io/grade4/lifesaver.pdf"> Lifesaver Puzzle </a>
