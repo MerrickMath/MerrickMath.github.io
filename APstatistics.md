@@ -29,8 +29,7 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/Assignments/assignment8.pdf"> Assignment 8 </a> (April 30 - May 6) 
 * <a href="https://MerrickMath.github.io/APStatistics/Assignments/assignment8solutions.pdf"> Assignment 8 Solutions </a> 
 * <a href="https://MerrickMath.github.io/APStatistics/Assignments/assignment9.pdf"> Assignment 9 </a> 
-* <a href="https://docs.google.com/forms/d/e/1FAIpQLScXmZFZJ5-1mWDZmzPoqg5YrWaF-CSFYX_UupotY9yPE7rlNQ/viewform?usp=sf_link"> 
- Assignment Dropbox </a>  
+* <a href="https://docs.google.com/forms/d/e/1FAIpQLScXmZFZJ5-1mWDZmzPoqg5YrWaF-CSFYX_UupotY9yPE7rlNQ/viewform?usp=sf_link"> Assignment Dropbox </a>  
 
 ### Practice 
 * <a href="https://MerrickMath.github.io/APStatistics/Notes/practice1.pdf"> Practice I </a> 
