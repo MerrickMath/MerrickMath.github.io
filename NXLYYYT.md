@@ -1,6 +1,9 @@
 ---
-page-layout: blank
-___
+layout: coursepage
+title: Celebrate Mathematics 2020
+show_downloads: FALSE
+
+---
 
 ## Code: NXLYYYT 
 
