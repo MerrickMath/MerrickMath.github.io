@@ -8,18 +8,6 @@ show_downloads: FALSE
 
 ### Welcome to AP Statistics
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
-### Tenatative Schedule
-* **Monday May 11:** AP Calculus Prep 
-* **Tuesday May 12:** AP Calculus Exam (No Statistics)
-* **Wednesday May 13:** Practice Set 9/10/11
-* **Thursday May 14:** Mock Exam 1 (12:00pm-1:00pm), <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2017 exam free response questions </a>, <a href="https://docs.google.com/forms/d/e/1FAIpQLSd_uy6Owjk30DvNFYytib6mCuCwN8LjpBMGkmdqgD60M4k8iw/viewform?usp=sf_link"> Exam Submission </a>
-* **Friday May 15:** Review Mock Exam 1 (10:00am-1:00pm), <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2016 exam free response questions </a>
-* **May 16-17:** <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2015 exam free response questions </a> 
-* **Monday May 18:** Mock Exam 2 + Review Mock Exam 2 (10:00am-1:00pm)
-* **Tuesday May 19:** Practice Set 12/13 <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> Homework: Complete 2013 exam free response questions </a>
-* **Wednesday  May 20:** Mock Exam 3 + Review Mock Exam 3 
-* **Thursday  May 21:** Practice Set 14/15
-* **Friday:** EXAM DAY 
 
 ### Exam 
 * The AP Statistics exam will be held on May 22, at 12PM. More information found <a href="https://MerrickMath.github.io/APStatistics/exam2020.pdf"> here </a>.
@@ -40,7 +28,9 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/Assignments/assignment7solutions.pdf"> Assignment 7 Solutions</a> 
 * <a href="https://MerrickMath.github.io/APStatistics/Assignments/assignment8.pdf"> Assignment 8 </a> (April 30 - May 6) 
 * <a href="https://MerrickMath.github.io/APStatistics/Assignments/assignment8solutions.pdf"> Assignment 8 Solutions </a> 
-* <a href="https://docs.google.com/forms/d/e/1FAIpQLScXmZFZJ5-1mWDZmzPoqg5YrWaF-CSFYX_UupotY9yPE7rlNQ/viewform?usp=sf_link"> Assignment Dropbox </a>  
+* <a href="https://MerrickMath.github.io/APStatistics/Assignments/assignment9.pdf"> Assignment 9 </a> 
+* <a href="https://docs.google.com/forms/d/e/1FAIpQLScXmZFZJ5-1mWDZmzPoqg5YrWaF-CSFYX_UupotY9yPE7rlNQ/viewform?usp=sf_link"> 
+ Assignment Dropbox </a>  
 
 ### Practice 
 * <a href="https://MerrickMath.github.io/APStatistics/Notes/practice1.pdf"> Practice I </a> 
