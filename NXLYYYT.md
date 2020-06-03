@@ -1,5 +1,5 @@
 ---
-layout: coursepage
+layout: blankpage
 title: Celebrate Mathematics 2020
 show_downloads: FALSE
 
