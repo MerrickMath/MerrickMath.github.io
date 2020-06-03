@@ -1,5 +1,5 @@
 ---
-layout: blank
+page-layout: blank
 ___
 
 ## Code: NXLYYYT 
