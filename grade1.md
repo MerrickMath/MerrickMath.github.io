@@ -17,6 +17,7 @@ Office hours are for asking additional questions and working on homework. If no 
 
 ### Challenges 
 * <a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge</a> 
+* <a href="https://merrickmath.github.io/MerrickMath.github.io-CelebrateMath/"> CoSMOS Challenge</a> 
 
 ### Fun and Games
 * <a href="https://krazydad.com"> Krazy Dad Puzzles</a>
