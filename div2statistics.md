@@ -10,7 +10,7 @@ show_downloads: FALSE
 ### Homework: 
 * *Exploration Challenge:* As far as you can get!
 * *Datacamp:* As far as you can get!
-* *Exploratory Data Analysis Project (Due June 8th)* 
+* *Exploratory Data Analysis Project (Due June 26th)*
 
 ### Data Adventures Form
 * <a href="https://docs.google.com/forms/d/e/1FAIpQLSdiiwROMkGb32edefPc1YkVwIGFTbH9K_VHht0KiOd5_UD3gg/viewform?usp=sf_link"> Let's Explore </a>
