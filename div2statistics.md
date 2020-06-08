@@ -10,7 +10,7 @@ show_downloads: FALSE
 
 ### Homework: 
 * <a href="https://merrickmath.github.io/MerrickMath-datachallenge/"> Data Adventure Challenge: </a> As far as your team can get!
-* *Datacamp:* As far as you can get!
+* *Datacamp:* Finish *Data Analysis in Spreadsheets* Course (Due June 26th)
 * *Exploratory Data Analysis Project (Due June 26th)*
 
 ### Data Adventures Form
