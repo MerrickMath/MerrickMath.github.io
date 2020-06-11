@@ -22,6 +22,7 @@ show_downloads: FALSE
 * <a href="https://github.com/MerrickMath/MerrickMath.github.io/blob/master/APStatistics/Notes/collectingdata2.pdf"> Collecting Data II </a>
 
 ### Assignments
+* <a href="https://MerrickMath.github.io/APStatistics/assignment5.pdf"> Assignment 5 </a> 
 * <a href="https://MerrickMath.github.io/APStatistics/assignment6.pdf"> Assignment 6 </a> (March 16-30) 
 * <a href="https://MerrickMath.github.io/APStatistics/Assignments/assignment6solutions.pdf"> Assignment 6 Solutions</a> 
 * <a href="https://MerrickMath.github.io/APStatistics/Assignments/Assignment%207.pdf"> Assignment 7 </a> (April 23-27) 
