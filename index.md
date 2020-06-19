@@ -42,6 +42,7 @@
     <p>
       <ul>
         <li> <a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/"> Pokemon Challenge</a>  </li>
+        <li> <a href="https://merrickmath.github.io/Merrickmath.github.io-MasterChefCalc/"> Master Chef Calculus</a>  </li>
       </ul> 
     </p>
   </div>
