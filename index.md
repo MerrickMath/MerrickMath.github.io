@@ -5,10 +5,8 @@
     <h2> Mathematics </h2>
     <p>
       <ul>
-        <li><a href="https://MerrickMath.github.io/grade1.html"> Grade 1 Mathematics</a> </li>
-        <li><a href="https://MerrickMath.github.io/grade23.html"> Grade 2/3 Mathematics</a> </li>
+        <li><a href="https://MerrickMath.github.io/Math20.html"> MATH 20 </a> </li>
         <li><a href="https://MerrickMath.github.io/div2.html"> Division 2 Mathematics </a> </li>
-        <li><a href="https://MerrickMath.github.io/Calculus.html"> AP Calculus</a> </li>
       </ul> 
     </p>
   </div>
@@ -17,8 +15,7 @@
     <h2> Statistics </h2>
     <p>
       <ul>
-        <li><a href="https://MerrickMath.github.io/APstatistics.html"> AP Statistics </a> </li>
-        <li><a href="https://MerrickMath.github.io/div2statistics.html"> Division 2 Statistics </a> </li>
+        <li> No classes in progress </li>
       </ul> 
     </p>
   </div>
