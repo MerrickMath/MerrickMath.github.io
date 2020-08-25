@@ -6,7 +6,6 @@
     <p>
       <ul>
         <li><a href="https://MerrickMath.github.io/Math20.html"> MATH 20 </a> </li>
-        <li><a href="https://MerrickMath.github.io/div2.html"> Division 2 Mathematics </a> </li>
       </ul> 
     </p>
   </div>
