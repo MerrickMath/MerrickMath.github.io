@@ -17,5 +17,3 @@ show_downloads: FALSE
 * Assignment 6 
 * Assignment 7 
 * Assignment 8 
-
-### Check In 
