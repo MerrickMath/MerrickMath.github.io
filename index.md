@@ -5,7 +5,10 @@
     <h2> Mathematics </h2>
     <p>
       <ul>
-        <li><a href="https://MerrickMath.github.io/Math20.html"> MATH 20 </a> </li>
+        <li><a href="https://MerrickMath.github.io/Grade1.html"> Grade 1 Mathematics </a> </li>
+        <li><a href="https://MerrickMath.github.io/Grade23.html"> Grade 2/3 Mathematics </a> </li>
+        <li><a href="https://MerrickMath.github.io/Div2.html"> Div 2 Mathematics </a> </li>
+        <li><a href="https://MerrickMath.github.io/Math20.html"> MATH 20-1 </a> </li>
       </ul> 
     </p>
   </div>
