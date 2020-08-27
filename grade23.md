@@ -13,3 +13,4 @@ show_downloads: FALSE
 ### Fun and Games
 * <a href="https://krazydad.com"> Krazy Dad Puzzles</a>
 * <a href="https://www.mathplayground.com/math-games.html"> Math Playground</a>
+* <a href="https://ca.ixl.com"> IXL </a>
