@@ -10,6 +10,7 @@ show_downloads: FALSE
 * <a href="https://docs.google.com/forms/d/e/1FAIpQLScu8gTgpGzh5IlB8DjHv3FwC8BW87Q7UFtOfm1HkfaUdQjbEQ/viewform?usp=sf_link"> Let me know where you are at</a>: Complete this form **once a week** so I know where you are at in your book, and if you have any questions.
 
 ### Course Outline
+* <a href="https://MerrickMath.github.io/Div2/CourseOutline.pdf"> Course Outline </a>
 
 ### Fun and Games
 * <a href="https://krazydad.com"> Krazy Dad Puzzles</a>
