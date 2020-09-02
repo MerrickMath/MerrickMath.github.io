@@ -17,7 +17,7 @@
     <h2> Statistics </h2>
     <p>
       <ul>
-        <li> No classes in progress </li>
+        <li><a href="https://MerrickMath.github.io/div3statistics.html"> Division 3 Statistics </a> </li>
       </ul> 
     </p>
   </div>
