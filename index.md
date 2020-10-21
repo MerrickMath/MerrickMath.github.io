@@ -44,6 +44,7 @@
         <li> <a href="https://merrickmath.github.io/Merrickmath.github.io-MasterChefCalc/"> Master Chef Calculus</a>  </li>
         <li> <a href="https://renertmath.github.io/RenertMath-CelebrateMath/"> COL Challenge 2020 </a>  </li>
         <li> <a href="https://merrickmath.github.io/MerrickMath.github.io-PythonProject/"> Python Project </a>  </li>
+        <li> <a href="https://merrickmath.github.io/MerrickMath.github.io-PumpkinBomb/"> Pumpkin BOMB Challenge </a>  </li>
       </ul> 
     </p>
   </div>
