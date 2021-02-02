@@ -17,7 +17,7 @@
     <h2> Statistics </h2>
     <p>
       <ul>
-        <li><a href="https://MerrickMath.github.io/div3statistics.html"> Division 3 Statistics </a> </li>
+        <li><a href="https://merrickmath.github.io/MerrickMath-datachallenge/"> Data CHALLENGE </a> </li>
       </ul> 
     </p>
   </div>
