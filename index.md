@@ -1,9 +1,5 @@
 *"The enchanting charms of this sublime science reveal only to those who have the courage to go deeply into it."* - Carl Friedrich Gauss
 
-<head>
-<meta name="google-site-verification" content="AmN2lbAdoaZpw-pWISvlD-2S61nTBHtsX--EmC-JTIA" />
-</head>
-
 <div class="row">
   <div class="column">
     <h2> Mathematics </h2>
