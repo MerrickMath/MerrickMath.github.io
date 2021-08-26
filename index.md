@@ -18,7 +18,7 @@
     <p>
       <ul>
         <li><a href="https://merrickmath.github.io/MerrickMath-datachallenge/"> Data CHALLENGE </a> </li>
-        <li><a href="https://merrickMath.github.io/APstatistics2021.html"> AP Statistics </a> </li>
+        <li><a href="https://merrickMath.github.io/2021Statistics.html"> AP Statistics </a> </li>
       </ul> 
     </p>
   </div>
