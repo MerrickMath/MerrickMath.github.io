@@ -12,10 +12,22 @@ description: Questions, links, materials, and more
 ### Homework 
 * <a href="https://tutorial.math.lamar.edu/problems/alg/factoring.aspx"> Monday 6pm-7pm Practice Homework </a>
 
-### Fun and Games
-* <a href="https://krazydad.com"> Krazy Dad Puzzles</a>
-* <a href="https://www.mathplayground.com/math-games.html"> Math Playground</a>
+### Online links/games
+
+* <a href="https://snap.berkeley.edu/snap/snap.html#present:Username=psafa&ProjectName=Numbers%20Game"> Measurement/estimation game </a>
+* <a href="https://www.mathplayground.com/ASB_Index.html"> Math playground multiplayer games </a> - Compete against other players in a variety of games.
+  * <a href="https://www.mathplayground.com/ASB_GrandPrixMultiplication.html"> Grand Prix multiplication racing game</a> - multiplication
+  * <a href="https://www.mathplayground.com/ASB_OrbitIntegers.html"> Orbit Integers</a> - integer addition
+  * <a href="https://www.mathplayground.com/ASB_DirtBikeProportions.html"> Dirt Bike Proportions</a> - equivalent fractions
+  * <a href="https://www.mathplayground.com/ASB_RatioStadium.html"> Ratio Stadium</a> - equivalent fractions
+* <a href="https://www.mathplayground.com/brain_workouts/brain_workout_01_subtraction.html"> Math playground subtraction game </a>
+* <a href="https://www.mathplayground.com/ASB_RatioBlaster.html"> Math playground equivalent fractions game </a>
+* <a href="https://solveme.edc.org/mobiles/"> Mobile balance puzzles </a>
+* <a href="https://www.mathsisfun.com/numbers/estimation-game.php"> Estimation games </a>
+* <a href="https://mrnussbaum.com/estimation-valley-golf-online-game"> Estimation game </a>
 * <a href="https://ca.ixl.com"> IXL </a>
+
+
 
 ---
 
