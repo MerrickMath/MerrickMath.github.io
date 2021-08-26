@@ -5,9 +5,9 @@
     <h2> Mathematics </h2>
     <p>
       <ul>
-        <li><a href="https://MerrickMath.github.io/grade1.html"> Grade 1 Mathematics </a> </li>
-        <li><a href="https://MerrickMath.github.io/grade23.html"> Grade 2/3 Mathematics </a> </li>
-        <li><a href="https://MerrickMath.github.io/div2.html"> Div 2 Mathematics </a> </li>
+        <li><a href="https://MerrickMath.github.io/2021Grade1.html"> Grade 1 Mathematics </a> </li>
+        <li><a href="https://MerrickMath.github.io/2021Grade23.html"> Grade 2/3 Mathematics </a> </li>
+        <li><a href="https://MerrickMath.github.io/2021Grade45.html"> Div 2 Mathematics </a> </li>
         <li><a href="https://MerrickMath.github.io/Math20.html"> MATH 20-1 </a> </li>
       </ul> 
     </p>
