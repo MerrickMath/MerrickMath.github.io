@@ -17,7 +17,6 @@
     <h2> Statistics </h2>
     <p>
       <ul>
-        <li><a href="https://merrickmath.github.io/MerrickMath-datachallenge/"> Data CHALLENGE </a> </li>
         <li><a href="https://merrickMath.github.io/2021Statistics.html"> AP Statistics </a> </li>
       </ul> 
     </p>
@@ -46,6 +45,7 @@
         <li> <a href="https://renertmath.github.io/RenertMath-CelebrateMath/"> COL Challenge 2020 </a>  </li>
         <li> <a href="https://merrickmath.github.io/MerrickMath.github.io-PythonProject/"> Python Project </a>  </li>
         <li> <a href="https://merrickmath.github.io/MerrickMath.github.io-PumpkinBomb/"> Pumpkin BOMB Challenge 2020 </a>  </li>
+        <li><a href="https://merrickmath.github.io/MerrickMath-datachallenge/"> Data CHALLENGE Course Shell </a> </li>
       </ul> 
     </p>
   </div>
