@@ -72,7 +72,7 @@
 
 ---
   <p align="center"> 
-  <iframe src="https://www.youtube.com/embed/qgkXUEWR52U" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="frame"></iframe> </p>
+  <iframe src="https://www.youtube.com/embed/qgkXUEWR52U" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="framer"></iframe> </p>
 
   
 
