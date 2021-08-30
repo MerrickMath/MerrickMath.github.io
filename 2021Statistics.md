@@ -9,7 +9,7 @@ show_downloads: FALSE
 ### Welcome to AP Statistics
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
-### CURRENT
+### September 6 - 10 
 * Barron's Pages 41 - 62 
 * Watch List: 
     * <a href="https://cosmolearning.org/video-lectures/stem-plots-statistics/"> Stem Plots </a> 
