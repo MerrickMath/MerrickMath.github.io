@@ -10,7 +10,12 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
 ### CURRENT
-* September 1 - Sepetember 3: 
+* Barron's Pages 41 - 62 
+* Watch List: 
+    * <a href="https://cosmolearning.org/video-lectures/stem-plots-statistics/"> Stem Plots </a> 
+    * <a href="https://cosmolearning.org/video-lectures/stem-plots-statistics/"> Histograms </a> 
+    * <a href="https://cosmolearning.org/video-lectures/making-histograms-boxplotsand-timeplots-with-graphing-calculator/"> Using the Calculator </a>
+    * <a href="https://cosmolearning.org/video-lectures/catagorical-graphs-statistics/"> Categorical Graphs </a>
 
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
