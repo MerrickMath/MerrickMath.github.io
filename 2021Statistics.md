@@ -17,7 +17,9 @@ show_downloads: FALSE
     * <a href="https://cosmolearning.org/video-lectures/making-histograms-boxplotsand-timeplots-with-graphing-calculator/"> Using the Calculator </a>
     * <a href="https://cosmolearning.org/video-lectures/catagorical-graphs-statistics/"> Categorical Graphs </a>
     * <a href="https://www.youtube.com/watch?v=4JrEuDYtfOg"> Random Variables </a> 
-    * <a href="https://www.youtube.com/watch?v=DLGMgJqF6SQ"> Categorical Data </a> 
+    * <a href="https://www.youtube.com/watch?v=DLGMgJqF6SQ"> Categorical Data </a>
+    * <a href="https://www.youtube.com/watch?v=qgkXUEWR52U"> Quantitative Data </a>
+    
 * AP Classroom Sections 1.1 - 1.4 
 
 ### Exam 
