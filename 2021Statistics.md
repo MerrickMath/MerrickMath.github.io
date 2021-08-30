@@ -18,6 +18,7 @@ show_downloads: FALSE
     * <a href="https://cosmolearning.org/video-lectures/catagorical-graphs-statistics/"> Categorical Graphs </a>
     * <a href="https://www.youtube.com/watch?v=4JrEuDYtfOg"> Random Variables </a> 
     * <a href="https://www.youtube.com/watch?v=DLGMgJqF6SQ"> Categorical Data </a> 
+* AP Classroom Sections 1.1 - 1.4 
 
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
