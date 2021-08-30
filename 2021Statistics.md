@@ -16,6 +16,9 @@ show_downloads: FALSE
     * <a href="https://cosmolearning.org/video-lectures/stem-plots-statistics/"> Histograms </a> 
     * <a href="https://cosmolearning.org/video-lectures/making-histograms-boxplotsand-timeplots-with-graphing-calculator/"> Using the Calculator </a>
     * <a href="https://cosmolearning.org/video-lectures/catagorical-graphs-statistics/"> Categorical Graphs </a>
+    * <a href="https://www.youtube.com/watch?v=4JrEuDYtfOg"> Random Variables </a> 
+    * <a href="https://www.youtube.com/watch?v=DLGMgJqF6SQ"> Categorical Data </a> 
+* Find Dataset(s) for Statistics Colloquium 
 
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
