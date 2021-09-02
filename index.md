@@ -18,7 +18,7 @@
     <p>
       <ul>
         <li><a href="https://merrickMath.github.io/2021Statistics.html"> AP Statistics </a> </li>
-        <li><a href="https://merrickMath.github.io/2021Div2Statistics.html"> Division 2 Statistics </a> </li>
+        <li><a href="https://merrickmath.github.io/MerrickMath.github.io-UnderstandingStatistics/"> Division 2 Statistics </a> </li>
       </ul> 
     </p>
   </div>
