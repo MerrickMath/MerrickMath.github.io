@@ -6,6 +6,8 @@ show_downloads: FALSE
 
 ---
 
+<div class="tenor-gif-embed" data-postid="17561248" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/brooklyn-nine-nine-brooklyn99-statistical-statistical-analysis-analysis-gif-17561248">Brooklyn Nine Nine Brooklyn99 GIF</a>from <a href="https://tenor.com/search/brooklyn+nine+nine-gifs">Brooklyn Nine Nine GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+
 ### Welcome to AP Statistics
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
@@ -37,9 +39,6 @@ show_downloads: FALSE
 * <a href="https://cosmolearning.org/video-lectures/catagorical-graphs-statistics/"> Categorical Graphs </a>
 * <a href="https://www.youtube.com/watch?v=4JrEuDYtfOg"> Random Variables </a> 
 * <a href="https://www.youtube.com/watch?v=DLGMgJqF6SQ"> Categorical Data </a> 
-
-
-<div class="tenor-gif-embed" data-postid="17561248" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/brooklyn-nine-nine-brooklyn99-statistical-statistical-analysis-analysis-gif-17561248">Brooklyn Nine Nine Brooklyn99 GIF</a>from <a href="https://tenor.com/search/brooklyn+nine+nine-gifs">Brooklyn Nine Nine GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
 
 
 ---
