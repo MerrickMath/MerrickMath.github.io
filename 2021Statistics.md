@@ -9,8 +9,7 @@ show_downloads: FALSE
 ### Welcome to AP Statistics
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
-### September 6 - 10 
-* Barron's Pages 41 - 62 
+### September 3-6 
 * Watch List: 
     * <a href="https://cosmolearning.org/video-lectures/stem-plots-statistics/"> Stem Plots </a> 
     * <a href="https://cosmolearning.org/video-lectures/stem-plots-statistics/"> Histograms </a> 
@@ -20,7 +19,7 @@ show_downloads: FALSE
     * <a href="https://www.youtube.com/watch?v=DLGMgJqF6SQ"> Categorical Data </a>
     * <a href="https://www.youtube.com/watch?v=qgkXUEWR52U"> Quantitative Data </a>
     
-* AP Classroom Sections 1.1 - 1.4 
+* AP Classroom Sections 1.1 - 1.5 
 
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
