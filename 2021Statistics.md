@@ -29,8 +29,8 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 ### Important Dates
 * <a href="https://MerrickMath.github.io/2021Statistics/Activities/Colloquium1.pdf"> One Variable Statistics Colloquium </a> : September 15
 * One Varibale Data Unit Test: September 20 
-* <a href="https://MerrickMath.github.io/2021Statistics/Activities/Colloquium2.pdf"> Two Variable Statistics Colloquium </a> : September 15
-* Two Varibale Data Unit Test: tbd 
+* <a href="https://MerrickMath.github.io/2021Statistics/Activities/Colloquium2.pdf"> Two Variable Statistics Colloquium </a> : September 27
+* Two Varibale Data Unit Test: October 4  
 
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
