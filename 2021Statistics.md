@@ -6,8 +6,6 @@ show_downloads: FALSE
 
 ---
 
-<div class="tenor-gif-embed" data-postid="17561248" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/brooklyn-nine-nine-brooklyn99-statistical-statistical-analysis-analysis-gif-17561248">Brooklyn Nine Nine Brooklyn99 GIF</a>from <a href="https://tenor.com/search/brooklyn+nine+nine-gifs">Brooklyn Nine Nine GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
-
 ### Welcome to AP Statistics
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
@@ -47,4 +45,7 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 
 
 ---
+
+<div class="tenor-gif-embed" data-postid="17561248" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/brooklyn-nine-nine-brooklyn99-statistical-statistical-analysis-analysis-gif-17561248">Brooklyn Nine Nine Brooklyn99 GIF</a>from <a href="https://tenor.com/search/brooklyn+nine+nine-gifs">Brooklyn Nine Nine GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+
 
