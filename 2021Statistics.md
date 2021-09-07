@@ -27,9 +27,9 @@ show_downloads: FALSE
 A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> </li>
 
 ### Important Dates
-* <a href="https://MerrickMath.github.io/2021Statistics/Activities/Colloquium1.pdf"> One Variable Statistics Colloquium </a> : September 15
+* <a href="https://MerrickMath.github.io/2021Statistics/Activities/Colloquium1.pdf"> One Variable Statistics Colloquium </a>: September 15
 * One Varibale Data Unit Test: September 20 
-* <a href="https://MerrickMath.github.io/2021Statistics/Activities/Colloquium2.pdf"> Two Variable Statistics Colloquium </a> : September 27
+* <a href="https://MerrickMath.github.io/2021Statistics/Activities/Colloquium2.pdf"> Two Variable Statistics Colloquium </a>: September 27
 * Two Varibale Data Unit Test: October 4  
 
 ### Exam 
