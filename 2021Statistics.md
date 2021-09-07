@@ -27,7 +27,7 @@ show_downloads: FALSE
     
 * AP Classroom Sections 1.6-1.10 
 
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> AP Statistics </a> </li>
+A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> </li>
 
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
