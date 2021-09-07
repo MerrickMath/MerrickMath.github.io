@@ -22,7 +22,6 @@ show_downloads: FALSE
     * <a href="https://cosmolearning.org/video-lectures/density-curves-empirical-rule-normality-z-score-intro/"> Desnity Curves, and the Noraml Distribtion </a>
     * <a href="https://cosmolearning.org/video-lectures/normal-probability-plots-ti-84/"> Normal Probability Plots and The TI-84 </a>
     * <a href="https://cosmolearning.org/video-lectures/z-score-calculations-percentiles-normal-distribution/"> Z-Scores </a>
-    * <a href="https://cosmolearning.org/video-lectures/ti-nspire-z-score-pval-pval-zscore-normcdf-invnorm/"> Using the Calculator </a>
     * <a href="https://www.youtube.com/watch?v=LQnRXTjKcHc"> Summarizing Quantitative Data </a> 
     
 * AP Classroom Sections 1.6-1.10 
