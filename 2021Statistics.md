@@ -27,7 +27,7 @@ show_downloads: FALSE
 A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> </li>
 
 ### Important Dates
-* <a href=""> One Variable Statistics Colloquium </a> : September 15
+* <a href="https://MerrickMath.github.io/2021Statistics/Activites/"> One Variable Statistics Colloquium </a> : September 15
 * One Varibale Data Unit Test: September 20 
 * <a href=""> Two Variable Statistics Colloquium </a> : September 15
 * Two Varibale Data Unit Test: tbd 
