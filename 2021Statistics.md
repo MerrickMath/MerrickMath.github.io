@@ -27,7 +27,7 @@ show_downloads: FALSE
     
 * AP Classroom Sections 1.6-1.10 
 
-A timeline of previous posts may be found <a href="https://cosmolearning.org/video-lectures/ti-nspire-z-score-pval-pval-zscore-normcdf-invnorm/"> here. </a>
+A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021Statistics.html"> AP Statistics </a> </li>
 
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
