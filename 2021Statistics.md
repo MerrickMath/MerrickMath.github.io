@@ -33,6 +33,7 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * Two Varibale Data Unit Test: October 4  
 
 ### In Class Materials  
+* <a href="https://MerrickMath.github.io/2021Statistics/Practice/STSept9.pdf"> Deep Thoughts: September 9 </a>
 
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
