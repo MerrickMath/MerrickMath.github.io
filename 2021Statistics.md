@@ -32,6 +32,8 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://MerrickMath.github.io/2021Statistics/Activities/Colloquium2.pdf"> Two Variable Statistics Colloquium </a>: September 27
 * Two Varibale Data Unit Test: October 4  
 
+### In Class Materials  
+
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
 * <a href="https://MerrickMath.github.io/APStatistics/FormulaSheets.pdf"> Exam Formula Sheet</a>.
@@ -40,15 +42,6 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://www.jbstatistics.com"> JBStatistics </a> 
 * <a href="https://www.khanacademy.org/math/ap-statistics"> Khan Academy AP Statistics </a> 
 * <a href="https://apcentral.collegeboard.org"> College Board </a> 
-
-### Watch List (Ongoing) 
-* <a href="https://cosmolearning.org/video-lectures/stem-plots-statistics/"> Stem Plots </a> 
-* <a href="https://cosmolearning.org/video-lectures/stem-plots-statistics/"> Histograms </a> 
-* <a href="https://cosmolearning.org/video-lectures/making-histograms-boxplotsand-timeplots-with-graphing-calculator/"> Using the Calculator </a>
-* <a href="https://cosmolearning.org/video-lectures/catagorical-graphs-statistics/"> Categorical Graphs </a>
-* <a href="https://www.youtube.com/watch?v=4JrEuDYtfOg"> Random Variables </a> 
-* <a href="https://www.youtube.com/watch?v=DLGMgJqF6SQ"> Categorical Data </a> 
-
 
 ---
 
