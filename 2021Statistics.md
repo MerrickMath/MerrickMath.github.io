@@ -18,6 +18,11 @@ show_downloads: FALSE
     * <a href="https://cosmolearning.org/video-lectures/regression-lines-correlation-with-ti-84/"> Least Squares Regession Line </a>
 
  * AP Classroom Sections 2.1-2.3
+
+* Homework 
+   * Finish in class handout
+   * Finish Barron's Unit 1 Practice Problems 
+   * Finish AP Statistics Colloquium Presentation and Report 
  
 A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> </li>
 
