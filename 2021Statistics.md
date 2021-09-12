@@ -9,6 +9,8 @@ show_downloads: FALSE
 ### Welcome to AP Statistics
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
+---
+
 ### September 13-19 
 * Watch List: 
     * <a href="https://cosmolearning.org/video-lectures/scatter-plot-intro-lurking-variables-defined/"> Scatter Plots and Lurking Variables </a>
@@ -16,15 +18,15 @@ show_downloads: FALSE
     * <a href="https://cosmolearning.org/video-lectures/outlier-vs-influential-point/"> Outliers and Influential Points </a> 
     * <a href="https://cosmolearning.org/video-lectures/least-squares-regression-line-notes/"> Least Squares Regession Line </a>
     * <a href="https://cosmolearning.org/video-lectures/regression-lines-correlation-with-ti-84/"> Using the TI-84 </a>
-
- * AP Classroom Sections 2.1-2.3
-
+* AP Classroom Sections 2.1-2.3
 * Homework 
    * Finish in class handout
    * Finish Barron's Unit 1 Practice Problems 
    * Finish AP Statistics Colloquium Presentation and Report 
  
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> </li>
+A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
+
+---
 
 ### Important Dates
 * <a href="https://MerrickMath.github.io/2021Statistics/Activities/ColloquiumI.pdf"> One Variable Statistics Colloquium </a>: September 17
