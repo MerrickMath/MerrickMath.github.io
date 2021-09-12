@@ -18,22 +18,7 @@ show_downloads: FALSE
     * <a href="https://cosmolearning.org/video-lectures/regression-lines-correlation-with-ti-84/"> Least Squares Regession Line </a>
 
  * AP Classroom Sections 2.1-2.3
-
-### September 7-12
-* Watch List: 
-    * <a href="https://cosmolearning.org/video-lectures/describing-distributions-statistics/"> Describing Distributions </a> 
-    * <a href="https://cosmolearning.org/video-lectures/determining-skewness-ogive-graphs/"> Skewness in Ogive Graphs </a> 
-    * <a href="https://cosmolearning.org/video-lectures/resistance-mean-median-5-number-summary-boxplots/"> Five Number Summary </a>
-    * <a href="https://cosmolearning.org/video-lectures/standard-deviation-preview-iqr-test/"> Determing Outliers </a>
-    * <a href="https://cosmolearning.org/video-lectures/distribution-shapes-ogive-graphs-time-plots/"> Shape, Ogive Graphs, Time Plots </a>
-    * <a href="https://cosmolearning.org/video-lectures/standard-deviation-linear-transformations/"> Standard Deviation and Linear Transformation </a>
-    * <a href="https://cosmolearning.org/video-lectures/density-curves-empirical-rule-normality-z-score-intro/"> Desnity Curves, and the Noraml Distribtion </a>
-    * <a href="https://cosmolearning.org/video-lectures/normal-probability-plots-ti-84/"> Normal Probability Plots and The TI-84 </a>
-    * <a href="https://cosmolearning.org/video-lectures/z-score-calculations-percentiles-normal-distribution/"> Z-Scores </a>
-    * <a href="https://www.youtube.com/watch?v=LQnRXTjKcHc"> Summarizing Quantitative Data </a> 
-    
-* AP Classroom Sections 1.6-1.10 
-
+ 
 A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> </li>
 
 ### Important Dates
