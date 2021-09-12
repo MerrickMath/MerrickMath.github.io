@@ -1,3 +1,19 @@
+### September 13-19 
+* Watch List: 
+    * <a href="https://cosmolearning.org/video-lectures/scatter-plot-intro-lurking-variables-defined/"> Scatter Plots and Lurking Variables </a>
+    * <a href="https://cosmolearning.org/video-lectures/intro-corellation-r-measure-linear-strength/"> Correlation Coefficient </a> 
+    * <a href="https://cosmolearning.org/video-lectures/outlier-vs-influential-point/"> Outliers and Influential Points </a> 
+    * <a href="https://cosmolearning.org/video-lectures/least-squares-regression-line-notes/"> Least Squares Regession Line </a>
+    * <a href="https://cosmolearning.org/video-lectures/regression-lines-correlation-with-ti-84/"> Least Squares Regession Line </a>
+
+ * AP Classroom Sections 2.1-2.3
+
+* Homework 
+   * Finish in class handout
+   * Finish Barron's Unit 1 Practice Problems 
+ 
+---
+
 ### September 7-12
 * Watch List: 
     * <a href="https://cosmolearning.org/video-lectures/describing-distributions-statistics/"> Describing Distributions </a> 
