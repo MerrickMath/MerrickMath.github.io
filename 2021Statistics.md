@@ -15,7 +15,7 @@ show_downloads: FALSE
     * <a href="https://cosmolearning.org/video-lectures/intro-corellation-r-measure-linear-strength/"> Correlation Coefficient </a> 
     * <a href="https://cosmolearning.org/video-lectures/outlier-vs-influential-point/"> Outliers and Influential Points </a> 
     * <a href="https://cosmolearning.org/video-lectures/least-squares-regression-line-notes/"> Least Squares Regession Line </a>
-    * <a href="https://cosmolearning.org/video-lectures/regression-lines-correlation-with-ti-84/"> Least Squares Regession Line </a>
+    * <a href="https://cosmolearning.org/video-lectures/regression-lines-correlation-with-ti-84/"> Using the TI-84 </a>
 
  * AP Classroom Sections 2.1-2.3
 
