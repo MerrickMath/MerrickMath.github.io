@@ -36,7 +36,7 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 
 ### In Class Materials  
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/DTSept9.pdf"> Deep Thoughts: September 9 </a>
-* <a href="https://MerrickMath.github.io/2021Statistics/Practice/DTSept9Solutions.pdf"> Deep Thoughts: September 9 SOLUTIONS </a>
+* <a href="https://MerrickMath.github.io/2021Statistics/Practice/DTSep9Solutions1.pdf"> Deep Thoughts: September 9 SOLUTIONS </a>
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
 * <a href="https://MerrickMath.github.io/APStatistics/FormulaSheets.pdf"> Exam Formula Sheet</a>.
