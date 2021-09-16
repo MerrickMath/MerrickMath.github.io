@@ -45,6 +45,7 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://www.jbstatistics.com"> JBStatistics </a> 
 * <a href="https://www.khanacademy.org/math/ap-statistics"> Khan Academy AP Statistics </a> 
 * <a href="https://apcentral.collegeboard.org"> College Board </a> 
+* <a href="https://www.stapplet.com"> Statistics Apps </a> 
 
 ---
 
