@@ -10,6 +10,15 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
 ---
+### September 13-19 
+* Watch List: 
+    * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Tarrou 15-17 </a>
+
+* AP Classroom Sections 2.4 - 2.6
+* Homework 
+   * Finish Deep Thoughts Handouts (**Before Test**)
+   * Statistics Colloquium I (Monday) 
+
 
 ### September 13-19 
 * Watch List: 
