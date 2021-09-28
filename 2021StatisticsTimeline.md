@@ -1,3 +1,14 @@
+### September 27 - October 3 
+* Watch List: 
+    * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 19-20 </a>
+* AP Classroom Sections 2.7 - 2.8
+* Homework 
+   * Read Barron's Pages 97-104
+   * Finish Quiz 6-9 Barron's 
+* Install R and R Studio on laptops
+
+---
+
 ### September 20-26 
 * Watch List: 
     * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 15-17 </a>
