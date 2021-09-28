@@ -16,7 +16,7 @@ show_downloads: FALSE
 * AP Classroom Sections 2.7 - 2.8
 * Homework 
    * Read Barron's Pages 97-104
-   * Finish Quiz 6-9 Barron's 
+   * Finish Quiz 6-7 Barron's (start 8/9)  
 * Install R and R Studio on laptops
  
 A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
