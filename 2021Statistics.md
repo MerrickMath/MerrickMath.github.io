@@ -24,6 +24,10 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 
 ---
 
+### Slides
+* <a href="https://MerrickMath.github.io/2021Statistics/Slides/Unit1.pdf"> Unit 1: One Variable Data</a>
+* <a href="https://MerrickMath.github.io/2021Statistics/Slides/Unit2.pdf"> Unit 2: Two Variable Data </a>
+
 ### Important Dates
 * <a href="https://MerrickMath.github.io/2021Statistics/Activities/ColloquiumI.pdf"> One Variable Statistics Colloquium </a>: September 17
 * One Variable Data Unit Test: September 27 
