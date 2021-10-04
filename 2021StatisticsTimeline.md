@@ -1,3 +1,17 @@
+### October 4 - 10 
+* Watch List: 
+    * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 21-22 </a>
+* AP Classroom Sections 2.9
+* AP Classroom Progress Check (DUE FRIDAY) 
+* Homework 
+   * Read Barron's Pages 113-131
+   * Finish Quiz 8-9 Barron's 
+* 2 Variable Statistics Colloquium is on FRIDAY 
+ 
+A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
+
+---
+
 ### September 27 - October 3 
 * Watch List: 
     * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 19-20 </a>
