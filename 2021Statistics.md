@@ -22,17 +22,6 @@ show_downloads: FALSE
  
 A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
 
-### September 27 - October 3 
-* Watch List: 
-    * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 19-20 </a>
-* AP Classroom Sections 2.7 - 2.8
-* Homework 
-   * Read Barron's Pages 97-104
-   * Finish Quiz 6-7 Barron's (start 8/9)  
-* Install R and R Studio on laptops
- 
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
-
 ---
 
 ### Important Dates
