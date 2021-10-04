@@ -12,7 +12,7 @@ show_downloads: FALSE
 ---
 ### October 4 - 10 
 * Watch List: 
-    * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 21-22 </a>
+    * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 21-22, 26 </a>
 * AP Classroom Sections 2.9
 * AP Classroom Progress Check (DUE FRIDAY) 
 * Homework 
