@@ -1,3 +1,15 @@
+### October 12 - 17 
+* Watch List: 
+    * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 31-34 </a>
+* AP Classroom Sections 3.1-3.4
+* Homework 
+   * Read Barron's Pages 147 - 153 
+   * Finish Quiz 10-11 Barron's 
+ 
+A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
+
+---
+
 ### October 4 - 10 
 * Watch List: 
     * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 21-22 </a>
