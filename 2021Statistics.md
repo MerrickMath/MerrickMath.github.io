@@ -16,7 +16,7 @@ show_downloads: FALSE
     * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 30, 35-36 </a>
 
 * Homework 
-   * Read Barron's Experiments/Experimental Design Notes 
+   * Read Barron's Experiments/Experimental Design Notes (pages 161-167)
    * Finish Quiz 12-13 Barron's 
  
 A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
