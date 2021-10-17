@@ -1,3 +1,14 @@
+### October 18-24 
+* Watch List: 
+    * AP Classroom Sections 3.5-3.7
+    * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 30, 35-36 </a>
+
+* Homework 
+   * Read Barron's Experiments/Experimental Design Notes 
+   * Finish Quiz 12-13 Barron's 
+
+--- 
+
 ### October 12 - 17 
 * Watch List: 
     * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 31-34 </a>
