@@ -42,8 +42,8 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://MerrickMath.github.io/2021Statistics/Activities/ColloquiumI.pdf"> One Variable Statistics Colloquium </a>: September 17
 * One Variable Data Unit Test: September 27 
 * <a href="https://MerrickMath.github.io/2021Statistics/Activities/ColloquiumII.pdf"> Two Variable Statistics Colloquium </a>: TBD
-* Two Varibale Data Unit Test: October 18. 
-* Collecting Data Unit Test: TBD
+* Two Varibale Data Unit Test: October 18 
+* Collecting Data Unit Test: Novmeber 1 
 * Probability Unit Test: TBD
 * Sampling Distributions Unit Test: TBD  
 
