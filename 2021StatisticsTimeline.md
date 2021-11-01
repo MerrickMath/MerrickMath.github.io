@@ -1,6 +1,6 @@
 ### November 1 - November 14
 * Watch List: 
-    * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 42 </a>
+    * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou - Video 42 </a>
     * AP Classoom Sections 4.1-4.6
     
 * Homework 
