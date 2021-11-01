@@ -10,6 +10,21 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
 ---
+
+### November 1 - November 14
+* Watch List: 
+    * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 42 </a>
+    * AP Classoom Sections 4.1-4.6
+    
+* Homework 
+   * Read Barron's pages 175-179, 190-195
+   * Barron's Quiz 14-15
+
+A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
+
+---
+
+
 ### October 24 - 31 
 * Watch List: 
     * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 38 </a>
@@ -21,18 +36,6 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 
 ---
 
-### October 18-24 
-* Watch List: 
-    * AP Classroom Sections 3.5-3.7
-    * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 30, 35-36 </a>
-
-* Homework 
-   * Read Barron's Experiments/Experimental Design Notes (pages 161-167)
-   * Finish Quiz 12-13 Barron's 
- 
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
-
----
 
 ### Slides
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/Unit1.pdf"> Unit 1: One Variable Data</a>
