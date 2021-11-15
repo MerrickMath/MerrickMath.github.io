@@ -10,8 +10,7 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
 ---
-
-### November 1 - November 14
+### November 15 - November 21
 * Watch List: 
     * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 42 </a>
     * AP Classoom Sections 4.1-4.6
