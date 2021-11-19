@@ -7,8 +7,6 @@
    * Read Barron's pages 203-208, 214-216
    * Barron's Quiz 18-19
 
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
-
 ---
 
 ### November 15 - November 21
@@ -19,8 +17,6 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * Homework 
    * Read Barron's pages 190-196
    * Barron's Quiz 16-17
-
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
 
 ---
 
