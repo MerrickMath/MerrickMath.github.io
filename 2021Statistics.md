@@ -10,6 +10,19 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
 ---
+### November 22 - Novmeber 28
+* Watch List: 
+    * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 48-50 </a>
+    * AP Classoom Sections 4.7-4.9
+    
+* Homework 
+   * Read Barron's pages 203-208, 214-216
+   * Barron's Quiz 18-19
+
+A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
+
+---
+
 ### November 15 - November 21
 * Watch List: 
     * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 45 </a>
