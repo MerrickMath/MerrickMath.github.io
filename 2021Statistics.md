@@ -23,19 +23,6 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 
 ---
 
-### November 15 - November 21
-* Watch List: 
-    * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 45 </a>
-    * AP Classoom Sections 4.7-4.9
-    
-* Homework 
-   * Read Barron's pages 190-196
-   * Barron's Quiz 16-17
-
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
-
----
-
 
 ### Slides/Notes 
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/Unit1.pdf"> Unit 1: One Variable Data</a>
