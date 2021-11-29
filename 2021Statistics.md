@@ -30,7 +30,8 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/Probability.pdf"> Unit 4: Probability </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/RandomVariables.pdf"> Unit 4: Random Variables </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/SumsandDiffs.pdf"> Unit 4: Sums and Differeneces for Random Variables
-* <a href="https://MerrickMath.github.io/2021Statistics/Slides/MassandDensity.pdf"> Unit 4: Probability Mass and Probability Density </a>
+* <a href="https://MerrickMath.github.io/2021Statistics/Slides/MassandDensity.pdf"> Unit 4: Mass and Density Continuous Random Variables
+   </a>
 
 ### Important Dates
 * <a href="https://MerrickMath.github.io/2021Statistics/Activities/ColloquiumI.pdf"> One Variable Statistics Colloquium </a>: September 17
