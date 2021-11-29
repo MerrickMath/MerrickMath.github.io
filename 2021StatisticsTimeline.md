@@ -1,3 +1,15 @@
+---
+### November 29 - December 5
+* Watch List: 
+    * <a href="https://www.youtube.com/watch?v=p-XZlSc663Q&t=1s"> Mean For Discrete Random Varibles </a>
+    * <a href="https://www.youtube.com/watch?v=nCfc0SGY_MU&t=472s"> Variance For Discrete Random Varibles </a>
+    * AP Classoom Sections 4.10-4.12
+    
+* Homework 
+   * Finish any remaining pages from Barron's Unit 4 *ASK QUESTIONS IF YOU HAVE ANY*
+   
+---
+
 ### November 22 - Novmeber 28
 * Watch List: 
     * <a href="https://cosmolearning.org/courses/ap-statistics-lessons-from-mr-tarrou/"> AP Statistics Lessons with Mr. Tarrou 48-50 </a>
