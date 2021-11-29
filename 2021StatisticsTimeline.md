@@ -1,4 +1,3 @@
----
 ### November 29 - December 5
 * Watch List: 
     * <a href="https://www.youtube.com/watch?v=p-XZlSc663Q&t=1s"> Mean For Discrete Random Varibles </a>
