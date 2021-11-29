@@ -33,7 +33,7 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/MassandDensity.pdf"> Unit 4: Mass and Density Continuous Random 
    Variables
    </a>
-* <a href="https://MerrickMath.github.io/2021Statistics/Slides/MassandDensity.pdf"> Unit 4: Normal Distribution </a>
+* <a href="https://MerrickMath.github.io/2021Statistics/Slides/NormalDistribution.pdf"> Unit 4: Normal Distribution </a>
 
 ### Important Dates
 * <a href="https://MerrickMath.github.io/2021Statistics/Activities/ColloquiumI.pdf"> One Variable Statistics Colloquium </a>: September 17
