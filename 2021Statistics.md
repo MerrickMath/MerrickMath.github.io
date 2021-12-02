@@ -35,6 +35,7 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
    </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/NormalDistribution.pdf"> Unit 4: Normal Distribution </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/ChiT.pdf"> Unit 4: Chi Square and T Distributions </a>
+* <a href="https://MerrickMath.github.io/2021Statistics/Slides/NormalApproxBinom.pdf"> Unit 4: Hypergeometric Random Variables </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/NormalApproxBinom.pdf"> Unit 4: Normal Approximation to Binomial Distribution </a>
 
 ### Important Dates
