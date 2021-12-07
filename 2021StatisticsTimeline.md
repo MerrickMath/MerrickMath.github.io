@@ -1,4 +1,4 @@
-### December 7 - December December 12
+### December 7 - December 12
 * Watch List: 
     * AP Classoom finish section 4 
     
