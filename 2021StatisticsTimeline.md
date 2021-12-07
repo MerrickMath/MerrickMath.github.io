@@ -1,3 +1,15 @@
+---
+### December 7 - December December 12
+* Watch List: 
+    * AP Classoom finish section 4 
+    
+* Homework 
+   * Finish any remaining pages from Barron's Unit 4 *ASK QUESTIONS IF YOU HAVE ANY*
+   * Finish deep thoughts handout, and questions from note guides.
+   * Unit 4 test will be held on Dec 13 *make sure you are prepared*. 
+
+---
+
 ### November 29 - December 5
 * Watch List: 
     * <a href="https://www.youtube.com/watch?v=p-XZlSc663Q&t=1s"> Mean For Discrete Random Varibles </a>
