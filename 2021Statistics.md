@@ -10,7 +10,7 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
 ---
-### December 7 - December December 12
+### December 7 - December 12
 * Watch List: 
     * AP Classoom finish section 4 
     
