@@ -10,7 +10,7 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
 ---
-### November 29 - December 5
+### December 7 - December December 12
 * Watch List: 
     * <a href="https://www.youtube.com/watch?v=p-XZlSc663Q&t=1s"> Mean For Discrete Random Varibles </a>
     * <a href="https://www.youtube.com/watch?v=nCfc0SGY_MU&t=472s"> Variance For Discrete Random Varibles </a>
