@@ -54,7 +54,8 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/DTSept17Solutions.pdf"> Deep Thoughts: September 17 SOLUTIONS </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/DTUnit3Solutions.pdf"> Deep Thoughts: Unit 3 Collecting Data SOLUTIONS </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/Unit4MiniMath.pdf"> Unit 4 Mini Math Problems (blank) </a>
-
+* <a href="https://MerrickMath.github.io/2021Statistics/Practice/DTDec3Solutions.pdf"> Deep Thoughts: Unit 4 Probability SOLUTIONS </a>
+* 
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
 * <a href="https://MerrickMath.github.io/APStatistics/FormulaSheets.pdf"> Exam Formula Sheet</a>.
