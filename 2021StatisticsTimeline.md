@@ -1,3 +1,14 @@
+### December 14 - January 2
+* Watch List: 
+    * AP Classoom 5.1 - 5.8 
+    
+* Homework 
+   * Barron's Sampling Distribution Problems 
+
+We will be moving through Unit 5 very quickly when we come back from the break. Please ensure you have watched videos, taken noted, and completed required problems. 
+
+---
+
 ### December 7 - December 12
 * Watch List: 
     * AP Classoom finish section 4 
