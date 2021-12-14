@@ -11,18 +11,19 @@ show_downloads: FALSE
 
 ---
 
-### December 7 - December 12
+### December 14 - January 2
 * Watch List: 
-    * AP Classoom finish section 4 
+    * AP Classoom 5.1 - 5.8 
     
 * Homework 
-   * Finish any remaining pages from Barron's Unit 4 *ASK QUESTIONS IF YOU HAVE ANY*
-   * Finish deep thoughts handout, and questions from note guides.
-   * Unit 4 test will be held on Dec 13 *make sure you are prepared*. 
+   * Barron's Sampling Distribution Problems 
+
+We will be moving through Unit 5 very quickly when we come back from the break. Please ensure you have watched videos, taken noted, and completed required problems. 
 
 A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
 
 ---
+
 
 ### Slides/Notes 
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/Unit1.pdf"> Unit 1: One Variable Data</a>
