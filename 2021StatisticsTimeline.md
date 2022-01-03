@@ -3,6 +3,7 @@
     * <a href="https://www.jbstatistics.com/sampling-distributions-introduction-to-the-concept/"> JBStatistics Sections 4.1-4.3 </a> 
 * Homework 
    * Barron's Quiz 20/21  
+   * AP Central Assigned Problems
 
 ---
 
