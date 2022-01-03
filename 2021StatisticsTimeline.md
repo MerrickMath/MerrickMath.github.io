@@ -1,3 +1,11 @@
+### January 3 - January 9
+* Watch List: 
+    * <a href="https://www.jbstatistics.com/sampling-distributions-introduction-to-the-concept/"> JBStatistics Sections 4.1-4.3 </a> 
+* Homework 
+   * Barron's Quiz 20/21  
+
+---
+
 ### December 14 - January 2
 * Watch List: 
     * AP Classoom 5.1 - 5.8 
