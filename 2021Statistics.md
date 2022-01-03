@@ -10,18 +10,12 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
 ---
-
-### December 14 - January 2
+### January 3 - January 9
 * Watch List: 
-    * AP Classoom 5.1 - 5.8 
-    
+    * <a href="https://www.jbstatistics.com/sampling-distributions-introduction-to-the-concept/"> JBStatistics Sections 4.1-4.3 </a> 
 * Homework 
-   * Barron's Sampling Distribution Problems 
-
-We will be moving through Unit 5 very quickly when we come back from the break. Please ensure you have watched videos, taken noted, and completed required problems. 
-
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
-
+   * Barron's Quiz 20/21  
+   
 ---
 
 
