@@ -47,7 +47,11 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * Two Varibale Data Unit Test: October 18 
 * Collecting Data Unit Test: Novmeber 1 
 * Probability Unit Test: December 13
-* Sampling Distributions Unit Test: TBD  
+* Sampling Distributions Unit Test: January 19
+* Confidence Interval Estimation Unit Test:
+* Hypothesis Testing Unit Test I: 
+* Hypothesis Testing Unit Test II: 
+* Inference for Regression Unit Test: 
 
 ### In Class Materials  
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/DTSept9.pdf"> Deep Thoughts: September 9 </a>
