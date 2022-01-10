@@ -38,7 +38,7 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/ChiT.pdf"> Unit 4: Chi Square and T Distributions </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/hypergeometric.pdf"> Unit 4: Hypergeometric Random Variables </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/NormalApproxBinom.pdf"> Unit 4: Normal Approximation to Binomial Distribution </a>
-* <a href="https://MerrickMath.github.io/2021Statistics/Slides/SamplingDistributions.pdf"> Sampling Distributions Notes </a>
+* <a href="https://MerrickMath.github.io/2021Statistics/Slides/SamplingDistributions.pdf"> Unit 5: Sampling Distributions Notes (filled in) </a>
 
 ### Important Dates
 * <a href="https://MerrickMath.github.io/2021Statistics/Activities/ColloquiumI.pdf"> One Variable Statistics Colloquium </a>: September 17
