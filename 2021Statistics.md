@@ -10,7 +10,7 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
 ---
-### January 3 - January 9
+### January 10 - January 17 
 * Watch List: 
     * <a href="https://www.jbstatistics.com"> JBStatistics Sections 7.2 </a> 
 * Homework 
@@ -18,6 +18,8 @@ show_downloads: FALSE
    * AP Central Assigned Problems and Quizzes
 
 Please not that the unit test for Unit 5 will be held in class on **January 19**. 
+
+A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
    
 ---
 
