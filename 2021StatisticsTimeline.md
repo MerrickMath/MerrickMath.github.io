@@ -1,3 +1,14 @@
+### January 10 - January 17 
+* Watch List: 
+    * <a href="https://www.jbstatistics.com"> JBStatistics Sections 7.2 </a> 
+* Homework 
+   * Barron's Quiz 22/23 
+   * AP Central Assigned Problems and Quizzes
+
+Please not that the unit test for Unit 5 will be held in class on **January 19**. 
+
+---
+
 ### January 3 - January 9
 * Watch List: 
     * <a href="https://www.jbstatistics.com/sampling-distributions-introduction-to-the-concept/"> JBStatistics Sections 4.1-4.3 </a> 
