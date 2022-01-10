@@ -57,7 +57,9 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/PropReviewSolutions.pdf"> Sampling Distribution for Sample Proportion Review SOLUTIONS </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/MeanReview.pdf"> Sampling Distribution for Sample Mean Practice </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/MeanReviewSolutions.pdf"> Sampling Distribution for Sample Mean Practice SOLUTIONS </a>
- 
+* <a href="https://MerrickMath.github.io/2021Statistics/Practice/MeanReview2.pdf"> Sampling Distribution for Sample Mean Practice 2 </a>
+* <a href="https://MerrickMath.github.io/2021Statistics/Practice/MeanReview2Solutions.pdf"> Sampling Distribution for Sample Mean Practice 2 SOLUTIONS </a>
+
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
 * <a href="https://MerrickMath.github.io/APStatistics/FormulaSheets.pdf"> Exam Formula Sheet</a>.
