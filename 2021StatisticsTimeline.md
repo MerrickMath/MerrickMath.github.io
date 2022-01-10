@@ -118,8 +118,6 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
    * Read Barron's Pages 113-131
    * Finish Quiz 8-9 Barron's 
 * 2 Variable Statistics Colloquium is on FRIDAY 
- 
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
 
 ---
 
