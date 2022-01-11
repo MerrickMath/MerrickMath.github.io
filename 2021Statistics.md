@@ -69,7 +69,8 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/MeanReview2Solutions.pdf"> Sampling Distribution for Sample Mean Practice 2 SOLUTIONS </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/MiniMathJan10.pdf"> Mini Math January 10 </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/MiniMathJan12.pdf"> Mini Math January 12 </a>
-* <a href="https://MerrickMath.github.io/2021Statistics/Practice/TwoStatsPraciceSolutions.pdf"> 'Difference' Sampling Distribution Problems </a>
+* <a href="https://MerrickMath.github.io/2021Statistics/Practice/TwoStatsPracice.pdf"> 'Difference' Sampling Distribution Problems </a>
+* <a href="https://MerrickMath.github.io/2021Statistics/Practice/TwoStatsPraciceSolutions.pdf"> 'Difference' Sampling Distribution Problems SOLUTIONS</a>
 
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
