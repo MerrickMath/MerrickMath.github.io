@@ -21,19 +21,6 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
    
 ---
 
-### January 10 - January 17 
-* Watch List: 
-    * <a href="https://www.jbstatistics.com"> JBStatistics Sections 7.2 </a> 
-* Homework 
-   * Barron's Quiz 22/23 
-   * AP Central Assigned Problems and Quizzes (from prior week)
-
-Please not that the unit test for Unit 5 will be held in class on **January 19**. 
-
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
-   
----
-
 
 ### Slides/Notes 
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/Unit1.pdf"> Unit 1: One Variable Data</a>
