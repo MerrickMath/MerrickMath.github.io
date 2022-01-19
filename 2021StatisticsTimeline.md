@@ -1,3 +1,12 @@
+### January 19 - January 23
+* Watch List: 
+    * <a href="https://www.jbstatistics.com"> JBStatistics Sections 5.1, 8.1, and 8.4 </a> 
+    * AP classroom sections 6.1-6.3
+* Homework 
+   * AP Central Assigned Problems and Quizzes 
+
+---
+
 ### January 10 - January 17 
 * Watch List: 
     * <a href="https://www.jbstatistics.com"> JBStatistics Sections 7.2 </a> 
