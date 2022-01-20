@@ -10,6 +10,7 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
 ---
+
 ### January 19 - January 23
 * Watch List: 
     * <a href="https://www.jbstatistics.com"> JBStatistics Sections 5.1, 8.1, and 8.4 </a> 
