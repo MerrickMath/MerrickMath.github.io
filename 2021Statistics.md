@@ -10,6 +10,17 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
 ---
+### January 24 - January 30 
+* Watch List:  
+    * AP classroom sections 6.4-6.7 (Hypothesis Testing for Means) 
+    * <a href="https://www.jbstatistics.com"> JBStatistics Sections 8.3-8.6 </a>
+* Homework 
+   * AP Central Assigned Problems
+   * Read Barron's Pages 259-269 
+
+A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
+   
+---
 
 ### January 19 - January 23
 * Watch List: 
