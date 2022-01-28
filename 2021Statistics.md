@@ -58,8 +58,8 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * Collecting Data Unit Test: Novmeber 1 
 * Probability Unit Test: December 13
 * Sampling Distributions Unit Test: January 19
-* Inference for Proportions Unit Test: February 9
-* Inference for Means Unit Test: TBH
+* Inference for Proportions Unit Test: February 9 
+* Inference for Means Unit Test: March 2 (Wednesday) 
  
 
 ### In Class Materials  
