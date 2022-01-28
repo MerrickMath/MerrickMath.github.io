@@ -83,7 +83,7 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/PaperToss.pdf"> Paper Toss SOLUTIONS </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/FreeThrows.pdf"> Free Throws SOLUTIONS </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/FoodPreference.pdf">Food Preference SOLUTIONS </a>
-* * <a href="https://MerrickMath.github.io/2021Statistics/Practice/Smoking.pdf"> Skin and Smoking SOLUTIONS </a>
+* <a href="https://MerrickMath.github.io/2021Statistics/Practice/Smoking.pdf"> Skin and Smoking SOLUTIONS </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/MiniMathJan28.pdf"> Mini Math Jan 28 SOLUTIONS </a>
 
 
