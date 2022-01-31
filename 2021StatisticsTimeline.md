@@ -1,4 +1,13 @@
+### January 31 - February 6 
+* Watch List:  
+    * AP classroom sections 6.8-6.11
 
+* Homework 
+   * AP Central Assigned Problems
+   * Finish Barron's all book inference for proportions quizzes
+   * Complete AP Classroom progress checks
+   
+---
 
 ### January 24 - January 30 
 * Watch List:  
