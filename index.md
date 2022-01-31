@@ -19,7 +19,8 @@
     <p>
       <ul>
         <li><a href="https://merrickMath.github.io/2021Statistics.html"> AP Statistics </a> </li>
-        <li><a href="https://merrickmath.github.io/MerrickMath.github.io-UnderstandingStatistics/"> Understanding Statistics </a> </li>
+        <! --- <li><a href="https://merrickmath.github.io/MerrickMath.github.io-D2DataScience2022/"> Exploring a World of Data </a> </li> --->
+        <! --- <li><a href="https://merrickmath.github.io/MerrickMath.github.io-D3DataScience2022/"> Introduction to Data Science </a> </li> --->
       </ul> 
     </p>
   </div>
