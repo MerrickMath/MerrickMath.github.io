@@ -7,8 +7,6 @@
 * Homework 
    * AP Central Assigned Problems
    * Read Barron's Pages 259-269 
-
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
    
 ---
 
