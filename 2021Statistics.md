@@ -77,7 +77,7 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/FoodPreference.pdf">Food Preference SOLUTIONS </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/Smoking.pdf"> Skin and Smoking SOLUTIONS </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/MiniMathJan28.pdf"> Mini Math Jan 28 SOLUTIONS </a>
-
+* <a href="https://MerrickMath.github.io/2021Statistics/Practice/TwoSampleP.pdf"> Two Sample z-test for p SOLUTIONS </a>
 
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
