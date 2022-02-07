@@ -81,7 +81,7 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/MiniMathFeb2Soln.pdf"> Mini Math Feb. 2 SOLUTIONS </a> 
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/ConfIntMuSoln.pdf"> Confidence interval for means SOLUTIONS </a> 
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/ConfIntMu2Soln.pdf"> Confidence interval for means 2 SOLUTIONS </a> 
-* <a href="https://MerrickMath.github.io/2021Statistics/Practice/MinimathFeb5Soln.pdff"> Mini Math Feb. 5 SOLUTIONS </a> 
+* <a href="https://MerrickMath.github.io/2021Statistics/Practice/MinimathFeb5Soln.pdf"> Mini Math Feb. 5 SOLUTIONS </a> 
 
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
