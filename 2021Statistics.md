@@ -10,6 +10,18 @@ show_downloads: FALSE
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
 
 ---
+
+### February 9 - February 13
+* Watch List:  
+    * AP classroom sections 7.1- 7.3, 7.6-7.7
+
+* Homework 
+   * AP Central Assigned Problems
+
+A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
+
+---
+
 ### January 31 - February 6 
 * Watch List:  
     * AP classroom sections 6.8-6.11
