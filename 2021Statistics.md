@@ -22,19 +22,6 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 
 ---
 
-### January 31 - February 6 
-* Watch List:  
-    * AP classroom sections 6.8-6.11
-
-* Homework 
-   * AP Central Assigned Problems
-   * Finish Barron's all book inference for proportions quizzes
-   * Complete AP Classroom progress checks
-
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
-   
----
-
 
 ### Slides/Notes 
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/Unit1.pdf"> Unit 1: One Variable Data</a>
