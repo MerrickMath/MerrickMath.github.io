@@ -11,6 +11,19 @@ show_downloads: FALSE
 
 ---
 
+### February 14 - Februrary 28 
+* Watch List:  
+    * ALL REMAINING AP Classroom Videos for Unit 7
+
+* Homework 
+   * ALL AP Central Assigned Problems
+   * Barrons Unit 7 exercises (Quiz 27-28) 
+   * Barrons Unit 7 Readings
+
+The Unit 7 test will be held RIGHT AFTER the break, Please ensure you are totally prepared!
+
+---
+
 ### February 9 - February 13
 * Watch List:  
     * AP classroom sections 7.1- 7.3, 7.6-7.7
