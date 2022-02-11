@@ -2,7 +2,7 @@
 
 <div class="row">
   <div class="column">
-    <h2> Current </h2>
+    <h2> Current Courses </h2>
     <p>
       <ul>
         <li><a href="https://MerrickMath.github.io/2021Grade1.html"> Grade 1 Mathematics </a> </li>
