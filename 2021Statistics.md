@@ -94,6 +94,13 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/ConfIntMuSoln.pdf"> Confidence interval for means SOLUTIONS </a> 
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/ConfIntMu2Soln.pdf"> Confidence interval for means 2 SOLUTIONS </a> 
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/MinimathFeb5Soln.pdf"> Mini Math Feb. 5 SOLUTIONS </a> 
+<!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/ConfInt2MuSoln.pdf"> Confidence Intervals for Two Means SOLUTIONS </a> --->
+<!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/ConfIntMudSoln.pdf"> Confidence Interval for a mean difference SOLUTIONS </a> --->
+<!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/ConfIntMudSoln2.pdf"> Confidence Interval for a mean difference II SOlUTIONS </a> --->
+<!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/OneMeanHypSoln.pdf"> One sample t test for a mean SOlUTIONS </a> --->
+<!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/TwoMeanHypSoln.pdf"> Two sample t test for a difference of means SOlUTIONS </a> --->
+<!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/DiffMeanHypSoln.pdf"> Paired t test for a mean difference SOlUTIONS </a> --->
+
 
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
