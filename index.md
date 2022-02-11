@@ -61,6 +61,7 @@
         <li><a href="https://krazydad.com/tablet/puzzles.php"> Krazy Dad Interactive Puzzles </a> </li>
         <li><a href="https://mathpickle.com"> Math Pickle </a> </li>
         <li><a href="https://www.mathplayground.com"> Math Playground </a> </li>
+        <li><a href="https://www.datacamp.com"> Data Camp </a> </li>
       </ul> 
     </p>
   </div>
