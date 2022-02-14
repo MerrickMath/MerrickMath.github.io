@@ -121,8 +121,6 @@ We will be moving through Unit 5 very quickly when we come back from the break. 
    * Read Barron's pages 175-179, 190-195
    * Barron's Quiz 14-15
 
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
-
 ---
 
 ### October 24 - 31 
@@ -131,8 +129,6 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 
 * Homework 
    * Read Barron's pages 175-179 
-
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
 
 ---
 
@@ -154,8 +150,6 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * Homework 
    * Read Barron's Pages 147 - 153 
    * Finish Quiz 10-11 Barron's 
- 
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
 
 ---
 
