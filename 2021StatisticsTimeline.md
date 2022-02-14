@@ -9,8 +9,6 @@
 
 The Unit 7 test will be held RIGHT AFTER the break, Please ensure you are totally prepared!
 
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
-
 ---
 
 ### February 9 - February 13
