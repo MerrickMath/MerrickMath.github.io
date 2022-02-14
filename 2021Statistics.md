@@ -22,6 +22,8 @@ show_downloads: FALSE
 
 The Unit 7 test will be held RIGHT AFTER the break, Please ensure you are totally prepared!
 
+A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
+
 ---
 
 
@@ -88,6 +90,7 @@ The Unit 7 test will be held RIGHT AFTER the break, Please ensure you are totall
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/ConfIntMudSoln2.pdf"> Confidence Interval for a mean difference II SOLUTIONS </a> 
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/OneMeanHypSoln.pdf"> One sample t test for a mean SOLUTIONS </a> 
 <!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/TwoMeanHypSoln.pdf"> Two sample t test for a difference of means SOLUTIONS </a> --->
+<!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/TwoMeanHyp2Soln.pdf"> Two sample t test for a difference of means practice SOLUTIONS </a> --->
 <!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/DiffMeanHypSoln.pdf"> Paired t test for a mean difference SOLUTIONS </a> --->
 
 
