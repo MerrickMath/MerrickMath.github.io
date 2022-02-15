@@ -26,6 +26,34 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 
 ---
 
+### Exam 
+* The AP Statistics exam will be held on Thursday May 5, at 12PM.
+* <a href="https://MerrickMath.github.io/APStatistics/FormulaSheets.pdf"> Exam Formula Sheet</a>.
+
+---
+
+### Resources
+* <a href="https://www.jbstatistics.com"> JBStatistics </a> 
+* <a href="https://www.khanacademy.org/math/ap-statistics"> Khan Academy AP Statistics </a> 
+* <a href="https://apcentral.collegeboard.org"> College Board </a> 
+* <a href="https://www.stapplet.com"> Statistics Apps </a> 
+
+---
+
+### Important Dates
+* <a href="https://MerrickMath.github.io/2021Statistics/Activities/ColloquiumI.pdf"> One Variable Statistics Colloquium </a>: September 17
+* One Variable Data Unit Test: September 27 
+* <a href="https://MerrickMath.github.io/2021Statistics/Activities/ColloquiumII.pdf"> Two Variable Statistics Colloquium </a>: TBD
+* Two Varibale Data Unit Test: October 18 
+* Collecting Data Unit Test: Novmeber 1 
+* Probability Unit Test: December 13
+* Sampling Distributions Unit Test: January 19
+* Inference for Proportions Unit Test: February 9 
+* Inference for Means Unit Test: March 2 (Wednesday) 
+* Inference for Categorical Data: March 16 (Tentative)
+* Inference for Regression: March 30 (Tentative)
+
+---
 
 ### Slides/Notes 
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/Unit1.pdf"> Unit 1: One Variable Data</a>
@@ -43,19 +71,7 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/NormalApproxBinom.pdf"> Unit 4: Normal Approximation to Binomial Distribution </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Slides/SamplingDistributionNotes.pdf"> Sampling Distribution Notes (Please note that these notes go into much more depth than is required of AP Statistics) </a>
 
-### Important Dates
-* <a href="https://MerrickMath.github.io/2021Statistics/Activities/ColloquiumI.pdf"> One Variable Statistics Colloquium </a>: September 17
-* One Variable Data Unit Test: September 27 
-* <a href="https://MerrickMath.github.io/2021Statistics/Activities/ColloquiumII.pdf"> Two Variable Statistics Colloquium </a>: TBD
-* Two Varibale Data Unit Test: October 18 
-* Collecting Data Unit Test: Novmeber 1 
-* Probability Unit Test: December 13
-* Sampling Distributions Unit Test: January 19
-* Inference for Proportions Unit Test: February 9 
-* Inference for Means Unit Test: March 2 (Wednesday) 
-* Inference for Categorical Data: March 16 (Tentative)
-* Inference for Regression: March 30 (Tentative)
- 
+---
 
 ### In Class Materials  
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/DTSept9.pdf"> Deep Thoughts: September 9 </a>
@@ -89,23 +105,9 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/ConfIntMudSoln.pdf"> Confidence Interval for a mean difference SOLUTIONS </a> 
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/ConfIntMud2Soln.pdf"> Confidence Interval for a mean difference II SOLUTIONS </a> 
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/OneMeanHypSoln.pdf"> One sample t test for a mean SOLUTIONS </a> 
-<!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/TwoMeanHypSoln.pdf"> Two sample t test for a difference of means SOLUTIONS </a> --->
-<!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/TwoMeanHyp2Soln.pdf"> Two sample t test for a difference of means practice SOLUTIONS </a> --->
-<!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/DiffMeanHypSoln.pdf"> Paired t test for a mean difference SOLUTIONS </a> --->
+* <a href="https://MerrickMath.github.io/2021Statistics/Practice/TwoMeanHypSoln.pdf"> Two sample t test for a difference of means SOLUTIONS </a> 
+* <a href="https://MerrickMath.github.io/2021Statistics/Practice/TwoMeanHyp2Soln.pdf"> Two sample t test for a difference of means practice SOLUTIONS </a>
+* <a href="https://MerrickMath.github.io/2021Statistics/Practice/DiffMeanHypSoln.pdf"> Paired t test for a mean difference SOLUTIONS </a> 
 
-
-### Exam 
-* The AP Statistics exam will be held on Thursday May 5, at 12PM.
-* <a href="https://MerrickMath.github.io/APStatistics/FormulaSheets.pdf"> Exam Formula Sheet</a>.
-
-### Resources
-* <a href="https://www.jbstatistics.com"> JBStatistics </a> 
-* <a href="https://www.khanacademy.org/math/ap-statistics"> Khan Academy AP Statistics </a> 
-* <a href="https://apcentral.collegeboard.org"> College Board </a> 
-* <a href="https://www.stapplet.com"> Statistics Apps </a> 
-
----
-
-<div class="tenor-gif-embed" data-postid="17561248" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%"><a href="https://tenor.com/view/brooklyn-nine-nine-brooklyn99-statistical-statistical-analysis-analysis-gif-17561248">Brooklyn Nine Nine Brooklyn99 GIF</a>from <a href="https://tenor.com/search/brooklyn+nine+nine-gifs">Brooklyn Nine Nine GIFs</a></div> <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
 
 
