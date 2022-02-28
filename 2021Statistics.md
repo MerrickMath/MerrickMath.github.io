@@ -11,6 +11,17 @@ show_downloads: FALSE
 
 ---
 
+### March 2 - March 6
+* Watch List:  
+    * AP Classroom Videos 8.1-8.3 
+
+* Homework 
+   * ALL AP Central Assigned Problems
+
+A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a>
+
+---
+
 ### February 14 - March 2
 * Watch List:  
     * ALL REMAINING AP Classroom Videos for Unit 7
