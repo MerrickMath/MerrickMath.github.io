@@ -13,7 +13,7 @@ show_downloads: FALSE
 
 ### March 2 - March 6
 * Watch List:  
-    * AP Classroom Videos 8.1-8.3 
+    * AP Classroom Videos 8.1-8.2 
 
 * Homework 
    * AP Central Assigned Problems
