@@ -1,6 +1,6 @@
 ### March 2 - March 6
 * Watch List:  
-    * AP Classroom Videos 8.1-8.3 
+    * AP Classroom Videos 8.1-8.2 
 
 * Homework 
    * ALL AP Central Assigned Problems
@@ -22,7 +22,7 @@ The Unit 7 test will be held RIGHT AFTER the break, Please ensure you are totall
 
 ### February 9 - February 13
 * Watch List:  
-    * AP classroom sections 7.1- 7.3, 7.6-7.7
+    * AP classroom sections 7.1-7.3, 7.6-7.7
 
 * Homework 
    * AP Central Assigned Problems 
