@@ -16,7 +16,7 @@ show_downloads: FALSE
     * AP Classroom Videos 8.1-8.3 
 
 * Homework 
-   * ALL AP Central Assigned Problems
+   * AP Central Assigned Problems
 
 A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a>
 
