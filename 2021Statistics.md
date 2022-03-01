@@ -60,7 +60,7 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * Probability Unit Test: December 13
 * Sampling Distributions Unit Test: January 19
 * Inference for Proportions Unit Test: February 9 
-* Inference for Means Unit Test: March 2 (Wednesday) 
+* Inference for Means Unit Test: March 9 (Wednesday) 
 * Inference for Categorical Data: March 16 (Tentative)
 * Inference for Regression: March 30 (Tentative)
 
