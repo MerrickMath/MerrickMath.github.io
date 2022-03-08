@@ -11,6 +11,18 @@ show_downloads: FALSE
 
 ---
 
+### March 8 - March 20 
+* Watch List:  
+    * AP Classroom Videos 8.3 - 8.7
+
+* Homework 
+   * AP Central Assigned Problems
+   * Read Barron's chapters and additional exercises 
+
+A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a>
+
+---
+
 ### March 2 - March 6
 * Watch List:  
     * AP Classroom Videos 8.1-8.2 
@@ -19,21 +31,6 @@ show_downloads: FALSE
    * AP Central Assigned Problems
 
 A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a>
-
----
-
-### February 14 - March 2
-* Watch List:  
-    * ALL REMAINING AP Classroom Videos for Unit 7
-
-* Homework 
-   * ALL AP Central Assigned Problems
-   * Barrons Unit 7 exercises (Quiz 27-28) 
-   * Barrons Unit 7 Readings
-
-The Unit 7 test will be held RIGHT AFTER the break, Please ensure you are totally prepared!
-
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a> 
 
 ---
 
@@ -61,8 +58,8 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * Sampling Distributions Unit Test: January 19
 * Inference for Proportions Unit Test: February 9 
 * Inference for Means Unit Test: March 9 (Wednesday) 
-* Inference for Categorical Data: March 16 (Tentative)
-* Inference for Regression: March 30 (Tentative)
+* Inference for Categorical Data (Chi-Square Testing): March 21 
+* Inference for Regression: April 4
 
 ---
 
