@@ -1,3 +1,13 @@
+### March 8 - March 20 
+* Watch List:  
+    * AP Classroom Videos 8.3 - 8.7
+
+* Homework 
+   * AP Central Assigned Problems
+   * Read Barron's chapters and additional exercises 
+
+---
+
 ### March 2 - March 6
 * Watch List:  
     * AP Classroom Videos 8.1-8.2 
