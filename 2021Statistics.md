@@ -23,17 +23,6 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 
 ---
 
-### March 2 - March 6
-* Watch List:  
-    * AP Classroom Videos 8.1-8.2 
-
-* Homework 
-   * AP Central Assigned Problems
-
-A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a>
-
----
-
 ### Exam 
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
 * <a href="https://MerrickMath.github.io/APStatistics/FormulaSheets.pdf"> Exam Formula Sheet</a>.
