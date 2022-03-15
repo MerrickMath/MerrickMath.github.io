@@ -105,6 +105,9 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/TwoMeanHypSoln.pdf"> Two sample t test for a difference of means SOLUTIONS </a> 
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/TwoMeanHyp2Soln.pdf"> Two sample t test for a difference of means practice SOLUTIONS </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/DiffMeanHypSoln.pdf"> Paired t test for a mean difference SOLUTIONS </a> 
+<!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/gof1.pdf"> Goodness of fit testing SOLUTIONS </a>  --->
+<!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/homo1Soln.pdf"> Test of Homogeneity SOLUTIONS </a>  --->
+<!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/Ind1Soln.pdf"> Test of Independence SOLUTIONS </a>  --->
 <!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/Unit8MiniMathSoln.pdf"> Unit 8 Mini Math SOLUTIONS </a>  --->
 
 
