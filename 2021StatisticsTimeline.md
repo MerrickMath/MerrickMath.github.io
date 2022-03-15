@@ -1,3 +1,13 @@
+### March 21 - April 3 (Unit 9) 
+* Watch List:  
+    * AP Classroom Videos 9.1-9.6
+
+* Homework 
+   * AP Central Assigned Videos and Problems 
+   * Read Barron's chapters and additional exercises 
+
+---
+
 ### March 8 - March 20 
 * Watch List:  
     * AP Classroom Videos 8.3 - 8.7
