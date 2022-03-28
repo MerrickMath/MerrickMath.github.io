@@ -123,6 +123,5 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/SlopeDistSoln.pdf"> Sampling distribution for slope of regression line  SOLUTIONS </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/SlopeCISoln.pdf"> Confidence interval for slope of regression line  SOLUTIONS </a>
 * <a href="https://MerrickMath.github.io/2021Statistics/Practice/SlopeTestSoln.pdf"> Hypothesis for slope of regression line  SOLUTIONS </a>
-<!--- * <a href="https://MerrickMath.github.io/2021Statistics/Practice/Unit8MiniMathSoln.pdf"> Unit 8 Mini Math SOLUTIONS </a>  --->
 
 
