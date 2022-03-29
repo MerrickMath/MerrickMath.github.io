@@ -60,7 +60,7 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * Inference for Proportions Unit Test: February 9 
 * Inference for Means Unit Test: March 9 (Wednesday) 
 * Inference for Categorical Data (Chi-Square Testing): March 21 
-* Inference for Regression: April 4
+* Inference for Regression: April 6
 
 ---
 
