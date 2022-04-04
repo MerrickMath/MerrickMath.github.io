@@ -1,3 +1,18 @@
+## April 4 -  May 4 
+* Watch List:  
+    * Review any outstanding material. 
+
+* Homework 
+   * 4 Past Free Resonse Problems Per Night (Cycle units as discussed in class). 
+   * AP Practice Test I 
+   * AP Practice Test II 
+   * AP Practice Test III 
+   * AP Pracitce Test IV
+
+THE AP STATISTICS EXAM IS APPROACHING **FAST** START PREPARING EARLY. 
+
+---
+
 ### March 21 - April 3 (Unit 9) 
 * Watch List:  
     * AP Classroom Videos 9.1-9.6
