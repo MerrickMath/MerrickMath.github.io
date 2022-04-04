@@ -11,13 +11,18 @@ show_downloads: FALSE
 
 ---
 
-### March 21 - April 3 (Unit 9) 
+### April 4 -  May 4 
 * Watch List:  
-    * AP Classroom Videos 9.1-9.6
+    * Review any outstanding material. 
 
 * Homework 
-   * AP Central Assigned Videos and Problems 
-   * Read Barron's chapters and additional exercises 
+   * 4 Past Free Resonse Problems Per Night (Cycle units as discussed in class). 
+   * AP Practice Test I 
+   * AP Practice Test II 
+   * AP Practice Test III 
+   * AP Pracitce Test IV
+
+THE AP STATISTICS EXAM IS APPROACHING **FAST** START PREPARING EARLY. 
 
 A timeline of previous posts may be found <a href="https://merrickMath.github.io/2021StatisticsTimeline.html"> here. </a>
 
