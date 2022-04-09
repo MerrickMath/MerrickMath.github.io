@@ -33,6 +33,7 @@ A timeline of previous posts may be found <a href="https://merrickMath.github.io
 * The AP Statistics exam will be held on Thursday May 5, at 12PM.
 * <a href="https://MerrickMath.github.io/APStatistics/FormulaSheets.pdf"> Exam Formula Sheet</a>.
 * Past exam questons may be found <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions"> here.</a>
+* <a href="https://MerrickMath.github.io/2021Statistics/Practice/Overview.pdf"> Question guide for AP exam. </a>
 
 ---
 
