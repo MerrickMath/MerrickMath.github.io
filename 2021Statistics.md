@@ -5,6 +5,8 @@ description: Questions, links, materials, and more
 show_downloads: FALSE
 
 ---
+### END OF AP CHECK IN FORM
+* <a href="https://docs.google.com/forms/d/e/1FAIpQLScySXcV61GN4LJZES57OjSC4DIZ1DwMezEJ9WbDCmMexBltpg/viewform?usp=sf_link"> Check in form </a>.
 
 ### Welcome to AP Statistics
 * <a href="https://MerrickMath.github.io/APStatistics/StatsTopics.pdf"> Course at a glance</a>.
