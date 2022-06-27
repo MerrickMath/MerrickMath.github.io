@@ -15,7 +15,7 @@
         <li><a href="https://MerrickMath.github.io/2021Grade45.html"> Grade 4/5 Mathematics </a> </li> 
         <li><a href="https://MerrickMath.github.io/2021Brightminds.html"> Bright Minds </a> </li>
         <!--- <li><a href="https://MerrickMath.github.io/2020Math20.html"> MATH 20-1 </a> </li> --->
-        <!--- <li><a href="https://merrickmath.github.io/MerrickMath.github.io-Div3Math/](https://merrickmath.github.io/MerrickMath.github.io-Div3Math/"> Grade 8 Mathematics </a> </li> --->
+        <!--- <li><a href="https://merrickmath.github.io/MerrickMath.github.io-Div3Math/"> Grade 8 Mathematics </a> </li> --->
       </ul> 
     </p>
   </div>
