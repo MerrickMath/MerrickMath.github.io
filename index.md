@@ -5,6 +5,7 @@
     <h2> Current Courses </h2>
     <p>
       <ul>
+        
         <h3> Statistics </h3>
         <li><a href="https://merrickmath.github.io/MerrickMath.github.io-APSTAT/"> AP Statistics 2022 </a> </li>
         <li><a href="https://merrickmath.github.io/MerrickMath.github.io-D3DataScience2022/"> Introduction to Data Science </a> </li>
