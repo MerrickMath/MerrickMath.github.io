@@ -8,9 +8,6 @@
         <h3> Statistics </h3>
         <li><a href="https://merrickmath.github.io/MerrickMath.github.io-APSTAT/"> AP Statistics 2022 </a> </li>
         <li><a href="https://merrickmath.github.io/MerrickMath.github.io-D3DataScience2022/"> Introduction to Data Science </a> </li>
-        <!--- <li><a href="https://merrickmath.github.io/MerrickMath.github.io-D2DataScience2022/"> Exploring Probability and Simulation </a> </li> --->
-        <li><a href="https://merrickmath.github.io/MerrickMath.github.io-D3DataScience2022/"> Introduction to Data Science </a> </li>
-        <!--- <li><a href=""> Probaability and Simulation </a> </li> --->
         
         <h3> Mathematics </h3>
         <li><a href="https://MerrickMath.github.io/2021Grade1.html"> Grade 1 Mathematics </a> </li>
