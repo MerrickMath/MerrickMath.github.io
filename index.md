@@ -5,7 +5,6 @@
     <h2> Current Courses </h2>
     <p>
       <ul>
-        
         <h3> Statistics </h3>
         <li><a href="https://merrickmath.github.io/MerrickMath.github.io-APSTAT/"> AP Statistics 2022 </a> </li>
         <li><a href="https://merrickmath.github.io/MerrickMath.github.io-D3DataScience2022/"> Introduction to Data Science </a> </li>
@@ -19,8 +18,7 @@
         <li><a href="https://MerrickMath.github.io/2021Grade45.html"> Grade 4/5 Mathematics </a> </li> 
         <li><a href="https://MerrickMath.github.io/2021Brightminds.html"> Bright Minds </a> </li>
         <!--- <li><a href="https://MerrickMath.github.io/2020Math20.html"> MATH 20-1 </a> </li> --->
-        <!--- <li><a href="https://merrickmath.github.io/MerrickMath.github.io-Div3Math/"> Grade 8 Mathematics </a> </li> --->
-        
+        <!--- <li><a href="https://merrickmath.github.io/MerrickMath.github.io-Div3Math/"> Grade 8 Mathematics </a> </li> ---> 
       </ul> 
     </p>
   </div>
