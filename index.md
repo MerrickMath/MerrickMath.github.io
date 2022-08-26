@@ -30,8 +30,8 @@
         <li> <a href="https://renertmath.github.io/RenertMath-CelebrateMath/"> COL Challenge 2020 </a>  </li>
         <li> <a href="https://merrickmath.github.io/MerrickMath.github.io-PythonProject/"> Python Project </a>  </li>
         <li> <a href="https://merrickmath.github.io/MerrickMath.github.io-PumpkinBomb/"> Pumpkin BOMB Challenge 2020 </a>  </li>
-        <li><a href="https://merrickmath.github.io/MerrickMath-datachallenge/"> DATA Challenge 2021 </a> </li>
         <li> <a href="https://renertmath.github.io/RenertMath-PumpkinBomb2021/"> Pumpkin BOMB Challenge 2021 </a>  </li>
+        <li><a href="https://merrickmath.github.io/MerrickMath-datachallenge/"> DATA Challenge 2021 </a> </li>
       </ul> 
     </p>
   </div>
