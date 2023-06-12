@@ -16,6 +16,7 @@
         <li><a href="https://merrickmath.github.io/MerrickMath.github.io-Div34Math"> MATH 20-1 </a> </li>
         <li><a href="https://MerrickMath.github.io/2021Brightminds.html"> Bright Minds </a> </li>
         <li><a href="https://merrickmath.github.io/MerrickMath.github.io-LinearAlgebra/"> Linear Algebra </a> </li>
+        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSfahcBe09_vBWZTlG8CFP4Y0tBraxurXFYXWIXBaRxytdlWHw/viewform?usp=sf_link"> D2 End of Year Check In </a> </li>
       </ul> 
     </p>
   </div>
