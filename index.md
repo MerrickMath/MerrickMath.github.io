@@ -6,14 +6,14 @@
     <p>
       <ul>
         <h3> Statistics </h3>
-        <li><a href="https://merrickmath.github.io/MerrickMath.github.io-APSTAT/"> Introduction to Statistics </a> </li>
-        <li><a href="https://merrickmath.github.io/MerrickMath.github.io-D3DataScience2022/"> Introduction to Data Science </a> </li>
+        <li><a href="https://merrickmath.github.io/MerrickMath.github.io-APSTAT/"> AP Statistics </a> </li>
+        <!--- <li><a href="https://merrickmath.github.io/MerrickMath.github.io-D3DataScience2022/"> Introduction to Data Science </a> </li> ---> 
         <h3> Mathematics </h3>
         <!--- <li><a href="https://MerrickMath.github.io/2021Grade1.html"> Grade 1 Mathematics </a> </li>  
         <li><a href="https://MerrickMath.github.io/2021Grade23.html"> Grade 2/3 Mathematics </a> </li>
         <li><a href="https://MerrickMath.github.io/2021Grade45.html"> Grade 4/5 Mathematics </a> </li>
         <li><a href="https://MerrickMath.github.io/2021Grade45.html"> Grade 6 Mathematics </a> </li> ---> 
-        <li><a href="https://merrickmath.github.io/MerrickMath.github.io-Div34Math"> MATH 20-1 </a> </li>
+        <li><a href="https://merrickmath.github.io/MerrickMath.github.io-Div34Math"> Math 7 </a> </li>
         <li><a href="https://MerrickMath.github.io/2021Brightminds.html"> Bright Minds </a> </li>
         <li><a href="https://merrickmath.github.io/MerrickMath.github.io-LinearAlgebra/"> Linear Algebra </a> </li>
         <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSfahcBe09_vBWZTlG8CFP4Y0tBraxurXFYXWIXBaRxytdlWHw/viewform?usp=sf_link"> D2 End of Year Check In </a> </li>
