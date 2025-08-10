@@ -105,23 +105,38 @@ show_header: false
   footer{ margin-top:28px; text-align:center; color:var(--muted); font-size:.9rem; }
 
   /* Title + icon */
-.title-wrap {
-  text-align: center;
-  margin: 10px 0 10px;
-}
-.title-logo {
-  display: block;
-  width: 450px;       /* was ~92px — now larger */
-  height: auto;
-  margin: 0 auto -12px; /* was 2px — slight extra breathing space, still tight */
-}
-.page-title {
-  margin: 0;
-  font-weight: 800;
-  text-align: center;
-  font-size: clamp(28px, 4vw, 44px);
-  color: var(--indigo);
-}
+  .title-wrap {
+    text-align: center;
+    margin: 8px 0 8px; /* tighter overall stack */
+  }
+  .title-logo {
+    display: block;
+    width: 450px;
+    height: auto;
+    margin: 0 auto -10px; /* pulls title closer to graph */
+  }
+  .page-title {
+    margin: 0;
+    font-weight: 800;
+    text-align: center;
+    font-size: clamp(28px, 4vw, 44px);
+    color: var(--indigo);
+    line-height: 1.2; /* compact title line */
+  }
+  .email-link{
+    display:inline-block;
+    margin-top: 0.15em; /* minimal space below title */
+    color: inherit;      /* match the header color */
+    text-decoration: none;
+  }
+  .email-link:focus{ outline: 2px solid var(--ring); outline-offset: 3px; border-radius: 8px; }
+  .my-svg-icon{
+    fill: currentColor;    /* make SVG match the header color */
+    vertical-align: middle;
+    width: 24px; height: 24px;
+  }
+  /* Optional: subtle hover affordance */
+  .email-link:hover{ color: var(--purple); }
 </style>
 
 <!-- Title with Wikimedia Gaussian SVG right on top -->
@@ -146,11 +161,12 @@ show_header: false
   </svg>
 
   <h1 class="page-title">Mathematics with Mr. Merrick</h1>
-  <a href="mailto:merrickfanning@renertschool.ca" aria-label="Email Merrick Fanning" style="display: inline-block; margin-top: 0.5em;">
-  <svg class="my-svg-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-    <path d="M12 .02c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.99 6.98l-6.99 5.666-6.991-5.666h13.981zm.01 10h-14v-8.505l7 5.673 7-5.672v8.504z"/>
-  </svg>
-</a>
+
+  <a href="mailto:merrickfanning@renertschool.ca" class="email-link" aria-label="Email Merrick Fanning">
+    <svg class="my-svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M12 .02c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.99 6.98l-6.99 5.666-6.991-5.666h13.981zm.01 10h-14v-8.505l7 5.673 7-5.672v8.504z"/>
+    </svg>
+  </a>
 </div>
 
 <div class="container">
@@ -243,6 +259,5 @@ show_header: false
     }
   })();
 </script>
-
 
 {% endraw %}
