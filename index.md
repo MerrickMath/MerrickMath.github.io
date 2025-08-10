@@ -4,6 +4,7 @@ title: Student Learning Hub
 show_header: false
 ---
 
+{% raw %}
 <style>
   :root {
     --bg: #0f172a;          /* slate-900 */
@@ -95,11 +96,15 @@ show_header: false
   .badge.active { background: rgba(96,165,250,.18); border-color: rgba(96,165,250,.45); }
 
   footer { margin-top: 28px; text-align: center; color: var(--muted); font-size: .9rem; }
+
+  /* Page hero image placed in page (not layout) */
+  .hero-img { display:block; width: 160px; max-width: 40vw; height: auto; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,.35); margin: 4px auto 12px; }
 </style>
 
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="container">
   <header>
+    <img class="hero-img" src="https://merrickmath.github.io/maintop.png" alt="Mathematics with Mr. Merrick">
     <h1>Learning Repository</h1>
     <p class="quote"><em>“The enchanting charms of this sublime science reveal only to those who have the courage to go deeply into it.”</em> — Carl Friedrich Gauss</p>
   </header>
@@ -166,3 +171,4 @@ show_header: false
 
   <footer></footer>
 </div>
+{% endraw %}
