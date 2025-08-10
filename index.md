@@ -6,103 +6,145 @@ show_header: false
 
 {% raw %}
 <style>
+  /* ===== Bright, high-contrast theme (white background) ===== */
   :root {
-    --bg: #B2D8CE;        /* pale mint background */
-    --card: #5459AC;      /* soft indigo card background */
-    --card-alt: #648DB3;  /* lighter sky-blue variant */
-    --text: #52357B;      /* deep purple text color */
-    --muted: #6b7a9e;     /* muted tone for secondary text */
-    --accent: #52357B;    /* deep purple highlights */
-    --accent-2: #5459AC;  /* secondary highlight */
-    --shadow: 0 10px 25px rgba(82, 53, 123, 0.3);
-  }
-
-  @media (prefers-color-scheme: light) {
-    :root {
-      --bg: #B2D8CE;
-      --card: #5459AC;
-      --card-alt: #648DB3;
-      --text: #52357B;
-      --muted: #6b7a9e;
-      --accent: #52357B;
-      --accent-2: #5459AC;
-      --shadow: 0 10px 25px rgba(82, 53, 123, 0.2);
-    }
+    --bg: #ffffff;           /* solid white page background */
+    --surface: #ffffff;      /* card/background surface */
+    --surface-alt: #f6f8fb;  /* very light tint for subtle contrast */
+    --text: #0f172a;         /* slate-900 dark text */
+    --muted: #475569;        /* slate-600 for secondary text */
+    --accent: #5459AC;       /* indigo */
+    --accent-2: #52357B;     /* deep purple */
+    --ring: rgba(84, 89, 172, .28);
+    --shadow: 0 10px 25px rgba(2,6,23,.08);
+    --radius: 18px;
   }
 
   * { box-sizing: border-box; }
   html, body { height: 100%; }
+  body,
+  .page-header,
+  .main-content,
+  header,
+  footer {
+    background: var(--bg) !important; /* ensure solid white with no seams */
+    border: 0 !important;
+  }
+
   body {
     margin: 0;
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
     font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-    background: radial-gradient(1200px 600px at 10% -10%, rgba(99,102,241,.20), transparent 50%),
-                radial-gradient(1000px 500px at 110% 10%, rgba(96,165,250,.18), transparent 50%),
-                var(--bg);
     color: var(--text);
     line-height: 1.55;
   }
 
-  .container { max-width: 1100px; margin: 0 auto; padding: 32px 20px 56px; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 20px 56px; }
 
-  header { display: grid; gap: 8px; justify-items: center; text-align: center; margin-bottom: 24px; }
-  header h1 { font-size: clamp(26px, 3.2vw, 36px); margin: 0; letter-spacing: .2px; }
-  header .quote { font-size: 0.98rem; color: var(--muted); max-width: 70ch; margin: 0; opacity: .9; }
+  /* ===== Rolling banner (title ticker) ===== */
+  .banner {
+    position: relative;
+    overflow: hidden;
+    background: var(--surface);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    border: 1px solid #e5e7eb;
+    margin: 18px 0 16px;
+  }
+  .banner__track {
+    display: inline-block;
+    white-space: nowrap;
+    padding: 12px 0;
+    animation: banner-scroll 18s linear infinite;
+    will-change: transform;
+  }
+  @keyframes banner-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .banner__item {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-weight: 700; letter-spacing: .2px;
+    color: var(--accent-2);
+    font-size: clamp(18px, 2.2vw, 24px);
+    padding: 0 22px;
+  }
+  .banner__dot { opacity: .4; }
 
-  /* Skip link */
-  .skip-link { position: absolute; left: -999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
-  .skip-link:focus {
-    left: 16px; top: 16px; width: auto; height: auto; padding: 8px 12px; border-radius: 10px; background: var(--card);
-    outline: 2px solid var(--accent); color: var(--text);
+  @media (prefers-reduced-motion: reduce) {
+    .banner__track { animation: none; }
   }
 
-  /* Section grid */
+  header { display: grid; gap: 8px; justify-items: center; text-align: center; margin: 8px 0 24px; }
+  header h1 { font-size: clamp(28px, 3.2vw, 36px); margin: 0; letter-spacing: .2px; color: var(--text); }
+  header .quote { font-size: 0.98rem; color: var(--muted); max-width: 70ch; margin: 0; opacity: .95; }
+  .hero-img { display:block; width: 180px; max-width: 42vw; height: auto; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,.12); margin: 4px auto 12px; }
+
+  /* ===== Sections & links ===== */
   .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
   section {
     grid-column: span 12;
-    background: linear-gradient(180deg, var(--card), var(--card-alt));
-    border: 1px solid rgba(148,163,184,.15);
+    background: var(--surface);
+    border: 1px solid #e5e7eb;
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     padding: 18px 18px 8px;
-    outline: 1px solid rgba(255,255,255,.02);
   }
   @media (min-width: 860px) { section { grid-column: span 4; } }
-  section h2 { margin: 2px 2px 12px; font-size: 1.1rem; font-weight: 700; letter-spacing: .2px; }
+  section h2 { margin: 2px 2px 12px; font-size: 1.1rem; font-weight: 800; letter-spacing: .2px; color: var(--accent-2); }
 
-  /* Link list */
   ul.linklist { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
-  .linkitem { display: flex; align-items: center; gap: 10px; }
   .linkitem a {
-    flex: 1; display: inline-flex; align-items: center; justify-content: space-between;
-    text-decoration: none; color: var(--text); background: rgba(148,163,184,.10);
-    padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(148,163,184,.18);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; text-decoration: none;
+    color: var(--text);
+    background: var(--surface-alt);
+    padding: 10px 12px; border-radius: 12px; border: 1px solid #e5e7eb;
     transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
     outline-offset: 3px;
   }
   .linkitem a:hover, .linkitem a:focus {
     transform: translateY(-1px);
-    box-shadow: 0 10px 18px rgba(2,6,23,.20);
+    box-shadow: 0 10px 18px rgba(2,6,23,.10);
     border-color: var(--accent);
-    background: rgba(96,165,250,.08);
+    background: #eef1fb;
   }
-  .linkitem a[target="_blank"]::after, .linkitem a[data-ext="true"]::after { content: "↗"; font-size: .95em; opacity: .6; margin-left: 10px; }
 
-  /* Badges */
   .badge { display: inline-block; font-size: .72rem; letter-spacing: .15px; line-height: 1; padding: 6px 8px;
-           border-radius: 999px; background: rgba(99,102,241,.15); color: var(--text); border: 1px solid rgba(99,102,241,.35); }
-  .badge.active { background: rgba(96,165,250,.18); border-color: rgba(96,165,250,.45); }
+           border-radius: 999px; background: #eef1fb; color: var(--accent-2); border: 1px solid var(--ring); }
+  .badge.active { background: #ede8ff; color: var(--accent-2); }
 
   footer { margin-top: 28px; text-align: center; color: var(--muted); font-size: .9rem; }
-
-  /* Page hero image placed in page (not layout) */
-  .hero-img { display:block; width: 160px; max-width: 40vw; height: auto; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,.35); margin: 4px auto 12px; }
 </style>
 
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="container">
+
+  <!-- Rolling banner title -->
+  <div class="banner" aria-label="Rolling banner">
+    <div class="banner__track">
+      <span class="banner__item">Mathematics with Mr. Merrick</span>
+      <span class="banner__dot">•</span>
+      <span class="banner__item">Mathematics with Mr. Merrick</span>
+      <span class="banner__dot">•</span>
+      <span class="banner__item">Mathematics with Mr. Merrick</span>
+      <span class="banner__dot">•</span>
+      <span class="banner__item">Mathematics with Mr. Merrick</span>
+      <span class="banner__dot">•</span>
+      <!-- duplicate sequence for seamless loop -->
+      <span class="banner__item">Mathematics with Mr. Merrick</span>
+      <span class="banner__dot">•</span>
+      <span class="banner__item">Mathematics with Mr. Merrick</span>
+      <span class="banner__dot">•</span>
+      <span class="banner__item">Mathematics with Mr. Merrick</span>
+      <span class="banner__dot">•</span>
+      <span class="banner__item">Mathematics with Mr. Merrick</span>
+    </div>
+  </div>
+
   <header>
-    <img class="maintop" src="https://merrickmath.github.io/maintop.png" alt="Top" />
-    <h1>Mathematics With Mr. Merrick</h1>
+    <img class="hero-img" src="https://merrickmath.github.io/maintop.png" alt="Mathematics with Mr. Merrick">
+    <h1>Learning Repository</h1>
     <p class="quote"><em>“The enchanting charms of this sublime science reveal only to those who have the courage to go deeply into it.”</em> — Carl Friedrich Gauss</p>
   </header>
 
