@@ -1,213 +1,134 @@
 ---
 layout: default
-title: Student Learning Hub
-show_header: false
+title: Mathematics with Mr. Merrick
+show_header: False 
 ---
 
 {% raw %}
 <style>
-  /* ===== Bright, high-contrast theme (white background) ===== */
   :root {
-    --bg: #ffffff;           /* solid white page background */
-    --surface: #ffffff;      /* card/background surface */
-    --surface-alt: #f6f8fb;  /* very light tint for subtle contrast */
-    --text: #0f172a;         /* slate-900 dark text */
-    --muted: #475569;        /* slate-600 for secondary text */
-    --accent: #5459AC;       /* indigo */
-    --accent-2: #52357B;     /* deep purple */
-    --ring: rgba(84, 89, 172, .28);
-    --shadow: 0 10px 25px rgba(2,6,23,.08);
-    --radius: 18px;
-  }
-
-  * { box-sizing: border-box; }
-  html, body { height: 100%; }
-  body,
-  .page-header,
-  .main-content,
-  header,
-  footer {
-    background: var(--bg) !important; /* ensure solid white with no seams */
-    border: 0 !important;
+    --purple: #52357B;
+    --indigo: #5459AC;
+    --blue: #648DB3;
+    --mint: #B2D8CE;
+    --text-dark: #222;
+    --text-muted: #555;
+    --link: #5459AC;
+    --link-hover: #52357B;
   }
 
   body {
     margin: 0;
-    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-    color: var(--text);
-    line-height: 1.55;
+    font-family: system-ui, sans-serif;
+    background-color: #fff;
+    color: var(--text-dark);
+    line-height: 1.6;
   }
 
-  .container { max-width: 1100px; margin: 0 auto; padding: 24px 20px 56px; }
-
-  /* ===== Rolling banner (title ticker) ===== */
-  .banner {
-    position: relative;
-    overflow: hidden;
-    background: var(--surface);
-    border-radius: 14px;
-    box-shadow: var(--shadow);
-    border: 1px solid #e5e7eb;
-    margin: 18px 0 16px;
-  }
-  .banner__track {
-    display: inline-block;
-    white-space: nowrap;
-    padding: 12px 0;
-    animation: banner-scroll 18s linear infinite;
-    will-change: transform;
-  }
-  @keyframes banner-scroll {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-  .banner__item {
-    display: inline-flex; align-items: center; gap: 10px;
-    font-weight: 700; letter-spacing: .2px;
-    color: var(--accent-2);
-    font-size: clamp(18px, 2.2vw, 24px);
-    padding: 0 22px;
-  }
-  .banner__dot { opacity: .4; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .banner__track { animation: none; }
+  /* Gradient Header */
+  .page-header {
+    background: linear-gradient(135deg, var(--blue), var(--indigo), var(--purple));
+    color: white;
+    text-align: center;
+    padding: 1.2rem 0; /* minimal padding */
   }
 
-  header { display: grid; gap: 8px; justify-items: center; text-align: center; margin: 8px 0 24px; }
-  header h1 { font-size: clamp(28px, 3.2vw, 36px); margin: 0; letter-spacing: .2px; color: var(--text); }
-  header .quote { font-size: 0.98rem; color: var(--muted); max-width: 70ch; margin: 0; opacity: .95; }
-  .hero-img { display:block; width: 180px; max-width: 42vw; height: auto; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,.12); margin: 4px auto 12px; }
-
-  /* ===== Sections & links ===== */
-  .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
-  section {
-    grid-column: span 12;
-    background: var(--surface);
-    border: 1px solid #e5e7eb;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 18px 18px 8px;
-  }
-  @media (min-width: 860px) { section { grid-column: span 4; } }
-  section h2 { margin: 2px 2px 12px; font-size: 1.1rem; font-weight: 800; letter-spacing: .2px; color: var(--accent-2); }
-
-  ul.linklist { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
-  .linkitem a {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 10px; text-decoration: none;
-    color: var(--text);
-    background: var(--surface-alt);
-    padding: 10px 12px; border-radius: 12px; border: 1px solid #e5e7eb;
-    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
-    outline-offset: 3px;
-  }
-  .linkitem a:hover, .linkitem a:focus {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 18px rgba(2,6,23,.10);
-    border-color: var(--accent);
-    background: #eef1fb;
+  .page-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
   }
 
-  .badge { display: inline-block; font-size: .72rem; letter-spacing: .15px; line-height: 1; padding: 6px 8px;
-           border-radius: 999px; background: #eef1fb; color: var(--accent-2); border: 1px solid var(--ring); }
-  .badge.active { background: #ede8ff; color: var(--accent-2); }
+  /* Main content area */
+  .container {
+    max-width: 1000px;
+    margin: 1.5rem auto;
+    padding: 0 1rem;
+  }
 
-  footer { margin-top: 28px; text-align: center; color: var(--muted); font-size: .9rem; }
+  h2 {
+    color: var(--indigo);
+    border-bottom: 2px solid var(--mint);
+    padding-bottom: 0.3rem;
+  }
+
+  a {
+    color: var(--link);
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+  }
+
+  ul {
+    padding-left: 1.2rem;
+  }
+
+  footer {
+    text-align: center;
+    padding: 1rem;
+    color: var(--text-muted);
+    border-top: 1px solid #ddd;
+    margin-top: 2rem;
+  }
+
+  /* Layout columns for sections */
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .column {
+    flex: 1;
+    min-width: 250px;
+  }
 </style>
 
-<a class="skip-link" href="#main">Skip to content</a>
-<div class="container">
+<div class="page-header">
+  <h1>Mathematics with Mr. Merrick</h1>
+</div>
 
-  <!-- Rolling banner title -->
-  <div class="banner" aria-label="Rolling banner">
-    <div class="banner__track">
-      <span class="banner__item">Mathematics with Mr. Merrick</span>
-      <span class="banner__dot">•</span>
-      <span class="banner__item">Mathematics with Mr. Merrick</span>
-      <span class="banner__dot">•</span>
-      <span class="banner__item">Mathematics with Mr. Merrick</span>
-      <span class="banner__dot">•</span>
-      <span class="banner__item">Mathematics with Mr. Merrick</span>
-      <span class="banner__dot">•</span>
-      <!-- duplicate sequence for seamless loop -->
-      <span class="banner__item">Mathematics with Mr. Merrick</span>
-      <span class="banner__dot">•</span>
-      <span class="banner__item">Mathematics with Mr. Merrick</span>
-      <span class="banner__dot">•</span>
-      <span class="banner__item">Mathematics with Mr. Merrick</span>
-      <span class="banner__dot">•</span>
-      <span class="banner__item">Mathematics with Mr. Merrick</span>
+<div class="container">
+  <div class="row">
+    <div class="column">
+      <h2>Current Courses</h2>
+      <ul>
+        <li><a href="https://merrickmath.github.io/MerrickMath.github.io-APSTAT/">AP Statistics</a></li>
+        <li><a href="https://merrickmath.github.io/Datascience/">Introduction to Data Science</a></li>
+        <li><a href="https://merrickmath.github.io/MerrickMath.github.io-Div34Math">Math 10</a></li>
+        <li><a href="https://merrickmath.github.io/MerrickMath.github.io-LinearAlgebra/">Linear Algebra</a></li>
+      </ul>
+    </div>
+    <div class="column">
+      <h2>Challenges</h2>
+      <ul>
+        <li><a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/">Pokemon Challenge</a></li>
+        <li><a href="https://merrickmath.github.io/Merrickmath.github.io-MasterChefCalc/">Master Chef Calculus</a></li>
+        <li><a href="https://renertmath.github.io/RenertMath-CelebrateMath/">COL Challenge 2020</a></li>
+        <li><a href="https://merrickmath.github.io/MerrickMath.github.io-PythonProject/">Python Project</a></li>
+        <li><a href="https://merrickmath.github.io/MerrickMath.github.io-PumpkinBomb/">Pumpkin BOMB Challenge 2020</a></li>
+        <li><a href="https://renertmath.github.io/RenertMath-PumpkinBomb2021/">Pumpkin BOMB Challenge 2021</a></li>
+        <li><a href="https://merrickmath.github.io/MerrickMath-datachallenge/">DATA Challenge 2021</a></li>
+      </ul>
+    </div>
+    <div class="column">
+      <h2>Cool Stuff</h2>
+      <ul>
+        <li><a href="https://www.3blue1brown.com">3 Blue 1 Brown</a></li>
+        <li><a href="https://krazydad.com/tablet/puzzles.php">Krazy Dad Interactive Puzzles</a></li>
+        <li><a href="https://mathpickle.com">Math Pickle</a></li>
+        <li><a href="https://www.mathplayground.com">Math Playground</a></li>
+        <li><a href="https://www.cemc.uwaterloo.ca/contests/past_contests.html">CEMC Past Contests</a></li>
+        <li><a href="https://artofproblemsolving.com/wiki/index.php/AMC_Problems_and_Solutions">AMC Problems and Solutions</a></li>
+        <li><a href="https://mathkangaroo.ca/samples/en">Kangaroo Math Past Contests</a></li>
+        <li><a href="https://www.datacamp.com">DataCamp</a></li>
+      </ul>
     </div>
   </div>
-
-  <header>
-    <img class="hero-img" src="https://merrickmath.github.io/maintop.png" alt="Mathematics with Mr. Merrick">
-    <h1>Learning Repository</h1>
-    <p class="quote"><em>“The enchanting charms of this sublime science reveal only to those who have the courage to go deeply into it.”</em> — Carl Friedrich Gauss</p>
-  </header>
-
-  <main id="main" class="grid" aria-label="Main sections">
-    <!-- Current Courses -->
-    <section aria-labelledby="sec-courses">
-      <h2 id="sec-courses">Current Courses</h2>
-      <ul class="linklist">
-        <li class="linkitem">
-          <a href="https://merrickmath.github.io/MerrickMath.github.io-APSTAT/" data-ext="true" aria-label="AP Statistics">
-            <span>AP Statistics</span>
-            <span class="badge active" aria-hidden="true">Active</span>
-          </a>
-        </li>
-        <li class="linkitem">
-          <a href="https://merrickmath.github.io/Datascience/" data-ext="true" aria-label="Introduction to Data Science">
-            <span>Introduction to Data Science</span>
-            <span class="badge">Course</span>
-          </a>
-        </li>
-        <li class="linkitem">
-          <a href="https://merrickmath.github.io/MerrickMath.github.io-Div34Math" data-ext="true" aria-label="Math 10">
-            <span>Math 10</span>
-            <span class="badge">Course</span>
-          </a>
-        </li>
-        <li class="linkitem">
-          <a href="https://merrickmath.github.io/MerrickMath.github.io-LinearAlgebra/" data-ext="true" aria-label="Linear Algebra">
-            <span>Linear Algebra</span>
-            <span class="badge">Elective</span>
-          </a>
-        </li>
-      </ul>
-    </section>
-    <!-- Challenges -->
-    <section aria-labelledby="sec-challenges">
-      <h2 id="sec-challenges">Challenges</h2>
-      <ul class="linklist">
-        <li class="linkitem"><a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/" data-ext="true" aria-label="Pokemon Challenge"><span>Pokemon Challenge</span></a></li>
-        <li class="linkitem"><a href="https://merrickmath.github.io/Merrickmath.github.io-MasterChefCalc/" data-ext="true" aria-label="Master Chef Calculus"><span>Master Chef Calculus</span></a></li>
-        <li class="linkitem"><a href="https://renertmath.github.io/RenertMath-CelebrateMath/" data-ext="true" aria-label="COL Challenge 2020"><span>COL Challenge 2020</span></a></li>
-        <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath.github.io-PythonProject/" data-ext="true" aria-label="Python Project"><span>Python Project</span></a></li>
-        <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath.github.io-PumpkinBomb/" data-ext="true" aria-label="Pumpkin Bomb Challenge 2020"><span>Pumpkin BOMB Challenge 2020</span></a></li>
-        <li class="linkitem"><a href="https://renertmath.github.io/RenertMath-PumpkinBomb2021/" data-ext="true" aria-label="Pumpkin Bomb Challenge 2021"><span>Pumpkin BOMB Challenge 2021</span></a></li>
-        <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath-datachallenge/" data-ext="true" aria-label="Data Challenge 2021"><span>DATA Challenge 2021</span></a></li>
-      </ul>
-    </section>
-    <!-- Cool Stuff -->
-    <section aria-labelledby="sec-cool">
-      <h2 id="sec-cool">Cool Stuff</h2>
-      <ul class="linklist">
-        <li class="linkitem"><a href="https://www.3blue1brown.com" target="_blank" rel="noopener" aria-label="3 Blue 1 Brown"><span>3 Blue 1 Brown</span></a></li>
-        <li class="linkitem"><a href="https://krazydad.com/tablet/puzzles.php" target="_blank" rel="noopener" aria-label="Krazy Dad Interactive Puzzles"><span>Krazy Dad Interactive Puzzles</span></a></li>
-        <li class="linkitem"><a href="https://mathpickle.com" target="_blank" rel="noopener" aria-label="Math Pickle"><span>Math Pickle</span></a></li>
-        <li class="linkitem"><a href="https://www.mathplayground.com" target="_blank" rel="noopener" aria-label="Math Playground"><span>Math Playground</span></a></li>
-        <li class="linkitem"><a href="https://www.cemc.uwaterloo.ca/contests/past_contests.html" target="_blank" rel="noopener" aria-label="CEMC Past Contests"><span>CEMC Past Contests</span></a></li>
-        <li class="linkitem"><a href="https://artofproblemsolving.com/wiki/index.php/AMC_Problems_and_Solutions" target="_blank" rel="noopener" aria-label="AMC Problems and Solutions"><span>AMC Problems and Solutions</span></a></li>
-        <li class="linkitem"><a href="https://mathkangaroo.ca/samples/en" target="_blank" rel="noopener" aria-label="Kangaroo Math Past Contests"><span>Kangaroo Math Past Contests</span></a></li>
-        <li class="linkitem"><a href="https://www.datacamp.com" target="_blank" rel="noopener" aria-label="DataCamp"><span>DataCamp</span></a></li>
-      </ul>
-    </section>
-  </main>
-
-  <footer></footer>
 </div>
+
+<footer>
+  <i>"Chase the extreme, not the mean"</i>
+</footer>
 {% endraw %}
