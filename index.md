@@ -113,7 +113,7 @@ show_header: false
   display: block;
   width: 400px;       /* was ~92px — now larger */
   height: auto;
-  margin: 0 auto -1px; /* was 2px — slight extra breathing space, still tight */
+  margin: 0 auto -6px; /* was 2px — slight extra breathing space, still tight */
 }
 .page-title {
   margin: 0;
