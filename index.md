@@ -108,10 +108,8 @@ show_header: false
 </style>
 
 <!-- Banner with title (white text) -->
-<div class="banner" role="banner" aria-label="Site title banner">
-  <div class="banner__inner">
-    <h1 class="banner__title">Mathematics with Mr. Merrick</h1>
-  </div>
+<div>
+    <h1>Mathematics with Mr. Merrick</h1>
 </div>
 
 <div class="container">
