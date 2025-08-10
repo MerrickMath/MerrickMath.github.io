@@ -105,7 +105,7 @@ show_header: false
 <div class="container">
   <header>
     <img class="hero-img" src="https://merrickmath.github.io/maintop.png" alt="Mathematics with Mr. Merrick">
-    <h1>Learning Repository</h1>
+    <h1>Mathematics With Mr. Merrick</h1>
     <p class="quote"><em>“The enchanting charms of this sublime science reveal only to those who have the courage to go deeply into it.”</em> — Carl Friedrich Gauss</p>
   </header>
 
