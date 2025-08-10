@@ -105,15 +105,23 @@ show_header: false
   footer{ margin-top:28px; text-align:center; color:var(--muted); font-size:.9rem; }
 
   /* Title + icon */
-  .title-wrap{ text-align:center; margin:10px 0 10px; }
-  .title-logo{ display:block; width:92px; height:auto; margin:0 auto 2px; } /* tight spacing above title */
-  .page-title{
-    margin:0;
-    font-weight:800;
-    text-align:center;
-    font-size:clamp(28px,4vw,44px);
-    color:var(--indigo);
-  }
+.title-wrap {
+  text-align: center;
+  margin: 10px 0 10px;
+}
+.title-logo {
+  display: block;
+  width: 160px;       /* was ~92px — now larger */
+  height: auto;
+  margin: 0 auto 4px; /* was 2px — slight extra breathing space, still tight */
+}
+.page-title {
+  margin: 0;
+  font-weight: 800;
+  text-align: center;
+  font-size: clamp(28px, 4vw, 44px);
+  color: var(--indigo);
+}
 </style>
 
 <!-- Title with Wikimedia Gaussian SVG right on top -->
