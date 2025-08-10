@@ -134,7 +134,6 @@ title: Student Learning Hub
         </li>
       </ul>
     </section>
-
     <!-- Challenges -->
     <section aria-labelledby="sec-challenges">
       <h2 id="sec-challenges">Challenges</h2>
@@ -148,7 +147,6 @@ title: Student Learning Hub
         <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath-datachallenge/" data-ext="true" aria-label="Data Challenge 2021"><span>DATA Challenge 2021</span></a></li>
       </ul>
     </section>
-
     <!-- Cool Stuff -->
     <section aria-labelledby="sec-cool">
       <h2 id="sec-cool">Cool Stuff</h2>
