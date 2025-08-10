@@ -215,4 +215,29 @@ show_header: false
 
   <footer></footer>
 </div>
+
+<script>
+  (function () {
+    const nav = performance.getEntriesByType('navigation')[0];
+    const isReload =
+      nav && (nav.type === 'reload' || nav.type === 'back_forward');
+
+    // If there is no URL fragment (e.g., #sec-courses), ensure top on load/reload
+    if (!location.hash) {
+      // Run on load
+      window.addEventListener('load', function () {
+        window.scrollTo(0, 0);
+      });
+
+      // Also handle bfcache restores (Safari/Firefox back-forward cache)
+      window.addEventListener('pageshow', function (e) {
+        if (e.persisted || isReload) {
+          window.scrollTo(0, 0);
+        }
+      });
+    }
+  })();
+</script>
+
+
 {% endraw %}
