@@ -111,7 +111,7 @@ show_header: false
 }
 .title-logo {
   display: block;
-  width: 400px;       /* was ~92px — now larger */
+  width: 450px;       /* was ~92px — now larger */
   height: auto;
   margin: 0 auto -12px; /* was 2px — slight extra breathing space, still tight */
 }
