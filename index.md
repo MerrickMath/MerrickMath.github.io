@@ -74,11 +74,14 @@ show_header: false
   }
   @media (min-width:860px){ section{ grid-column:span 4; } }
 
-  section h2{
-    margin:2px 2px 12px;
-    font-size:1.1rem; font-weight:800; letter-spacing:.2px;
-    color:var(--purple);
-    border-bottom:2px solid #e8eafc; padding-bottom:.2rem;
+  section h2 {
+  margin: 2px 2px 12px;
+  font-size: 1.4rem; /* increased size */
+  font-weight: 800;
+  letter-spacing: .2px;
+  color: var(--purple);
+  border-bottom: 2px solid #e8eafc;
+  padding-bottom: .2rem;
   }
 
   ul.linklist{ list-style:none; padding:0; margin:0; display:grid; gap:8px; }
@@ -107,9 +110,14 @@ show_header: false
   footer{ margin-top:28px; text-align:center; color:var(--muted); font-size:.9rem; }
 </style>
 
-<!-- Banner with title (white text) -->
-<div>
-    <h1>Mathematics with Mr. Merrick</h1>
+<!-- Banner with title and icon -->
+<div style="text-align:center; margin-bottom:20px;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Normal_distribution_pdf.svg" 
+       alt="Normal Distribution Icon" 
+       style="width:80px; height:auto; filter: hue-rotate(220deg) saturate(1.2);">
+  <h1 style="font-weight:bold; font-size:2.4rem; margin-top:10px; color:var(--indigo);">
+    Mathematics with Mr. Merrick
+  </h1>
 </div>
 
 <div class="container">
