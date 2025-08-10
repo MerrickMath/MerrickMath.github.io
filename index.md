@@ -1,185 +1,126 @@
----
-layout: default
-title: Mathematics with Mr. Merrick
-show_header: false
----
-
-{% raw %}
-<!-- LaTeX-ish serif -->
-<link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;600;700&display=swap" rel="stylesheet">
-
-<style>
-  /* ===== Base theme (clean, readable) ===== */
-  :root{
-    --bg:#ffffff;             /* solid white background */
-    --surface:#ffffff;        /* card background */
-    --surface-alt:#f4f6ff;    /* light indigo tint for buttons */
-    --text:#0f172a;           /* dark text */
-    --muted:#475569;          /* secondary text */
-    --indigo:#5459AC;         /* primary accent */
-    --purple:#52357B;         /* secondary accent */
-    --ring:rgba(84,89,172,.28);
-    --shadow:0 10px 25px rgba(2,6,23,.08);
-    --radius:18px;
-  }
-
-  /* Ensure no seams with layout header/footer */
-  body,.page-header,.main-content,header,footer{
-    background:var(--bg) !important;
-    border:0 !important;
-  }
-
-  body{
-    margin:0;
-    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-    font-family:"STIX Two Text","Computer Modern Serif","Latin Modern Roman","Times New Roman",serif;
-    color:var(--text);
-    line-height:1.6;
-  }
-
-  /* ===== Gradient Banner (fixed, centered) ===== */
-  .banner{
-    width:100%;
-    background:linear-gradient(135deg,#648DB3,#5459AC,#52357B);
-    color:#fff;
-    padding:12px 10px; /* minimal padding like you asked */
-  }
-  .banner__inner{
-    max-width:1100px; margin:0 auto;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .banner__title{
-    margin:0;
-    font-weight:800;
-    font-size:clamp(22px,3vw,36px);
-    letter-spacing:.2px;
-    text-align:center;
-  }
-
-  /* ===== Page wrapper ===== */
-  .container{ max-width:1100px; margin:14px auto 56px; padding:0 20px; }
-
-  header{ display:grid; gap:8px; justify-items:center; text-align:center; margin:8px 0 20px; }
-  header .quote{ font-size:.98rem; color:var(--muted); max-width:70ch; margin:0; }
-
-  /* ===== Sections & refreshed link “buttons” ===== */
-  .grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:16px; }
-  section{
-    grid-column:span 12;
-    background:var(--surface);
-    border:1px solid #e5e7eb;
-    border-radius:var(--radius);
-    box-shadow:var(--shadow);
-    padding:18px 18px 10px;
-  }
-  @media (min-width:860px){ section{ grid-column:span 4; } }
-
-  section h2{
-    margin:2px 2px 12px;
-    font-size:1.1rem; font-weight:800; letter-spacing:.2px;
-    color:var(--purple);
-    border-bottom:2px solid #e8eafc; padding-bottom:.2rem;
-  }
-
-  ul.linklist{ list-style:none; padding:0; margin:0; display:grid; gap:8px; }
-  .linkitem a{
-    display:flex; align-items:center; justify-content:space-between;
-    gap:10px; text-decoration:none;
-    color:var(--indigo);           /* darker, brighter links */
-    background:var(--surface-alt); /* vibrant but not noisy */
-    padding:10px 12px; border-radius:12px; border:1px solid var(--ring);
-    transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
-    outline-offset:3px; font-weight:600;
-  }
-  .linkitem a:hover,.linkitem a:focus{
-    transform:translateY(-1px);
-    box-shadow:0 10px 18px rgba(2,6,23,.10);
-    border-color:var(--indigo);
-    background:#e9ecff;
-  }
-
-  .badge{
-    display:inline-block; font-size:.72rem; letter-spacing:.15px; line-height:1;
-    padding:6px 8px; border-radius:999px; background:#eef1fb; color:var(--purple); border:1px solid var(--ring);
-  }
-  .badge.active{ background:#ede8ff; color:var(--purple); }
-
-  footer{ margin-top:28px; text-align:center; color:var(--muted); font-size:.9rem; }
-</style>
-
-<!-- Banner with title (white text) -->
-<div class="banner" role="banner" aria-label="Site title banner">
-  <div class="banner__inner">
-    <h1 class="banner__title">Mathematics with Mr. Merrick</h1>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mathematics with Mr. Merrick</title>
+  <style>
+    :root {
+      --purple: #52357B;
+      --indigo: #5459AC;
+      --blue: #648DB3;
+      --text-dark: #222;
+      --link: #3333aa;
+      --link-hover: #111177;
+      --radius: 18px;
+    }
+    body {
+      margin: 0;
+      font-family: 'CMU Serif', 'Times New Roman', serif;
+      background-color: #fff;
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+    /* Banner */
+    .banner {
+      background: #fff;
+      color: var(--text-dark);
+      text-align: center;
+      padding: 1.5rem 0;
+    }
+    .banner__item {
+      font-weight: 800;
+      letter-spacing: .2px;
+      font-size: clamp(28px, 3.5vw, 48px);
+      margin: 0;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+    h2 {
+      color: var(--indigo);
+      border-bottom: 2px solid var(--blue);
+      padding-bottom: 0.3rem;
+      font-size: 1.35rem;
+    }
+    a {
+      color: var(--link);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    a:hover {
+      color: var(--link-hover);
+      text-decoration: underline;
+    }
+    ul {
+      padding-left: 1.2rem;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      color: #555;
+      border-top: 1px solid #ddd;
+      margin-top: 2rem;
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .column {
+      flex: 1;
+      min-width: 250px;
+    }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <h1 class="banner__item">Mathematics with Mr. Merrick</h1>
   </div>
-</div>
 
-<div class="container">
-  <header>
-    <!-- Title removed per request; keeping your quote -->
-    <p class="quote"><em>“The enchanting charms of this sublime science reveal only to those who have the courage to go deeply into it.”</em> — Carl Friedrich Gauss</p>
-  </header>
+  <div class="container">
+    <div class="row">
+      <div class="column">
+        <h2>Current Courses</h2>
+        <ul>
+          <li><a href="https://merrickmath.github.io/MerrickMath.github.io-APSTAT/">AP Statistics</a></li>
+          <li><a href="https://merrickmath.github.io/Datascience/">Introduction to Data Science</a></li>
+          <li><a href="https://merrickmath.github.io/MerrickMath.github.io-Div34Math">Math 10</a></li>
+          <li><a href="https://merrickmath.github.io/MerrickMath.github.io-LinearAlgebra/">Linear Algebra</a></li>
+        </ul>
+      </div>
+      <div class="column">
+        <h2>Challenges</h2>
+        <ul>
+          <li><a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/">Pokemon Challenge</a></li>
+          <li><a href="https://merrickmath.github.io/Merrickmath.github.io-MasterChefCalc/">Master Chef Calculus</a></li>
+          <li><a href="https://renertmath.github.io/RenertMath-CelebrateMath/">COL Challenge 2020</a></li>
+          <li><a href="https://merrickmath.github.io/MerrickMath.github.io-PythonProject/">Python Project</a></li>
+          <li><a href="https://merrickmath.github.io/MerrickMath.github.io-PumpkinBomb/">Pumpkin BOMB Challenge 2020</a></li>
+          <li><a href="https://renertmath.github.io/RenertMath-PumpkinBomb2021/">Pumpkin BOMB Challenge 2021</a></li>
+          <li><a href="https://merrickmath.github.io/MerrickMath-datachallenge/">DATA Challenge 2021</a></li>
+        </ul>
+      </div>
+      <div class="column">
+        <h2>Cool Stuff</h2>
+        <ul>
+          <li><a href="https://www.3blue1brown.com">3 Blue 1 Brown</a></li>
+          <li><a href="https://krazydad.com/tablet/puzzles.php">Krazy Dad Interactive Puzzles</a></li>
+          <li><a href="https://mathpickle.com">Math Pickle</a></li>
+          <li><a href="https://www.mathplayground.com">Math Playground</a></li>
+          <li><a href="https://www.cemc.uwaterloo.ca/contests/past_contests.html">CEMC Past Contests</a></li>
+          <li><a href="https://artofproblemsolving.com/wiki/index.php/AMC_Problems_and_Solutions">AMC Problems and Solutions</a></li>
+          <li><a href="https://mathkangaroo.ca/samples/en">Kangaroo Math Past Contests</a></li>
+          <li><a href="https://www.datacamp.com">DataCamp</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
-  <main id="main" class="grid" aria-label="Main sections">
-    <!-- Current Courses -->
-    <section aria-labelledby="sec-courses">
-      <h2 id="sec-courses">Current Courses</h2>
-      <ul class="linklist">
-        <li class="linkitem">
-          <a href="https://merrickmath.github.io/MerrickMath.github.io-APSTAT/" data-ext="true" aria-label="AP Statistics">
-            <span>AP Statistics</span>
-            <span class="badge active" aria-hidden="true">Active</span>
-          </a>
-        </li>
-        <li class="linkitem">
-          <a href="https://merrickmath.github.io/Datascience/" data-ext="true" aria-label="Introduction to Data Science">
-            <span>Introduction to Data Science</span>
-            <span class="badge">Course</span>
-          </a>
-        </li>
-        <li class="linkitem">
-          <a href="https://merrickmath.github.io/MerrickMath.github.io-Div34Math" data-ext="true" aria-label="Math 10">
-            <span>Math 10</span>
-            <span class="badge">Course</span>
-          </a>
-        </li>
-        <li class="linkitem">
-          <a href="https://merrickmath.github.io/MerrickMath.github.io-LinearAlgebra/" data-ext="true" aria-label="Linear Algebra">
-            <span>Linear Algebra</span>
-            <span class="badge">Elective</span>
-          </a>
-        </li>
-      </ul>
-    </section>
-    <!-- Challenges -->
-    <section aria-labelledby="sec-challenges">
-      <h2 id="sec-challenges">Challenges</h2>
-      <ul class="linklist">
-        <li class="linkitem"><a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/" data-ext="true"><span>Pokemon Challenge</span></a></li>
-        <li class="linkitem"><a href="https://merrickmath.github.io/Merrickmath.github.io-MasterChefCalc/" data-ext="true"><span>Master Chef Calculus</span></a></li>
-        <li class="linkitem"><a href="https://renertmath.github.io/RenertMath-CelebrateMath/" data-ext="true"><span>COL Challenge 2020</span></a></li>
-        <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath.github.io-PythonProject/" data-ext="true"><span>Python Project</span></a></li>
-        <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath.github.io-PumpkinBomb/" data-ext="true"><span>Pumpkin BOMB Challenge 2020</span></a></li>
-        <li class="linkitem"><a href="https://renertmath.github.io/RenertMath-PumpkinBomb2021/" data-ext="true"><span>Pumpkin BOMB Challenge 2021</span></a></li>
-        <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath-datachallenge/" data-ext="true"><span>DATA Challenge 2021</span></a></li>
-      </ul>
-    </section>
-    <!-- Cool Stuff -->
-    <section aria-labelledby="sec-cool">
-      <h2 id="sec-cool">Cool Stuff</h2>
-      <ul class="linklist">
-        <li class="linkitem"><a href="https://www.3blue1brown.com" target="_blank" rel="noopener"><span>3 Blue 1 Brown</span></a></li>
-        <li class="linkitem"><a href="https://krazydad.com/tablet/puzzles.php" target="_blank" rel="noopener"><span>Krazy Dad Interactive Puzzles</span></a></li>
-        <li class="linkitem"><a href="https://mathpickle.com" target="_blank" rel="noopener"><span>Math Pickle</span></a></li>
-        <li class="linkitem"><a href="https://www.mathplayground.com" target="_blank" rel="noopener"><span>Math Playground</span></a></li>
-        <li class="linkitem"><a href="https://www.cemc.uwaterloo.ca/contests/past_contests.html" target="_blank" rel="noopener"><span>CEMC Past Contests</span></a></li>
-        <li class="linkitem"><a href="https://artofproblemsolving.com/wiki/index.php/AMC_Problems_and_Solutions" target="_blank" rel="noopener"><span>AMC Problems and Solutions</span></a></li>
-        <li class="linkitem"><a href="https://mathkangaroo.ca/samples/en" target="_blank" rel="noopener"><span>Kangaroo Math Past Contests</span></a></li>
-        <li class="linkitem"><a href="https://www.datacamp.com" target="_blank" rel="noopener"><span>DataCamp</span></a></li>
-      </ul>
-    </section>
-  </main>
-
-  <footer></footer>
-</div>
-{% endraw %}
+  <footer>
+    <i>"Chase the extreme, not the mean"</i>
+  </footer>
+</body>
+</html>
