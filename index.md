@@ -15,7 +15,7 @@
         <li><a href="https://MerrickMath.github.io/2021Grade45.html"> Grade 6 Mathematics </a> </li>
         <li><a href="https://MerrickMath.github.io/2021Brightminds.html"> Bright Minds </a> </li> 
         <li><a href="https://merrickmath.github.io/MerrickMath.github.io-LinearAlgebra/"> Linear Algebra </a> </li> ---> 
-        <li><a href="https://merrickmath.github.io/MerrickMath.github.io-Div34Math"> Math 8 </a> </li>
+        <li><a href="https://merrickmath.github.io/MerrickMath.github.io-Div34Math"> Math 10 </a> </li>
         <h3> Electives </h3>
         <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScmC5atQ9uQfUwM1PqB-43kOFXXkqpjUT2C96dPcbWGKP6HYw/viewform?usp=dialog"> Board Game Survey 1 </a> </li>
         <li><a href="https://merrickmath.github.io/MerrickMath.github.io-LinearAlgebra/"> Linear Algebra </a> </li>
