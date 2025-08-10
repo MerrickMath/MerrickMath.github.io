@@ -41,6 +41,7 @@
         <li><a href="https://mathpickle.com"> Math Pickle </a> </li>
         <li><a href="https://www.mathplayground.com"> Math Playground </a> </li>
         <li><a href="https://www.cemc.uwaterloo.ca/contests/past_contests.html"> CEMC Past Contests </a> </li>
+        <li><a href="https://artofproblemsolving.com/wiki/index.php/AMC_Problems_and_Solutions?srsltid=AfmBOopEruAHJXRk_nc_y-gH6LzBXUETipf8xv4FoVVpIQxOl8Jds_Id"> AMC Problems and Solutions </a> </li>
         <li><a href="https://mathkangaroo.ca/samples/en"> Kangaroo Math Past Contests </a> </li>
         <li><a href="https://www.datacamp.com"> Data Camp </a> </li>
       </ul> 
