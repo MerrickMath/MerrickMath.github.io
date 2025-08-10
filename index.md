@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Student Learning Hub
+show_header: false
 ---
 
 <style>
