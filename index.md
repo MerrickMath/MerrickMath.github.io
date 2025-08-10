@@ -9,21 +9,19 @@ show_header: false
 <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-  /* ===== Base theme (clean, readable) ===== */
   :root{
-    --bg:#ffffff;             /* solid white background */
-    --surface:#ffffff;        /* card background */
-    --surface-alt:#f4f6ff;    /* light indigo tint for buttons */
-    --text:#0f172a;           /* dark text */
-    --muted:#475569;          /* secondary text */
-    --indigo:#5459AC;         /* primary accent */
-    --purple:#52357B;         /* secondary accent */
+    --bg:#ffffff;
+    --surface:#ffffff;
+    --surface-alt:#f4f6ff;
+    --text:#0f172a;
+    --muted:#475569;
+    --indigo:#5459AC;
+    --purple:#52357B;
     --ring:rgba(84,89,172,.28);
     --shadow:0 10px 25px rgba(2,6,23,.08);
     --radius:18px;
   }
 
-  /* Ensure no seams with layout header/footer */
   body,.page-header,.main-content,header,footer{
     background:var(--bg) !important;
     border:0 !important;
@@ -31,18 +29,18 @@ show_header: false
 
   body{
     margin:0;
-    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    -webkit-font-smoothing:antialiased; 
+    -moz-osx-font-smoothing:grayscale;
     font-family:"STIX Two Text","Computer Modern Serif","Latin Modern Roman","Times New Roman",serif;
     color:var(--text);
     line-height:1.6;
   }
 
-  /* ===== Gradient Banner (fixed, centered) ===== */
   .banner{
     width:100%;
     background:linear-gradient(135deg,#648DB3,#5459AC,#52357B);
     color:#fff;
-    padding:12px 10px; /* minimal padding like you asked */
+    padding:12px 10px;
   }
   .banner__inner{
     max-width:1100px; margin:0 auto;
@@ -56,13 +54,11 @@ show_header: false
     text-align:center;
   }
 
-  /* ===== Page wrapper ===== */
   .container{ max-width:1100px; margin:14px auto 56px; padding:0 20px; }
 
   header{ display:grid; gap:8px; justify-items:center; text-align:center; margin:8px 0 20px; }
   header .quote{ font-size:.98rem; color:var(--muted); max-width:70ch; margin:0; }
 
-  /* ===== Sections & refreshed link “buttons” ===== */
   .grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:16px; }
   section{
     grid-column:span 12;
@@ -74,22 +70,21 @@ show_header: false
   }
   @media (min-width:860px){ section{ grid-column:span 4; } }
 
-  section h2 {
-  margin: 2px 2px 12px;
-  font-size: 1.4rem; /* increased size */
-  font-weight: 800;
-  letter-spacing: .2px;
-  color: var(--purple);
-  border-bottom: 2px solid #e8eafc;
-  padding-bottom: .2rem;
+  /* Bigger section headings */
+  section h2{
+    margin:2px 2px 12px;
+    font-size:clamp(1.25rem,2.2vw,1.6rem);
+    font-weight:800; letter-spacing:.2px;
+    color:var(--purple);
+    border-bottom:2px solid #e8eafc; padding-bottom:.2rem;
   }
 
   ul.linklist{ list-style:none; padding:0; margin:0; display:grid; gap:8px; }
   .linkitem a{
     display:flex; align-items:center; justify-content:space-between;
     gap:10px; text-decoration:none;
-    color:var(--indigo);           /* darker, brighter links */
-    background:var(--surface-alt); /* vibrant but not noisy */
+    color:var(--indigo);
+    background:var(--surface-alt);
     padding:10px 12px; border-radius:12px; border:1px solid var(--ring);
     transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
     outline-offset:3px; font-weight:600;
@@ -108,21 +103,30 @@ show_header: false
   .badge.active{ background:#ede8ff; color:var(--purple); }
 
   footer{ margin-top:28px; text-align:center; color:var(--muted); font-size:.9rem; }
+
+  /* Title + icon */
+  .title-wrap{ text-align:center; margin:12px 0 10px; }
+  .title-logo{ display:block; width:84px; height:auto; margin:0 auto 8px; color:var(--indigo); }
+  .page-title{
+    margin:0;
+    font-weight:800;
+    text-align:center;
+    font-size:clamp(28px,4vw,44px);
+    color:var(--indigo);
+  }
 </style>
 
-<!-- Banner with title and icon -->
-<div style="text-align:center; margin-bottom:20px;">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Normal_distribution_pdf.svg" 
-       alt="Normal Distribution Icon" 
-       style="width:80px; height:auto; filter: hue-rotate(220deg) saturate(1.2);">
-  <h1 style="font-weight:bold; font-size:2.4rem; margin-top:10px; color:var(--indigo);">
-    Mathematics with Mr. Merrick
-  </h1>
+<!-- Title with inline SVG icon -->
+<div class="title-wrap">
+  <svg class="title-logo" viewBox="0 0 128 64" role="img" aria-label="Normal distribution">
+    <path d="M4 56 C 24 56, 40 8, 64 8 C 88 8, 104 56, 124 56" 
+          fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+  </svg>
+  <h1 class="page-title">Mathematics with Mr. Merrick</h1>
 </div>
 
 <div class="container">
   <header>
-    <!-- Title removed per request; keeping your quote -->
     <p class="quote"><em>“The enchanting charms of this sublime science reveal only to those who have the courage to go deeply into it.”</em> — Carl Friedrich Gauss</p>
   </header>
 
