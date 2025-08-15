@@ -215,7 +215,6 @@ show_header: false
         <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath.github.io-PythonProject/" data-ext="true"><span>Python Project</span></a></li>
         <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath.github.io-PumpkinBomb/" data-ext="true"><span>Pumpkin BOMB Challenge 2020</span></a></li>
         <li class="linkitem"><a href="https://renertmath.github.io/RenertMath-PumpkinBomb2021/" data-ext="true"><span>Pumpkin BOMB Challenge 2021</span></a></li>
-        <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath-datachallenge/" data-ext="true"><span>DATA Challenge 2021</span></a></li>
       </ul>
     </section>
     <!-- Cool Stuff -->
