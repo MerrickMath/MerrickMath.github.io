@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Grade 6 PAT Generator</title>
+  <title>Math 6 – PAT Part A Generator</title>
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
@@ -19,14 +19,16 @@
       padding: 1rem;
       line-height: 1.35;
     }
+
+    /* Header controls (simplified) */
     .controls {
       display:flex; flex-wrap:wrap; gap:.6rem 1rem; align-items:center;
       border:1px solid #ddd; border-radius:10px; padding:.8rem 1rem; margin-bottom:1rem; background:#fafafa;
     }
-    .controls h1 { font-size:1.25rem; margin:0 .5rem 0 0; }
+    .controls h1 { font-size:1.25rem; margin:0 .75rem 0 0; }
     .controls label { display:flex; align-items:center; gap:.35rem; }
-    .controls input[type="number"], .controls input[type="text"] {
-      width: 12ch; padding:.35rem .45rem; border:1px solid #bbb; border-radius:6px; font-family:inherit;
+    .controls input[type="number"] {
+      width: 14ch; padding:.35rem .45rem; border:1px solid #bbb; border-radius:6px; font-family:inherit;
     }
     .btn { padding:.45rem .8rem; border:1px solid #bbb; border-radius:8px; background:#fff; cursor:pointer; }
     .btn:hover { border-color:#333; box-shadow:0 1px 4px rgba(0,0,0,.08); }
@@ -36,16 +38,11 @@
 
     .two-col { column-count:2; column-gap:1.2rem; }
     ol { margin:.1rem 0 1.2rem 1.25rem; padding:0; }
-    li { break-inside: avoid; margin:.75rem 0 1.25rem; } /* more spacing */
+    li { break-inside: avoid; margin:.75rem 0 1.25rem; } /* spacing between questions */
 
     /* Keep each question on one line */
     .qline { white-space: nowrap; display: inline-block; width: 100%; }
     .no-break { white-space: nowrap; }
-
-    .answer-line {
-      display:inline-block; min-width: 7rem; border-bottom:1px solid #000; padding:0 .4rem;
-      color: transparent; user-select: none;
-    }
 
     .box { border:1px solid #444; padding:.7rem .8rem; margin:.8rem 0 1rem; border-radius:8px; }
     .box .center { text-align:center; }
@@ -65,10 +62,10 @@
 </head>
 <body>
   <div class="controls">
-    <h1>Math 6 PAT – Part A Generator</h1>
+    <h1>Math 6 – PAT Part A Generator</h1>
     <label>Seed <input id="seed" type="number" placeholder="random"></label>
     <button class="btn" id="genBtn">Generate</button>
-    <label><input type="checkbox" id="toggleAns"> Show solutions</label>
+    <button class="btn" id="toggleBtn">Show solutions</button>
   </div>
 
   <div id="exam" class="paper"></div>
@@ -99,7 +96,7 @@
     function fracTex(n,d){return `\\dfrac{${n}}{${d}}`;}
     function mixedTex(w,n,d){return n===0?`${w}`:`${w}\\dfrac{${n}}{${d}}`;}
 
-    // Wrap TeX answers so KaTeX renders them
+    // Wrap TeX answers so KaTeX renders them in the solutions panel
     function wrapMathIfNeeded(ans){
       if (typeof ans !== 'string') ans = String(ans);
       const hasMath = /\\|[\^\{\}%]/.test(ans);
@@ -109,9 +106,7 @@
 
     // Robustly keep the final '?' with the preceding content and avoid line breaks
     function keepQuestionMark(html){
-      // If the question mark is at end (optionally followed by closing tags), wrap it:
       html = html.replace(/(\?)(\s*(?:<\/[^>]+>\s*)*)$/,'<span class="no-break">&nbsp;?</span>$2');
-      // If a '?' appears right before a closing tag mid-string, also wrap it:
       html = html.replace(/\?(\s*<\/)/g,'<span class="no-break">&nbsp;?</span>$1');
       return html;
     }
@@ -119,9 +114,9 @@
     // ---------- Answers store ----------
     function Answers(){ this.items=[]; }
     Answers.prototype.add=function(ans){ this.items.push(wrapMathIfNeeded(ans)); };
-    Answers.prototype.render=function(seed,titleText){
+    Answers.prototype.render=function(seed){
       const lis=this.items.map(a=>`<li>${a}</li>`).join('');
-      return `<h3>Solutions${titleText?` – ${titleText}`:''} (Seed ${seed})</h3><ol>${lis}</ol>`;
+      return `<h3>Solutions (Seed ${seed})</h3><ol>${lis}</ol>`;
     };
 
     // ---------- Problem generators ----------
@@ -201,7 +196,7 @@
     function genPrimeExponentSum(rng){const a=randi(rng,0,6), b=randi(rng,0,4), c=randi(rng,0,3); const N=(2**a)*(3**b)*(5**c); return { q:`$${N}=2^a 3^b 5^c$. What is $a+b+c$?`, a:`${a+b+c}` }; }
 
     // ---------- Build exam ----------
-    function buildExam(rng, titleText){
+    function buildExam(rng){
       const A=new Answers();
       const section1Fns = [
         genAddFourBlocks, genDollarAdd, genDecimalSubSafe, genMulSmall, genMulMed, genDivClean,
@@ -209,12 +204,12 @@
         genHundredthDivIntClean, genTenthsMinusHundredths, genDecMinusHundredth, genHundredthDivIntClean
       ];
       const header = `
-        <div class="meta"><strong>PAT Title:</strong> Math 6 PAT – ${titleText||"Sample Questions"}</div>
+        <div class="meta"><strong>PAT Title:</strong> Math 6 – PAT Part A</div>
         <div class="two-col"><ol>
           ${section1Fns.map(fn=>{
             const {q,a}=fn(rng); A.add(a);
             const qFixed = keepQuestionMark(q);
-            return `<li><span class="qline">${qFixed}</span><br><strong>Answer:</strong> <span class="answer-line">${wrapMathIfNeeded(a)}</span></li>`;
+            return `<li><span class="qline">${qFixed}</span></li>`;
           }).join("")}
         </ol></div>
       `;
@@ -222,9 +217,6 @@
       const fill = genFillInProductBox(rng); A.add(fill.a);
       const infoBlock = `
         ${keepQuestionMark(fill.q)}
-        <div style="margin:.6rem 0 1.2rem;">
-          <strong>Answer:</strong> <span class="answer-line">${wrapMathIfNeeded(fill.a)}</span>
-        </div>
         <div class="page-break"></div>
       `;
 
@@ -239,7 +231,7 @@
           ${section2Fns.map(fn=>{
             const {q,a}=fn(rng); A.add(a);
             const qFixed = keepQuestionMark(q);
-            return `<li><span class="qline">${qFixed}</span><br><strong>Answer:</strong> <span class="answer-line">${wrapMathIfNeeded(a)}</span></li>`;
+            return `<li><span class="qline">${qFixed}</span></li>`;
           }).join("")}
         </ol></div>
       `;
@@ -250,20 +242,20 @@
     const examEl=document.getElementById('exam');
     const solEl=document.getElementById('solutions');
     const genBtn=document.getElementById('genBtn');
-    const printBtn=document.getElementById('printBtn');
-    const toggleAns=document.getElementById('toggleAns');
+    const toggleBtn=document.getElementById('toggleBtn');
+
+    let solutionsVisible = false;
 
     function generate(){
       const seedInput=document.getElementById('seed').value;
       const seed=seedInput ? Number(seedInput) : Math.floor(Math.random()*1e9);
-      const titleText=document.getElementById('title').value.trim();
-
       const rng=mulberry32(seed);
-      const { html, answers } = buildExam(rng, titleText);
+      const { html, answers } = buildExam(rng);
       examEl.innerHTML = html;
 
-      solEl.innerHTML = answers.render(seed, titleText);
-      solEl.style.display = toggleAns.checked ? '' : 'none';
+      solEl.innerHTML = answers.render(seed);
+      solEl.style.display = solutionsVisible ? '' : 'none';
+      toggleBtn.textContent = solutionsVisible ? 'Hide solutions' : 'Show solutions';
 
       renderMath();
 
@@ -274,8 +266,11 @@
     }
 
     genBtn.addEventListener('click', generate);
-    printBtn.addEventListener('click', ()=>window.print());
-    toggleAns.addEventListener('change', ()=>{ solEl.style.display = toggleAns.checked ? '' : 'none'; });
+    toggleBtn.addEventListener('click', ()=>{
+      solutionsVisible = !solutionsVisible;
+      solEl.style.display = solutionsVisible ? '' : 'none';
+      toggleBtn.textContent = solutionsVisible ? 'Hide solutions' : 'Show solutions';
+    });
 
     window.addEventListener('load', generate);
     window.addEventListener('load', renderMath);
