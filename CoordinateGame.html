@@ -10,13 +10,13 @@
       --panel: #ffffff;
       --muted: #4b5563;
       --text: #1f2937;
-      --accent: #22d3ee;
-      --accent-2: #a78bfa;
-      --ok: #22c55e;
-      --warn: #f59e0b;
-      --danger: #ef4444;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
       --card: #f3f4f6;
       --radius: 16px;
+      --button-bg: #3b82f6;
+      --button-bg-hover: #2563eb;
+      --button-text: #ffffff;
     }
     * { box-sizing: border-box; }
     body {
@@ -44,7 +44,7 @@
       margin-top: 12px;
     }
     .control label { display:block; font-size: 12px; margin-bottom: 4px; color: var(--muted); }
-    .control input, .control select, .control button {
+    .control input, .control select {
       width: 100%;
       padding: 8px 10px;
       border-radius: 8px;
@@ -52,6 +52,21 @@
       background: #fff;
       color: var(--text);
     }
+    .control button, .primary {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: none;
+      background: var(--button-bg);
+      color: var(--button-text);
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .control button:hover, .primary:hover {
+      background: var(--button-bg-hover);
+    }
+
     .timer { border: 1px solid #000; padding: 6px 10px; border-radius: 6px; text-align: center; font-variant-numeric: tabular-nums; }
     .timer-controls { display:flex; align-items:center; gap:8px; justify-content:flex-end; }
 
@@ -60,7 +75,7 @@
     .list { display: grid; gap: 12px; }
     .card { background: var(--card); border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px; }
     .step-head { display: flex; justify-content: space-between; align-items: center; }
-    .answer { margin-top: 8px; color: var(--accent); font-weight: 600; display:none; }
+    .answer { margin-top: 8px; color: var(--button-bg); font-weight: 600; display:none; }
   </style>
 </head>
 <body>
@@ -91,7 +106,6 @@
       <button class="primary" id="toggleTimerBtn">Pause</button>
       <button class="primary" id="resetBtn">Reset</button>
     </div>
-    <div style="margin-top:6px"><span id="meta" class="muted mono">&nbsp;</span></div>
   </header>
 
   <section class="panel">
@@ -171,12 +185,10 @@ const seedInput = document.getElementById('seedInput');
 const stepsInput = document.getElementById('stepsInput');
 const boundInput = document.getElementById('boundInput');
 const generateBtn = document.getElementById('generateBtn');
-const metaEl = document.getElementById('meta');
 
 // Timer controls
 const timerEl = document.getElementById('timer');
-const startBtn = document.getElementById('startBtn');
-const stopBtn = document.getElementById('stopBtn');
+const toggleTimerBtn = document.getElementById('toggleTimerBtn');
 const resetBtn = document.getElementById('resetBtn');
 
 let timerHandle = null; let elapsedSec = 0;
@@ -184,15 +196,17 @@ function fmtTime(sec) { const m = Math.floor(sec / 60); const s = sec % 60; retu
 function timerStart() { if (timerHandle) return; timerHandle = setInterval(() => { elapsedSec++; timerEl.textContent = fmtTime(elapsedSec); }, 1000); }
 function timerStop() { if (timerHandle) { clearInterval(timerHandle); timerHandle = null; } }
 function timerReset() { timerStop(); elapsedSec = 0; timerEl.textContent = fmtTime(elapsedSec); }
-startBtn?.addEventListener('click', timerStart);
-stopBtn?.addEventListener('click', timerStop);
-resetBtn?.addEventListener('click', timerReset);
+toggleTimerBtn?.addEventListener('click', () => {
+  if (timerHandle) { timerStop(); toggleTimerBtn.textContent = 'Start'; }
+  else { timerStart(); toggleTimerBtn.textContent = 'Pause'; }
+});
+resetBtn?.addEventListener('click', () => { timerReset(); if (toggleTimerBtn) toggleTimerBtn.textContent = 'Start'; });
 
-function renderAnswers(startPt, steps) {
+function renderAnswers(startPt, steps, seedUsed) {
   answersEl.innerHTML = '';
   const startCard = document.createElement('div');
   startCard.className = 'card';
-  startCard.innerHTML = `<div class="step-head"><span class="step-desc">0 · Start</span><span class="mono">(${startPt[0]}, ${startPt[1]})</span></div>`;
+  startCard.innerHTML = `<div class="step-head"><span class="step-desc">Seed: ${seedUsed}</span><span class="mono">Start: (${startPt[0]}, ${startPt[1]})</span></div>`;
   answersEl.appendChild(startCard);
 
   steps.forEach((step, idx) => {
@@ -235,9 +249,7 @@ function generate() {
   let [x, y] = start; const steps = [];
   for (const [desc, fn] of tforms) { [x, y] = fn(x, y); steps.push([desc, [x, y]]); }
 
-  renderAnswers(start, steps);
-
-  metaEl.textContent = `Seed: ${seedUsed} · Start: (${start[0]}, ${start[1]}) · Steps: ${stepsN}`;
+  renderAnswers(start, steps, seedUsed);
 
   timerReset();
   timerStart();
