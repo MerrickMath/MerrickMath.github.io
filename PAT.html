@@ -122,12 +122,6 @@
       return (hasMath && !alreadyWrapped) ? `$${ans}$` : ans;
     }
 
-    // Robustly keep the final '?' with the preceding content and avoid line breaks
-    function keepQuestionMark(html){
-      html = html.replace(/(\?)(\s*(?:<\/[^>]+>\s*)*)$/,'<span class="no-break">&nbsp;?</span>$2');
-      html = html.replace(/\?(\s*<\/)/g,'<span class="no-break">&nbsp;?</span>$1');
-      return html;
-    }
 
     // ---------- Answers store ----------
     function Answers(){ this.items=[]; }
