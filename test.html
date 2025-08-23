@@ -190,7 +190,7 @@
       const Ai={n:A.w*A.d+A.n,d:A.d}, Bi={n:B.w*B.d+B.n,d:B.d};
       let N=Ai.n*Bi.d + Bi.n*Ai.d, D=Ai.d*Bi.d;
       const mix=toMixed(N,D);
-      return { q:`$$${A.w}\\dfrac{${A.n}}{${A.d}} + ${B.w}\\dfrac{${B.n}}{${B.d}} = \\square\\,\\dfrac{\\square}{\\square}$$`, a:`$${mixedTex(mix.w,mix.n,mix.d)}$` };
+      return { q:`$${A.w}\\dfrac{${A.n}}{${A.d}} + ${B.w}\\dfrac{${B.n}}{${B.d}} = \\square\\,\\dfrac{\\square}{\\square}$`, a:`$${mixedTex(mix.w,mix.n,mix.d)}$` };
     }
     function genIntMul(rng){const m1=randi(rng,12,999), m2=randi(rng,12,99); return { q:`What is $${m1}\\times${m2}$?`, a:`${m1*m2}` }; }
     function genPrimeExponentSum(rng){const a=randi(rng,0,6), b=randi(rng,0,4), c=randi(rng,0,3); const N=(2**a)*(3**b)*(5**c); return { q:`$${N}=2^a 3^b 5^c$. What is $a+b+c$?`, a:`${a+b+c}` }; }
