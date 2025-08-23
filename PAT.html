@@ -73,6 +73,23 @@
   <div id="solutions" class="paper solutions" style="display:none"></div>
 
   <script>
+    // ---- Timer ----
+    let timerInterval;
+    let startTime;
+    
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval); // reset if running
+      startTime = Date.now();
+      updateTimer();
+      timerInterval = setInterval(updateTimer, 1000);
+    }
+    
+    function updateTimer() {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+      const secs = String(elapsed % 60).padStart(2, '0');
+      document.getElementById('timer').textContent = `${mins}:${secs}`;
+    }
     // ---------- KaTeX ----------
     function renderMath() {
       renderMathInElement(document.body, {
@@ -252,17 +269,20 @@
       const rng=mulberry32(seed);
       const { html, answers } = buildExam(rng);
       examEl.innerHTML = html;
-
+    
       solEl.innerHTML = answers.render(seed);
       solEl.style.display = solutionsVisible ? '' : 'none';
       toggleBtn.textContent = solutionsVisible ? 'Hide solutions' : 'Show solutions';
-
+    
       renderMath();
-
+    
       const meta=document.createElement('div');
       meta.className='meta';
       meta.textContent=`Seed: ${seed}`;
       examEl.prepend(meta);
+    
+      // ⏱️ Start timer
+      startTimer();
     }
 
     genBtn.addEventListener('click', generate);
