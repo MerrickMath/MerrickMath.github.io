@@ -36,11 +36,11 @@
 
     .two-col { column-count:2; column-gap:1.2rem; }
     ol { margin:.1rem 0 1.2rem 1.25rem; padding:0; }
-    li { break-inside: avoid; margin: .65rem 0 1.15rem; } /* <-- MORE SPACING */
+    li { break-inside: avoid; margin:.75rem 0 1.25rem; } /* more spacing */
 
     /* Keep each question on one line */
-    .qline { white-space: nowrap; display: inline-block; }
-    .no-break { white-space: nowrap; } /* wraps &nbsp;? together */
+    .qline { white-space: nowrap; display: inline-block; width: 100%; }
+    .no-break { white-space: nowrap; }
 
     .answer-line {
       display:inline-block; min-width: 7rem; border-bottom:1px solid #000; padding:0 .4rem;
@@ -67,9 +67,7 @@
   <div class="controls">
     <h1>Math 6 PAT – Part A Generator</h1>
     <label>Seed <input id="seed" type="number" placeholder="random"></label>
-    <label>Variant title <input id="title" type="text" placeholder="Sample Questions"></label>
     <button class="btn" id="genBtn">Generate</button>
-    <button class="btn" id="printBtn">Print / Save PDF</button>
     <label><input type="checkbox" id="toggleAns"> Show solutions</label>
   </div>
 
@@ -101,18 +99,21 @@
     function fracTex(n,d){return `\\dfrac{${n}}{${d}}`;}
     function mixedTex(w,n,d){return n===0?`${w}`:`${w}\\dfrac{${n}}{${d}}`;}
 
-    // Ensure TeX answers render (wrap if needed)
+    // Wrap TeX answers so KaTeX renders them
     function wrapMathIfNeeded(ans){
       if (typeof ans !== 'string') ans = String(ans);
-      const hasMath = ans.includes('\\') || ans.includes('^') || ans.includes('%') || ans.includes('{');
+      const hasMath = /\\|[\^\{\}%]/.test(ans);
       const alreadyWrapped = ans.trim().startsWith('$') && ans.trim().endsWith('$');
       return (hasMath && !alreadyWrapped) ? `$${ans}$` : ans;
     }
 
-    // Keep '?' with previous token to avoid wrapping onto next line
-    function keepQuestionMark(text){
-      return text.replace(/\?(\s*<\/)/g, '<span class="no-break">&nbsp;?</span>$1')
-                 .replace(/\?$/,'<span class="no-break">&nbsp;?</span>');
+    // Robustly keep the final '?' with the preceding content and avoid line breaks
+    function keepQuestionMark(html){
+      // If the question mark is at end (optionally followed by closing tags), wrap it:
+      html = html.replace(/(\?)(\s*(?:<\/[^>]+>\s*)*)$/,'<span class="no-break">&nbsp;?</span>$2');
+      // If a '?' appears right before a closing tag mid-string, also wrap it:
+      html = html.replace(/\?(\s*<\/)/g,'<span class="no-break">&nbsp;?</span>$1');
+      return html;
     }
 
     // ---------- Answers store ----------
@@ -160,7 +161,7 @@
             <div class="center">$${(a/10).toFixed(1)}\\times ${b} = ${revealed}$</div>
           </div>
           <div><em>Use the information above to answer the next question.</em></div>
-          <span class="qline">In the equation above, which digit could be placed in the blank to make the equation correct<span class="no-break">&nbsp;?</span></span>
+          In the equation above, which digit could be placed in the blank to make the equation correct?
         `,
         a: `${prodStr[i]}`
       };
@@ -202,39 +203,43 @@
     // ---------- Build exam ----------
     function buildExam(rng, titleText){
       const A=new Answers();
+      const section1Fns = [
+        genAddFourBlocks, genDollarAdd, genDecimalSubSafe, genMulSmall, genMulMed, genDivClean,
+        genOnesTensHundredsAdd, genMinusFourBlocks, genDecTimesInt, genDecDivIntClean,
+        genHundredthDivIntClean, genTenthsMinusHundredths, genDecMinusHundredth, genHundredthDivIntClean
+      ];
       const header = `
         <div class="meta"><strong>PAT Title:</strong> Math 6 PAT – ${titleText||"Sample Questions"}</div>
         <div class="two-col"><ol>
-          ${[
-            genAddFourBlocks, genDollarAdd, genDecimalSubSafe, genMulSmall, genMulMed, genDivClean,
-            genOnesTensHundredsAdd, genMinusFourBlocks, genDecTimesInt, genDecDivIntClean,
-            genHundredthDivIntClean, genTenthsMinusHundredths, genDecMinusHundredth, genHundredthDivIntClean
-          ].map(fn=>{
+          ${section1Fns.map(fn=>{
             const {q,a}=fn(rng); A.add(a);
-            return `<li><span class="qline">${keepQuestionMark(q)}</span><br><strong>Answer:</strong> <span class="answer-line">${wrapMathIfNeeded(a)}</span></li>`;
+            const qFixed = keepQuestionMark(q);
+            return `<li><span class="qline">${qFixed}</span><br><strong>Answer:</strong> <span class="answer-line">${wrapMathIfNeeded(a)}</span></li>`;
           }).join("")}
         </ol></div>
       `;
 
       const fill = genFillInProductBox(rng); A.add(fill.a);
       const infoBlock = `
-        ${fill.q}
+        ${keepQuestionMark(fill.q)}
         <div style="margin:.6rem 0 1.2rem;">
           <strong>Answer:</strong> <span class="answer-line">${wrapMathIfNeeded(fill.a)}</span>
         </div>
         <div class="page-break"></div>
       `;
 
+      const section2Fns = [
+        function(r){const a=randi(r,444,999), b=randi(r,2,9), c=b*10; return { q:`What is $${(a/100).toFixed(2)}\\times ${c}$?`, a:`${round2((a/100)*c)}` };},
+        genMixedMinusMixed, genIntegerDivision, genNegPlusNeg, genPosPlusPos, genDecSub,
+        genDecSub, genFracAdd, genPercentOf, genIntTimesProperFrac, genSubtractNegative,
+        genMixedPlusMixed, genIntMul, genPrimeExponentSum
+      ];
       const second = `
         <div class="two-col"><ol start="16">
-          ${[
-            function(r){const a=randi(r,444,999), b=randi(r,2,9), c=b*10; return { q:`What is $${(a/100).toFixed(2)}\\times ${c}$?`, a:`${round2((a/100)*c)}` };},
-            genMixedMinusMixed, genIntegerDivision, genNegPlusNeg, genPosPlusPos, genDecSub,
-            genDecSub, genFracAdd, genPercentOf, genIntTimesProperFrac, genSubtractNegative,
-            genMixedPlusMixed, genIntMul, genPrimeExponentSum
-          ].map(fn=>{
+          ${section2Fns.map(fn=>{
             const {q,a}=fn(rng); A.add(a);
-            return `<li><span class="qline">${keepQuestionMark(q)}</span><br><strong>Answer:</strong> <span class="answer-line">${wrapMathIfNeeded(a)}</span></li>`;
+            const qFixed = keepQuestionMark(q);
+            return `<li><span class="qline">${qFixed}</span><br><strong>Answer:</strong> <span class="answer-line">${wrapMathIfNeeded(a)}</span></li>`;
           }).join("")}
         </ol></div>
       `;
