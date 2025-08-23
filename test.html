@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Interactive Coordinate Dash Worksheet</title>
+  <title>Coordinate Dash</title>
   <style>
     :root {
-      --bg: #0f172a;           /* slate-900 */
-      --panel: #111827;        /* gray-900 */
-      --muted: #94a3b8;        /* slate-400 */
-      --text: #e5e7eb;         /* gray-200 */
+      --bg: #f9fafb;           /* light gray background */
+      --panel: #ffffff;        /* white panel */
+      --muted: #4b5563;        /* gray-600 */
+      --text: #1f2937;         /* dark gray text */
       --accent: #22d3ee;       /* cyan-400 */
       --accent-2: #a78bfa;     /* violet-400 */
       --ok: #22c55e;           /* green-500 */
       --warn: #f59e0b;         /* amber-500 */
       --danger: #ef4444;       /* red-500 */
-      --card: #0b1220;         /* custom dark card */
+      --card: #f3f4f6;         /* light card */
       --radius: 16px;
     }
     * { box-sizing: border-box; }
@@ -25,9 +25,7 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
         Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji",
         "Segoe UI Emoji";
-      background: radial-gradient(1200px 600px at 80% -10%, #1f2937, transparent),
-                  radial-gradient(1000px 700px at -10% 120%, #1e293b, transparent),
-                  var(--bg);
+      background: var(--bg);
       color: var(--text);
       line-height: 1.5;
     }
@@ -50,7 +48,7 @@
       font-size: 28px;
       letter-spacing: 0.2px;
     }
-    header p { margin: 0; color: var(--muted); }
+    header p { margin: 0; color: #374151; /* dark gray readable */ }
 
     .controls {
       display: grid;
@@ -64,14 +62,14 @@
       border-radius: 12px;
       padding: 10px 12px;
     }
-    .control label { display: block; font-size: 12px; color: var(--muted); }
+    .control label { display: block; font-size: 12px; color: #374151; /* dark gray readable */ }
     .control input, .control select {
       width: 100%;
       margin-top: 6px;
       padding: 10px 12px;
       border-radius: 10px;
       border: 1px solid rgba(255,255,255,0.12);
-      background: #0a0f1a;
+      background: #ffffff;
       color: var(--text);
       outline: none;
     }
@@ -95,7 +93,7 @@
     button:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.25); }
     button.primary { border-color: rgba(34, 211, 238, 0.7); background: linear-gradient(180deg, rgba(34,211,238,0.18), rgba(34,211,238,0.08)); }
     button.success { border-color: rgba(34,197,94,0.7); background: linear-gradient(180deg, rgba(34,197,94,0.18), rgba(34,197,94,0.08)); }
-    button.warn { border-color: rgba(245,158,11,0.7); background: linear-gradient(180deg, rgba(245,158,11,0.18), rgba(245,158,11,0.08)); }
+    button.warn { border-color: #000000; background:#fff3cd; color:#000; }
 
     .grid {
       display: grid;
@@ -136,27 +134,33 @@
     .badge.seed { background: var(--accent); }
     .badge.bound { background: var(--accent-2); color: #0b1220; }
 
-    .muted { color: var(--muted); }
+    .muted { color: #374151; /* dark gray readable */ }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
     .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
     .timer {
       font-variant-numeric: tabular-nums;
-      font-size: 28px;
+      font-size: 16px; /* match normal text size */
       letter-spacing: 1px;
-      padding: 8px 12px;
-      background: #0a0f1a;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
+      padding: 4px 8px;
+      background: #ffffff;
+      border: 2px solid #000000; /* dark border */
+      border-radius: 8px;
       display: inline-block;
-      min-width: 130px;
+      min-width: 80px;
       text-align: center;
     }
     .headingbar { display:flex; align-items:flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
   .heading-controls { display:flex; gap:10px; flex-wrap:wrap; align-items:end; }
   .heading-controls .control { background: transparent; border: none; padding: 0; }
-  .heading-controls label { font-size: 12px; color: var(--muted); }
-  .heading-controls input, .heading-controls select { background:#0a0f1a; border:1px solid rgba(255,255,255,0.12); border-radius:10px; padding:8px 10px; color:var(--text); }
+  .heading-controls label { font-size: 12px; color: #374151; /* dark gray readable */ }
+  .heading-controls input, .heading-controls select {
+    background:#ffffff;
+    border:1px solid #d1d5db; /* light gray border */
+    border-radius:10px;
+    padding:8px 10px;
+    color:var(--text);
+  }
   .heading-controls button { padding: 10px 14px; }
 </style>
 </head>
@@ -165,10 +169,11 @@
     <header>
       <div class="headingbar">
         <div>
-          <h1 style="margin:0">Interactive Coordinate Dash Worksheet</h1>
+          <h1 style="margin:0">Coordinate Dash</h1>
           <p class="muted" style="margin:4px 0 0 0">Seeded, step-by-step transformations with a built-in timer.</p>
         </div>
-        <div class="heading-controls">
+      </div>
+      <div class="heading-controls" style="margin-top:10px">
           <div class="control">
             <label for="stepsInput">Number of steps</label>
             <select id="stepsInput">
@@ -195,229 +200,195 @@
             <label>&nbsp;</label>
             <button class="primary" id="generateBtn">Generate</button>
           </div>
-        </div>
-      </div>
-
-      <div class="controls" style="margin-top:10px">
-        <div class="control">
-          <label>Timer</label>
-          <div class="row">
-            <span class="timer" id="timer">00:00</span>
-            <div class="buttons">
-              <button class="warn" id="startBtn">Start</button>
-              <button id="stopBtn">Stop</button>
-              <button id="resetBtn">Reset</button>
+          <div class="control">
+            <label>Timer</label>
+            <div class="row">
+              <span class="timer" id="timer">00:00</span>
+              <div class="buttons">
+                <button class="primary" id="startBtn">Start</button>
+                <button class="primary" id="stopBtn">Stop</button>
+                <button class="primary" id="resetBtn">Reset</button>
+              </div>
             </div>
           </div>
-        </div>
       </div>
-
       <div class="row" style="margin-top:6px">
         <span id="meta" class="muted mono">&nbsp;</span>
       </div>
     </header>
 
-    <div class="grid">
-      <section class="panel">
-        <h2>Question</h2>
-        <div id="question"></div>
-      </section>
+    
 
-      <section class="panel">
-        <h2>Answer (step-by-step)</h2>
+    <div class="grid">
+      <section class="panel" style="grid-column: 1 / -1;">
+        <h2>Transformations</h2>
         <div id="answers" class="list"></div>
       </section>
     </div>
-  </div>
 
   <script>
-    // ===== Deterministic RNG (mulberry32) + string hashing =====
-    function mulberry32(a) {
-      return function() {
-        var t = a += 0x6D2B79F5;
-        t = Math.imul(t ^ (t >>> 15), t | 1);
-        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-      }
-    }
-    function hashStringToSeed(str) {
-      let h = 0x811c9dc5; // FNV-1a
-      for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); }
-      return h >>> 0;
-    }
+// ===== Deterministic RNG (mulberry32) + string hashing =====
+function mulberry32(a) {
+  return function() {
+    var t = a += 0x6D2B79F5;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+}
+function hashStringToSeed(str) {
+  let h = 0x811c9dc5; // FNV-1a
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); }
+  return h >>> 0;
+}
 
-    let rng = mulberry32(123456789);
-    function reseed(seedVal) {
-      let seed;
-      if (typeof seedVal === 'number' && Number.isFinite(seedVal)) seed = seedVal >>> 0;
-      else if (typeof seedVal === 'string' && seedVal.trim().length) seed = hashStringToSeed(seedVal.trim());
-      else seed = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
-      rng = mulberry32(seed);
-      return seed;
-    }
-    function rand() { return rng(); }
-    function randint(min, max) { return Math.floor(rand() * (max - min + 1)) + min; }
-    function choice(arr) { return arr[Math.floor(rand() * arr.length)]; }
+let rng = mulberry32(123456789);
+function reseed(seedVal) {
+  let seed;
+  if (typeof seedVal === 'number' && Number.isFinite(seedVal)) seed = seedVal >>> 0;
+  else if (typeof seedVal === 'string' && seedVal.trim().length) seed = hashStringToSeed(seedVal.trim());
+  else seed = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
+  rng = mulberry32(seed);
+  return seed;
+}
+function rand() { return rng(); }
+function randint(min, max) { return Math.floor(rand() * (max - min + 1)) + min; }
+function choice(arr) { return arr[Math.floor(rand() * arr.length)]; }
 
-    // ===== Transformations =====
-    function random_translation() {
-      const direction = choice(["up", "down", "left", "right"]);
-      const magnitude = randint(1, 5);
-      const desc = `Translate ${magnitude} unit${magnitude===1?'':'s'} ${direction}`;
-      function fn(x, y) {
-        if (direction === 'up') return [x, y + magnitude];
-        if (direction === 'down') return [x, y - magnitude];
-        if (direction === 'right') return [x + magnitude, y];
-        return [x - magnitude, y];
-      }
-      return [desc, fn];
-    }
-    function random_reflection() {
-      const axis = choice(["x-axis", "y-axis", "line"]);
-      if (axis === 'x-axis') return ["Reflect over x-axis", (x, y) => [x, -y]];
-      if (axis === 'y-axis') return ["Reflect over y-axis", (x, y) => [-x, y]];
-      const lineType = choice(["x=", "y="]);
-      const value = randint(-3, 3);
-      if (lineType === 'x=') return [`Reflect over the line x = ${value}`, (x, y) => [2*value - x, y]];
-      return [`Reflect over the line y = ${value}`, (x, y) => [x, 2*value - y]];
-    }
-    function random_rotation() {
-      const angle = choice([90, -90]);
-      const pivot = [randint(-5, 5), randint(-5, 5)];
-      const arrow = angle === 90 ? '↺' : '↻';
-      const desc = `Rotate ${Math.abs(angle)}° ${arrow} about the point (${pivot[0]}, ${pivot[1]})`;
-      function fn(x, y) {
-        const [x0, y0] = pivot; const dx = x - x0, dy = y - y0;
-        if (angle === 90) return [x0 - dy, y0 + dx];
-        return [x0 + dy, y0 - dx];
-      }
-      return [desc, fn];
-    }
-    function generate_random_transformation() { return choice([random_translation, random_reflection, random_rotation])(); }
+// ===== Transformations =====
+function random_translation() {
+  const direction = choice(["up", "down", "left", "right"]);
+  const magnitude = randint(1, 5);
+  const desc = `Translate ${magnitude} unit${magnitude===1?'':'s'} ${direction}`;
+  function fn(x, y) {
+    if (direction === 'up') return [x, y + magnitude];
+    if (direction === 'down') return [x, y - magnitude];
+    if (direction === 'right') return [x + magnitude, y];
+    return [x - magnitude, y];
+  }
+  return [desc, fn];
+}
+function random_reflection() {
+  const axis = choice(["x-axis", "y-axis", "line"]);
+  if (axis === 'x-axis') return ["Reflect over x-axis", (x, y) => [x, -y]];
+  if (axis === 'y-axis') return ["Reflect over y-axis", (x, y) => [-x, y]];
+  const lineType = choice(["x=", "y="]);
+  const value = randint(-3, 3);
+  if (lineType === 'x=') return [`Reflect over the line x = ${value}`, (x, y) => [2*value - x, y]];
+  return [`Reflect over the line y = ${value}`, (x, y) => [x, 2*value - y]];
+}
+function random_rotation() {
+  const angle = choice([90, -90]);
+  const pivot = [randint(-5, 5), randint(-5, 5)];
+  const arrow = angle === 90 ? '↺' : '↻';
+  const desc = `Rotate ${Math.abs(angle)}° ${arrow} about the point (${pivot[0]}, ${pivot[1]})`;
+  function fn(x, y) {
+    const [x0, y0] = pivot; const dx = x - x0, dy = y - y0;
+    if (angle === 90) return [x0 - dy, y0 + dx];
+    return [x0 + dy, y0 - dx];
+  }
+  return [desc, fn];
+}
+function generate_random_transformation() { return choice([random_translation, random_reflection, random_rotation])(); }
 
-    // ===== UI refs =====
-    const questionEl = document.getElementById('question');
-    const answersEl = document.getElementById('answers');
-    const seedInput = document.getElementById('seedInput');
-    const stepsInput = document.getElementById('stepsInput');
-    const boundInput = document.getElementById('boundInput');
-    const generateBtn = document.getElementById('generateBtn');
-    const metaEl = document.getElementById('meta');
+// ===== UI refs =====
+const answersEl = document.getElementById('answers');
+const seedInput = document.getElementById('seedInput');
+const stepsInput = document.getElementById('stepsInput');
+const boundInput = document.getElementById('boundInput');
+const generateBtn = document.getElementById('generateBtn');
+const metaEl = document.getElementById('meta');
 
-    // Timer controls
-    const timerEl = document.getElementById('timer');
-    const startBtn = document.getElementById('startBtn');
-    const stopBtn = document.getElementById('stopBtn');
-    const resetBtn = document.getElementById('resetBtn');
+// Timer controls
+const timerEl = document.getElementById('timer');
+const startBtn = document.getElementById('startBtn');
+const stopBtn = document.getElementById('stopBtn');
+const resetBtn = document.getElementById('resetBtn');
 
-    let timerHandle = null; let elapsedSec = 0;
-    function fmtTime(sec) { const m = Math.floor(sec / 60); const s = sec % 60; return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
-    function timerStart() { if (timerHandle) return; timerHandle = setInterval(() => { elapsedSec++; timerEl.textContent = fmtTime(elapsedSec); }, 1000); }
-    function timerStop() { if (timerHandle) { clearInterval(timerHandle); timerHandle = null; } }
-    function timerReset() { timerStop(); elapsedSec = 0; timerEl.textContent = fmtTime(elapsedSec); }
-    startBtn?.addEventListener('click', timerStart);
-    stopBtn?.addEventListener('click', timerStop);
-    resetBtn?.addEventListener('click', timerReset);
+let timerHandle = null; let elapsedSec = 0;
+function fmtTime(sec) { const m = Math.floor(sec / 60); const s = sec % 60; return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
+function timerStart() { if (timerHandle) return; timerHandle = setInterval(() => { elapsedSec++; timerEl.textContent = fmtTime(elapsedSec); }, 1000); }
+function timerStop() { if (timerHandle) { clearInterval(timerHandle); timerHandle = null; } }
+function timerReset() { timerStop(); elapsedSec = 0; timerEl.textContent = fmtTime(elapsedSec); }
+startBtn?.addEventListener('click', timerStart);
+stopBtn?.addEventListener('click', timerStop);
+resetBtn?.addEventListener('click', timerReset);
 
-    function renderQuestion(startPt, transformDescs) {
-      const list = transformDescs.map(d => `<li>${d}</li>`).join('');
-      questionEl.innerHTML = `
-        <div class="card">
-          <div class="row" style="justify-content: space-between; align-items: baseline;">
-            <div>
-              <strong>Starting coordinate:</strong>
-              <span class="mono">(     ,      )</span>
-            </div>
-            <div class="row">
-              <span class="badge bound" title="Coordinate bound">bound ±${boundInput.value}</span>
-            </div>
-          </div>
+function renderAnswers(startPt, steps) {
+  answersEl.innerHTML = '';
+  const startCard = document.createElement('div');
+  startCard.className = 'card';
+  startCard.innerHTML = `<div class="step-head"><span class="step-desc">0 · Start</span><span class="mono">(${startPt[0]}, ${startPt[1]})</span></div>`;
+  answersEl.appendChild(startCard);
+
+  steps.forEach((step, idx) => {
+    const [desc, coord] = step;
+    const card = document.createElement('div');
+    card.className = 'card';
+    const ansId = `ans-${idx}`;
+    card.innerHTML = `
+      <div class="step-head">
+        <div class="step-desc">${idx+1} · ${desc}</div>
+        <div class="step-actions">
+          <button class="primary" data-target="${ansId}">Show result</button>
         </div>
-        <div class="card">
-          <ol>${list}</ol>
-        </div>`;
-    }
+      </div>
+      <div class="answer mono" id="${ansId}">(${coord[0]}, ${coord[1]})</div>
+    `;
+    answersEl.appendChild(card);
+  });
 
-    function renderAnswers(startPt, steps) {
-      answersEl.innerHTML = '';
-      const startCard = document.createElement('div');
-      startCard.className = 'card';
-      startCard.innerHTML = `<div class="step-head"><span class="step-desc">0 · Start</span><span class="mono">(${startPt[0]}, ${startPt[1]})</span></div>`;
-      answersEl.appendChild(startCard);
+  answersEl.querySelectorAll('button[data-target]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-target');
+      const el = document.getElementById(id);
+      const vis = el.style.display === 'block';
+      el.style.display = vis ? 'none' : 'block';
+      btn.textContent = vis ? 'Show result' : 'Hide result';
+    });
+  });
+}
 
-      steps.forEach((step, idx) => {
-        const [desc, coord] = step;
-        const card = document.createElement('div');
-        card.className = 'card';
-        const ansId = `ans-${idx}`;
-        card.innerHTML = `
-          <div class="step-head">
-            <div class="step-desc">${idx+1} · ${desc}</div>
-            <div class="step-actions">
-              <button class="primary" data-target="${ansId}">Show result</button>
-            </div>
-          </div>
-          <div class="answer mono" id="${ansId}">(${coord[0]}, ${coord[1]})</div>
-        `;
-        answersEl.appendChild(card);
-      });
+function generate() {
+  const stepsN = parseInt(stepsInput?.value, 10) || 6;
+  const BOUND = parseInt(boundInput?.value, 10) || 10;
+  const seedText = (seedInput?.value || '').trim();
+  const seedUsed = reseed(seedText.length ? seedText : undefined);
 
-      answersEl.querySelectorAll('button[data-target]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-target');
-          const el = document.getElementById(id);
-          const vis = el.style.display === 'block';
-          el.style.display = vis ? 'none' : 'block';
-          btn.textContent = vis ? 'Show result' : 'Hide result';
-        });
-      });
-    }
+  const start = [ randint(-BOUND + 1, BOUND - 1), randint(-BOUND + 1, BOUND - 1) ];
+  const tforms = Array.from({ length: stepsN }, () => generate_random_transformation());
 
-    function generate() {
-      const stepsN = parseInt(stepsInput?.value, 10) || 6;
-      const BOUND = parseInt(boundInput?.value, 10) || 10;
-      const seedText = (seedInput?.value || '').trim();
-      const seedUsed = reseed(seedText.length ? seedText : undefined);
+  let [x, y] = start; const steps = [];
+  for (const [desc, fn] of tforms) { [x, y] = fn(x, y); steps.push([desc, [x, y]]); }
 
-      const start = [ randint(-BOUND + 1, BOUND - 1), randint(-BOUND + 1, BOUND - 1) ];
-      const tforms = Array.from({ length: stepsN }, () => generate_random_transformation());
-      const descs = tforms.map(t => t[0]);
+  renderAnswers(start, steps);
 
-      let [x, y] = start; const steps = [];
-      for (const [desc, fn] of tforms) { [x, y] = fn(x, y); steps.push([desc, [x, y]]); }
+  metaEl.textContent = `Seed: ${seedUsed} · Start: (${start[0]}, ${start[1]}) · Steps: ${stepsN}`;
 
-      renderQuestion(start, descs);
-      renderAnswers(start, steps);
+  timerReset();
+  timerStart();
 
-      metaEl.textContent = `Seed: ${seedUsed} · Start: (${start[0]}, ${start[1]}) · Steps: ${stepsN}`;
+  const params = new URLSearchParams({ seed: seedText || String(seedUsed), steps: String(stepsN), bound: String(BOUND) });
+  try { history.replaceState(null, '', `${location.pathname}#${params.toString()}`); } catch {}
+}
 
-      timerReset();
-      timerStart();
+generateBtn?.addEventListener('click', generate);
 
-      // Keep URL shareable (no extra buttons needed)
-      const params = new URLSearchParams({ seed: seedText || String(seedUsed), steps: String(stepsN), bound: String(BOUND) });
-      try { history.replaceState(null, '', `${location.pathname}#${params.toString()}`); } catch {}
-    }
+function initFromHash() {
+  if (!location.hash) return false;
+  const q = new URLSearchParams(location.hash.slice(1));
+  const seed = q.get('seed'); if (seed && seedInput) seedInput.value = seed;
+  const steps = q.get('steps'); if (steps && stepsInput) stepsInput.value = steps;
+  const bound = q.get('bound'); if (bound && boundInput) boundInput.value = bound;
+  return true;
+}
 
-    generateBtn?.addEventListener('click', generate);
-
-    function initFromHash() {
-      if (!location.hash) return false;
-      const q = new URLSearchParams(location.hash.slice(1));
-      const seed = q.get('seed'); if (seed && seedInput) seedInput.value = seed;
-      const steps = q.get('steps'); if (steps && stepsInput) stepsInput.value = steps;
-      const bound = q.get('bound'); if (bound && boundInput) boundInput.value = bound;
-      return true;
-    }
-
-    // Startup
-    initFromHash();
-    // Defer initial generate until DOM is ready (script is already at end, but be safe)
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', generate);
-    } else {
-      generate();
-    }
-  </script>
+initFromHash();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', generate);
+} else {
+  generate();
+}
+</script>
 </body>
 </html>
