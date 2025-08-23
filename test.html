@@ -152,39 +152,53 @@
       min-width: 130px;
       text-align: center;
     }
-  </style>
+    .headingbar { display:flex; align-items:flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .heading-controls { display:flex; gap:10px; flex-wrap:wrap; align-items:end; }
+  .heading-controls .control { background: transparent; border: none; padding: 0; }
+  .heading-controls label { font-size: 12px; color: var(--muted); }
+  .heading-controls input, .heading-controls select { background:#0a0f1a; border:1px solid rgba(255,255,255,0.12); border-radius:10px; padding:8px 10px; color:var(--text); }
+  .heading-controls button { padding: 10px 14px; }
+</style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>Interactive Coordinate Dash Worksheet</h1>
-      <p class="muted">Generate deterministic practice with a <strong>seed</strong>,
-        reveal each <strong>intermediate coordinate</strong> step-by-step, and keep time with the built-in
-        <strong>timer</strong>. Perfect for GitHub Pages or any static host.</p>
+      <div class="headingbar">
+        <div>
+          <h1 style="margin:0">Interactive Coordinate Dash Worksheet</h1>
+          <p class="muted" style="margin:4px 0 0 0">Seeded, step-by-step transformations with a built-in timer.</p>
+        </div>
+        <div class="heading-controls">
+          <div class="control">
+            <label for="stepsInput">Number of steps</label>
+            <select id="stepsInput">
+              <option>4</option>
+              <option selected>6</option>
+              <option>8</option>
+              <option>10</option>
+            </select>
+          </div>
+          <div class="control">
+            <label for="boundInput">Coordinate bound</label>
+            <select id="boundInput">
+              <option>8</option>
+              <option selected>10</option>
+              <option>12</option>
+              <option>15</option>
+            </select>
+          </div>
+          <div class="control">
+            <label for="seedInput">Seed</label>
+            <input id="seedInput" type="text" placeholder="e.g. 12345 or any text" />
+          </div>
+          <div class="control">
+            <label>&nbsp;</label>
+            <button class="primary" id="generateBtn">Generate</button>
+          </div>
+        </div>
+      </div>
 
-      <div class="controls">
-        <div class="control">
-          <label for="seedInput">Seed</label>
-          <input id="seedInput" type="text" placeholder="e.g. 12345 or any text" />
-        </div>
-        <div class="control">
-          <label for="stepsInput">Number of steps</label>
-          <select id="stepsInput">
-            <option>4</option>
-            <option selected>6</option>
-            <option>8</option>
-            <option>10</option>
-          </select>
-        </div>
-        <div class="control">
-          <label for="boundInput">Coordinate bound (inclusive)</label>
-          <select id="boundInput">
-            <option>8</option>
-            <option selected>10</option>
-            <option>12</option>
-            <option>15</option>
-          </select>
-        </div>
+      <div class="controls" style="margin-top:10px">
         <div class="control">
           <label>Timer</label>
           <div class="row">
@@ -194,14 +208,6 @@
               <button id="stopBtn">Stop</button>
               <button id="resetBtn">Reset</button>
             </div>
-          </div>
-        </div>
-        <div class="control">
-          <label>&nbsp;</label>
-          <div class="buttons">
-            <button class="primary" id="generateBtn">Generate</button>
-            <button class="success" id="revealAllBtn">Reveal all</button>
-            <button id="copyLinkBtn" title="Copy link with current seed & options">Copy link</button>
           </div>
         </div>
       </div>
@@ -235,16 +241,11 @@
       }
     }
     function hashStringToSeed(str) {
-      // simple 32-bit FNV-1a hash
-      let h = 0x811c9dc5;
-      for (let i = 0; i < str.length; i++) {
-        h ^= str.charCodeAt(i);
-        h = Math.imul(h, 0x01000193);
-      }
+      let h = 0x811c9dc5; // FNV-1a
+      for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); }
       return h >>> 0;
     }
 
-    // RNG helpers using a current PRNG instance
     let rng = mulberry32(123456789);
     function reseed(seedVal) {
       let seed;
@@ -255,9 +256,7 @@
       return seed;
     }
     function rand() { return rng(); }
-    function randint(min, max) { // inclusive
-      return Math.floor(rand() * (max - min + 1)) + min;
-    }
+    function randint(min, max) { return Math.floor(rand() * (max - min + 1)) + min; }
     function choice(arr) { return arr[Math.floor(rand() * arr.length)]; }
 
     // ===== Transformations =====
@@ -273,7 +272,6 @@
       }
       return [desc, fn];
     }
-
     function random_reflection() {
       const axis = choice(["x-axis", "y-axis", "line"]);
       if (axis === 'x-axis') return ["Reflect over x-axis", (x, y) => [x, -y]];
@@ -283,34 +281,27 @@
       if (lineType === 'x=') return [`Reflect over the line x = ${value}`, (x, y) => [2*value - x, y]];
       return [`Reflect over the line y = ${value}`, (x, y) => [x, 2*value - y]];
     }
-
     function random_rotation() {
       const angle = choice([90, -90]);
       const pivot = [randint(-5, 5), randint(-5, 5)];
-      const arrow = angle === 90 ? '↺' : '↻'; // CCW vs CW
+      const arrow = angle === 90 ? '↺' : '↻';
       const desc = `Rotate ${Math.abs(angle)}° ${arrow} about the point (${pivot[0]}, ${pivot[1]})`;
       function fn(x, y) {
-        const [x0, y0] = pivot;
-        const dx = x - x0, dy = y - y0;
+        const [x0, y0] = pivot; const dx = x - x0, dy = y - y0;
         if (angle === 90) return [x0 - dy, y0 + dx];
         return [x0 + dy, y0 - dx];
       }
       return [desc, fn];
     }
+    function generate_random_transformation() { return choice([random_translation, random_reflection, random_rotation])(); }
 
-    function generate_random_transformation() {
-      return choice([random_translation, random_reflection, random_rotation])();
-    }
-
-    // ===== UI / Logic =====
+    // ===== UI refs =====
     const questionEl = document.getElementById('question');
     const answersEl = document.getElementById('answers');
     const seedInput = document.getElementById('seedInput');
     const stepsInput = document.getElementById('stepsInput');
     const boundInput = document.getElementById('boundInput');
     const generateBtn = document.getElementById('generateBtn');
-    const revealAllBtn = document.getElementById('revealAllBtn');
-    const copyLinkBtn = document.getElementById('copyLinkBtn');
     const metaEl = document.getElementById('meta');
 
     // Timer controls
@@ -319,36 +310,25 @@
     const stopBtn = document.getElementById('stopBtn');
     const resetBtn = document.getElementById('resetBtn');
 
-    let timerHandle = null;
-    let elapsedSec = 0;
-
-    function fmtTime(sec) {
-      const m = Math.floor(sec / 60); const s = sec % 60;
-      return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-    }
-    function timerStart() {
-      if (timerHandle) return;
-      timerHandle = setInterval(() => { elapsedSec++; timerEl.textContent = fmtTime(elapsedSec); }, 1000);
-    }
+    let timerHandle = null; let elapsedSec = 0;
+    function fmtTime(sec) { const m = Math.floor(sec / 60); const s = sec % 60; return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
+    function timerStart() { if (timerHandle) return; timerHandle = setInterval(() => { elapsedSec++; timerEl.textContent = fmtTime(elapsedSec); }, 1000); }
     function timerStop() { if (timerHandle) { clearInterval(timerHandle); timerHandle = null; } }
     function timerReset() { timerStop(); elapsedSec = 0; timerEl.textContent = fmtTime(elapsedSec); }
-
-    startBtn.addEventListener('click', timerStart);
-    stopBtn.addEventListener('click', timerStop);
-    resetBtn.addEventListener('click', timerReset);
+    startBtn?.addEventListener('click', timerStart);
+    stopBtn?.addEventListener('click', timerStop);
+    resetBtn?.addEventListener('click', timerReset);
 
     function renderQuestion(startPt, transformDescs) {
-      const startHTML = `<div class="card"><div class="step-head"><span class="step-desc">Starting coordinate:</span><span class="mono">( \,\,\,\,\, , \,\,\,\,\, )</span></div></div>`;
       const list = transformDescs.map(d => `<li>${d}</li>`).join('');
       questionEl.innerHTML = `
         <div class="card">
           <div class="row" style="justify-content: space-between; align-items: baseline;">
             <div>
               <strong>Starting coordinate:</strong>
-              <span class="mono">(\u2007\u2007\u2007\u2007\u2007, \u2007\u2007\u2007\u2007\u2007)</span>
+              <span class="mono">(     ,      )</span>
             </div>
             <div class="row">
-              <span class="badge seed" title="Seed used for RNG">seeded</span>
               <span class="badge bound" title="Coordinate bound">bound ±${boundInput.value}</span>
             </div>
           </div>
@@ -382,7 +362,6 @@
         answersEl.appendChild(card);
       });
 
-      // Wire up per-step reveal buttons
       answersEl.querySelectorAll('button[data-target]').forEach(btn => {
         btn.addEventListener('click', () => {
           const id = btn.getAttribute('data-target');
@@ -395,68 +374,50 @@
     }
 
     function generate() {
-      const stepsN = parseInt(stepsInput.value, 10) || 6;
-      const BOUND = parseInt(boundInput.value, 10) || 10;
-      const seedText = seedInput.value.trim();
+      const stepsN = parseInt(stepsInput?.value, 10) || 6;
+      const BOUND = parseInt(boundInput?.value, 10) || 10;
+      const seedText = (seedInput?.value || '').trim();
       const seedUsed = reseed(seedText.length ? seedText : undefined);
 
-      // Starting coordinate inside bounds (shy 1 to avoid overflow with small translations)
       const start = [ randint(-BOUND + 1, BOUND - 1), randint(-BOUND + 1, BOUND - 1) ];
-
-      // Build transformations
       const tforms = Array.from({ length: stepsN }, () => generate_random_transformation());
       const descs = tforms.map(t => t[0]);
 
-      // Apply + record intermediates
-      let [x, y] = start;
-      const steps = [];
-      for (const [desc, fn] of tforms) {
-        [x, y] = fn(x, y);
-        steps.push([desc, [x, y]]);
-      }
+      let [x, y] = start; const steps = [];
+      for (const [desc, fn] of tforms) { [x, y] = fn(x, y); steps.push([desc, [x, y]]); }
 
-      // Render
       renderQuestion(start, descs);
       renderAnswers(start, steps);
 
-      // Update meta
-      metaEl.textContent = `Seed: ${seedUsed} · Start: (${start[0]}, ${start[1]}) · Final: (${x}, ${y}) · Steps: ${stepsN}`;
+      metaEl.textContent = `Seed: ${seedUsed} · Start: (${start[0]}, ${start[1]}) · Steps: ${stepsN}`;
 
-      // Reset & start timer automatically
       timerReset();
       timerStart();
 
-      // Update URL hash with options (for shareable links)
+      // Keep URL shareable (no extra buttons needed)
       const params = new URLSearchParams({ seed: seedText || String(seedUsed), steps: String(stepsN), bound: String(BOUND) });
-      history.replaceState(null, '', `${location.pathname}#${params.toString()}`);
+      try { history.replaceState(null, '', `${location.pathname}#${params.toString()}`); } catch {}
     }
 
-    // Global buttons
-    generateBtn.addEventListener('click', generate);
-    revealAllBtn.addEventListener('click', () => {
-      document.querySelectorAll('.answer').forEach(el => el.style.display = 'block');
-      document.querySelectorAll('button[data-target]').forEach(btn => btn.textContent = 'Hide result');
-      timerStop(); // optional: stop timing when answers are revealed
-    });
-    copyLinkBtn.addEventListener('click', async () => {
-      const url = location.href;
-      try { await navigator.clipboard.writeText(url); copyLinkBtn.textContent = 'Copied!'; setTimeout(() => copyLinkBtn.textContent = 'Copy link', 1200); }
-      catch { alert('Copy failed. You can copy the URL from the address bar.'); }
-    });
+    generateBtn?.addEventListener('click', generate);
 
-    // Load options from URL hash on first visit
     function initFromHash() {
       if (!location.hash) return false;
       const q = new URLSearchParams(location.hash.slice(1));
-      const seed = q.get('seed'); if (seed) seedInput.value = seed;
-      const steps = q.get('steps'); if (steps) stepsInput.value = steps;
-      const bound = q.get('bound'); if (bound) boundInput.value = bound;
+      const seed = q.get('seed'); if (seed && seedInput) seedInput.value = seed;
+      const steps = q.get('steps'); if (steps && stepsInput) stepsInput.value = steps;
+      const bound = q.get('bound'); if (bound && boundInput) boundInput.value = bound;
       return true;
     }
 
-    // First render
+    // Startup
     initFromHash();
-    generate();
+    // Defer initial generate until DOM is ready (script is already at end, but be safe)
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', generate);
+    } else {
+      generate();
+    }
   </script>
 </body>
 </html>
