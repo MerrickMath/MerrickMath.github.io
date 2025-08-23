@@ -182,7 +182,7 @@
       const Ai2={n:A.w*A.d+A.n,d:A.d}, Bi2={n:B.w*B.d+B.n,d:B.d};
       let N=Ai2.n*Bi2.d - Bi2.n*Ai2.d, D=Ai2.d*Bi2.d;
       const mix=toMixed(N,D);
-      return { q:`$$${A.w}\\dfrac{${A.n}}{${A.d}} - ${B.w}\\dfrac{${B.n}}{${B.d}} = \\square\\,\\dfrac{\\square}{\\square}$$`, a:`$${mixedTex(mix.w,mix.n,mix.d)}$` };
+      return { q:`$${A.w}\\dfrac{${A.n}}{${A.d}} - ${B.w}\\dfrac{${B.n}}{${B.d}} = \\square\\,\\dfrac{\\square}{\\square}$`, a:`$${mixedTex(mix.w,mix.n,mix.d)}$` };
     }
     function genMixedPlusMixed(rng){
       function randMixed(){const w=randi(rng,1,5), d=randi(rng,2,9), n=randi(rng,1,d-1); return {w,n,d};}
