@@ -209,7 +209,7 @@ show_header: false
     <section aria-labelledby="sec-challenges">
       <h2 id="sec-challenges">Challenges</h2>
       <ul class="linklist">
-        <li class="linkitem"><a href="https://MerrickMath.github.io/PAT.html" data-ext="true"><span>PAT Mental Math Practice</span></a></li>
+        <li class="linkitem"><a href="https://MerrickMath.github.io/PAT.html" data-ext="true"><span>PAT 6 Practice</span></a></li>
         <li class="linkitem"><a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/" data-ext="true"><span>Pokemon Challenge</span></a></li>
         <li class="linkitem"><a href="https://merrickmath.github.io/Merrickmath.github.io-MasterChefCalc/" data-ext="true"><span>Master Chef Calculus</span></a></li>
         <li class="linkitem"><a href="https://renertmath.github.io/RenertMath-CelebrateMath/" data-ext="true"><span>COL Challenge 2020</span></a></li>
