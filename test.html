@@ -162,7 +162,7 @@
       };
     }
     function genPercentOf(rng){const pct=choice(rng,[5,10,15,20,25,30,40,50,60,70,75,80,90]), base=randi(rng,20,150); return { q:`What is $${pct}\\%$ of $${base}$?`, a:`${round2((pct/100)*base)}` }; }
-    function genIntTimesProperFrac(rng){const k=randi(rng,2,12), den=randi(rng,2,12), num=randi(rng,1,den-1); const n=k*num,d=den; const mix=toMixed(n,d); return { q:`$${k}\\times ${fracTex(num,den)} = \\square\\,\\dfrac{\\square}{\\square}$?`, a:`$${mixedTex(mix.w,mix.n,mix.d)}$` }; }
+    function genIntTimesProperFrac(rng){const k=randi(rng,2,12), den=randi(rng,2,12), num=randi(rng,1,den-1); const n=k*num,d=den; const mix=toMixed(n,d); return { q:`$${k}\\times ${fracTex(num,den)} = \\square\\,\\dfrac{\\square}{\\square}$`, a:`$${mixedTex(mix.w,mix.n,mix.d)}$` }; }
     function genIntegerDivision(rng){const divisor=randi(rng,2,21), quotient=randi(rng,6,99), dividend=divisor*quotient; return { q:`What is $${dividend}\\div${divisor}$?`, a:`${quotient}` }; }
     function genNegPlusNeg(rng){const m=randi(rng,3,30), n=randi(rng,3,30); return { q:`What is $(-${m})+(-${n})$?`, a:`-${m+n}` }; }
     function genPosPlusPos(rng){const x=randi(rng,5,60), y=randi(rng,5,60); return { q:`What is $(${x})+(${y})$?`, a:`${x+y}` }; }
@@ -182,7 +182,7 @@
       const Ai2={n:A.w*A.d+A.n,d:A.d}, Bi2={n:B.w*B.d+B.n,d:B.d};
       let N=Ai2.n*Bi2.d - Bi2.n*Ai2.d, D=Ai2.d*Bi2.d;
       const mix=toMixed(N,D);
-      return { q:`$$${A.w}\\dfrac{${A.n}}{${A.d}} - ${B.w}\\dfrac{${B.n}}{${B.d}} = \\square\\,\\dfrac{\\square}{\\square}$$?`, a:`$${mixedTex(mix.w,mix.n,mix.d)}$` };
+      return { q:`$$${A.w}\\dfrac{${A.n}}{${A.d}} - ${B.w}\\dfrac{${B.n}}{${B.d}} = \\square\\,\\dfrac{\\square}{\\square}$$`, a:`$${mixedTex(mix.w,mix.n,mix.d)}$` };
     }
     function genMixedPlusMixed(rng){
       function randMixed(){const w=randi(rng,1,5), d=randi(rng,2,9), n=randi(rng,1,d-1); return {w,n,d};}
@@ -190,7 +190,7 @@
       const Ai={n:A.w*A.d+A.n,d:A.d}, Bi={n:B.w*B.d+B.n,d:B.d};
       let N=Ai.n*Bi.d + Bi.n*Ai.d, D=Ai.d*Bi.d;
       const mix=toMixed(N,D);
-      return { q:`$$${A.w}\\dfrac{${A.n}}{${A.d}} + ${B.w}\\dfrac{${B.n}}{${B.d}} = \\square\\,\\dfrac{\\square}{\\square}$$?`, a:`$${mixedTex(mix.w,mix.n,mix.d)}$` };
+      return { q:`$$${A.w}\\dfrac{${A.n}}{${A.d}} + ${B.w}\\dfrac{${B.n}}{${B.d}} = \\square\\,\\dfrac{\\square}{\\square}$$`, a:`$${mixedTex(mix.w,mix.n,mix.d)}$` };
     }
     function genIntMul(rng){const m1=randi(rng,12,999), m2=randi(rng,12,99); return { q:`What is $${m1}\\times${m2}$?`, a:`${m1*m2}` }; }
     function genPrimeExponentSum(rng){const a=randi(rng,0,6), b=randi(rng,0,4), c=randi(rng,0,3); const N=(2**a)*(3**b)*(5**c); return { q:`$${N}=2^a 3^b 5^c$. What is $a+b+c$?`, a:`${a+b+c}` }; }
