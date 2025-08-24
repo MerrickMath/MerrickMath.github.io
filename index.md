@@ -209,22 +209,10 @@ show_header: false
     <section aria-labelledby="sec-challenges">
       <h2 id="sec-challenges">Games</h2>
       <ul class="linklist">
+        <li class="linkitem"><a href="https://MerrickMath.github.io/PAT.html" data-ext="true"><span>PAT 6 Practice</span></a></li>
         <li class="linkitem"><a href="https://MerrickMath.github.io/CoordinateGame.html" data-ext="true"><span>Coordinate Dash</span></a></li>
         <li class="linkitem"><a href="https://MerrickMath.github.io/Graphblitz.html" data-ext="true"><span>Graph Blitz</span></a></li>
         <li class="linkitem"><a href="https://www.mathplayground.com" target="_blank" rel="noopener"><span>Math Playground</span></a></li>
-      </ul>
-    </section>
-    <!-- Challenges -->
-    <section aria-labelledby="sec-challenges">
-      <h2 id="sec-challenges">Challenges</h2>
-      <ul class="linklist">
-        <li class="linkitem"><a href="https://MerrickMath.github.io/PAT.html" data-ext="true"><span>PAT 6 Practice</span></a></li>
-        <li class="linkitem"><a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/" data-ext="true"><span>Pokemon Challenge</span></a></li>
-        <li class="linkitem"><a href="https://merrickmath.github.io/Merrickmath.github.io-MasterChefCalc/" data-ext="true"><span>Master Chef Calculus</span></a></li>
-        <li class="linkitem"><a href="https://renertmath.github.io/RenertMath-CelebrateMath/" data-ext="true"><span>COL Challenge 2020</span></a></li>
-        <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath.github.io-PythonProject/" data-ext="true"><span>Python Project</span></a></li>
-        <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath.github.io-PumpkinBomb/" data-ext="true"><span>Pumpkin BOMB Challenge 2020</span></a></li>
-        <li class="linkitem"><a href="https://renertmath.github.io/RenertMath-PumpkinBomb2021/" data-ext="true"><span>Pumpkin BOMB Challenge 2021</span></a></li>
       </ul>
     </section>
     <!-- Contests -->
@@ -236,12 +224,28 @@ show_header: false
         <li class="linkitem"><a href="https://mathkangaroo.ca/samples/en" target="_blank" rel="noopener"><span>Kangaroo Math Past Contests</span></a></li>
       </ul>
     </section>
+    <!-- Challenges -->
+    <section aria-labelledby="sec-challenges">
+      <h2 id="sec-challenges">Challenges</h2>
+      <ul class="linklist">
+        <li class="linkitem"><a href="https://MerrickMath.github.io/MerrickMath.github.io-PokemonChallenge/" data-ext="true"><span>Pokemon Challenge</span></a></li>
+        <li class="linkitem"><a href="https://merrickmath.github.io/Merrickmath.github.io-MasterChefCalc/" data-ext="true"><span>Master Chef Calculus</span></a></li>
+        <li class="linkitem"><a href="https://renertmath.github.io/RenertMath-CelebrateMath/" data-ext="true"><span>COL Challenge 2020</span></a></li>
+        <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath.github.io-PythonProject/" data-ext="true"><span>Python Project</span></a></li>
+        <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath.github.io-PumpkinBomb/" data-ext="true"><span>Pumpkin BOMB Challenge 2020</span></a></li>
+        <li class="linkitem"><a href="https://renertmath.github.io/RenertMath-PumpkinBomb2021/" data-ext="true"><span>Pumpkin BOMB Challenge 2021</span></a></li>
+      </ul>
+    </section>
     <!-- Cool Stuff -->
     <section aria-labelledby="sec-cool">
       <h2 id="sec-cool">More Cool Stuff</h2>
       <ul class="linklist">
         <li class="linkitem"><a href="https://www.3blue1brown.com" target="_blank" rel="noopener"><span>3 Blue 1 Brown</span></a></li>
+        <li class="linkitem"><a href="https://www.veritasium.com" target="_blank" rel="noopener"><span>Veritasium</span></a></li>
+        <li class="linkitem"><a href="https://www.youtube.com/user/standupmaths" target="_blank" rel="noopener"><span>Stand Up Maths</span></a></li>
+        <li class="linkitem"><a href="https://www.youtube.com/numberphile" target="_blank" rel="noopener"><span>Numberphile</span></a></li>
         <li class="linkitem"><a href="https://krazydad.com/tablet/puzzles.php" target="_blank" rel="noopener"><span>Krazy Dad Interactive Puzzles</span></a></li>
+        <li class="linkitem"><a href="https://www.puzzle-star-battle.com" target="_blank" rel="noopener"><span>Logic Puzzles Galore</span></a></li>
         <li class="linkitem"><a href="https://mathpickle.com" target="_blank" rel="noopener"><span>Math Pickle</span></a></li>
         <li class="linkitem"><a href="https://www.datacamp.com" target="_blank" rel="noopener"><span>DataCamp</span></a></li>
       </ul>
