@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Geometry Blitz</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --card: #f9fafb;
+      --muted: #374151;
+      --text: #111827;
+      --ring: 0 0 0 3px rgba(59,130,246,.35);
+      /* Bright palette */
+      --green: #4ade80;
+      --red: #f87171;
+      --orange: #fb923c;
+      --black: #111827;
+      --pink: #f472b6;
+      --yellow: #facc15;
+    }
+
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial; background: var(--bg); color: var(--text); }
+
+    .page { max-width: 980px; margin: 24px auto 56px; padding: 0 16px; }
+
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+    h1 { margin:0; font-size: clamp(20px,3vw,28px); }
+    .controls { display:flex; gap:10px; }
+    button { appearance:none; border:0; padding:10px 14px; border-radius:12px; background:#e5e7eb; font-weight:600; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.12); }
+    button:hover { filter:brightness(1.05); }
+
+    .layout { display:grid; grid-template-columns: 260px 1fr; gap:18px; align-items:start; }
+
+    .legend { background:#f3f4f6; padding:14px; border-radius:16px; box-shadow:0 6px 14px rgba(0,0,0,.08); }
+    .legend h3 { margin:0 0 8px 0; font-size:16px; color:var(--muted); }
+    .row { display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
+    .pill { display:flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:#e5e7eb; font-size:13px; }
+    .dot { width:12px; height:12px; border-radius:50%; border:2px solid #111827; }
+
+    .card { background:var(--card); padding:16px; border-radius:16px; box-shadow:0 6px 14px rgba(0,0,0,.12); }
+    .grid { display:grid; grid-template-columns: repeat(2, minmax(160px, 1fr)); gap:18px; }
+    .slot { background:#f3f4f6; border-radius:18px; height:210px; display:grid; place-items:center; }
+    .slot.correct { outline: var(--ring); }
+    svg { width:90%; height:90%; }
+
+    .status { margin-top:10px; font-size:14px; color:var(--muted); min-height:22px; }
+
+    .brand { position:fixed; bottom:10px; left:0; right:0; text-align:center; font-size:12px; color:#6b7280; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topbar">
+      <h1>Geometry Blitz</h1>
+      <div class="controls">
+        <button id="btnShow">Show solution</button>
+        <button id="btnNew">New card</button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <!-- Legend LEFT -->
+      <aside class="legend" aria-label="Home colors legend">
+        <h3>Home colors</h3>
+        <div class="row" id="legendRow"></div>
+      </aside>
+
+      <!-- Card RIGHT -->
+      <section class="card">
+        <div class="grid" id="grid" role="group" aria-label="Card with 4 shapes"></div>
+        <div id="status" class="status" aria-live="polite"></div>
+      </section>
+    </div>
+  </div>
+  <div class="brand">Math with Mr. Merrick</div>
+
+  <script>
+    // ===== Data =====
+    const SHAPES = ["Triangle", "Kite", "Trapezoid", "Parallelogram", "Pentagon", "Hexagon"];
+    const HOME = {
+      Triangle:   css("--green"),
+      Kite:       css("--red"),
+      Trapezoid:  css("--orange"),
+      Parallelogram: css("--black"),
+      Pentagon:   css("--pink"),
+      Hexagon:    css("--yellow")
+    };
+    const COLORS = Object.values(HOME);
+
+    // ===== Elements =====
+    const gridEl = document.getElementById('grid');
+    const statusEl = document.getElementById('status');
+    const btnNew = document.getElementById('btnNew');
+    const btnShow = document.getElementById('btnShow');
+    const legendRow = document.getElementById('legendRow');
+
+    // ===== State =====
+    let state = { items: [], solution: null };
+
+    // ===== Utils =====
+    function css(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+    function sample(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+    function shuffle(arr){ return arr.slice().sort(()=>Math.random()-.5); }
+
+    // ===== Legend =====
+    function makeLegend(){
+      legendRow.innerHTML = '';
+      SHAPES.forEach(s => {
+        const pill = document.createElement('div'); pill.className = 'pill';
+        const dot = document.createElement('span'); dot.className = 'dot'; dot.style.background = HOME[s];
+        const label = document.createElement('span'); label.textContent = s;
+        pill.append(dot, label);
+        legendRow.appendChild(pill);
+      });
+    }
+
+    // ===== SVG drawing =====
+    function svgBox(){ const s = document.createElementNS('http://www.w3.org/2000/svg','svg'); s.setAttribute('viewBox','0 0 180 180'); return s; }
+    function poly(points, fill){
+      const p = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+      p.setAttribute('points', points.map(pt=>pt.join(',')).join(' '));
+      p.setAttribute('fill', fill);
+      p.setAttribute('stroke', 'black');
+      p.setAttribute('stroke-width', '3');
+      p.setAttribute('vector-effect', 'non-scaling-stroke');
+      return p;
+    }
+    function regPoly(cx,cy,r,n){
+      const pts=[]; const start=-Math.PI/2;
+      for(let i=0;i<n;i++){ const a=start+i*2*Math.PI/n; pts.push([cx+r*Math.cos(a), cy+r*Math.sin(a)]); }
+      return pts;
+    }
+    function drawShape(shape,color){
+      const svg = svgBox();
+      const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+      const angle = [0,30,60,90,120,150,180,210,240,270,300,330][Math.floor(Math.random()*12)];
+      g.setAttribute('transform', `rotate(${angle} 90 90)`);
+      if(shape==='Triangle') g.appendChild(poly([[90,15],[15,165],[165,165]], color));
+      else if(shape==='Kite') g.appendChild(poly([[90,15],[160,85],[90,165],[20,85]], color));
+      else if(shape==='Trapezoid') g.appendChild(poly([[35,35],[145,35],[170,165],[10,165]], color));
+      else if(shape==='Parallelogram') g.appendChild(poly([[35,35],[170,35],[145,165],[10,165]], color));
+      else if(shape==='Pentagon') g.appendChild(poly(regPoly(90,95,75,5), color));
+      else if(shape==='Hexagon') g.appendChild(poly(regPoly(90,95,70,6), color));
+      svg.appendChild(g);
+      return svg;
+    }
+
+    // ===== Card generation =====
+    function renderCard(shapes, colors){
+      gridEl.innerHTML = '';
+      state.items = [];
+      shapes.forEach((shape,i)=>{
+        const slot = document.createElement('div'); slot.className = 'slot';
+        const svg = drawShape(shape, colors[i]);
+        slot.appendChild(svg);
+        gridEl.appendChild(slot);
+        state.items.push({shape, color: colors[i], slotEl: slot, svgEl: svg});
+      });
+    }
+
+    function computeSolution(){
+      // 1) Home-color rule
+      const homeIdx = state.items.findIndex(it => it.color === HOME[it.shape]);
+      if(homeIdx !== -1){
+        // if multiple home matches exist, no unique solution
+        const another = state.items.findIndex((it,idx) => idx!==homeIdx && it.color===HOME[it.shape]);
+        if(another === -1){
+          return { type:'home', target: state.items[homeIdx].shape, index: homeIdx, explain: `${state.items[homeIdx].shape} appears in its home color.` };
+        }
+      }
+      // 2) Absent rule
+      const shownShapes = state.items.map(it=>it.shape);
+      const shownColors = state.items.map(it=>it.color);
+      const cands = SHAPES.filter(s => !shownShapes.includes(s) && !shownColors.includes(HOME[s]));
+      if(cands.length === 1){
+        return { type:'absent', target: cands[0], index: -1, explain: `${cands[0]} is the only shape whose shape and home color are both missing.` };
+      }
+      // 3) No solution
+      return { type:'none', target:null, index:-1, explain:'No solution on this card.' };
+    }
+
+    function newCard(){
+      statusEl.textContent = '';
+      // 60% chance of solvable home-match, 25% chance solvable absent, 15% truly random (may be none)
+      const r = Math.random();
+      if(r < 0.60){
+        const target = sample(SHAPES);
+        const others = shuffle(SHAPES.filter(s=>s!==target)).slice(0,3);
+        const chosen = [target, ...others];
+        const colors = chosen.map(s => s===target ? HOME[s] : sample(COLORS.filter(c=>c!==HOME[s])));
+        renderCard(chosen, colors);
+      } else if(r < 0.85){
+        // Construct a guaranteed-unique absent solution
+        const T = sample(SHAPES); // answer (absent)
+        let U = sample(SHAPES); while(U===T) U = sample(SHAPES); // also absent
+        const shown = SHAPES.filter(s=>s!==T && s!==U); // 4 shapes
+        const colorPool = COLORS.filter(c=>c!==HOME[T]); // exclude HOME[T]
+        const colors = [HOME[U]]; // include HOME[U]
+        const rest = colorPool.filter(c=>c!==HOME[U]);
+        const shuffled = shuffle(rest);
+        while(colors.length<4) colors.push(shuffled.shift());
+        // derangement: none shown in home color
+        let assign = shuffle(colors), tries=0;
+        while(shown.some((s,i)=>assign[i]===HOME[s]) && tries<200){ assign = shuffle(colors); tries++; }
+        renderCard(shown, assign);
+      } else {
+        // random (may be none)
+        const chosen = shuffle(SHAPES).slice(0,4);
+        const colors = shuffle(COLORS).slice(0,4);
+        renderCard(chosen, colors);
+      }
+      state.solution = computeSolution();
+    }
+
+    function showSolution(){
+      if(!state.solution) return;
+      state.items.forEach(it=>it.slotEl.classList.remove('correct'));
+      if(state.solution.type==='home'){
+        const t = state.items[state.solution.index];
+        if(t) t.slotEl.classList.add('correct');
+      }
+      statusEl.innerHTML = (state.solution.type==='none')
+        ? 'No solution on this card.'
+        : `Answer: <strong>${state.solution.target}</strong> — ${state.solution.explain}`;
+    }
+
+    // ===== Events =====
+    btnNew.addEventListener('click', newCard);
+    btnShow.addEventListener('click', showSolution);
+    window.addEventListener('keydown', e=>{
+      const k = e.key.toLowerCase();
+      if(k==='n') newCard();
+      if(k==='s') showSolution();
+    });
+
+    // ===== Init =====
+    makeLegend();
+    newCard();
+  </script>
+</body>
+</html>
