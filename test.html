@@ -2,265 +2,382 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Geometry Blitz</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Camel Up – Monte Carlo Simulator (with Crazy Camels)</title>
   <style>
-    :root {
-      --bg: #ffffff;
-      --card: #f9fafb;
-      --muted: #374151;
-      --text: #111827;
-      --ring: 0 0 0 3px rgba(59,130,246,.35);
-      /* Bright palette */
-      --green: #4ade80;
-      --red: #f87171;
-      --orange: #fb923c;
-      --black: #111827;
-      --pink: #f472b6;
-      --yellow: #facc15;
+    :root{
+      --bg:#f6f8fb; --card:#ffffff; --muted:#5b6b88; --text:#0d1b2a; --accent:#2563eb; --border:#d8e0ef; --chip:#eef2f9;
     }
-
-    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial; background: var(--bg); color: var(--text); }
-
-    .page { max-width: 980px; margin: 24px auto 56px; padding: 0 16px; }
-
-    .topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
-    h1 { margin:0; font-size: clamp(20px,3vw,28px); }
-    .controls { display:flex; gap:10px; }
-    button { appearance:none; border:0; padding:10px 14px; border-radius:12px; background:#e5e7eb; font-weight:600; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.12); }
-    button:hover { filter:brightness(1.05); }
-
-    .layout { display:grid; grid-template-columns: 260px 1fr; gap:18px; align-items:start; }
-
-    .legend { background:#f3f4f6; padding:14px; border-radius:16px; box-shadow:0 6px 14px rgba(0,0,0,.08); }
-    .legend h3 { margin:0 0 8px 0; font-size:16px; color:var(--muted); }
-    .row { display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
-    .pill { display:flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:#e5e7eb; font-size:13px; }
-    .dot { width:12px; height:12px; border-radius:50%; border:2px solid #111827; }
-
-    .card { background:var(--card); padding:16px; border-radius:16px; box-shadow:0 6px 14px rgba(0,0,0,.12); }
-    .grid { display:grid; grid-template-columns: repeat(2, minmax(160px, 1fr)); gap:18px; }
-    .slot { background:#f3f4f6; border-radius:18px; height:210px; display:grid; place-items:center; position:relative; }
-    .slot.correct { outline: var(--ring); }
-    svg { width:90%; height:90%; }
-
-    .status { margin-top:10px; font-size:14px; color:var(--muted); min-height:22px; }
-
-    .brand { position:fixed; bottom:10px; left:0; right:0; text-align:center; font-size:12px; color:#6b7280; }
-
-    /* Labels revealed on Show Solution */
-    .label { position:absolute; bottom:6px; left:50%; transform:translateX(-50%); font-size:12px; padding:2px 8px; border-radius:999px; background:#e5e7eb; color:var(--text); border:1px solid rgba(0,0,0,.08); }
-    .hidden { display:none; }
+    *{box-sizing:border-box}
+    body{margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; background:var(--bg); color:var(--text)}
+    .wrap{max-width:1100px; margin:32px auto; padding:0 16px}
+    h1{margin:0 0 8px; font-size:clamp(22px,3.8vw,36px)}
+    p.subtitle{margin:0 0 20px; color:var(--muted)}
+    .grid{display:grid; gap:16px}
+    @media (min-width:900px){.grid{grid-template-columns: 1.2fr 1fr}}
+    .card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:16px; box-shadow:0 6px 18px rgba(13,27,42,.05)}
+    .card h2{margin:0 0 12px; font-size:18px; color:var(--accent)}
+    .row{display:grid; grid-template-columns: 160px 1fr 1fr; gap:8px; align-items:center; padding:6px 8px; border-radius:12px}
+    .row:nth-child(odd){background:var(--chip)}
+    .badge{display:inline-flex; align-items:center; gap:8px; font-weight:700}
+    .dot{width:16px; height:16px; border-radius:999px; display:inline-block; border:1px solid rgba(0,0,0,.15)}
+    input[type="number"], select{width:100%; background:#fff; border:1px solid var(--border); color:var(--text); border-radius:10px; padding:8px 10px; font-size:14px}
+    input[type="number"]:focus, select:focus{outline:2px solid #93c5fd; border-color:#93c5fd}
+    .controls{display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-top:12px}
+    .controls > *{flex:1 0 auto}
+    button{cursor:pointer; background:linear-gradient(180deg,#93c5fd,#60a5fa); color:#05152b; font-weight:800; border:none; padding:12px 16px; border-radius:12px; box-shadow:0 6px 18px rgba(37,99,235,.20)}
+    button.secondary{background:#fff; border:1px solid var(--border); color:#1f2937}
+    .note{font-size:12px; color:var(--muted)}
+    table{width:100%; border-collapse:collapse}
+    th,td{padding:8px 10px; text-align:center; border-bottom:1px solid var(--border)}
+    th{color:#334155; font-weight:700}
+    .pill{display:inline-block; padding:.25rem .6rem; border-radius:999px; border:1px solid var(--border); min-width:3.2ch; background:#fff}
+    .footer{margin-top:12px; font-size:12px; color:#64748b}
+    .track{display:grid; grid-template-columns: repeat(var(--len), 26px); gap:4px; align-items:end}
+    .space{height:84px; background:#ffffff; border:1px dashed var(--border); border-radius:8px; display:flex; flex-direction:column-reverse; align-items:center; justify-content:flex-start; padding:4px}
+    .camel{width:18px; height:12px; border-radius:3px; border:1px solid rgba(0,0,0,.15); margin:3px 0; box-shadow:0 2px 6px rgba(0,0,0,.08)}
+    .camel.crazy{outline:2px dashed #0f172a; outline-offset:1px}
+    .legend{display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:12px}
+    .legend .camel{width:14px; height:10px}
+    .mono{font-variant-numeric: tabular-nums}
+    .sectionLabel{margin-top:8px; margin-bottom:6px; font-weight:700; color:#334155}
+    .roundlog{margin-top:12px; font-size:13px; color:#0f172a; max-height:260px; overflow:auto}
+    .roundlog table{font-size:12px; border:1px solid var(--border)}
+    .nowrap{white-space:nowrap}
   </style>
 </head>
 <body>
-  <div class="page">
-    <div class="topbar">
-      <h1>Geometry Blitz</h1>
-      <div class="controls">
-        <button id="btnShow">Show solution</button>
-        <button id="btnNew">New card</button>
-      </div>
-    </div>
+  <div class="wrap">
+    <h1>Camel Up – placement simulator</h1>
+    <p class="subtitle">Now includes <b>crazy camels</b> (black & white) moving backwards from the finish. Only the five racers compete for placements.</p>
 
-    <div class="layout">
-      <!-- Legend LEFT -->
-      <aside class="legend" aria-label="Home colors legend">
-        <h3>Home colors</h3>
-        <div class="row" id="legendRow"></div>
-      </aside>
+    <div class="grid">
+      <section class="card" id="setup">
+        <h2>Setup</h2>
+        <div class="sectionLabel">Racing camels (start from the beginning; move forward):</div>
+        <div id="rows-racers"></div>
+        <div class="sectionLabel">Crazy camels (start near the finish; move backward):</div>
+        <div id="rows-crazy"></div>
+        <div class="controls">
+          <label class="pill">Track length
+            <input type="number" id="trackLen" min="6" max="40" step="1" value="16" />
+          </label>
+          <label class="pill">Simulations
+            <input type="number" id="sims" min="1" max="100000" step="1" value="100" />
+          </label>
+          <button id="runBtn">Run simulation</button>
+          <button id="randomizeBtn" class="secondary">Randomize starts</button>
+        </div>
+        <p class="note">For stacks at the same space, <b>Stack order</b> is bottom→top (1 = bottom). Crazy camels carry any camels stacked on them <i>backwards</i> and are placed at the <b>bottom</b> of their destination stack.</p>
 
-      <!-- Card RIGHT -->
+        <div class="legend" style="margin-top:10px">
+          <div class="camel" style="background:#3b82f6"></div> Blue
+          <div class="camel" style="background:#22c55e"></div> Green
+          <div class="camel" style="background:#eab308"></div> Yellow
+          <div class="camel" style="background:#f97316"></div> Orange
+          <div class="camel" style="background:#a855f7"></div> Purple
+          <div class="camel crazy" style="background:#111827"></div> Black (crazy)
+          <div class="camel crazy" style="background:#f8fafc; border-color:#cbd5e1"></div> White (crazy)
+        </div>
+      </section>
+
       <section class="card">
-        <div class="grid" id="grid" role="group" aria-label="Card with 4 shapes"></div>
-        <div id="status" class="status" aria-live="polite"></div>
+        <h2>Board (live view of one run)</h2>
+        <div id="board" class="track" style="--len:16; overflow:auto"></div>
+        <div class="footer">Finish is just beyond the last space. Furthest space wins ties; within a stack, the <b>top</b> camel is ahead.</div>
       </section>
     </div>
+
+    <section class="card" style="margin-top:16px">
+      <h2>Results</h2>
+      <div id="results">Run the simulation to see placement distributions for the five racers.</div>
+      <div id="rounds" class="roundlog"></div>
+    </section>
+
+    <div class="footer">Single-file. Drop this <span class="mono">index.html</span> onto GitHub Pages.</div>
   </div>
-  <div class="brand">Math with Mr. Merrick</div>
 
   <script>
-    // ===== Data =====
-    const SHAPES = ["Triangle", "Kite", "Trapezoid", "Parallelogram", "Pentagon", "Hexagon"];
-    const HOME = {
-      Triangle:   css("--green"),
-      Kite:       css("--red"),
-      Trapezoid:  css("--orange"),
-      Parallelogram: css("--black"),
-      Pentagon:   css("--pink"),
-      Hexagon:    css("--yellow")
-    };
-    const COLORS = Object.values(HOME);
+    // === Config ===
+    const RACERS = [
+      { id: 'blue',   name: 'Blue',   color: '#3b82f6' },
+      { id: 'green',  name: 'Green',  color: '#22c55e' },
+      { id: 'yellow', name: 'Yellow', color: '#eab308' },
+      { id: 'orange', name: 'Orange', color: '#f97316' },
+      { id: 'purple', name: 'Purple', color: '#a855f7' },
+    ];
+    const CRAZY = [
+      { id: 'black', name: 'Black (crazy)', color:'#111827', crazy:true },
+      { id: 'white', name: 'White (crazy)', color:'#f8fafc', border:'#cbd5e1', crazy:true },
+    ];
+    const CAMELS = [...RACERS, ...CRAZY];
 
-    // ===== Elements =====
-    const gridEl = document.getElementById('grid');
-    const statusEl = document.getElementById('status');
-    const btnNew = document.getElementById('btnNew');
-    const btnShow = document.getElementById('btnShow');
-    const legendRow = document.getElementById('legendRow');
+    // === Utilities ===
+    const el = sel => document.querySelector(sel);
+    const make = (tag, props={}) => Object.assign(document.createElement(tag), props);
+    const clamp=(x,a,b)=> Math.max(a, Math.min(b,x));
+    const ordinal = n => { const s=["th","st","nd","rd"], v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); };
+    const shuffle = (arr)=>{ const a = arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+    const isCrazyId = cid => CRAZY.some(c=>c.id===cid);
 
-    // ===== State =====
-    let state = { items: [], solution: null };
-
-    // ===== Utils =====
-    function css(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
-    function sample(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-    function shuffle(arr){ return arr.slice().sort(()=>Math.random()-.5); }
-
-    // ===== Legend =====
-    function makeLegend(){
-      legendRow.innerHTML = '';
-      SHAPES.forEach(s => {
-        const pill = document.createElement('div'); pill.className = 'pill';
-        const dot = document.createElement('span'); dot.className = 'dot'; dot.style.background = HOME[s];
-        const label = document.createElement('span'); label.textContent = s;
-        pill.append(dot, label);
-        legendRow.appendChild(pill);
+    // === Setup rows ===
+    const rowsR = el('#rows-racers');
+    const rowsC = el('#rows-crazy');
+    function buildRows(){
+      rowsR.innerHTML = '';
+      rowsC.innerHTML = '';
+      const headerR = make('div', { className: 'row', innerHTML: '<div class="badge" style="opacity:.7">Camel</div><div>Start space</div><div>Stack order</div>' });
+      rowsR.appendChild(headerR);
+      RACERS.forEach((c, i)=>{
+        const row = make('div', { className: 'row' });
+        const badge = make('div', { className: 'badge' });
+        const dot = make('span', { className: 'dot' });
+        dot.style.background = c.color;
+        badge.append(dot, document.createTextNode(' '+c.name));
+        const pos = make('input', { type:'number', min:0, max:39, step:1, value:0 }); pos.id = `pos-${c.id}`;
+        const order = make('input', { type:'number', min:1, max:10, step:1, value:i+1 }); order.id = `ord-${c.id}`;
+        row.append(badge, pos, order);
+        rowsR.appendChild(row);
+      });
+      const headerC = make('div', { className: 'row', innerHTML: '<div class="badge" style="opacity:.7">Camel</div><div>Spaces from finish</div><div>Stack order</div>' });
+      rowsC.appendChild(headerC);
+      CRAZY.forEach((c, i)=>{
+        const row = make('div', { className: 'row' });
+        const badge = make('div', { className: 'badge' });
+        const dot = make('span', { className: 'dot' });
+        dot.style.background = c.color; if(c.border) dot.style.borderColor = c.border;
+        badge.append(dot, document.createTextNode(' '+c.name));
+        const pos = make('input', { type:'number', min:0, max:39, step:1, value:0 }); pos.id = `pos-${c.id}`; // distance from finish
+        const order = make('input', { type:'number', min:1, max:10, step:1, value:i+1 }); order.id = `ord-${c.id}`;
+        row.append(badge, pos, order);
+        rowsC.appendChild(row);
       });
     }
+    buildRows();
 
-    // ===== SVG drawing =====
-    function svgBox(){ const s = document.createElementNS('http://www.w3.org/2000/svg','svg'); s.setAttribute('viewBox','0 0 180 180'); return s; }
-    function poly(points, fill){
-      const p = document.createElementNS('http://www.w3.org/2000/svg','polygon');
-      p.setAttribute('points', points.map(pt=>pt.join(',')).join(' '));
-      p.setAttribute('fill', fill);
-      p.setAttribute('stroke', 'black');       // black outline for clarity
-      p.setAttribute('stroke-width', '3');
-      p.setAttribute('vector-effect', 'non-scaling-stroke');
-      return p;
-    }
-    function regPoly(cx,cy,r,n){
-      const pts=[]; const start=-Math.PI/2;
-      for(let i=0;i<n;i++){ const a=start+i*2*Math.PI/n; pts.push([cx+r*Math.cos(a), cy+r*Math.sin(a)]); }
-      return pts;
-    }
-    function drawShape(shape,color){
-      const svg = svgBox();
-      const g = document.createElementNS('http://www.w3.org/2000/svg','g');
-      const angle = [0,30,60,90,120,150,180,210,240,270,300,330][Math.floor(Math.random()*12)];
-      g.setAttribute('transform', `rotate(${angle} 90 90)`);
-      if(shape==='Triangle') g.appendChild(poly([[90,15],[15,165],[165,165]], color));
-      else if(shape==='Kite') g.appendChild(poly([[90,15],[160,85],[90,165],[20,85]], color));
-      else if(shape==='Trapezoid') g.appendChild(poly([[35,35],[145,35],[170,165],[10,165]], color));
-      else if(shape==='Parallelogram') g.appendChild(poly([[35,35],[170,35],[145,165],[10,165]], color));
-      else if(shape==='Pentagon') g.appendChild(poly(regPoly(90,95,75,5), color));
-      else if(shape==='Hexagon') g.appendChild(poly(regPoly(90,95,70,6), color));
-      svg.appendChild(g);
-      return svg;
-    }
-
-    // ===== Card generation =====
-    function renderCard(shapes, colors){
-      gridEl.innerHTML = '';
-      state.items = [];
-      shapes.forEach((shape,i)=>{
-        const slot = document.createElement('div'); slot.className = 'slot';
-        const svg = drawShape(shape, colors[i]);
-        slot.appendChild(svg);
-
-        // add hidden label now; reveal on Show Solution
-        const label = document.createElement('div');
-        label.className = 'label hidden';
-        label.textContent = shape;
-        slot.appendChild(label);
-
-        gridEl.appendChild(slot);
-        state.items.push({shape, color: colors[i], slotEl: slot, svgEl: svg, labelEl: label});
-      });
-    }
-
-    function computeSolution(){
-      // 1) Home-color rule
-      const homeIdx = state.items.findIndex(it => it.color === HOME[it.shape]);
-      if(homeIdx !== -1){
-        // if multiple home matches exist, no unique solution
-        const another = state.items.findIndex((it,idx) => idx!==homeIdx && it.color===HOME[it.shape]);
-        if(another === -1){
-          return { type:'home', target: state.items[homeIdx].shape, index: homeIdx, explain: `${state.items[homeIdx].shape} appears in its home color.` };
-        }
-      }
-      // 2) Absent rule
-      const shownShapes = state.items.map(it=>it.shape);
-      const shownColors = state.items.map(it=>it.color);
-      const cands = SHAPES.filter(s => !shownShapes.includes(s) && !shownColors.includes(HOME[s]));
-      if(cands.length === 1){
-        return { type:'absent', target: cands[0], index: -1, explain: `${cands[0]} is the only shape whose shape and home color are both missing.` };
-      }
-      // 3) No solution
-      return { type:'none', target:null, index:-1, explain:'No solution on this card.' };
-    }
-
-    function newCard(){
-      statusEl.textContent = '';
-      // 60% chance of solvable home-match, 25% chance solvable absent, 15% truly random (may be none)
-      const r = Math.random();
-      if(r < 0.60){
-        const target = sample(SHAPES);
-        const others = shuffle(SHAPES.filter(s=>s!==target)).slice(0,3);
-        const chosen = [target, ...others];
-
-        // distinct colors on card; target uses home color, others avoid own home and repeats
-        const used = new Set([HOME[target]]);
-        const colors = chosen.map(s => {
-          if (s === target) return HOME[s];
-          const pool = COLORS.filter(c => c !== HOME[s] && !used.has(c));
-          const pick = pool.length ? sample(pool) : sample(COLORS.filter(c => c !== HOME[s]));
-          used.add(pick);
-          return pick;
-        });
-
-        renderCard(chosen, colors);
-      } else if(r < 0.85){
-        // Construct a guaranteed-unique absent solution
-        const T = sample(SHAPES); // answer (absent)
-        let U = sample(SHAPES); while(U===T) U = sample(SHAPES); // also absent
-        const shown = SHAPES.filter(s=>s!==T && s!==U); // 4 shapes
-        const colorPool = COLORS.filter(c=>c!==HOME[T]); // exclude HOME[T]
-        const colors = [HOME[U]]; // include HOME[U]
-        const rest = colorPool.filter(c=>c!==HOME[U]);
-        const shuffled = shuffle(rest);
-        while(colors.length<4) colors.push(shuffled.shift());
-        // derangement: none shown in home color
-        let assign = shuffle(colors), tries=0;
-        while(shown.some((s,i)=>assign[i]===HOME[s]) && tries<200){ assign = shuffle(colors); tries++; }
-        renderCard(shown, assign);
-      } else {
-        // random (may be none)
-        const chosen = shuffle(SHAPES).slice(0,4);
-        const colors = shuffle(COLORS).slice(0,4);
-        renderCard(chosen, colors);
-      }
-      state.solution = computeSolution();
-    }
-
-    function showSolution(){
-      if(!state.solution) return;
-      state.items.forEach(it=>{
-        it.slotEl.classList.remove('correct');
-        if(it.labelEl) it.labelEl.classList.remove('hidden'); // reveal labels
-      });
-      if(state.solution.type==='home'){
-        const t = state.items[state.solution.index];
-        if(t) t.slotEl.classList.add('correct'); // highlight correct slot
-      }
-      statusEl.innerHTML = (state.solution.type==='none')
-        ? 'No solution on this card.'
-        : `Answer: <strong>${state.solution.target}</strong> — ${state.solution.explain}`;
-    }
-
-    // ===== Events =====
-    btnNew.addEventListener('click', newCard);
-    btnShow.addEventListener('click', showSolution);
-    window.addEventListener('keydown', e=>{
-      const k = e.key.toLowerCase();
-      if(k==='n') newCard();
-      if(k==='s') showSolution();
+    // Randomize
+    el('#randomizeBtn').addEventListener('click', ()=>{
+      const spots = shuffle([0,1,2,3,4]);
+      RACERS.forEach((c,i)=>{ el(`#pos-${c.id}`).value = spots[i]; el(`#ord-${c.id}`).value = i+1; });
+      CRAZY.forEach((c,i)=>{ el(`#pos-${c.id}`).value = i; el(`#ord-${c.id}`).value = i+1; });
+      drawBoard(buildInitialBoard());
     });
 
-    // ===== Init =====
-    makeLegend();
-    newCard();
+    // === Board building ===
+    function buildInitialBoard(){
+      const trackLen = clamp(parseInt(el('#trackLen').value||16,10), 6, 40);
+      const groups = new Map(); // space -> array of {camel,ord,crazy}
+      // racers
+      RACERS.forEach(c=>{
+        const space = clamp(parseInt(el(`#pos-${c.id}`).value||0,10), 0, 1000);
+        const ord = parseInt(el(`#ord-${c.id}`).value||0,10) || 0;
+        if(!groups.has(space)) groups.set(space, []);
+        groups.get(space).push({ camel:c.id, ord, crazy:false });
+      });
+      // crazy (distance from finish)
+      CRAZY.forEach(c=>{
+        const fromFinish = clamp(parseInt(el(`#pos-${c.id}`).value||0,10), 0, 1000);
+        const space = Math.max(0, trackLen - 1 - fromFinish);
+        const ord = parseInt(el(`#ord-${c.id}`).value||0,10) || 0;
+        if(!groups.has(space)) groups.set(space, []);
+        groups.get(space).push({ camel:c.id, ord, crazy:true });
+      });
+      // sort & flatten
+      const board = new Map();
+      for(const [space, arr] of groups.entries()){
+        arr.sort((a,b)=> (a.ord??0)-(b.ord??0) || a.camel.localeCompare(b.camel));
+        board.set(space, arr.map(x=>x.camel)); // bottom -> top
+      }
+      return board;
+    }
+
+    // Locate camel on board
+    function locate(board, camel){
+      for(const [s, stack] of board.entries()){
+        const idx = stack.indexOf(camel);
+        if(idx!==-1) return { space:s, index:idx };
+      }
+      return { space:-1, index:-1 };
+    }
+
+    // Positions map {cid: space}
+    function positionsFromBoard(board){
+      const pos = new Map();
+      for(const [s, stack] of board.entries()){
+        for(let i=0;i<stack.length;i++) pos.set(stack[i], s);
+      }
+      return pos;
+    }
+
+    // === Single-race simulation (returns round log) ===
+    function simulateRace(startBoard, trackLen){
+      const board = new Map();
+      for(const [k,v] of startBoard.entries()) board.set(k, v.slice());
+      let finished = false;
+      const roundLog = [];
+      let round = 1;
+
+      while(!finished){
+        let bag = CAMELS.map(c=>c.id); // dice left this leg
+        const legMoves = [];
+        while(bag.length && !finished){
+          const pickIdx = Math.floor(Math.random()*bag.length);
+          const camel = bag.splice(pickIdx,1)[0];
+          const roll = 1 + Math.floor(Math.random()*3); // 1..3
+
+          const {space, index} = locate(board, camel);
+          if(space===-1) throw new Error('Camel not found on board');
+          const movers = board.get(space).slice(index); // camel + above
+          const stayers = board.get(space).slice(0, index);
+          if(stayers.length) board.set(space, stayers); else board.delete(space);
+
+          if(isCrazyId(camel)){
+            const dest = Math.max(0, space - roll);
+            const destStack = board.get(dest) || [];
+            // crazy camels (and riders) go to BOTTOM
+            board.set(dest, movers.concat(destStack));
+          } else {
+            const dest = space + roll;
+            const destStack = board.get(dest) || [];
+            // racers go to TOP
+            destStack.push(...movers);
+            board.set(dest, destStack);
+            if(dest >= trackLen) finished = true; // race ends immediately
+          }
+
+          legMoves.push({ camel, roll });
+        }
+        roundLog.push({ round, moves: legMoves, positions: positionsFromBoard(board) });
+        round++;
+      }
+
+      // Final placements among racers only
+      const racers = new Set(RACERS.map(c=>c.id));
+      const maxSpace = Math.max(...board.keys());
+      const order = [];
+      for(let s = maxSpace; s >= -100; s--){
+        if(!board.has(s)) continue;
+        const stack = board.get(s);
+        for(let i = stack.length-1; i>=0; i--){
+          const cid = stack[i];
+          if(racers.has(cid)) order.push(cid);
+        }
+      }
+      const placement = new Map();
+      order.forEach((cid, idx)=> placement.set(cid, idx+1));
+      return { placement, finalBoard: board, roundLog };
+    }
+
+    // === Monte Carlo wrapper ===
+    function runSimulations(n, startBoard, trackLen){
+      const places = RACERS.length;
+      const counts = new Map();
+      RACERS.forEach(c=> counts.set(c.id, Array(places).fill(0)));
+      let sampleBoard = null;
+      let sampleRounds = null;
+      for(let i=0;i<n;i++){
+        const { placement, finalBoard, roundLog } = simulateRace(startBoard, trackLen);
+        RACERS.forEach(c=>{
+          const p = placement.get(c.id) || places; // safety
+          counts.get(c.id)[p-1] += 1;
+        });
+        if(i===0){ sampleBoard = finalBoard; sampleRounds = roundLog; }
+      }
+      return { counts, sampleBoard, sampleRounds };
+    }
+
+    // === Rendering ===
+    function drawBoard(board){
+      const trackLen = parseInt(el('#trackLen').value,10) || 16;
+      const boardEl = el('#board');
+      boardEl.style.setProperty('--len', trackLen.toString());
+      boardEl.innerHTML = '';
+      for(let s=0; s<trackLen; s++){
+        const cell = make('div', { className: 'space' });
+        const stack = board.get(s) || [];
+        stack.forEach(cid=>{
+          const cfg = CAMELS.find(x=>x.id===cid);
+          const cam = make('div', { className:'camel'+(cfg.crazy?' crazy':''), title: cfg.name });
+          cam.style.background = cfg.color; if(cfg.border) cam.style.borderColor = cfg.border;
+          cell.appendChild(cam);
+        });
+        boardEl.appendChild(cell);
+      }
+    }
+
+    function renderResults(counts, sims){
+      const container = el('#results');
+      const places = RACERS.length;
+      let html = '<div style="overflow:auto"><table><thead><tr><th>Camel</th>';
+      for(let p=1;p<=places;p++) html += `<th>${ordinal(p)}</th>`;
+      html += '</tr></thead><tbody>';
+      RACERS.forEach(c=>{
+        html += `<tr><td style="text-align:left" class="nowrap"><span class="camel" style="background:${c.color}; vertical-align:middle; display:inline-block"></span> ${c.name}</td>`;
+        const arr = counts.get(c.id);
+        for(let p=0;p<places;p++){
+          const k = arr[p];
+          const pct = (k/sims*100).toFixed(1);
+          html += `<td><div class="mono">${k}</div><div class="note">${pct}%</div></td>`;
+        }
+        html += '</tr>';
+      });
+      html += '</tbody></table></div>';
+      container.innerHTML = html;
+    }
+
+    function shortName(cid){
+      switch(cid){
+        case 'blue': return 'Blue';
+        case 'green': return 'Green';
+        case 'yellow': return 'Yellow';
+        case 'orange': return 'Orange';
+        case 'purple': return 'Purple';
+        case 'black': return 'Black';
+        case 'white': return 'White';
+        default: return cid;
+      }
+    }
+
+    function renderRoundLog(rounds, trackLen){
+      const container = el('#rounds');
+      if(!rounds || !rounds.length){ container.innerHTML = ''; return; }
+      let html = '<h3 style="margin:12px 0 6px">Round-by-round log</h3>';
+      html += '<div style="overflow:auto"><table><thead><tr><th>Round</th><th style="min-width:260px">Dice order</th>';
+      [...RACERS, ...CRAZY].forEach(c=>{ html += `<th class="nowrap">${c.name}</th>`; });
+      html += '</tr></thead><tbody>';
+      rounds.forEach(leg=>{
+        const moveStr = leg.moves.map(m=> `${shortName(m.camel)}:${m.roll}${isCrazyId(m.camel)?'←':''}`).join(', ');
+        html += `<tr><td class="mono">${leg.round}</td><td style="text-align:left">${moveStr || '—'}</td>`;
+        [...RACERS, ...CRAZY].forEach(c=>{
+          const pos = leg.positions.get(c.id);
+          let val = (pos!=null? pos : '—');
+          if(typeof val==='number' && val>=trackLen) val = `${val} (finish)`;
+          html += `<td class="mono">${val}</td>`;
+        });
+        html += '</tr>';
+      });
+      html += '</tbody></table></div>';
+      html += '<div class="note" style="margin-top:6px">Crazy camel moves are marked with a ← in the dice order. Numbers are track spaces (0-indexed); values ≥ track length indicate the winners have crossed the finish.</div>';
+      container.innerHTML = html;
+    }
+
+    // === Live preview ===
+    function updatePreview(){ drawBoard(buildInitialBoard()); }
+    el('#setup').addEventListener('input', updatePreview);
+    el('#trackLen').addEventListener('input', updatePreview);
+    updatePreview();
+
+    // === Run button ===
+    el('#runBtn').addEventListener('click', ()=>{
+      const sims = clamp(parseInt(el('#sims').value||100,10), 1, 100000);
+      const trackLen = clamp(parseInt(el('#trackLen').value||16,10), 6, 40);
+      const startBoard = buildInitialBoard();
+      const { counts, sampleBoard, sampleRounds } = runSimulations(sims, startBoard, trackLen);
+      renderResults(counts, sims);
+      drawBoard(sampleBoard);
+      renderRoundLog(sampleRounds, trackLen);
+      el('#board').style.setProperty('--len', trackLen.toString());
+    });
   </script>
 </body>
 </html>
