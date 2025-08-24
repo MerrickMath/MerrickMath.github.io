@@ -234,6 +234,20 @@ show_header: false
         <li class="linkitem"><a href="https://www.datacamp.com" target="_blank" rel="noopener"><span>DataCamp</span></a></li>
       </ul>
     </section>
+    <!-- Cool Stuff -->
+    <section aria-labelledby="sec-cool">
+      <h2 id="sec-cool">Cool Stuff</h2>
+      <ul class="linklist">
+        <li class="linkitem"><a href="https://www.3blue1brown.com" target="_blank" rel="noopener"><span>3 Blue 1 Brown</span></a></li>
+        <li class="linkitem"><a href="https://krazydad.com/tablet/puzzles.php" target="_blank" rel="noopener"><span>Krazy Dad Interactive Puzzles</span></a></li>
+        <li class="linkitem"><a href="https://mathpickle.com" target="_blank" rel="noopener"><span>Math Pickle</span></a></li>
+        <li class="linkitem"><a href="https://www.mathplayground.com" target="_blank" rel="noopener"><span>Math Playground</span></a></li>
+        <li class="linkitem"><a href="https://www.cemc.uwaterloo.ca/contests/past_contests.html" target="_blank" rel="noopener"><span>CEMC Past Contests</span></a></li>
+        <li class="linkitem"><a href="https://artofproblemsolving.com/wiki/index.php/AMC_Problems_and_Solutions" target="_blank" rel="noopener"><span>AMC Problems and Solutions</span></a></li>
+        <li class="linkitem"><a href="https://mathkangaroo.ca/samples/en" target="_blank" rel="noopener"><span>Kangaroo Math Past Contests</span></a></li>
+        <li class="linkitem"><a href="https://www.datacamp.com" target="_blank" rel="noopener"><span>DataCamp</span></a></li>
+      </ul>
+    </section>
   </main>
 
   <footer></footer>
