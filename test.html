@@ -31,13 +31,16 @@
     .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;background:#eef2ff;border:1px solid #c7d2fe;font-size:12px}
     .dot{width:10px;height:10px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.15)}
     .error{color:#b91c1c}
+    details.debug{margin-top:8px}
+    details.debug summary{cursor:pointer}
+    #status[aria-live]{min-height:1.2em}
   </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Camel Up — Interactive Leg Completer</h1>
   <p class="subtitle">Math with Mr. Merrick</p>
-  <p class="subtitle">Enter a die result (e.g., <i>Red moves 2</i>), then the <b>remainder of the leg</b> will be simulated (exactly 5 dice total this leg).</p>
+  <p class="subtitle">Enter a die result (e.g., <i>Red moves 2</i>), then I simulate the <b>remainder of the leg</b> (exactly 5 dice total this leg). If the <b>grey</b> die is chosen, <b>one</b> crazy camel (black or white) moves backward 1–3.</p>
 
   <!-- Setup (shared) -->
   <section class="card" id="setup">
@@ -88,7 +91,7 @@
       </label>
       <button id="applyBtn">Apply move</button>
       <button id="resetBtn" title="Reset the leg to setup state">Reset</button>
-      <span class="note" id="status"></span>
+      <span class="note" id="status" aria-live="polite"></span>
     </div>
 
     <div style="margin-top:10px" id="usedDiceLine" class="note">No inputs yet.</div>
@@ -96,13 +99,19 @@
 
   <section class="card">
     <h2>Placement stats (after completing the leg from current state)</h2>
-    <div id="placementStats">Make an input to see stats…</div>
+    <div id="placementStats">Loading…</div>
   </section>
 
   <section class="card">
     <h2>Remainder simulations</h2>
-    <div id="legsTable" class="scroller">Make an input to see simulated completions…</div>
+    <div id="legsTable" class="scroller">Loading…</div>
   </section>
+
+  <details class="debug">
+    <summary>Developer tests</summary>
+    <div id="tests"></div>
+    <button id="runTestsBtn">Run smoke tests</button>
+  </details>
 </div>
 
 <script>
@@ -128,6 +137,7 @@
   const isCrazyId=cid=>cid==='black'||cid==='white';
   const shuffle=(arr)=>{ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
   const num=(sel,def)=>{ const n=el(sel); const v=(n&&n.value!=null)? n.value : def; const t=parseInt(v,10); return Number.isFinite(t)? t : def; };
+  const safe = (fn, ctx) => { try { return fn(); } catch(e){ console.error(e); if(ctx){ const s=el('#status'); if(s) s.innerHTML = `<span class="error">${ctx}: ${e.message}</span>`; } return undefined; } };
 
   // === Build Setup Rows ===
   function buildRows(){
@@ -228,9 +238,9 @@
     finished = false;
     drawBoard(legBoard);
     updateUsedDiceLine();
-    el('#placementStats').innerHTML = 'Make an input to see stats…';
-    el('#legsTable').innerHTML = 'Make an input to see simulated completions…';
-    el('#status').textContent = '';
+    const s=el('#status'); if(s) s.textContent = '';
+    // Immediately compute results before any input
+    runSimulationsForCurrentState();
   }
 
   function updateUsedDiceLine(){
@@ -343,7 +353,7 @@
 
   function renderLegsTable(legs){
     const container=el('#legsTable');
-    if(!legs?.length){ container.innerHTML='Make an input to see simulated completions…'; return; }
+    if(!legs?.length){ container.innerHTML='No simulations to display.'; return; }
     let html='<div class="scroller"><table><thead><tr><th>#</th><th>Dice order</th>';
     [...RACERS,...CRAZY].forEach(c=>{ html+=`<th class="nowrap">${c.name}</th>`; });
     html+='</tr></thead><tbody>';
@@ -366,13 +376,48 @@
     container.innerHTML=html;
   }
 
+  // === Developer tests ===
+  function runTests(){
+    const out=[]; const push=(ok,msg)=>out.push((ok?'✅ ':'❌ ')+msg);
+    try{
+      // Test 1: default setup mapping
+      const board = buildInitialBoard();
+      const trackLen = num('#trackLen',16);
+      const blue = locate(board,'blue');
+      const black = locate(board,'black');
+      push(blue.space===0, `Blue starts at space 0 (got ${blue.space})`);
+      push(black.space===trackLen-1, `Black starts at last space index ${trackLen-1} (got ${black.space})`);
+
+      // Test 2: placements ordering rule (top of stack ahead on same space)
+      const testBoard=new Map();
+      testBoard.set(5,['blue','red']); // blue bottom, red top -> red ahead of blue
+      const plc = placementsFromBoard(testBoard);
+      push(plc.get('red')===1 && plc.get('blue')===2, `Top-of-stack ahead on same space`);
+
+      // Test 3: simulate remainder with all 5 dice already used
+      const savedUsed = usedDice; const savedBoard = legBoard; const savedFinished = finished;
+      usedDice=['blue','green','red','yellow','purple']; finished=false; legBoard=new Map([[0,['blue']]]);
+      const res = simulateRemainderOnce(trackLen);
+      push(Array.isArray(res.moves) && res.moves.length===0, `No moves when 5 dice already used`);
+      // restore
+      usedDice=savedUsed; legBoard=savedBoard; finished=savedFinished;
+    }catch(e){ push(false, 'Unexpected error: '+e.message); console.error(e); }
+    el('#tests').innerText = out.join('\n');
+  }
+
   // === Init ===
-  function updatePreview(){ drawBoard(buildInitialBoard()); }
+  function updatePreview(){
+    const newBoard = buildInitialBoard();
+    if(!usedDice || usedDice.length===0){
+      legBoard = newBoard;
+      runSimulationsForCurrentState();
+    }
+    drawBoard(newBoard);
+  }
   function init(){
     buildRows();
     el('#setup').addEventListener('input', updatePreview);
     el('#trackLen').addEventListener('input', updatePreview);
-    updatePreview();
 
     el('#applyBtn').addEventListener('click', ()=>{
       const die = el('#dieSelect').value;
@@ -380,6 +425,7 @@
       if(applyUserMove(die, roll)) runSimulationsForCurrentState();
     });
     el('#resetBtn').addEventListener('click', resetLeg);
+    const btn=el('#runTestsBtn'); if(btn) btn.addEventListener('click', runTests);
 
     // Start fresh
     resetLeg();
