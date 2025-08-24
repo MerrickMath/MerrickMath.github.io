@@ -224,6 +224,7 @@ show_header: false
         <li class="linkitem"><a href="https://artofproblemsolving.com/wiki/index.php/AMC_Problems_and_Solutions" target="_blank" rel="noopener"><span>AMC Problems and Solutions</span></a></li>
         <li class="linkitem"><a href="https://mathkangaroo.ca/samples/en" target="_blank" rel="noopener"><span>Kangaroo Math Past Contests</span></a></li>
         <li class="linkitem"><a href="https://science.ucalgary.ca/mathematics-statistics/engagement/educational-outreach/math-nite" target="_blank" rel="noopener"><span>Math Nite</span></a></li>
+        <li class="linkitem"><a href="https://renertmath.github.io/renertrabbit.html" target="_blank" rel="noopener"><span>Renert Rabbit</span></a></li>
       </ul>
     </section>
     <!-- Challenges -->
