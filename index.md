@@ -207,7 +207,7 @@ show_header: false
     </section>
     <!-- Challenges -->
     <section aria-labelledby="sec-challenges">
-      <h2 id="sec-challenges">Challenges</h2>
+      <h2 id="sec-challenges">Materials <span>&#38;</span> Challenges</h2>
       <ul class="linklist">
         <li class="linkitem"><a href="https://MerrickMath.github.io/PAT.html" data-ext="true"><span>PAT 6 Practice</span></a></li>
         <li class="linkitem"><a href="https://MerrickMath.github.io/CoordinateGame.html" data-ext="true"><span>Coordinate Game</span></a></li>
