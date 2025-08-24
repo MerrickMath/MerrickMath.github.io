@@ -207,10 +207,10 @@ show_header: false
     </section>
     <!-- Games -->
     <section aria-labelledby="sec-challenges">
-      <h2 id="sec-challenges">Challenges</h2>
+      <h2 id="sec-challenges">Games</h2>
       <ul class="linklist">
-        <li class="linkitem"><a href="https://MerrickMath.github.io/CoordinateGame.html" data-ext="true"><span>Coordinate Game</span></a></li>
-        <li class="linkitem"><a href="https://MerrickMath.github.io/Graphblitz.html" data-ext="true"><span>Graph Blitz Game</span></a></li>
+        <li class="linkitem"><a href="https://MerrickMath.github.io/CoordinateGame.html" data-ext="true"><span>Coordinate Dash</span></a></li>
+        <li class="linkitem"><a href="https://MerrickMath.github.io/Graphblitz.html" data-ext="true"><span>Graph Blitz</span></a></li>
         <li class="linkitem"><a href="https://www.mathplayground.com" target="_blank" rel="noopener"><span>Math Playground</span></a></li>
       </ul>
     </section>
