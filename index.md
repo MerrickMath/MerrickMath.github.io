@@ -212,6 +212,7 @@ show_header: false
         <li class="linkitem"><a href="https://MerrickMath.github.io/PAT.html" data-ext="true"><span>PAT 6 Practice</span></a></li>
         <li class="linkitem"><a href="https://MerrickMath.github.io/CoordinateGame.html" data-ext="true"><span>Coordinate Dash</span></a></li>
         <li class="linkitem"><a href="https://MerrickMath.github.io/Graphblitz.html" data-ext="true"><span>Graph Blitz</span></a></li>
+        <li class="linkitem"><a href="https://MerrickMath.github.io/Graphblitz.html" data-ext="true"><span>Geometry Blitz</span></a></li>
         <li class="linkitem"><a href="https://www.mathplayground.com" target="_blank" rel="noopener"><span>Math Playground</span></a></li>
       </ul>
     </section>
