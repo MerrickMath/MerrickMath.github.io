@@ -6,73 +6,45 @@
 <title>Graph Blitz</title>
 <style>
   :root{
-    --bg:#0b1220; --panel:#0e1730; --ink:#e6ebff; --accent:#7aa2f7;
+    /* Light theme */
+    --bg:#f7f9fc; --ink:#0b1220; --muted:#5a6c8f; --panel:#ffffff; --border:#dde3f0;
     --ccyan:#009999; --cgreen:#009900; --cblue:#0000cc; --cmagenta:#ff00ff; --corange:#ff8000; --cred:#ff0000; --cblack:#111111;
   }
   *{box-sizing:border-box}
-  body{
-    margin:0; font-family:system-ui,Segoe UI,Roboto,Inter,Arial,sans-serif;
-    color:var(--ink); background:radial-gradient(1200px 900px at 20% 0%,#17203f 0%,#0b1220 60%) fixed;
-  }
-  header{
-    padding:20px 16px; display:flex; gap:12px; align-items:center; justify-content:space-between;
-    max-width:1100px; margin:0 auto;
-  }
-  h1{margin:0; font-size:20px; letter-spacing:.3px; font-weight:700}
+  body{margin:0; font-family:system-ui,Segoe UI,Roboto,Inter,Arial,sans-serif; color:var(--ink); background:var(--bg)}
+  header{padding:20px 16px; display:flex; gap:12px; align-items:center; justify-content:space-between; max-width:1100px; margin:0 auto; flex-wrap:wrap;}
+  h1{margin:0; font-size:22px; letter-spacing:.3px; font-weight:700}
+  .instructions{font-size:13px;color:var(--muted);background:#fbfdff;border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-top:6px;max-width:700px}
   .controls{display:flex; gap:10px; flex-wrap:wrap}
-  button{
-    cursor:pointer; border:1px solid #2a386b; background:#131d3a; color:var(--ink);
-    padding:10px 14px; border-radius:12px; font-weight:600; transition:.15s transform ease,.15s background-color ease,.15s border-color ease;
-  }
-  button:hover{transform:translateY(-1px); background:#17244a; border-color:#3a4a8a}
-  button.secondary{background:#10172b; border-color:#22305e}
+  button{cursor:pointer; border:1px solid var(--border); background:#f3f6fd; color:var(--ink); padding:10px 14px; border-radius:10px; font-weight:600; transition:.15s transform ease,.15s background-color ease,.15s border-color ease;}
+  button:hover{transform:translateY(-1px); background:#eef3ff; border-color:#cfd9ee}
   main{max-width:1100px; margin:0 auto; padding:0 16px 28px}
-  .card{
-    position:relative; background:#0c1329; border:1px solid #222d56; border-radius:20px; padding:20px;
-    box-shadow:0 10px 35px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.03);
-  }
-  .stage{display:grid; grid-template-columns:1fr 340px; gap:18px}
-  @media (max-width:1020px){ .stage{grid-template-columns:1fr} }
-  .plotWrap{
-    background:#f8faff; border-radius:16px; padding:12px; min-height:420px; overflow:hidden; position:relative;
-  }
-  .plotWrap svg{width:100%; height:420px; display:block; background:#fff; border-radius:12px}
-  .legend{
-    display:grid; gap:8px; grid-template-columns:repeat(2,minmax(0,1fr));
-    background:var(--panel); border:1px solid #1b2550; border-radius:14px; padding:12px;
-    align-self:start;
-  }
-  .legend h3{margin:0 0 6px; grid-column:1/-1; font-size:14px; color:#cfd8ff; opacity:.9}
-  .pill{display:flex; gap:8px; align-items:center; padding:8px 10px; background:#0d1631; border:1px solid #1b2550; border-radius:12px}
+  .card{position:relative; background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:18px; box-shadow:0 8px 24px rgba(12,22,44,.06)}
+  .stage{display:grid; grid-template-columns:1fr 260px; gap:16px; align-items:start}
+  @media (max-width:980px){ .stage{grid-template-columns:1fr} }
+  .plotWrap{background:#fff; border:1px solid var(--border); border-radius:12px; padding:8px; min-height:420px; position:relative}
+  .plotWrap svg{width:100%; height:420px; display:block; background:#fff; border-radius:8px}
+  .legend{display:grid; grid-template-columns:1fr; gap:8px; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:12px;}
+  .legend h3{margin:0 0 8px; font-size:14px; color:var(--muted)}
+  .pill{display:flex; gap:8px; align-items:center; padding:8px 10px; background:#fbfdff; border:1px solid var(--border); border-radius:10px}
   .dot{width:12px; height:12px; border-radius:50%}
-  .eq{font-family:ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size:12px; color:#dfe6ff}
-  .edges{
-    margin-top:18px; display:grid; grid-template-columns:repeat(2,1fr); gap:10px;
-  }
-  .edge{
-    padding:10px 12px; border-radius:12px; background:#10183a; border:1px dashed #314078;
-    display:flex; align-items:center; justify-content:center; min-height:42px; text-align:center;
-    font-weight:700; letter-spacing:.2px;
-  }
-  .edge .eq{font-weight:800}
-  .edge.correct{border-style:solid; border-color:#38b263; box-shadow:0 0 0 3px rgba(56,178,99,.18) inset}
-  .edge.wrong{opacity:.55}
-  .tiny{opacity:.75; font-size:12px}
-  .toast{
-    position:fixed; z-index:50; right:14px; bottom:14px; padding:10px 12px; border-radius:10px;
-    background:#0e1a3b; border:1px solid #2b3a72; color:#cfe1ff; font-weight:600; box-shadow:0 10px 30px rgba(0,0,0,.4);
-    opacity:0; transform:translateY(10px); transition:.2s opacity ease,.2s transform ease;
-  }
+  .answers{margin-top:14px; padding:10px; background:#fbfdff; border:1px solid var(--border); border-radius:10px; display:none}
+  .answers.show{display:block}
+  .answers ul{margin:8px 0 0 18px}
+  .toast{position:fixed; z-index:50; right:14px; bottom:14px; padding:10px 12px; border-radius:10px; background:#ffffff; border:1px solid var(--border); color:var(--ink); font-weight:600; box-shadow:0 10px 30px rgba(0,0,0,.08); opacity:0; transform:translateY(10px); transition:.2s opacity ease,.2s transform ease}
   .toast.show{opacity:1; transform:none}
   footer{opacity:.7; text-align:center; font-size:12px; padding:10px}
 </style>
 </head>
 <body>
 <header>
-  <h1>Graph Blitz</h1>
+  <div>
+    <h1>Graph Blitz</h1>
+    <div class="instructions">How to play: Colours are fixed per family (see Legend). If any graphed family uses its own colour, grab that family. Otherwise, grab the single family that is completely absent (neither its graph nor its colour appears).</div>
+  </div>
   <div class="controls">
     <button id="btn-new">New card</button>
-    <button id="btn-solution" class="secondary">Show solution</button>
+    <button id="btn-solution">Show solution</button>
   </div>
 </header>
 
@@ -83,273 +55,233 @@
         <svg id="plot" viewBox="0 0 900 520" preserveAspectRatio="xMidYMid meet" aria-label="Graph plot area"></svg>
       </div>
       <aside class="legend" id="legend">
-        <h3>Families on this card</h3>
-        <!-- pills inserted here -->
+        <h3>Legend</h3>
       </aside>
     </div>
 
-    <div class="edges" id="edges">
-      <!-- 4 edges inserted here -->
+    <div class="answers" id="answers">
+      <strong>Grab:</strong>
+      <ul id="answerList"></ul>
     </div>
-
-    <div style="margin-top:12px" class="tiny">Rule: If any edge is a correctly colored equation, it’s the answer. Otherwise, pick the single edge whose <em>color and equation</em> both come from families <strong>absent</strong> from the plot.</div>
   </div>
 </main>
 
 <div class="toast" id="toast">New card generated</div>
-<footer>Host this file with GitHub Pages to let students play online.</footer>
+<footer>GitHub Pages friendly — single file.</footer>
 
 <script>
-/* ---------- Data & helpers ---------- */
-const COLORS = {
-  ccyan:    getCSS('--ccyan'),
-  cgreen:   getCSS('--cgreen'),
-  black:    getCSS('--cblack'),
-  cblue:    getCSS('--cblue'),
-  cmagenta: getCSS('--cmagenta'),
-  corange:  getCSS('--corange'),
-  cred:     getCSS('--cred'),
-};
+(function(){
+  /* ---------- Fixed mapping (like Ghost Blitz pieces) ---------- */
+  const FAMILY = [
+    { key:'lin',   name:'Linear',      color:'ccyan'    },
+    { key:'quad',  name:'Quadratic',   color:'cgreen'   },
+    { key:'sin',   name:'Sinusoidal',  color:'black'    },
+    { key:'recip', name:'Reciprocal',  color:'cblue'    },
+    { key:'exp',   name:'Exponential', color:'cmagenta' },
+    { key:'rad',   name:'Radical',     color:'corange'  },
+    { key:'cub',   name:'Degree 3',    color:'cred'     },
+  ];
+  const KEY = Object.fromEntries(FAMILY.map(f=>[f.key,f]));
+  const COLOR_HEX = { ccyan:css('--ccyan'), cgreen:css('--cgreen'), black:css('--cblack'), cblue:css('--cblue'), cmagenta:css('--cmagenta'), corange:css('--corange'), cred:css('--cred') };
 
-const FAMILIES = [
-  { key:'lin',   name:'Linear',       eq:'y = x',         color:'ccyan'   },
-  { key:'quad',  name:'Quadratic',    eq:'y = x^2',       color:'cgreen'  },
-  { key:'sin',   name:'Sinusoidal',   eq:'y = sin(x)',    color:'black'   },
-  { key:'recip', name:'Reciprocal',   eq:'y = 1/x',       color:'cblue'   },
-  { key:'exp',   name:'Exponential',  eq:'y = e^x',       color:'cmagenta'},
-  { key:'rad',   name:'Radical',      eq:'y = sqrt(x)',   color:'corange' },
-  { key:'cub',   name:'Cubic',        eq:'y = x^3',       color:'cred'    },
-];
-const byKey = Object.fromEntries(FAMILIES.map(f => [f.key, f]));
-const colorToKey = Object.fromEntries(FAMILIES.map(f => [f.color, f.key]));
-const eqToKey = Object.fromEntries(FAMILIES.map(f => [f.eq, f.key]));
-const EQS = FAMILIES.map(f => f.eq);
-const KEYS = FAMILIES.map(f => f.key);
+  /* ---------- Utilities ---------- */
+  function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+  function sample(arr,k){ const a=[...arr], r=[]; for(let i=0;i<k;i++){ const j=Math.floor(Math.random()*a.length); r.push(a.splice(j,1)[0]); } return r; }
+  function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
 
-function getCSS(varName){
-  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
-}
-function randChoice(arr){ return arr[Math.floor(Math.random()*arr.length)] }
-function sample(arr, k){
-  const copy=[...arr]; const res=[];
-  for(let i=0;i<k;i++){ const j=Math.floor(Math.random()*copy.length); res.push(copy.splice(j,1)[0]); }
-  return res;
-}
-function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()* (i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+  /* ---------- Plot (SVG) with transformable families ---------- */
+  const PLOT = document.getElementById('plot');
+  const W=900,H=520,PAD=40; const XMIN=-3,XMAX=3,YMIN=-3,YMAX=3;
+  const sx = x => PAD + (x-XMIN)/(XMAX-XMIN)*(W-2*PAD);
+  const sy = y => H - PAD - (y-YMIN)/(YMAX-YMIN)*(H-2*PAD);
+  function mk(tag, attrs={}, kids=[]){ const el=document.createElementNS('http://www.w3.org/2000/svg',tag); Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v)); kids.forEach(ch=>el.appendChild(ch)); return el; }
+  function axes(){ const g=mk('g'); const x0=sy(0), y0=sx(0); g.appendChild(mk('line',{x1:sx(XMIN),y1:x0,x2:sx(XMAX),y2:x0,stroke:'#444'})); g.appendChild(mk('line',{x1:y0,y1:sy(YMIN),x2:y0,y2:sy(YMAX),stroke:'#444'})); for(let t=-3;t<=3;t++){ const tx=sx(t), ty=sy(t); g.appendChild(mk('line',{x1:tx,y1:x0-4,x2:tx,y2:x0+4,stroke:'#aaa'})); g.appendChild(mk('line',{x1:y0-4,y1:ty,x2:y0+4,y2:ty,stroke:'#aaa'})); } return g; }
+  function pathFor(fn, segs, color, width=3){ const N=700; let d=''; for(const [a,b] of segs){ let first=true; for(let i=0;i<=N;i++){ const x=a+(b-a)*i/N; let y=fn(x); if(!isFinite(y)) { first=true; continue; } y=Math.max(YMIN-1,Math.min(YMAX+1,y)); const px=sx(x).toFixed(2), py=sy(y).toFixed(2); d += (first?`M ${px} ${py}`:` L ${px} ${py}`); first=false; } } return mk('path',{d,fill:'none',stroke:color,'stroke-width':String(width)}); }
 
-/* ---------- Card generator (always-solvable) ---------- */
-function makeCard(){
-  const present4 = sample(KEYS, 4).sort();
-  const absent = KEYS.filter(k => !present4.includes(k));
+  // Random transform helpers (keep curves varied but readable)
+  function rng(a,b){ return a + Math.random()*(b-a); }
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
-  // Decide card type: 50% match, 50% absent
-  const matchType = Math.random() < 0.5;
-
-  let edges = []; // list of {color, eq}
-  if (matchType){
-    // Exactly ONE correctly colored edge
-    const matchKey = randChoice(present4);
-    edges.push({ color: byKey[matchKey].color, eq: byKey[matchKey].eq });
-    const others = present4.filter(k => k !== matchKey);
-    for (const colKey of others){
-      const color = byKey[colKey].color;
-      // pick an equation from a different family (can be present or absent), ensure mismatch
-      const choices = KEYS.filter(k => k !== colKey);
-      const eqKey = randChoice(choices);
-      edges.push({ color, eq: byKey[eqKey].eq });
-    }
-  } else {
-    // ABSENT: zero color-correct edges.
-    // Create exactly one edge whose color & equation are from two different absent families.
-    const [aColorKey, aEqKey] = sample(absent, 2);
-    edges.push({ color: byKey[aColorKey].color, eq: byKey[aEqKey].eq });
-    // Other three: colors from present; eq from present but not same as the color family
-    for (let i=0;i<3;i++){
-      const colKey = randChoice(present4);
-      const color = byKey[colKey].color;
-      const choices = present4.filter(k => k !== colKey);
-      const eqKey = randChoice(choices);
-      edges.push({ color, eq: byKey[eqKey].eq });
-    }
-  }
-
-  // Verify constraints
-  const isCorrectPair = (edge)=> colorToKey[edge.color] === eqToKey[edge.eq];
-  const correctCount = edges.filter(isCorrectPair).length;
-  if (matchType){
-    if (correctCount !== 1){
-      return makeCard(); // retry if unlucky
-    }
-  } else {
-    if (correctCount !== 0){
-      return makeCard(); // retry
-    }
-    const isFullyAbsent = (edge)=>{
-      const ck = colorToKey[edge.color], ek = eqToKey[edge.eq];
-      return !present4.includes(ck) && !present4.includes(ek);
-    };
-    const fullyAbsentCount = edges.filter(isFullyAbsent).length;
-    if (fullyAbsentCount !== 1){
-      return makeCard(); // retry
+  function familyFn(key){
+    switch(key){
+      case 'lin': {
+        const m = pick([-2,-1.5,-1,-0.5,0.5,1,1.5,2]);
+        const h = rng(-1.5,1.5), k = rng(-1.0,1.0);
+        const fn = x => m*(x-h)+k;
+        return { fn, segs:[[-3,3]] };
+      }
+      case 'quad': {
+        const a = pick([-1.5,-1,-0.7,0.7,1,1.3]);
+        const h = rng(-1.0,1.0), k = rng(-0.8,1.0);
+        const fn = x => a*(x-h)*(x-h)+k;
+        return { fn, segs:[[-3,3]] };
+      }
+      case 'sin': {
+        const A = pick([0.7,1,1.3]) * pick([1,-1]);
+        const B = pick([0.7,1,1.4]);
+        const h = rng(-1.5,1.5), k = rng(-0.5,0.5);
+        const fn = x => A*Math.sin(B*(x-h))+k;
+        return { fn, segs:[[-6.283,6.283]] };
+      }
+      case 'recip': {
+        const A = pick([0.8,1,1.5]) * pick([1,-1]);
+        const h = rng(-0.8,0.8), k = rng(-0.8,0.8);
+        const fn = x => A/(x-h)+k;
+        return { fn, segs:[[-3,h-0.2],[h+0.2,3]] };
+      }
+      case 'exp': {
+        const A = pick([0.3,0.5,0.8]) * pick([1,-1]);
+        const B = pick([0.6,0.8,1.0]);
+        const h = rng(-0.8,0.8), k = rng(-0.5,0.8);
+        const fn = x => A*Math.exp(B*(x-h))+k;
+        return { fn, segs:[[-3,3]] };
+      }
+      case 'rad': {
+        const A = pick([0.7,1,1.3]) * pick([1,-1]);
+        const h = rng(-2.0,1.5), k = rng(-0.8,0.8);
+        const fn = x => A*Math.sqrt(Math.max(0,x-h))+k;
+        return { fn, segs:[[h,3]] };
+      }
+      case 'cub': {
+        const A = pick([0.5,0.8,1,1.3]) * pick([1,-1]);
+        const h = rng(-1.2,1.2), k = rng(-1.0,1.0);
+        const fn = x => A*Math.pow(x-h,3)+k;
+        return { fn, segs:[[-3,3]] };
+      }
     }
   }
 
-  // Randomize assignment to positions
-  edges = shuffle(edges);
-
-  // Compute the unique answer index
-  let answerIdx = -1;
-  if (correctCount === 1){
-    answerIdx = edges.findIndex(isCorrectPair);
-  } else {
-    // no correct colors; choose the fully-absent one
-    const isFullyAbsent = (edge)=>{
-      const ck = colorToKey[edge.color], ek = eqToKey[edge.eq];
-      return !present4.includes(ck) && !present4.includes(ek);
-    };
-    answerIdx = edges.findIndex(isFullyAbsent);
-  }
-
-  return { present4, edges, answerIdx };
-}
-
-/* ---------- Plotting (SVG) ---------- */
-// We draw in a scaled coordinate system: x ∈ [-3,3], y ∈ [-3,3]
-const PLOT = document.getElementById('plot');
-const W = 900, H = 520;
-const PAD = 40;
-const XMIN=-3, XMAX=3, YMIN=-3, YMAX=3;
-
-function scaleX(x){ return PAD + (x - XMIN) / (XMAX - XMIN) * (W - 2*PAD); }
-function scaleY(y){ return H - PAD - (y - YMIN) / (YMAX - YMIN) * (H - 2*PAD); }
-
-function mk(tag, attrs={}, children=[]){
-  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
-  for (const [k,v] of Object.entries(attrs)){ el.setAttribute(k, v); }
-  for (const ch of children) el.appendChild(ch);
-  return el;
-}
-
-function axes(){
-  const g = mk('g', { 'stroke': '#555', 'stroke-width':'1' });
-  // axes lines
-  const x0 = scaleY(0), y0 = scaleX(0);
-  g.appendChild(mk('line', { x1: scaleX(XMIN), y1: x0, x2: scaleX(XMAX), y2: x0, stroke:'#888' }));
-  g.appendChild(mk('line', { x1: y0, y1: scaleY(YMIN), x2: y0, y2: scaleY(YMAX), stroke:'#888' }));
-  // ticks (optional light)
-  for (let t=-3; t<=3; t++){
-    const tx = scaleX(t), ty = scaleY(t);
-    g.appendChild(mk('line', { x1: tx, y1: x0-4, x2: tx, y2: x0+4, stroke:'#bbb' }));
-    g.appendChild(mk('line', { x1: y0-4, y1: ty, x2: y0+4, y2: ty, stroke:'#bbb' }));
-  }
-  return g;
-}
-
-function pathFor(f, options={}){
-  const { color='#000', width=3 } = options;
-  const N = 700;
-  let d = '';
-  function moveTo(x,y){ d += (d ? ' L ' : 'M ') + scaleX(x).toFixed(2) + ' ' + scaleY(y).toFixed(2); }
-  function lineTo(x,y){ d += ' L ' + scaleX(x).toFixed(2) + ' ' + scaleY(y).toFixed(2); }
-
-  // split into safe segments for discontinuities
-  const segments = f.segments;
-  for (const seg of segments){
-    const [a,b] = seg;
-    let first=true;
-    for (let i=0;i<=N;i++){
-      const x = a + (b-a)*i/N;
-      let y = f.fn(x);
-      if (!isFinite(y)) { first=true; continue; }
-      y = Math.max(YMIN-1, Math.min(YMAX+1, y));
-      if (first){ moveTo(x,y); first=false; } else { lineTo(x,y); }
+  function renderPlot(curves){
+    PLOT.innerHTML='';
+    PLOT.appendChild(axes());
+    for(const c of curves){
+      const col = COLOR_HEX[KEY[c.colorK].color];
+      const f   = familyFn(c.shapeK);
+      PLOT.appendChild(pathFor(f.fn, f.segs, col));
     }
   }
-  return mk('path', { d, fill:'none', stroke: color, 'stroke-width': String(width) });
-}
 
-function familyDef(key){
-  switch(key){
-    case 'lin':   return { fn:(x)=>x, segments:[[-3,3]], color: COLORS.ccyan };
-    case 'quad':  return { fn:(x)=>x*x, segments:[[-3,3]], color: COLORS.cgreen };
-    case 'sin':   return { fn:(x)=>Math.sin(x), segments:[[-6.283,6.283]], color: COLORS.black };
-    case 'recip': return { fn:(x)=>1/x, segments:[[-3,-0.2],[0.2,3]], color: COLORS.cblue };
-    case 'exp':   return { fn:(x)=>Math.exp(x), segments:[[-2,2.5]], color: COLORS.cmagenta };
-    case 'rad':   return { fn:(x)=>Math.sqrt(Math.max(0,x)), segments:[[0,3]], color: COLORS.corange };
-    case 'cub':   return { fn:(x)=>x*x*x, segments:[[-2,2]], color: COLORS.cred };
+  /* ---------- Legend (single column, one per family) ---------- */
+  const legend = document.getElementById('legend');
+  function makeLegend(){
+    legend.querySelectorAll('.pill').forEach(n=>n.remove());
+    FAMILY.forEach(f=>{
+      const p=document.createElement('div'); p.className='pill';
+      const dot=document.createElement('span'); dot.className='dot'; dot.style.background=COLOR_HEX[f.color];
+      const text=document.createElement('span'); text.textContent=f.name;
+      p.append(dot,text); legend.appendChild(p);
+    });
   }
-}
 
-function renderPlot(present4){
-  PLOT.innerHTML='';
-  PLOT.appendChild(axes());
-  for (const k of present4){
-    const f = familyDef(k);
-    PLOT.appendChild(pathFor(f, { color: f.color, width:3.2 }));
+  /* ---------- Solution box ---------- */
+  const ansWrap = document.getElementById('answers');
+  const ansList = document.getElementById('answerList');
+  function showSolution(item){
+    ansList.innerHTML='';
+    const li=document.createElement('li'); const hex = COLOR_HEX[KEY[item].color];
+    li.innerHTML = `<span class="dot" style="background:${hex}; display:inline-block; vertical-align:middle; margin-right:6px"></span><strong>${KEY[item].name}</strong>`;
+    ansList.appendChild(li); ansWrap.classList.add('show');
   }
-}
+  function hideSolution(){ ansWrap.classList.remove('show'); ansList.innerHTML=''; }
 
-/* ---------- UI: legend + edges ---------- */
-const legend = document.getElementById('legend');
-const edgesBox = document.getElementById('edges');
-function renderLegend(present4){
-  // Clear previous pills
-  [...legend.querySelectorAll('.pill')].forEach(el=>el.remove());
-  for (const k of present4){
-    const fam = byKey[k];
-    const pill = document.createElement('div');
-    pill.className = 'pill';
-    const dot = document.createElement('span');
-    dot.className='dot'; dot.style.background = COLORS[fam.color];
-    const label = document.createElement('span');
-    label.innerHTML = `<strong>${fam.name}</strong> <span class="eq">(${fam.eq})</span>`;
-    pill.append(dot, label);
-    legend.appendChild(pill);
+  /* ---------- Helpers for always-unique card ---------- */
+  function derangeColours(shapes, colours){
+    // Assign each shape a colour with colour != shape. Simple backtracking.
+    const n = shapes.length; const used = Array(n).fill(false); const out = Array(n).fill(null);
+    function backtrack(i){
+      if(i===n) return true;
+      for(let j=0;j<n;j++){
+        if(used[j]) continue;
+        const c = colours[j];
+        if(c===shapes[i]) continue;
+        out[i]=c; used[j]=true;
+        if(backtrack(i+1)) return true;
+        used[j]=false; out[i]=null;
+      }
+      return false;
+    }
+    if(backtrack(0)) return out; else return null;
   }
-}
 
-function renderEdges(edges, answerIdx){
-  edgesBox.innerHTML='';
-  const posNames = ['Top','Right','Left','Bottom'];
-  edges.forEach((e, idx)=>{
-    const el = document.createElement('div');
-    el.className='edge';
-    el.dataset.index = idx;
-    const col = COLORS[e.color];
-    el.innerHTML = `<span style="color:${col}">${e.eq}</span>`;
-    edgesBox.appendChild(el);
+  /* ---------- Card generation (graphs only, always-solvable) ---------- */
+  function makeCard(){
+    const all = FAMILY.map(f=>f.key);
+    const shapes = sample(all, 4).sort();           // families drawn as graphs
+    const absent = all.filter(k=>!shapes.includes(k)); // the other 3 families
+
+    let curves = []; // list of {shapeK, colorK}
+    let solution = null;
+
+    if (Math.random() < 0.5){
+      // MATCH TYPE: exactly one graph drawn in its canonical colour
+      const matchK = rand(shapes);
+      const others = shapes.filter(k=>k!==matchK);
+      // colours to assign: one correct, others mismatched
+      let colours = [matchK, ...others.map(s=>rand(all.filter(k=>k!==s)) )];
+      // Ensure at least the mismatches are not accidentally equal
+      let assigned = derangeColours(shapes, colours);
+      if(!assigned){ return makeCard(); }
+      for(let i=0;i<shapes.length;i++) curves.push({ shapeK: shapes[i], colorK: assigned[i] });
+      // Force exactly one correct: if assigned doesn't keep match unique, rebuild
+      const correctCount = curves.filter(c=>c.shapeK===c.colorK).length;
+      if (correctCount!==1){ return makeCard(); }
+      solution = matchK;
+    } else {
+      // ABSENT TYPE: zero correctly-coloured graphs
+      // choose a unique fully-absent family whose SHAPE and COLOUR both do not appear
+      const [absPick, b, c] = shuffle([...absent]);
+      // prepare colours list: must include b and c (so they are not fully absent), exclude absPick
+      let colourCandidates = [b, c];
+      // fill to 4 with colours from shapes (allow repeats avoidance)
+      while(colourCandidates.length < 4){
+        const k = rand(shapes);
+        if(!colourCandidates.includes(k)) colourCandidates.push(k);
+      }
+      // remove any accidental absPick
+      colourCandidates = colourCandidates.filter(k=>k!==absPick);
+      while(colourCandidates.length<4){
+        const k = rand(all.filter(x=>x!==absPick));
+        if(!colourCandidates.includes(k)) colourCandidates.push(k);
+      }
+      // Find a derangement assignment so no shape gets its own colour
+      let assigned = derangeColours(shapes, shuffle(colourCandidates));
+      if(!assigned){ return makeCard(); }
+      for(let i=0;i<shapes.length;i++) curves.push({ shapeK: shapes[i], colorK: assigned[i] });
+      // Validate constraints
+      const anyCorrect = curves.some(c=>c.shapeK===c.colorK);
+      const colorsUsed = new Set(curves.map(c=>c.colorK));
+      if (anyCorrect) return makeCard();
+      if (colorsUsed.has(absPick)) return makeCard();
+      // Ensure b or c colours appear so they are not fully absent
+      if (!(colorsUsed.has(b) && colorsUsed.has(c))) return makeCard();
+      solution = absPick; // unique fully-absent
+    }
+
+    curves = shuffle(curves); // randomize draw order
+
+    return { curves, solution };
+  }
+
+  function render(){
+    const {curves, solution} = makeCard();
+    renderPlot(curves);
+    makeLegend();
+    hideSolution();
+    // store for solution button
+    render.currentSolution = solution;
+  }
+
+  /* ---------- App wiring ---------- */
+  document.getElementById('btn-new').addEventListener('click', render);
+  document.getElementById('btn-solution').addEventListener('click', ()=>{
+    if (render.currentSolution) showSolution(render.currentSolution);
   });
 
-  // Reveal handler
-  document.getElementById('btn-solution').onclick = ()=>{
-    [...edgesBox.children].forEach((d,i)=>{
-      if (i===answerIdx){ d.classList.remove('wrong'); d.classList.add('correct'); }
-      else { d.classList.remove('correct'); d.classList.add('wrong'); }
-    });
-  };
-}
-
-/* ---------- App flow ---------- */
-let current = null;
-
-function newCard(){
-  current = makeCard();
-  renderPlot(current.present4);
-  renderLegend(current.present4);
-  renderEdges(current.edges, current.answerIdx);
-  toast('New card generated');
-}
-
-function toast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 1200);
-}
-
-document.getElementById('btn-new').addEventListener('click', newCard);
-document.getElementById('btn-solution').addEventListener('click', ()=>{/* wired in renderEdges */});
-newCard(); // initial card
+  // Boot
+  makeLegend();
+  render();
+})();
 </script>
 </body>
 </html>
