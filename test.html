@@ -6,227 +6,115 @@
   <title>Coordinate Dash</title>
   <style>
     :root {
-      --bg: #f9fafb;           /* light gray background */
-      --panel: #ffffff;        /* white panel */
-      --muted: #4b5563;        /* gray-600 */
-      --text: #1f2937;         /* dark gray text */
-      --accent: #22d3ee;       /* cyan-400 */
-      --accent-2: #a78bfa;     /* violet-400 */
-      --ok: #22c55e;           /* green-500 */
-      --warn: #f59e0b;         /* amber-500 */
-      --danger: #ef4444;       /* red-500 */
-      --card: #f3f4f6;         /* light card */
+      --bg: #f9fafb;
+      --panel: #ffffff;
+      --muted: #4b5563;
+      --text: #1f2937;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --card: #f3f4f6;
       --radius: 16px;
+      --button-bg: #3b82f6;
+      --button-bg-hover: #2563eb;
+      --button-text: #ffffff;
     }
     * { box-sizing: border-box; }
-    html, body { height: 100%; }
     body {
       margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
-        Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji",
-        "Segoe UI Emoji";
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
     }
-    .container {
-      max-width: 980px;
-      margin: 32px auto;
-      padding: 0 16px;
-    }
-    header {
-      display: grid;
-      gap: 12px;
-      padding: 16px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: var(--radius);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    }
-    header h1 {
-      margin: 0 0 4px 0;
-      font-size: 28px;
-      letter-spacing: 0.2px;
-    }
-    header p { margin: 0; color: #374151; /* dark gray readable */ }
+    .container { max-width: 900px; margin: 32px auto; padding: 0 16px; }
 
-    .controls {
+    header {
+      background: var(--panel);
+      border: 1px solid #e5e7eb;
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    header h1 { margin: 0 0 4px 0; font-size: 26px; }
+    header p { margin: 0; color: var(--muted); }
+
+    .heading-controls {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 12px;
-      margin-top: 10px;
+      margin-top: 12px;
     }
-    .control {
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
-      padding: 10px 12px;
-    }
-    .control label { display: block; font-size: 12px; color: #374151; /* dark gray readable */ }
+    .control label { display:block; font-size: 12px; margin-bottom: 4px; color: var(--muted); }
     .control input, .control select {
       width: 100%;
-      margin-top: 6px;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: #ffffff;
-      color: var(--text);
-      outline: none;
-    }
-
-    .buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 6px;
-    }
-    button {
-      appearance: none;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: transform 120ms ease, background 200ms ease, border-color 200ms ease;
-    }
-    button:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.25); }
-    button.primary { border-color: rgba(34, 211, 238, 0.7); background: linear-gradient(180deg, rgba(34,211,238,0.18), rgba(34,211,238,0.08)); }
-    button.success { border-color: rgba(34,197,94,0.7); background: linear-gradient(180deg, rgba(34,197,94,0.18), rgba(34,197,94,0.08)); }
-    button.warn { border-color: #000000; background:#fff3cd; color:#000; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1.1fr 1fr;
-      gap: 16px;
-      margin-top: 20px;
-    }
-    @media (max-width: 900px) {
-      .grid { grid-template-columns: 1fr; }
-    }
-
-    .panel {
-      background: var(--panel);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: var(--radius);
-      padding: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    }
-    .panel h2 { margin-top: 0; font-size: 20px; }
-
-    .list { display: grid; gap: 12px; }
-    .card {
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 14px;
-      padding: 12px;
-    }
-    .step-head {
-      display: flex; align-items: center; justify-content: space-between; gap: 10px;
-    }
-    .step-desc { font-weight: 600; }
-    .step-actions { display: flex; gap: 8px; }
-    .answer { margin-top: 8px; color: var(--accent); font-weight: 600; display: none; }
-
-    .badge {
-      display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; color: #0b1220;
-    }
-    .badge.seed { background: var(--accent); }
-    .badge.bound { background: var(--accent-2); color: #0b1220; }
-
-    .muted { color: #374151; /* dark gray readable */ }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-
-    .timer {
-      font-variant-numeric: tabular-nums;
-      font-size: 16px; /* match normal text size */
-      letter-spacing: 1px;
-      padding: 4px 8px;
-      background: #ffffff;
-      border: 2px solid #000000; /* dark border */
+      padding: 8px 10px;
       border-radius: 8px;
-      display: inline-block;
-      min-width: 80px;
-      text-align: center;
+      border: 1px solid #d1d5db;
+      background: #fff;
+      color: var(--text);
     }
-    .headingbar { display:flex; align-items:flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  .heading-controls { display:flex; gap:10px; flex-wrap:wrap; align-items:end; }
-  .heading-controls .control { background: transparent; border: none; padding: 0; }
-  .heading-controls label { font-size: 12px; color: #374151; /* dark gray readable */ }
-  .heading-controls input, .heading-controls select {
-    background:#ffffff;
-    border:1px solid #d1d5db; /* light gray border */
-    border-radius:10px;
-    padding:8px 10px;
-    color:var(--text);
-  }
-  .heading-controls button { padding: 10px 14px; }
-</style>
+    .control button, .primary {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: none;
+      background: var(--button-bg);
+      color: var(--button-text);
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .control button:hover, .primary:hover {
+      background: var(--button-bg-hover);
+    }
+
+    .timer { border: 1px solid #000; padding: 6px 10px; border-radius: 6px; text-align: center; font-variant-numeric: tabular-nums; }
+    .timer-controls { display:flex; align-items:center; gap:8px; justify-content:flex-end; }
+
+    .panel { background: var(--panel); border: 1px solid #e5e7eb; border-radius: var(--radius); padding: 16px; margin-top: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+    .panel h2 { margin-top: 0; }
+    .list { display: grid; gap: 12px; }
+    .card { background: var(--card); border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px; }
+    .step-head { display: flex; justify-content: space-between; align-items: center; }
+    .answer { margin-top: 8px; color: var(--button-bg); font-weight: 600; display:none; }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="headingbar">
-        <div>
-          <h1 style="margin:0">Coordinate Dash</h1>
-          <p class="muted" style="margin:4px 0 0 0">Seeded, step-by-step transformations with a built-in timer.</p>
-        </div>
+<div class="container">
+  <header>
+    <h1>Coordinate Dash</h1>
+    <p class="muted">Seeded, step-by-step transformations with a built-in timer.</p>
+    <div class="heading-controls">
+      <div class="control">
+        <label for="stepsInput">Number of steps</label>
+        <select id="stepsInput"><option>4</option><option selected>6</option><option>8</option><option>10</option></select>
       </div>
-      <div class="heading-controls" style="margin-top:10px">
-          <div class="control">
-            <label for="stepsInput">Number of steps</label>
-            <select id="stepsInput">
-              <option>4</option>
-              <option selected>6</option>
-              <option>8</option>
-              <option>10</option>
-            </select>
-          </div>
-          <div class="control">
-            <label for="boundInput">Coordinate bound</label>
-            <select id="boundInput">
-              <option>8</option>
-              <option selected>10</option>
-              <option>12</option>
-              <option>15</option>
-            </select>
-          </div>
-          <div class="control">
-            <label for="seedInput">Seed</label>
-            <input id="seedInput" type="text" placeholder="e.g. 12345 or any text" />
-          </div>
-          <div class="control">
-            <label>&nbsp;</label>
-            <button class="primary" id="generateBtn">Generate</button>
-          </div>
-          <div class="control">
-            <label>Timer</label>
-            <div class="row">
-              <span class="timer" id="timer">00:00</span>
-              <div class="buttons">
-                <button class="primary" id="startBtn">Start</button>
-                <button class="primary" id="stopBtn">Stop</button>
-                <button class="primary" id="resetBtn">Reset</button>
-              </div>
-            </div>
-          </div>
+      <div class="control">
+        <label for="boundInput">Coordinate bound</label>
+        <select id="boundInput"><option>8</option><option selected>10</option><option>12</option><option>15</option></select>
       </div>
-      <div class="row" style="margin-top:6px">
-        <span id="meta" class="muted mono">&nbsp;</span>
+      <div class="control">
+        <label for="seedInput">Seed</label>
+        <input id="seedInput" type="text" placeholder="e.g. 12345 or any text" />
       </div>
-    </header>
-
-    
-
-    <div class="grid">
-      <section class="panel" style="grid-column: 1 / -1;">
-        <h2>Transformations</h2>
-        <div id="answers" class="list"></div>
-      </section>
+      <div class="control">
+        <label>&nbsp;</label>
+        <button class="primary" id="generateBtn">Generate</button>
+      </div>
     </div>
+    <div class="timer-controls" style="margin-top:12px;">
+      <span class="timer" id="timer">00:00</span>
+      <button class="primary" id="toggleTimerBtn">Pause</button>
+      <button class="primary" id="resetBtn">Reset</button>
+    </div>
+  </header>
 
-  <script>
+  <section class="panel">
+    <h2>Transformations</h2>
+    <div id="answers" class="list"></div>
+  </section>
+</div>
+
+<script>
 // ===== Deterministic RNG (mulberry32) + string hashing =====
 function mulberry32(a) {
   return function() {
@@ -297,12 +185,10 @@ const seedInput = document.getElementById('seedInput');
 const stepsInput = document.getElementById('stepsInput');
 const boundInput = document.getElementById('boundInput');
 const generateBtn = document.getElementById('generateBtn');
-const metaEl = document.getElementById('meta');
 
 // Timer controls
 const timerEl = document.getElementById('timer');
-const startBtn = document.getElementById('startBtn');
-const stopBtn = document.getElementById('stopBtn');
+const toggleTimerBtn = document.getElementById('toggleTimerBtn');
 const resetBtn = document.getElementById('resetBtn');
 
 let timerHandle = null; let elapsedSec = 0;
@@ -310,15 +196,17 @@ function fmtTime(sec) { const m = Math.floor(sec / 60); const s = sec % 60; retu
 function timerStart() { if (timerHandle) return; timerHandle = setInterval(() => { elapsedSec++; timerEl.textContent = fmtTime(elapsedSec); }, 1000); }
 function timerStop() { if (timerHandle) { clearInterval(timerHandle); timerHandle = null; } }
 function timerReset() { timerStop(); elapsedSec = 0; timerEl.textContent = fmtTime(elapsedSec); }
-startBtn?.addEventListener('click', timerStart);
-stopBtn?.addEventListener('click', timerStop);
-resetBtn?.addEventListener('click', timerReset);
+toggleTimerBtn?.addEventListener('click', () => {
+  if (timerHandle) { timerStop(); toggleTimerBtn.textContent = 'Start'; }
+  else { timerStart(); toggleTimerBtn.textContent = 'Pause'; }
+});
+resetBtn?.addEventListener('click', () => { timerReset(); if (toggleTimerBtn) toggleTimerBtn.textContent = 'Start'; });
 
-function renderAnswers(startPt, steps) {
+function renderAnswers(startPt, steps, seedUsed) {
   answersEl.innerHTML = '';
   const startCard = document.createElement('div');
   startCard.className = 'card';
-  startCard.innerHTML = `<div class="step-head"><span class="step-desc">0 · Start</span><span class="mono">(${startPt[0]}, ${startPt[1]})</span></div>`;
+  startCard.innerHTML = `<div class="step-head"><span class="step-desc">Seed: ${seedUsed}</span><span class="mono">Start: (${startPt[0]}, ${startPt[1]})</span></div>`;
   answersEl.appendChild(startCard);
 
   steps.forEach((step, idx) => {
@@ -361,9 +249,7 @@ function generate() {
   let [x, y] = start; const steps = [];
   for (const [desc, fn] of tforms) { [x, y] = fn(x, y); steps.push([desc, [x, y]]); }
 
-  renderAnswers(start, steps);
-
-  metaEl.textContent = `Seed: ${seedUsed} · Start: (${start[0]}, ${start[1]}) · Steps: ${stepsN}`;
+  renderAnswers(start, steps, seedUsed);
 
   timerReset();
   timerStart();
