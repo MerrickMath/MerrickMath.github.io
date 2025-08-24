@@ -8,7 +8,7 @@
   :root{
     /* Light theme */
     --bg:#f7f9fc; --ink:#0b1220; --muted:#5a6c8f; --panel:#ffffff; --border:#dde3f0;
-    --ccyan:#009999; --cgreen:#009900; --cblue:#0000cc; --cmagenta:#ff00ff; --corange:#ff8000; --cred:#ff0000; --cblack:#111111;
+    --clin:#ff0000; --cquad:#ff8000; --csin:#111111; --crecip:#0099ff; --cexp:#ff66cc; --crad:#ffff00; --ccub:#009900;
   }
   *{box-sizing:border-box}
   body{margin:0; font-family:system-ui,Segoe UI,Roboto,Inter,Arial,sans-serif; color:var(--ink); background:var(--bg)}
@@ -71,18 +71,22 @@
 
 <script>
 (function(){
-  /* ---------- Fixed mapping (like Ghost Blitz pieces) ---------- */
+  /* ---------- Fixed mapping (updated colours) ---------- */
   const FAMILY = [
-    { key:'lin',   name:'Linear',      color:'ccyan'    },
-    { key:'quad',  name:'Quadratic',   color:'cgreen'   },
-    { key:'sin',   name:'Sinusoidal',  color:'black'    },
-    { key:'recip', name:'Reciprocal',  color:'cblue'    },
-    { key:'exp',   name:'Exponential', color:'cmagenta' },
-    { key:'rad',   name:'Radical',     color:'corange'  },
-    { key:'cub',   name:'Degree 3',    color:'cred'     },
+    { key:'lin',   name:'Linear',      color:'clin'    }, // Red
+    { key:'quad',  name:'Quadratic',   color:'cquad'   }, // Orange
+    { key:'sin',   name:'Sinusoidal',  color:'csin'    }, // Black
+    { key:'recip', name:'Reciprocal',  color:'crecip'  }, // Light Blue (#0099FF)
+    { key:'exp',   name:'Exponential', color:'cexp'    }, // Pink
+    { key:'rad',   name:'Radical',     color:'crad'    }, // Yellow
+    { key:'cub',   name:'Degree 3 Polynomial', color:'ccub' }, // Green
   ];
   const KEY = Object.fromEntries(FAMILY.map(f=>[f.key,f]));
-  const COLOR_HEX = { ccyan:css('--ccyan'), cgreen:css('--cgreen'), black:css('--cblack'), cblue:css('--cblue'), cmagenta:css('--cmagenta'), corange:css('--corange'), cred:css('--cred') };
+  const COLOR_HEX = {
+    clin:css('--clin'), cquad:css('--cquad'), csin:css('--csin'), crecip:css('--crecip'),
+    cexp:css('--cexp'), crad:css('--crad'), ccub:css('--ccub')
+  };
+  const ALL_KEYS = FAMILY.map(f=>f.key);
 
   /* ---------- Utilities ---------- */
   function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
@@ -112,7 +116,7 @@
         return { fn, segs:[[-3,3]] };
       }
       case 'quad': {
-        const a = pick([-1.5,-1,-0.7,0.7,1,1.3]);
+        const a = pick([-1.3,-1,-0.7,0.7,1,1.3]);
         const h = rng(-1.0,1.0), k = rng(-0.8,1.0);
         const fn = x => a*(x-h)*(x-h)+k;
         return { fn, segs:[[-3,3]] };
@@ -162,53 +166,46 @@
     }
   }
 
-  /* ---------- Legend (single column, one per family) ---------- */
+  /* ---------- Legend (single column, updated text) ---------- */
   const legend = document.getElementById('legend');
+  const LEGEND_TEXT = {
+    lin: 'Linear — Red',
+    quad: 'Quadratic — Orange',
+    sin: 'Sinusoidal — Black',
+    recip: 'Reciprocal — Light Blue',
+    exp: 'Exponential — Pink',
+    rad: 'Radical — Yellow',
+    cub: 'Degree 3 Polynomial — Green'
+  };
   function makeLegend(){
     legend.querySelectorAll('.pill').forEach(n=>n.remove());
     FAMILY.forEach(f=>{
       const p=document.createElement('div'); p.className='pill';
       const dot=document.createElement('span'); dot.className='dot'; dot.style.background=COLOR_HEX[f.color];
-      const text=document.createElement('span'); text.textContent=f.name;
+      const text=document.createElement('span'); text.textContent = LEGEND_TEXT[f.key] || f.name;
       p.append(dot,text); legend.appendChild(p);
     });
   }
 
-  /* ---------- Solution box ---------- */
-  const ansWrap = document.getElementById('answers');
-  const ansList = document.getElementById('answerList');
-  function showSolution(item){
-    ansList.innerHTML='';
-    const li=document.createElement('li'); const hex = COLOR_HEX[KEY[item].color];
-    li.innerHTML = `<span class="dot" style="background:${hex}; display:inline-block; vertical-align:middle; margin-right:6px"></span><strong>${KEY[item].name}</strong>`;
-    ansList.appendChild(li); ansWrap.classList.add('show');
-  }
-  function hideSolution(){ ansWrap.classList.remove('show'); ansList.innerHTML=''; }
-
-  /* ---------- Helpers for always-unique card ---------- */
-  function derangeColours(shapes, colours){
-    // Assign each shape a colour with colour != shape. Simple backtracking.
-    const n = shapes.length; const used = Array(n).fill(false); const out = Array(n).fill(null);
+  /* ---------- Derangement helper ---------- */
+  function derange(shapes, colours){
+    // assign colours (array of family keys) to shapes (array of family keys) such that colour != corresponding shape
+    const n=shapes.length; const used=Array(n).fill(false); const out=Array(n).fill(null);
     function backtrack(i){
       if(i===n) return true;
       for(let j=0;j<n;j++){
-        if(used[j]) continue;
-        const c = colours[j];
-        if(c===shapes[i]) continue;
-        out[i]=c; used[j]=true;
-        if(backtrack(i+1)) return true;
-        used[j]=false; out[i]=null;
+        if(used[j]) continue; const c=colours[j]; if(c===shapes[i]) continue;
+        out[i]=c; used[j]=true; if(backtrack(i+1)) return true; used[j]=false; out[i]=null;
       }
       return false;
     }
-    if(backtrack(0)) return out; else return null;
+    return backtrack(0) ? out : null;
   }
 
   /* ---------- Card generation (graphs only, always-solvable) ---------- */
   function makeCard(){
-    const all = FAMILY.map(f=>f.key);
-    const shapes = sample(all, 4).sort();           // families drawn as graphs
-    const absent = all.filter(k=>!shapes.includes(k)); // the other 3 families
+    const shapes = sample(ALL_KEYS, 4).sort();            // families drawn as graphs
+    const absent = ALL_KEYS.filter(k=>!shapes.includes(k));
 
     let curves = []; // list of {shapeK, colorK}
     let solution = null;
@@ -217,70 +214,77 @@
       // MATCH TYPE: exactly one graph drawn in its canonical colour
       const matchK = rand(shapes);
       const others = shapes.filter(k=>k!==matchK);
-      // colours to assign: one correct, others mismatched
-      let colours = [matchK, ...others.map(s=>rand(all.filter(k=>k!==s)) )];
-      // Ensure at least the mismatches are not accidentally equal
-      let assigned = derangeColours(shapes, colours);
-      if(!assigned){ return makeCard(); }
+      const colourPool = shuffle([...ALL_KEYS]);
+      // Ensure pool contains matchK, and we take distinct colours
+      const assigned = [];
+      for(const s of shapes){
+        if(s===matchK){ assigned.push(matchK); continue; }
+        const c = colourPool.find(k=>k!==s && !assigned.includes(k) && k!==matchK ? true : (k!==s && !assigned.includes(k)));
+        if(!c){ return makeCard(); }
+        assigned.push(c);
+      }
       for(let i=0;i<shapes.length;i++) curves.push({ shapeK: shapes[i], colorK: assigned[i] });
-      // Force exactly one correct: if assigned doesn't keep match unique, rebuild
       const correctCount = curves.filter(c=>c.shapeK===c.colorK).length;
       if (correctCount!==1){ return makeCard(); }
       solution = matchK;
     } else {
-      // ABSENT TYPE: zero correctly-coloured graphs
-      // choose a unique fully-absent family whose SHAPE and COLOUR both do not appear
+      // ABSENT TYPE: zero correctly-coloured graphs; exactly one fully-absent family
       const [absPick, b, c] = shuffle([...absent]);
-      // prepare colours list: must include b and c (so they are not fully absent), exclude absPick
-      let colourCandidates = [b, c];
-      // fill to 4 with colours from shapes (allow repeats avoidance)
-      while(colourCandidates.length < 4){
-        const k = rand(shapes);
-        if(!colourCandidates.includes(k)) colourCandidates.push(k);
-      }
-      // remove any accidental absPick
-      colourCandidates = colourCandidates.filter(k=>k!==absPick);
+      // Build a colour set that excludes absPick but includes b and c to prevent them from being fully absent
+      let colourCandidates = shuffle([b,c, ...shapes]);
+      colourCandidates = Array.from(new Set(colourCandidates.filter(k=>k!==absPick))).slice(0,4);
       while(colourCandidates.length<4){
-        const k = rand(all.filter(x=>x!==absPick));
-        if(!colourCandidates.includes(k)) colourCandidates.push(k);
+        const k = rand(ALL_KEYS.filter(x=>x!==absPick && !colourCandidates.includes(x)));
+        colourCandidates.push(k);
       }
-      // Find a derangement assignment so no shape gets its own colour
-      let assigned = derangeColours(shapes, shuffle(colourCandidates));
+      let assigned = derange(shapes, colourCandidates);
       if(!assigned){ return makeCard(); }
       for(let i=0;i<shapes.length;i++) curves.push({ shapeK: shapes[i], colorK: assigned[i] });
-      // Validate constraints
       const anyCorrect = curves.some(c=>c.shapeK===c.colorK);
-      const colorsUsed = new Set(curves.map(c=>c.colorK));
       if (anyCorrect) return makeCard();
-      if (colorsUsed.has(absPick)) return makeCard();
-      // Ensure b or c colours appear so they are not fully absent
-      if (!(colorsUsed.has(b) && colorsUsed.has(c))) return makeCard();
-      solution = absPick; // unique fully-absent
+      const shapesUsed = new Set(shapes);
+      const coloursUsed = new Set(curves.map(c=>c.colorK));
+      const fullyAbsent = ALL_KEYS.filter(k=>!shapesUsed.has(k) && !coloursUsed.has(k));
+      if (fullyAbsent.length!==1 || fullyAbsent[0]!==absPick){ return makeCard(); }
+      solution = absPick;
     }
 
     curves = shuffle(curves); // randomize draw order
-
     return { curves, solution };
   }
 
-  function render(){
+  /* ---------- Solution box ---------- */
+  const ansWrap = document.getElementById('answers');
+  const ansList = document.getElementById('answerList');
+  function showSolution(key){
+    ansList.innerHTML='';
+    const fam = KEY[key];
+    const hex = COLOR_HEX[fam.color];
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="dot" style="background:${hex}; display:inline-block; vertical-align:middle; margin-right:6px"></span><strong>${fam.name}</strong>`;
+    ansList.appendChild(li);
+    ansWrap.classList.add('show');
+  }
+  function hideSolution(){ ansWrap.classList.remove('show'); ansList.innerHTML=''; }
+
+  function toast(msg){ const t=document.getElementById('toast'); if(!t) return; t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1200); }
+
+  /* ---------- App wiring ---------- */
+  function newCard(){
     const {curves, solution} = makeCard();
     renderPlot(curves);
     makeLegend();
     hideSolution();
-    // store for solution button
-    render.currentSolution = solution;
+    newCard.solution = solution;
+    toast('New card generated');
   }
 
-  /* ---------- App wiring ---------- */
-  document.getElementById('btn-new').addEventListener('click', render);
-  document.getElementById('btn-solution').addEventListener('click', ()=>{
-    if (render.currentSolution) showSolution(render.currentSolution);
-  });
+  document.getElementById('btn-new').addEventListener('click', newCard);
+  document.getElementById('btn-solution').addEventListener('click', ()=>{ if(newCard.solution) showSolution(newCard.solution); });
 
   // Boot
   makeLegend();
-  render();
+  newCard();
 })();
 </script>
 </body>
