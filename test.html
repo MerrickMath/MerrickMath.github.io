@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Camel Up – Leg Simulator (with Crazy Camels)</title>
   <style>
-    body{font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;background:#f6f8fb;color:#0d1b2a;margin:0}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f6f8fb;color:#0d1b2a;margin:0}
     .wrap{max-width:1100px;margin:24px auto;padding:0 16px}
     .card{background:#fff;border:1px solid #d8e0ef;border-radius:12px;padding:16px;margin-bottom:16px;box-shadow:0 4px 10px rgba(13,27,42,.05)}
     h1{margin:0 0 6px}
@@ -32,14 +32,13 @@
 <body>
 <div class="wrap">
   <h1>Camel Up – Leg Simulator</h1>
-  <p class="subtitle">Simulates <b>one leg</b> at a time (dice bag = five racer dice + one grey crazy-camel die). Crazy camels move <i>backwards</i>. Track spaces are <b>1-indexed</b>.</p>
+  <p class="subtitle">Simulates <b>one leg</b> (exactly 5 dice drawn from the 6). If the <b>grey</b> die is drawn, <b>one</b> crazy camel (black or white) moves backward this leg. Spaces are <b>1-indexed</b>.</p>
 
   <section class="card" id="setup">
     <h2>Setup</h2>
     <div id="board" class="track" style="--len:16"></div>
 
     <div class="row"><strong>Track length</strong><input id="trackLen" type="number" value="16" min="6" max="40" /></div>
-
     <div class="row"><strong>Simulations (legs)</strong><input id="sims" type="number" value="100" min="1" max="100000" /></div>
 
     <h3>Racing camels (start from space 1 and move forward)</h3>
@@ -62,6 +61,11 @@
       <div class="camel crazy" style="background:#f8fafc;border-color:#cbd5e1"></div> White (crazy)
     </div>
     <p class="note">At equal start spaces, stacks are auto-ordered: racers on the bottom (Blue→Purple), crazy on top (Black→White).</p>
+  </section>
+
+  <section class="card">
+    <h2>Placement stats</h2>
+    <div id="placementStats">Run to see placement percentages…</div>
   </section>
 
   <section class="card">
@@ -92,6 +96,7 @@
   const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
   const shortName=cid=>({blue:'Blue',green:'Green',red:'Red',yellow:'Yellow',purple:'Purple',black:'Black',white:'White'})[cid]||cid;
   const isCrazyId=cid=>CRAZY.some(c=>c.id===cid);
+  const shuffle=(arr)=>{ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
 
   // === Inputs ===
   function buildRows(){
@@ -169,53 +174,68 @@
 
   function locate(board,camel){ for(const[s,stack] of board.entries()){ const i=stack.indexOf(camel); if(i!==-1) return {space:s,index:i}; } return {space:-1,index:-1}; }
   function positionsFromBoard(board){ const pos=new Map(); for(const[s,stack] of board.entries()){ for(let i=0;i<stack.length;i++){ pos.set(stack[i], s); } } return pos; }
+  function placementsFromBoard(board){
+    const racers=new Set(RACERS.map(c=>c.id));
+    let maxSpace=-Infinity; for(const k of board.keys()) if(k>maxSpace) maxSpace=k;
+    const order=[]; // furthest first; within a space, top ahead
+    for(let s=maxSpace; s>=-100; s--){ if(!board.has(s)) continue; const stack=board.get(s); for(let i=stack.length-1;i>=0;i--){ const cid=stack[i]; if(racers.has(cid)) order.push(cid); } }
+    const placement=new Map(); order.forEach((cid,idx)=> placement.set(cid, idx+1));
+    return placement;
+  }
 
   // === One-leg simulation ===
   function simulateLeg(startBoard, trackLen){
     const board=new Map(); for(const[k,v] of startBoard.entries()) board.set(k, v.slice());
     let finished=false; const moves=[];
-    let bag=[...RACERS.map(c=>c.id),'grey']; // five racer dice + grey
-    while(bag.length && !finished){
-      const die=bag.splice(Math.floor(Math.random()*bag.length),1)[0];
-      const roll=1+Math.floor(Math.random()*3);
+    // Only 5 dice are rolled each leg: choose 5 at random from 6 (5 racers + grey)
+    const bag = shuffle([...RACERS.map(c=>c.id),'grey']).slice(0,5);
+    for(const die of bag){
+      if(finished) break;
       if(die==='grey'){
-        const colorFace=Math.random()<0.5?'white':'black';
-        const carrying=(cid)=>{ const {space,index}=locate(board,cid); if(space===-1) return false; const st=board.get(space)||[]; for(let i=index+1;i<st.length;i++){ if(!isCrazyId(st[i])) return true; } return false; };
-        // exceptions for which crazy moves
-        const cb=carrying('black'), cw=carrying('white');
-        let camel;
-        if(cb && !cw) camel='black'; else if(cw && !cb) camel='white';
-        else {
-          const b=locate(board,'black'), w=locate(board,'white');
-          if(b.space!==-1 && b.space===w.space && Math.abs(b.index-w.index)===1){ camel = (b.index>w.index)?'black':'white'; }
-          else camel=colorFace;
-        }
-        const {space,index}=locate(board,camel); if(space===-1) throw new Error('Crazy camel missing');
-        const movers=board.get(space).slice(index); const stayers=board.get(space).slice(0,index);
-        if(stayers.length) board.set(space,stayers); else board.delete(space);
-        const dest=Math.max(0, space - roll); const destStack=board.get(dest)||[];
-        destStack.push(...movers); board.set(dest,destStack);
-        moves.push({camel,roll});
-      } else {
+      const crazy = Math.random() < 0.5 ? 'black' : 'white';
+      const roll = 1 + Math.floor(Math.random()*3);
+      const loc = locate(board, crazy);
+      if(loc.space !== -1){
+        const movers = board.get(loc.space).slice(loc.index);
+        const stayers = board.get(loc.space).slice(0, loc.index);
+        if(stayers.length) board.set(loc.space, stayers); else board.delete(loc.space);
+        const dest = Math.max(0, loc.space - roll);
+        const destStack = board.get(dest) || [];
+        destStack.push(...movers); // land on top
+        board.set(dest, destStack);
+      }
+      moves.push({ camel: crazy, roll });
+    } else {
+        const roll = 1 + Math.floor(Math.random()*3);
         const camel=die;
-        const {space,index}=locate(board,camel); if(space===-1) throw new Error('Racer camel missing');
+        const {space,index}=locate(board,camel); if(space===-1) continue;
         const movers=board.get(space).slice(index); const stayers=board.get(space).slice(0,index);
         if(stayers.length) board.set(space,stayers); else board.delete(space);
         const dest=space+roll; const destStack=board.get(dest)||[]; destStack.push(...movers); board.set(dest,destStack);
         if(dest>=trackLen) finished=true; // if finish reached mid-leg, leg ends
-        moves.push({camel,roll});
+        moves.push({camel, roll});
       }
     }
-    return { moves, positions: positionsFromBoard(board) };
+    return { moves, positions: positionsFromBoard(board), placement: placementsFromBoard(board) };
   }
 
   function runLegSimulations(n, startBoard, trackLen){
-    const sims=[];
-    for(let i=0;i<n;i++) sims.push(simulateLeg(startBoard,trackLen));
-    return sims;
+    const legs=[];
+    const stats=new Map(); // racerId -> [1st,2nd,3rd,4th,5th]
+    RACERS.forEach(c=> stats.set(c.id,[0,0,0,0,0]));
+    for(let i=0;i<n;i++){
+      const leg=simulateLeg(startBoard,trackLen);
+      legs.push(leg);
+      // tally placements among racers 1..5
+      RACERS.forEach(c=>{
+        const p = leg.placement.get(c.id);
+        if(p>=1 && p<=5){ const arr=stats.get(c.id); arr[p-1] += 1; }
+      });
+    }
+    return { legs, stats };
   }
 
-  // === Rendering (table of leg sims) ===
+  // === Rendering ===
   function renderLegsTable(legs, trackLen){
     const container=el('#legsTable');
     if(!legs?.length){ container.innerHTML='Run to see results…'; return; }
@@ -227,13 +247,31 @@
       html+=`<tr><td class="mono">${idx+1}</td><td style="text-align:left">${order}</td>`;
       [...RACERS,...CRAZY].forEach(c=>{
         const posIdx = leg.positions.get(c.id);
-        const val = (posIdx==null)? '—' : (posIdx+1); // convert to 1-indexed for display
+        const val = (posIdx==null)? '—' : (posIdx+1);
         html+=`<td class="mono">${val}</td>`;
       });
       html+='</tr>';
     });
     html+='</tbody></table></div>';
     html+='<p class="note">Display uses 1-indexed spaces. Crazy moves are marked with a ←. A leg can end early if a racer crosses the finish.</p>';
+    container.innerHTML=html;
+  }
+
+  function renderPlacementStats(stats, total){
+    const container=el('#placementStats');
+    let html='<table><thead><tr><th>Camel</th><th>1st</th><th>2nd</th><th>3rd</th><th>4th</th><th>5th</th></tr></thead><tbody>';
+    RACERS.forEach(c=>{
+      const arr = stats.get(c.id)||[0,0,0,0,0];
+      const pct=n=> total? ((n/total*100).toFixed(1)+'%') : '0.0%';
+      html+=`<tr><td style="text-align:left">${c.name}</td>`+
+            `<td class="mono">${arr[0]} <span class="note">(${pct(arr[0])})</span></td>`+
+            `<td class="mono">${arr[1]} <span class="note">(${pct(arr[1])})</span></td>`+
+            `<td class="mono">${arr[2]} <span class="note">(${pct(arr[2])})</span></td>`+
+            `<td class="mono">${arr[3]} <span class="note">(${pct(arr[3])})</span></td>`+
+            `<td class="mono">${arr[4]} <span class="note">(${pct(arr[4])})</span></td>`+
+            `</tr>`;
+    });
+    html+='</tbody></table>';
     container.innerHTML=html;
   }
 
@@ -248,11 +286,12 @@
       const sims=clamp(parseInt(el('#sims').value||100,10),1,100000);
       const trackLen=clamp(parseInt(el('#trackLen').value||16,10),6,40);
       const startBoard=buildInitialBoard();
-      const legs=runLegSimulations(sims, startBoard, trackLen);
+      const { legs, stats } = runLegSimulations(sims, startBoard, trackLen);
+      renderPlacementStats(stats, sims);
       renderLegsTable(legs, trackLen);
     });
   }
-  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);} else { init(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
 </script>
 </body>
