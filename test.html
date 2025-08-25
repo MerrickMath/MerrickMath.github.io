@@ -1,290 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Coordinate Dash</title>
+  <title>Coordinate Transformer — Standalone</title>
   <style>
     :root {
-      --bg: #f9fafb;
+      --bg: #f7f9fc;
       --panel: #ffffff;
-      --muted: #4b5563;
-      --text: #1f2937;
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
-      --card: #f3f4f6;
-      --radius: 16px;
-      --button-bg: #3b82f6;
-      --button-bg-hover: #2563eb;
-      --button-text: #ffffff;
+      --muted: #555;
+      --accent: #0077cc;
+      --accent-2: #009966;
+      --danger: #cc3333;
+      --grid: #ccddee;
+      --axis: #000;
+      --point: #e67e22;
     }
     * { box-sizing: border-box; }
+    html, body { height: 100%; }
     body {
       margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans";
       background: var(--bg);
-      color: var(--text);
+      color: #222;
     }
-    .container { max-width: 900px; margin: 32px auto; padding: 0 16px; }
-
-    header {
-      background: var(--panel);
-      border: 1px solid #e5e7eb;
-      border-radius: var(--radius);
+    .wrap {
+      max-width: 1100px;
+      margin: 32px auto;
       padding: 16px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-    header h1 { margin: 0 0 4px 0; font-size: 26px; }
-    header p { margin: 0; color: var(--muted); }
-
-    .heading-controls {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
-      margin-top: 12px;
+      grid-template-columns: 1fr 360px;
+      gap: 18px;
     }
-    .control label { display:block; font-size: 12px; margin-bottom: 4px; color: var(--muted); }
-    .control input, .control select {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid #d1d5db;
-      background: #fff;
-      color: var(--text);
+    @media (max-width: 960px) {
+      .wrap { grid-template-columns: 1fr; }
     }
-    .control button, .primary {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: none;
-      background: var(--button-bg);
-      color: var(--button-text);
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.2s;
+    .card {
+      background: var(--panel);
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
-    .control button:hover, .primary:hover {
-      background: var(--button-bg-hover);
+    .canvas-card { padding: 12px; }
+    .controls-card { padding: 14px; }
+    h1 {
+      font-size: 20px; margin: 0 0 6px 0; font-weight: 650;
     }
-
-    .timer { border: 1px solid #000; padding: 6px 10px; border-radius: 6px; text-align: center; font-variant-numeric: tabular-nums; }
-    .timer-controls { display:flex; align-items:center; gap:8px; justify-content:flex-end; }
-
-    .panel { background: var(--panel); border: 1px solid #e5e7eb; border-radius: var(--radius); padding: 16px; margin-top: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
-    .panel h2 { margin-top: 0; }
-    .list { display: grid; gap: 12px; }
-    .card { background: var(--card); border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px; }
-    .step-head { display: flex; justify-content: space-between; align-items: center; }
-    .answer { margin-top: 8px; color: var(--button-bg); font-weight: 600; display:none; }
-    canvas { border:1px solid #ccc; background:#fff; margin-top:10px; }
-  .viz-wrap{margin-top:10px}
-    svg.viz{background:#ffffff;border:1px solid #e5e7eb;border-radius:8px;max-width:100%;height:auto}
-    .grid line{stroke:#e5e7eb;stroke-width:1}
-    .axis line{stroke:#9ca3af;stroke-width:2}
-    .point{fill:var(--button-bg);stroke:#111827;stroke-width:1.5}
+    .sub { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0 14px; }
+    .row.full { grid-template-columns: 1fr; }
+    .group { border: 1px dashed #ccc; padding: 10px; border-radius: 10px; }
+    .group h2 { font-size: 14px; margin: 0 0 10px 0; color: var(--muted); font-weight: 600; }
+    button, input, select { font: inherit; }
+    button {
+      border: 1px solid #aaa; background: #f0f4f8; color: #222; padding: 8px 10px; border-radius: 8px; cursor: pointer; transition: 120ms ease;
+    }
+    button:hover { background: #e2e8f0; }
+    .primary { border-color: #0077cc; background: #e6f2ff; }
+    .accent { border-color: #009966; background: #e6fff2; }
+    .danger { border-color: #cc3333; background: #ffe6e6; }
+    .practice-link { display: block; text-align: center; margin: 16px 0; }
+    .practice-link a { display:inline-block; padding:10px 16px; background:#0077cc; color:white; border-radius:8px; text-decoration:none; font-weight:600; }
+    .practice-link a:hover { background:#005fa3; }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .grid .wide { grid-column: span 2; }
+    .grid .full { grid-column: 1 / -1; }
+    label { font-size: 13px; color: var(--muted); }
+    .controls .grid input {
+      width: 100%; padding: 8px 10px; border: 1px solid #bbb; border-radius: 6px; background: #fff; color: #222;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 999px; background: #f1f5f9; border: 1px solid #ccc; color: #333;
+    }
+    .muted { color: var(--muted); }
+    canvas { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid #ccc; background: #fff; }
+    .topbar { display:flex; align-items:center; justify-content: space-between; margin-bottom: 8px; }
+    .coords { font-size: 14px; }
+    .coords strong { color: var(--accent-2); }
   </style>
 </head>
 <body>
-<div class="container">
-  <header>
-    <h1>Coordinate Dash</h1>
-    <p class="muted">Math with Mr. Merrick</p>
-    <div class="heading-controls">
-      <div class="control">
-        <label for="stepsInput">Number of steps</label>
-        <select id="stepsInput"><option>4</option><option selected>6</option><option>8</option><option>10</option></select>
+  <div class="wrap">
+    <div class="card canvas-card">
+      <div class="topbar">
+        <h1>Transformer Explainer</h1>
+        <div class="pill coords" id="coordDisplay">(1, 1)</div>
       </div>
-      <div class="control">
-        <label for="boundInput">Coordinate bound</label>
-        <select id="boundInput"><option>8</option><option selected>10</option><option>12</option><option>15</option></select>
-      </div>
-      <div class="control">
-        <label for="seedInput">Seed</label>
-        <input id="seedInput" type="text" placeholder="e.g. 12345 or any text" />
-      </div>
-      <div class="control">
-        <label>&nbsp;</label>
-        <button class="primary" id="generateBtn">Generate</button>
+      <div class="sub">Interact with the point on the coordinate plane. Use the controls to translate, reflect, and rotate.</div>
+      <canvas id="plane" width="720" height="720" aria-label="coordinate plane"></canvas>
+      <div class="practice-link">
+        <a href="https://merrickmath.github.io/CoordinateGame.html" target="_blank">Practice</a>
       </div>
     </div>
-    <div class="timer-controls" style="margin-top:12px;">
-      <span class="timer" id="timer">00:00</span>
-      <button class="primary" id="toggleTimerBtn">Pause</button>
-      <button class="primary" id="resetBtn">Reset</button>
+
+    <div class="card controls-card controls">
+      <h1>Controls</h1>
+      <div class="sub">Choose magnitude and apply transformations. Values accept decimals.</div>
+
+      <div class="group">
+        <h2>Settings</h2>
+        <div class="grid">
+          <label class="wide">Magnitude
+            <input id="magnitude" type="number" min="0" step="0.5" value="1">
+          </label>
+          <label>Grid bound
+            <input id="bound" type="number" min="2" max="30" step="1" value="10">
+          </label>
+          <label>Start X
+            <input id="startX" type="number" step="0.5" value="1">
+          </label>
+          <label>Start Y
+            <input id="startY" type="number" step="0.5" value="1">
+          </label>
+          <button class="full primary" id="applyStart">Reset to Start</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <h2>Translate</h2>
+        <div class="grid">
+          <button class="accent" id="up">↑ Up</button>
+          <button class="accent" id="down">↓ Down</button>
+          <button class="accent" id="left">← Left</button>
+          <button class="accent" id="right">→ Right</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <h2>Reflect</h2>
+        <div class="grid">
+          <button id="refX">Over x-axis</button>
+          <button id="refY">Over y-axis</button>
+          <label>x = a
+            <input id="refXa" type="number" step="0.5" value="0">
+          </label>
+          <button id="refXline">Reflect across x = a</button>
+          <label>y = b
+            <input id="refYb" type="number" step="0.5" value="0">
+          </label>
+          <button id="refYline">Reflect across y = b</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <h2>Rotate 90°</h2>
+        <div class="grid">
+          <label>Pivot x
+            <input id="pivotX" type="number" step="0.5" value="0">
+          </label>
+          <label>Pivot y
+            <input id="pivotY" type="number" step="0.5" value="0">
+          </label>
+          <button id="ccw">↺ CCW</button>
+          <button id="cw">↻ CW</button>
+        </div>
+      </div>
+
+      <div class="row full">
+        <button class="danger" id="reset">Reset to (1, 1)</button>
+      </div>
+
+      <div class="sub muted">Tip: click on the canvas to move the point directly.</div>
     </div>
-  </header>
+  </div>
 
-  <section class="panel">
-    <h2>Transformations</h2>
-    <div id="answers" class="list"></div>
-  </section>
+  <script>
+    const canvas = document.getElementById('plane');
+    const ctx = canvas.getContext('2d');
 
-  <!-- Visual Transformer / Explainer -->
-  <section class="panel">
-    <h2>Transformer Explainer</h2>
-    <div class="viz-wrap">
-      <svg id="tfSvg" class="viz" viewBox="0 0 440 440" width="100%" height="340" aria-label="coordinate grid">
-        <g class="grid" id="tfGrid"></g>
-        <g class="axis" id="tfAxes"></g>
-        <g id="tfLayer">
-          <circle id="tfDot" class="point" cx="0" cy="0" r="5"></circle>
-        </g>
-      </svg>
-    </div>
-    <div class="heading-controls" style="margin-top:12px; grid-template-columns: repeat(auto-fit,minmax(160px,1fr));">
-      <div class="control">
-        <label for="tfMag">Translate magnitude</label>
-        <select id="tfMag"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
-      </div>
-      <div class="control">
-        <label>&nbsp;</label>
-        <div style="display:flex;gap:8px">
-          <button class="primary" id="tfUp">Up</button>
-          <button class="primary" id="tfDown">Down</button>
-          <button class="primary" id="tfLeft">Left</button>
-          <button class="primary" id="tfRight">Right</button>
-        </div>
-      </div>
-      <div class="control">
-        <label>Reflect</label>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="primary" id="tfReflectX">Over x-axis</button>
-          <button class="primary" id="tfReflectY">Over y-axis</button>
-        </div>
-      </div>
-      <div class="control">
-        <label>Reflect over x = a / y = b</label>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <span>x =</span><input id="tfXVal" type="number" value="0" style="max-width:90px" />
-          <button class="primary" id="tfReflectXLine">Reflect</button>
-          <span style="margin-left:12px">y =</span><input id="tfYVal" type="number" value="0" style="max-width:90px" />
-          <button class="primary" id="tfReflectYLine">Reflect</button>
-        </div>
-      </div>
-      <div class="control">
-        <label>Rotate 90° about pivot</label>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <span>pivot (</span><input id="tfPivotX" type="number" value="0" style="max-width:90px" /><span>,</span>
-          <input id="tfPivotY" type="number" value="0" style="max-width:90px" /><span>)</span>
-          <button class="primary" id="tfRotCCW">↺ CCW</button>
-          <button class="primary" id="tfRotCW">↻ CW</button>
-        </div>
-      </div>
-      <div class="control">
-        <label>&nbsp;</label>
-        <button class="primary" id="tfReset">Reset to (1, 1)</button>
-      </div>
-    </div>
-  </section>
-</div>
+    // UI elements
+    const coordDisplay = document.getElementById('coordDisplay');
+    const magnitudeEl = document.getElementById('magnitude');
+    const boundEl = document.getElementById('bound');
+    const startXEl = document.getElementById('startX');
+    const startYEl = document.getElementById('startY');
 
-<script>
-function drawGrid(ctx, width, height, step=20) {
-  ctx.strokeStyle = '#eee';
-  for(let x=0;x<=width;x+=step){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,height); ctx.stroke(); }
-  for(let y=0;y<=height;y+=step){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(width,y); ctx.stroke(); }
-  ctx.strokeStyle = '#999';
-  ctx.beginPath(); ctx.moveTo(width/2,0); ctx.lineTo(width/2,height); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(0,height/2); ctx.lineTo(width,height/2); ctx.stroke();
-}
-function drawPoint(ctx,x,y,color,label){
-  ctx.fillStyle=color;
-  const cx=200+x*20, cy=200-y*20;
-  ctx.beginPath(); ctx.arc(cx,cy,5,0,Math.PI*2); ctx.fill();
-  if(label){ctx.fillText(label,cx+8,cy-8)}
-}
+    const upBtn = document.getElementById('up');
+    const downBtn = document.getElementById('down');
+    const leftBtn = document.getElementById('left');
+    const rightBtn = document.getElementById('right');
 
-function showExamples(){
-  const canvas=document.getElementById('tfCanvas');
-  const ctx=canvas.getContext('2d');
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  drawGrid(ctx,canvas.width,canvas.height);
+    const refXBtn = document.getElementById('refX');
+    const refYBtn = document.getElementById('refY');
+    const refXaEl = document.getElementById('refXa');
+    const refYbEl = document.getElementById('refYb');
+    const refXlineBtn = document.getElementById('refXline');
+    const refYlineBtn = document.getElementById('refYline');
 
-  // original point
-  drawPoint(ctx,1,1,'#3b82f6','Start (1,1)');
-  // translated up 2
-  drawPoint(ctx,1,3,'#ef4444','Translate up 2');
-  // reflected over y-axis
-  drawPoint(ctx,-1,1,'#22c55e','Reflect y-axis');
-  // rotated 90° CCW about origin
-  drawPoint(ctx,-1,1,'#f59e0b','Rotate 90°');
-}
+    const pivotXEl = document.getElementById('pivotX');
+    const pivotYEl = document.getElementById('pivotY');
+    const ccwBtn = document.getElementById('ccw');
+    const cwBtn = document.getElementById('cw');
 
-showExamples();
-// ===== Visual Transformer logic =====
-(function(){
-  const svg = document.getElementById('tfSvg');
-  if (!svg) return; // guard
-  const gridG = document.getElementById('tfGrid');
-  const axesG = document.getElementById('tfAxes');
-  const dot = document.getElementById('tfDot');
+    const resetBtn = document.getElementById('reset');
+    const applyStartBtn = document.getElementById('applyStart');
 
-  const SIZE = 440, M = 20, MIN = -10, MAX = 10, STEP = 1;
-  const SCALE = (SIZE - 2*M) / (MAX - MIN);
-  const toX = x => M + (x - MIN) * SCALE;
-  const toY = y => SIZE - M - (y - MIN) * SCALE;
+    // World state
+    let bound = 10; // half-range on each axis
+    let scale = canvas.width / (bound * 2);
+    let point = { x: 1, y: 1 };
 
-  // draw grid
-  for (let v = MIN; v <= MAX; v += STEP) {
-    const gx = document.createElementNS('http://www.w3.org/2000/svg','line');
-    gx.setAttribute('x1', toX(v)); gx.setAttribute('y1', toY(MIN));
-    gx.setAttribute('x2', toX(v)); gx.setAttribute('y2', toY(MAX));
-    gridG.appendChild(gx);
-    const gy = document.createElementNS('http://www.w3.org/2000/svg','line');
-    gy.setAttribute('x1', toX(MIN)); gy.setAttribute('y1', toY(v));
-    gy.setAttribute('x2', toX(MAX)); gy.setAttribute('y2', toY(v));
-    gridG.appendChild(gy);
-  }
-  // axes at 0
-  const ax = document.createElementNS('http://www.w3.org/2000/svg','line');
-  ax.setAttribute('x1', toX(MIN)); ax.setAttribute('y1', toY(0));
-  ax.setAttribute('x2', toX(MAX)); ax.setAttribute('y2', toY(0));
-  axesG.appendChild(ax);
-  const ay = document.createElementNS('http://www.w3.org/2000/svg','line');
-  ay.setAttribute('x1', toX(0)); ay.setAttribute('y1', toY(MIN));
-  ay.setAttribute('x2', toX(0)); ay.setAttribute('y2', toY(MAX));
-  axesG.appendChild(ay);
+    // Helpers
+    function toScreen({x, y}) {
+      return {
+        sx: Math.round(canvas.width / 2 + x * scale),
+        sy: Math.round(canvas.height / 2 - y * scale)
+      };
+    }
+    function fromScreen(sx, sy) {
+      return {
+        x: (sx - canvas.width / 2) / scale,
+        y: (canvas.height / 2 - sy) / scale
+      };
+    }
+    function round2(n) { return Math.round(n * 100) / 100; }
 
-  // state & controls
-  let px = 1, py = 1;
-  const tfPoint = () => { dot.setAttribute('cx', toX(px)); dot.setAttribute('cy', toY(py)); };
-  tfPoint();
+    function drawGrid() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const tfMag = document.getElementById('tfMag');
-  const tfUp = document.getElementById('tfUp');
-  const tfDown = document.getElementById('tfDown');
-  const tfLeft = document.getElementById('tfLeft');
-  const tfRight = document.getElementById('tfRight');
-  const tfReflectX = document.getElementById('tfReflectX');
-  const tfReflectY = document.getElementById('tfReflectY');
-  const tfXVal = document.getElementById('tfXVal');
-  const tfYVal = document.getElementById('tfYVal');
-  const tfReflectXLine = document.getElementById('tfReflectXLine');
-  const tfReflectYLine = document.getElementById('tfReflectYLine');
-  const tfPivotX = document.getElementById('tfPivotX');
-  const tfPivotY = document.getElementById('tfPivotY');
-  const tfRotCCW = document.getElementById('tfRotCCW');
-  const tfRotCW = document.getElementById('tfRotCW');
-  const tfReset = document.getElementById('tfReset');
+      // background
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  function mag() { const m = parseInt(tfMag?.value,10); return Number.isFinite(m) ? Math.max(1, Math.min(10,m)) : 1; }
+      ctx.save();
+      ctx.translate(canvas.width/2, canvas.height/2);
 
-  tfUp?.addEventListener('click', ()=>{ py += mag(); tfPoint(); });
-  tfDown?.addEventListener('click', ()=>{ py -= mag(); tfPoint(); });
-  tfLeft?.addEventListener('click', ()=>{ px -= mag(); tfPoint(); });
-  tfRight?.addEventListener('click', ()=>{ px += mag(); tfPoint(); });
+      // grid lines
+      ctx.lineWidth = 1;
+      for (let i = -bound; i <= bound; i++) {
+        ctx.strokeStyle = '#ccddee';
+        // vertical
+        ctx.beginPath();
+        ctx.moveTo(i * scale, -bound * scale);
+        ctx.lineTo(i * scale, bound * scale);
+        ctx.stroke();
+        // horizontal
+        ctx.beginPath();
+        ctx.moveTo(-bound * scale, i * scale);
+        ctx.lineTo(bound * scale, i * scale);
+        ctx.stroke();
+      }
 
-  tfReflectX?.addEventListener('click', ()=>{ py = -py; tfPoint(); });
-  tfReflectY?.addEventListener('click', ()=>{ px = -px; tfPoint(); });
+      // axes
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2;
+      // x-axis
+      ctx.beginPath(); ctx.moveTo(-bound*scale, 0); ctx.lineTo(bound*scale, 0); ctx.stroke();
+      // y-axis
+      ctx.beginPath(); ctx.moveTo(0, -bound*scale); ctx.lineTo(0, bound*scale); ctx.stroke();
 
-  tfReflectXLine?.addEventListener('click', ()=>{ const a = parseFloat(tfXVal?.value)||0; px = 2*a - px; tfPoint(); });
-  tfReflectYLine?.addEventListener('click', ()=>{ const b = parseFloat(tfYVal?.value)||0; py = 2*b - py; tfPoint(); });
+      // ticks + labels
+      ctx.fillStyle = '#000';
+      ctx.font = '12px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      for (let i = -bound; i <= bound; i++) {
+        if (i === 0) continue;
+        ctx.beginPath(); ctx.moveTo(i*scale, -4); ctx.lineTo(i*scale, 4); ctx.stroke();
+        ctx.fillText(i, i*scale, 6);
+      }
+      ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+      for (let i = -bound; i <= bound; i++) {
+        if (i === 0) continue;
+        ctx.beginPath(); ctx.moveTo(-4, i*scale); ctx.lineTo(4, i*scale); ctx.stroke();
+        ctx.fillText(i, -8, i*scale);
+      }
 
-  tfRotCCW?.addEventListener('click', ()=>{ const x0 = parseFloat(tfPivotX?.value)||0; const y0 = parseFloat(tfPivotY?.value)||0; const dx = px - x0, dy = py - y0; px = x0 - dy; py = y0 + dx; tfPoint(); });
-  tfRotCW?.addEventListener('click', ()=>{ const x0 = parseFloat(tfPivotX?.value)||0; const y0 = parseFloat(tfPivotY?.value)||0; const dx = px - x0, dy = py - y0; px = x0 + dy; py = y0 - dx; tfPoint(); });
+      ctx.restore();
 
-  tfReset?.addEventListener('click', ()=>{ px = 1; py = 1; tfPoint(); });
-})();
-</script>
+      // point
+      const { sx, sy } = toScreen(point);
+      ctx.fillStyle = '#e67e22';
+      ctx.beginPath(); ctx.arc(sx, sy, 7, 0, Math.PI * 2); ctx.fill();
+
+      // point label
+      ctx.fillStyle = '#000';
+      ctx.font = '14px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+      ctx.fillText(`(${round2(point.x)}, ${round2(point.y)})`, sx + 12, sy - 12);
+    }
+
+    function setBound(val) {
+      bound = Math.max(2, Math.min(30, Number(val) || 10));
+      scale = canvas.width / (bound * 2);
+      drawGrid();
+    }
+
+    function updateDisplay() {
+      coordDisplay.textContent = `(${round2(point.x)}, ${round2(point.y)})`;
+      drawGrid();
+    }
+
+    function translate(dx, dy) { point.x += dx; point.y += dy; updateDisplay(); }
+    function reflectOverXAxis() { point.y = -point.y; updateDisplay(); }
+    function reflectOverYAxis() { point.x = -point.x; updateDisplay(); }
+    function reflectOverX(a) { point.y = 2*a - point.y; updateDisplay(); }
+    function reflectOverY(b) { point.x = 2*b - point.x; updateDisplay(); }
+
+    function rotate90(pivotX, pivotY, dir = 'ccw') {
+      const rx = point.x - pivotX;
+      const ry = point.y - pivotY;
+      let nx, ny;
+      if (dir === 'ccw') { nx = -ry; ny = rx; }
+      else { nx = ry; ny = -rx; }
+      point.x = pivotX + nx;
+      point.y = pivotY + ny;
+      updateDisplay();
+    }
+
+    upBtn.onclick = () => translate(0, Number(magnitudeEl.value)||0);
+    downBtn.onclick = () => translate(0, -(Number(magnitudeEl.value)||0));
+    leftBtn.onclick = () => translate(-(Number(magnitudeEl.value)||0), 0);
+    rightBtn.onclick = () => translate((Number(magnitudeEl.value)||0), 0);
+
+    refXBtn.onclick = () => reflectOverXAxis();
+    refYBtn.onclick = () => reflectOverYAxis();
+    refXlineBtn.onclick = () => reflectOverX(Number(refXaEl.value)||0);
+    refYlineBtn.onclick = () => reflectOverY(Number(refYbEl.value)||0);
+
+    ccwBtn.onclick = () => rotate90(Number(pivotXEl.value)||0, Number(pivotYEl.value)||0, 'ccw');
+    cwBtn.onclick = () => rotate90(Number(pivotXEl.value)||0, Number(pivotYEl.value)||0, 'cw');
+
+    resetBtn.onclick = () => { point = { x: 1, y: 1 }; updateDisplay(); };
+    applyStartBtn.onclick = () => { point = { x: Number(startXEl.value)||0, y: Number(startYEl.value)||0 }; updateDisplay(); };
+
+    boundEl.oninput = (e) => setBound(e.target.value);
+
+    canvas.addEventListener('click', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const sx = e.clientX - rect.left;
+      const sy = e.clientY - rect.top;
+      point = fromScreen(sx, sy);
+      updateDisplay();
+    });
+
+    setBound(bound);
+    updateDisplay();
+  </script>
 </body>
 </html>
