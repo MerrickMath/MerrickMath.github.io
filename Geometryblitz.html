@@ -50,37 +50,7 @@
 
     .label { position:absolute; bottom:6px; left:50%; transform:translateX(-50%); font-size:12px; padding:2px 8px; border-radius:999px; background:#e5e7eb; color:var(--text); border:1px solid rgba(0,0,0,.08); z-index:2; pointer-events:none; }
     .hidden { display:none; }
-      /* Responsive sizing */
-    .grid { display:grid; grid-template-columns: repeat(2, minmax(140px, 1fr)); gap:18px; }
-    .slot { height: clamp(140px, 36vw, 230px); }
-    svg { width: 88%; height: 88%; }
-
-    @media (max-width: 900px) {
-      .page { max-width: 100%; margin: 12px auto 72px; padding: 0 12px; }
-      .layout { grid-template-columns: 1fr; }
-      .legend { order: -1; }
-      .grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); gap:14px; }
-      .slot { height: clamp(130px, 40vw, 220px); }
-      .controls { flex-wrap: wrap; }
-      .topbar { align-items: start; }
-    }
-
-    @media (max-width: 560px) {
-      h1 { font-size: clamp(18px, 6vw, 24px); }
-      .grid { grid-template-columns: 1fr; }
-      .slot { height: clamp(160px, 58vw, 260px); }
-      .row { grid-template-columns: 1fr; }
-      .pill { font-size: 14px; }
-      .controls { gap:8px; }
-      button { width: 100%; }
-    }
-
-    /* Definitions section */
-    .defs { margin-top: 18px; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 14px; padding: 14px 16px; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
-    .defs h2 { margin: 0 0 10px 0; font-size: 18px; }
-    .defs h3 { margin: 16px 0 6px 0; font-size: 15px; color: var(--muted); }
-    .defs p, .defs li { font-size: 14px; line-height: 1.45; }
-    .defs ul { margin: 6px 0 10px 18px; }
+  .defs { margin: 16px auto; max-width: 980px; }
   </style>
 </head>
 <body>
@@ -106,33 +76,8 @@
         <div id="status" class="status" aria-live="polite"></div>
       </section>
     </div>
-
-    <!-- Mathematical definitions (for teaching/reference) -->
-    <section class="defs" aria-label="Geometry definitions">
-      <h2>Geometry definitions</h2>
-
-      <h3>Polygons used in this game</h3>
-      <ul>
-        <li><strong>Triangle</strong>: a polygon with 3 sides and 3 angles.</li>
-        <li><strong>Pentagon</strong>: a polygon with 5 sides.</li>
-        <li><strong>Hexagon</strong>: a polygon with 6 sides.</li>
-      </ul>
-
-      <h3>Quadrilaterals (all 4‑sided polygons)</h3>
-      <p><em>Quadrilateral</em> means any polygon with four sides. The common families below may overlap (for example, every square is also a rectangle, a rhombus, and a parallelogram). We use the <em>inclusive</em> definition of trapezoid: at least one pair of parallel sides.</p>
-      <ul>
-        <li><strong>Kite</strong>: a quadrilateral with two pairs of <em>adjacent</em> equal sides. In this game our kites use two different pair-lengths, so they are not rhombi.</li>
-        <li><strong>Trapezoid</strong>: a quadrilateral with <em>at least one</em> pair of parallel sides (the bases).</li>
-        <li><strong>Parallelogram</strong>: a quadrilateral with <em>two</em> pairs of parallel sides. Opposite sides are equal in length and opposite angles are equal.</li>
-        <li><strong>Rectangle</strong>: a parallelogram with four right angles.</li>
-        <li><strong>Rhombus</strong>: a parallelogram with all four sides equal in length. (Note: we purposely avoid rhombi in this game so a kite cannot also be a parallelogram.)</li>
-        <li><strong>Square</strong>: a rectangle and a rhombus (four equal sides and four right angles).</li>
-      </ul>
-
-      <p><strong>Game note:</strong> This game never generates a rhombus - kites will have two pairs of adjacent equal sides of different lengths, and parallelograms have unequal adjacent side lengths. Why is this necessary?</p>
-    </section>
   </div>
-  <div class="brand">Math with Mr. Merrick</div>
+  
 
   <script>
     // ===== Data =====
@@ -369,5 +314,45 @@
     makeLegend();
     newCard();
   </script>
+  <section class="card defs" aria-label="Game instructions">
+    <h2>How to play Geometry Blitz</h2>
+    <ol>
+      <li>Each card shows four colored shapes.</li>
+      <li>Use the legend on the left to see each shape’s “home color.”</li>
+      <li>If exactly one shape appears in its home color, that shape is the answer.</li>
+      <li>If no shape is in its home color, find the one shape whose shape and home color are both absent from the card — that shape is the answer.</li>
+      <li>If neither rule applies, then the card has no solution.</li>
+      <li>Press <em>Show solution</em> to reveal the answer and labels; press <em>New card</em> to play again.</li>
+      <li>You can also press keyboard keys: <strong>N</strong> for new card, <strong>S</strong> to show solution.</li>
+    </ol>
+  </section>
+
+  <section class="card defs" aria-label="Geometry definitions">
+    <h2>Geometry definitions</h2>
+
+    <h3>Polygons used in this game</h3>
+    <ul>
+      <li><strong>Triangle</strong>: a polygon with 3 sides and 3 angles.</li>
+      <li><strong>Pentagon</strong>: a polygon with 5 sides.</li>
+      <li><strong>Hexagon</strong>: a polygon with 6 sides.</li>
+    </ul>
+
+    <h3>Quadrilaterals (all 4‑sided polygons)</h3>
+    <p><em>Quadrilateral</em> means any polygon with four sides. The common families below may overlap (for example, every square is also a rectangle, a rhombus, and a parallelogram). We use the <em>exclusive</em> definition of trapezoid: exactly one pair of parallel sides.</p>
+    <ul>
+      <li><strong>Kite</strong>: a quadrilateral with two pairs of <em>adjacent</em> equal sides. In this game our kites use two different pair-lengths, so they are not rhombi.</li>
+      <li><strong>Trapezoid</strong>: a quadrilateral with <em>exactly one</em> pair of parallel sides (the bases).</li>
+      <li><strong>Parallelogram</strong>: a quadrilateral with <em>two</em> pairs of parallel sides. Opposite sides are equal in length and opposite angles are equal.</li>
+      <li><strong>Rectangle</strong>: a parallelogram with four right angles.</li>
+      <li><strong>Rhombus</strong>: a parallelogram with all four sides equal in length. (Note: we purposely avoid rhombi in this game so a kite cannot also be a parallelogram.)</li>
+      <li><strong>Square</strong>: a rectangle and a rhombus (four equal sides and four right angles).</li>
+    </ul>
+
+    <p><strong>Game question:</strong> This game never generates a rhombus—kites have two pairs of adjacent equal sides of different lengths, and parallelograms have unequal adjacent side lengths. <em>Why is this necessary?</em></p>
+  </section>
+
+  <footer class="card defs" style="text-align:center; font-size:13px; color:#6b7280; margin:16px auto; max-width:980px;">
+    Math with Mr. Merrick
+  </footer>
 </body>
 </html>
