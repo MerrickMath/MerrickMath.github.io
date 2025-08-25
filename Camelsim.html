@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Camel Up — Interactive Leg Simulator</title>
+  <title>Camel Racing — Interactive Leg Simulator</title>
   <style>
     :root{--bg:#f6f8fb;--ink:#0d1b2a;--muted:#5b6b88;--card:#fff;--line:#d8e0ef;--accent1:#93c5fd;--accent2:#60a5fa}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);margin:0}
@@ -38,7 +38,7 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>Camel Up — Interactive Leg Simulator</h1>
+  <h1>Camel Racing — Interactive Leg Simulator</h1>
   <p class="subtitle">Math with Mr. Merrick</p>
   <p class="subtitle">Enter a die result (e.g., <i>Red moves 2</i>), then I simulate the <b>remainder of the leg</b> (exactly 5 dice total this leg). If the <b>grey</b> die is chosen, <b>one</b> crazy camel (black or white) moves backward 1–3.</p>
 
@@ -91,11 +91,16 @@
       </label>
       <button id="applyBtn">Apply move</button>
       <button id="rollBtn" title="Pick a random remaining die and roll 1–3">Roll a die</button>
+      <button id="nextLegBtn" title="Copy current board into Setup and reset dice">Start next leg</button>
       <button id="resetBtn" title="Reset the leg to setup state">Reset</button>
       <span class="note" id="status" aria-live="polite"></span>
+
     </div>
 
     <div style="margin-top:10px" id="usedDiceLine" class="note">No inputs yet.</div>
+    <h3 style="margin-top:12px">Board view</h3>
+    <div id="liveBoard" class="track" style="--len:16"></div>
+
   </section>
 
   <section class="card">
@@ -199,9 +204,12 @@
     return board;
   }
 
-  function drawBoard(board){
+  function drawBoard(board, target = '#board'){
     const trackLen=num('#trackLen',16);
-    const boardEl=el('#board'); boardEl.style.setProperty('--len',String(trackLen)); boardEl.innerHTML='';
+    const boardEl=el(target);
+    if(!boardEl) return;
+    boardEl.style.setProperty('--len',String(trackLen));
+    boardEl.innerHTML='';
     for(let s=0;s<trackLen;s++){
       const cell=make('div',{className:'space'});
       const stack=board.get(s)||[];
@@ -214,6 +222,7 @@
       boardEl.appendChild(cell);
     }
   }
+
 
   function locate(board,camel){ for(const[s,stack] of board.entries()){ const i=stack.indexOf(camel); if(i!==-1) return {space:s,index:i}; } return {space:-1,index:-1}; }
   function positionsFromBoard(board){ const pos=new Map(); for(const[s,stack] of board.entries()){ for(let i=0;i<stack.length;i++){ pos.set(stack[i], s); } } return pos; }
@@ -235,7 +244,8 @@
     legBoard = buildInitialBoard();
     usedDice = [];
     finished = false;
-    drawBoard(legBoard);
+    drawBoard(legBoard);                 // setup board
+    drawBoard(legBoard, '#liveBoard');   // live board in Enter die results
     updateUsedDiceLine();
     const s=el('#status'); if(s) s.textContent = '';
     // Immediately compute results before any input
@@ -278,7 +288,8 @@
     }
     usedDice.push(die);
     updateUsedDiceLine();
-    drawBoard(legBoard);
+    drawBoard(legBoard);                // setup board
+    drawBoard(legBoard, '#liveBoard');  // live board
     el('#status').textContent = '';
     return true;
   }
@@ -404,15 +415,50 @@
     el('#tests').innerText = out.join('\n');
   }
 
+
+  function commitBoardToSetup(){
+    // Copy current board positions into the Setup inputs and reset the leg
+    const trackLen = clamp(num('#trackLen',16),6,40);
+    const pos = positionsFromBoard(legBoard);
+  
+    // Racers: board is 0-indexed -> Setup wants 1-indexed start spaces
+    RACERS.forEach(c=>{
+      const p = pos.get(c.id);
+      if(p != null){
+        const inp = el(`#pos-${c.id}`);
+        if(inp) inp.value = String(p + 1);
+      }
+    });
+  
+    // Crazy: Setup expects "spaces from finish" (1 = last space)
+    CRAZY.forEach(c=>{
+      const p = pos.get(c.id);
+      if(p != null){
+        const fromFinish = Math.max(1, trackLen - p);
+        const inp = el(`#pos-${c.id}`);
+        if(inp) inp.value = String(fromFinish);
+      }
+    });
+  
+    // Rebuild leg from these new inputs
+    resetLeg();
+    const s = el('#status');
+    if(s) s.innerHTML = `<b>Starting next leg</b> from current positions.`;
+  }
+
+  
   // === Init ===
   function updatePreview(){
     const newBoard = buildInitialBoard();
     if(!usedDice || usedDice.length===0){
+      // Before any inputs, keep live state in sync with setup
       legBoard = newBoard;
       runSimulationsForCurrentState();
     }
-    drawBoard(newBoard);
+    drawBoard(newBoard, '#board');      // Setup board
+    drawBoard(legBoard, '#liveBoard');  // Live board
   }
+
   function init(){
     buildRows();
     el('#setup').addEventListener('input', updatePreview);
@@ -441,6 +487,8 @@
     
     el('#resetBtn').addEventListener('click', resetLeg);
     const btn=el('#runTestsBtn'); if(btn) btn.addEventListener('click', runTests);
+
+    el('#nextLegBtn').addEventListener('click', commitBoardToSetup);
 
     // Start fresh
     resetLeg();
