@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coordinate Transformer</title>
+  <style>
+    :root {
+      --bg: #f7f9fc;
+      --panel: #ffffff;
+      --muted: #555;
+      --accent: #0077cc;
+      --accent-2: #009966;
+      --danger: #cc3333;
+      --grid: #ccddee;
+      --axis: #000;
+      --point: #0077cc;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans";
+      background: var(--bg);
+      color: #222;
+    }
+    .wrap { max-width: 1100px; margin: 32px auto; padding: 16px; display: grid; grid-template-columns: 1fr 360px; gap: 18px; }
+    @media (max-width: 960px) { .wrap { grid-template-columns: 1fr; } }
+    .card { background: var(--panel); border: 1px solid #ddd; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .canvas-card { padding: 12px; }
+    .controls-card { padding: 14px; }
+    h1 { font-size: 20px; margin: 0 0 6px 0; font-weight: 650; }
+    .sub { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0 14px; }
+    .row.full { grid-template-columns: 1fr; }
+    .group { border: 1px dashed #ccc; padding: 10px; border-radius: 10px; }
+    .group h2 { font-size: 14px; margin: 0 0 10px 0; color: var(--muted); font-weight: 600; }
+    button, input, select { font: inherit; }
+    button { border: 1px solid #aaa; background: #f0f4f8; color: #222; padding: 8px 10px; border-radius: 8px; cursor: pointer; transition: 120ms ease; }
+    button:hover { background: #e2e8f0; }
+    .primary { border-color: #0077cc; background: #e6f2ff; }
+    .accent { border-color: #009966; background: #e6fff2; }
+    .danger { border-color: #cc3333; background: #ffe6e6; }
+    .practice-link { display: block; text-align: center; margin: 16px 0; }
+    .practice-link a { display:inline-block; padding:10px 16px; background:#0077cc; color:white; border-radius:8px; text-decoration:none; font-weight:600; }
+    .practice-link a:hover { background:#005fa3; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid .wide { grid-column: span 2; }
+    .grid .full { grid-column: 1 / -1; }
+    label { font-size: 13px; color: var(--muted); }
+    .controls .grid input,
+    .controls input {width: 100%; padding: 8px 10px; border: 1px solid #bbb; border-radius: 6px; background: #fff; color: #222;}
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 999px; background: #f1f5f9; border: 1px solid #ccc; color: #333; }
+    .muted { color: var(--muted); }
+    canvas { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid #ccc; background: #fff; }
+    .topbar { display:flex; align-items:center; justify-content: space-between; margin-bottom: 8px; }
+    .coords { font-size: 14px; }
+    .coords strong { color: var(--accent-2); }
+    .footer { text-align:center; margin-top:20px; font-size:14px; }
+    .footer a { color:#0077cc; font-weight:600; text-decoration:none; }
+    .footer a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card canvas-card">
+      <div class="topbar">
+        <h1>Coordinate Transformer</h1>
+        <div class="pill coords" id="coordDisplay">(1, 1)</div>
+      </div>
+      <div class="sub">Interact with the point on the coordinate plane. Use the controls to translate, reflect, and rotate.</div>
+      <canvas id="plane" width="720" height="720" aria-label="coordinate plane"></canvas>
+      <div class="practice-link">
+        <a href="https://merrickmath.github.io/CoordinateGame.html" target="_blank">Go to Practice</a>
+      </div>
+      <div class="footer">
+        <a href="https://merrickmath.github.io" target="_blank">Math with Mr. Merrick</a>
+      </div>
+    </div>
+
+    <div class="card controls-card controls">
+      <h1>Controls</h1>
+      <div class="sub">Choose magnitude and apply transformations. Values accept decimals.</div>
+
+      <div class="group">
+        <h2>Settings</h2>
+        <div class="grid">
+          <label>Magnitude
+            <input id="magnitude" type="number" min="0" step="0.5" value="1">
+          </label>
+          <label>Grid bound
+            <input id="bound" type="number" min="2" max="30" step="1" value="10">
+          </label>
+          <label>Start X
+            <input id="startX" type="number" step="0.5" value="1">
+          </label>
+          <label>Start Y
+            <input id="startY" type="number" step="0.5" value="1">
+          </label>
+          <button class="full primary" id="applyStart">Reset to Start</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <h2>Translate</h2>
+        <div class="grid">
+          <label class="full">Distance
+            <input id="step" type="number" min="0" step="0.5" value="1">
+          </label>
+          <button class="accent" id="up">↑ Up</button>
+          <button class="accent" id="down">↓ Down</button>
+          <button class="accent" id="left">← Left</button>
+          <button class="accent" id="right">→ Right</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <h2>Reflect</h2>
+        <div class="reflect">
+          <div class="row">
+            <button id="refX">Over x-axis</button>
+            <button id="refY">Over y-axis</button>
+          </div>
+          <div class="row">
+            <label>x = a
+              <input id="refXa" type="number" step="0.5" value="0">
+            </label>
+            <button id="refXline">Across x = a</button>
+          </div>
+          <div class="row">
+            <label>y = b
+              <input id="refYb" type="number" step="0.5" value="0">
+            </label>
+            <button id="refYline">Across y = b</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
+        <h2>Rotate 90°</h2>
+        <div class="grid">
+          <label>Pivot x
+            <input id="pivotX" type="number" step="0.5" value="0">
+          </label>
+          <label>Pivot y
+            <input id="pivotY" type="number" step="0.5" value="0">
+          </label>
+          <button id="ccw">↺ CCW</button>
+          <button id="cw">↻ CW</button>
+        </div>
+      </div>
+
+      <div class="row full">
+        <button class="danger" id="reset">Reset to (1, 1)</button>
+      </div>
+
+      <div class="sub muted">Tip: click on the canvas to move the point directly.</div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('plane');
+    const ctx = canvas.getContext('2d');
+
+    const coordDisplay = document.getElementById('coordDisplay');
+    const magnitudeEl = document.getElementById('magnitude');
+    const stepEl = document.getElementById('step');
+    const boundEl = document.getElementById('bound');
+    const startXEl = document.getElementById('startX');
+    const startYEl = document.getElementById('startY');
+
+    const upBtn = document.getElementById('up');
+    const downBtn = document.getElementById('down');
+    const leftBtn = document.getElementById('left');
+    const rightBtn = document.getElementById('right');
+
+    const refXBtn = document.getElementById('refX');
+    const refYBtn = document.getElementById('refY');
+    const refXaEl = document.getElementById('refXa');
+    const refYbEl = document.getElementById('refYb');
+    const refXlineBtn = document.getElementById('refXline');
+    const refYlineBtn = document.getElementById('refYline');
+
+    const pivotXEl = document.getElementById('pivotX');
+    const pivotYEl = document.getElementById('pivotY');
+    const ccwBtn = document.getElementById('ccw');
+    const cwBtn = document.getElementById('cw');
+
+    const resetBtn = document.getElementById('reset');
+    const applyStartBtn = document.getElementById('applyStart');
+
+    let bound = 10;
+    let scale = canvas.width / (bound * 2);
+    let point = { x: 1, y: 1 };
+
+    function toScreen({x, y}) { return { sx: Math.round(canvas.width / 2 + x * scale), sy: Math.round(canvas.height / 2 - y * scale) }; }
+    function fromScreen(sx, sy) { return { x: (sx - canvas.width / 2) / scale, y: (canvas.height / 2 - sy) / scale }; }
+    function round2(n) { return Math.round(n * 100) / 100; }
+
+    function drawGrid() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.translate(canvas.width/2, canvas.height/2);
+      ctx.lineWidth = 1;
+      for (let i = -bound; i <= bound; i++) {
+        ctx.strokeStyle = '#ccddee';
+        ctx.beginPath(); ctx.moveTo(i * scale, -bound * scale); ctx.lineTo(i * scale, bound * scale); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(-bound * scale, i * scale); ctx.lineTo(bound * scale, i * scale); ctx.stroke();
+      }
+      ctx.strokeStyle = '#000'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(-bound*scale, 0); ctx.lineTo(bound*scale, 0); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, -bound*scale); ctx.lineTo(0, bound*scale); ctx.stroke();
+      ctx.fillStyle = '#000'; ctx.font = '12px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      for (let i = -bound; i <= bound; i++) { if (i===0) continue; ctx.beginPath(); ctx.moveTo(i*scale, -4); ctx.lineTo(i*scale, 4); ctx.stroke(); ctx.fillText(i, i*scale, 6); }
+      ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+      for (let i = -bound; i <= bound; i++) { if (i===0) continue; ctx.beginPath(); ctx.moveTo(-4, i*scale); ctx.lineTo(4, i*scale); ctx.stroke(); ctx.fillText(i, -8, i*scale); }
+      ctx.restore();
+      const { sx, sy } = toScreen(point);
+      ctx.fillStyle = '#0077cc';
+      ctx.beginPath(); ctx.arc(sx, sy, 7, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = '#000'; ctx.font = '14px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+      ctx.fillText(`(${round2(point.x)}, ${round2(point.y)})`, sx+12, sy-12);
+    }
+
+    function setBound(val) { bound = Math.max(2, Math.min(30, Number(val)||10)); scale = canvas.width/(bound*2); drawGrid(); }
+    function updateDisplay() { coordDisplay.textContent = `(${round2(point.x)}, ${round2(point.y)})`; drawGrid(); }
+
+    function translate(dx, dy) { point.x += dx; point.y += dy; updateDisplay(); }
+    function reflectOverXAxis() { point.y = -point.y; updateDisplay(); }
+    function reflectOverYAxis() { point.x = -point.x; updateDisplay(); }
+    function reflectOverX(a) { point.y = 2*a - point.y; updateDisplay(); }
+    function reflectOverY(b) { point.x = 2*b - point.x; updateDisplay(); }
+    function rotate90(pivotX, pivotY, dir='ccw') {
+      const rx = point.x - pivotX; const ry = point.y - pivotY;
+      let nx, ny; if(dir==='ccw'){ nx=-ry; ny=rx; } else { nx=ry; ny=-rx; }
+      point.x = pivotX+nx; point.y = pivotY+ny; updateDisplay();
+    }
+
+    function getStep() { return Number(stepEl.value)||Number(magnitudeEl.value)||0; }
+
+    upBtn.onclick = () => { const d = getStep(); translate(0, d); };
+    downBtn.onclick = () => { const d = getStep(); translate(0, -d); };
+    leftBtn.onclick = () => { const d = getStep(); translate(-d, 0); };
+    rightBtn.onclick = () => { const d = getStep(); translate(d, 0); };
+
+    refXBtn.onclick = () => reflectOverXAxis();
+    refYBtn.onclick = () => reflectOverYAxis();
+    refXlineBtn.onclick = () => reflectOverX(Number(refXaEl.value)||0);
+    refYlineBtn.onclick = () => reflectOverY(Number(refYbEl.value)||0);
+
+    ccwBtn.onclick = () => rotate90(Number(pivotXEl.value)||0, Number(pivotYEl.value)||0, 'ccw');
+    cwBtn.onclick = () => rotate90(Number(pivotXEl.value)||0, Number(pivotYEl.value)||0, 'cw');
+
+    resetBtn.onclick = () => { point = { x: 1, y: 1 }; updateDisplay(); };
+    applyStartBtn.onclick = () => { point = { x: Number(startXEl.value)||0, y: Number(startYEl.value)||0 }; updateDisplay(); };
+
+    boundEl.oninput = (e) => setBound(e.target.value);
+    canvas.addEventListener('click', (e) => { const rect=canvas.getBoundingClientRect(); const sx=e.clientX-rect.left; const sy=e.clientY-rect.top; point=fromScreen(sx,sy); updateDisplay(); });
+
+    setBound(bound);
+    updateDisplay();
+  </script>
+</body>
+</html>
