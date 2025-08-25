@@ -191,16 +191,23 @@
       groups.get(space).push({camel:c.id,crazy:true});
     });
 
-    // auto stack: racers bottom (RACERS order), then crazy (CRAZY order)
-    const board=new Map();
-    for(const [space,arr] of groups.entries()){
-      arr.sort((a,b)=>{
-        const ag=a.crazy?1:0, bg=b.crazy?1:0; if(ag!==bg) return ag-bg;
-        const idx=x=> x.crazy ? CRAZY.findIndex(y=>y.id===x.camel) : RACERS.findIndex(y=>y.id===x.camel);
-        return idx(a)-idx(b);
-      });
-      board.set(space, arr.map(x=>x.camel)); // bottom -> top
-    }
+    // auto stack: if we have a saved priority, use it to preserve orientation;
+  // otherwise fall back to default rule (racers bottom, crazy on top; Blue→Purple; Black→White)
+  const board=new Map();
+  for (const [space, arr] of groups.entries()) {
+    arr.sort((a,b)=>{
+      if (STACK_PRI && STACK_PRI instanceof Map) {
+        const ra = STACK_PRI.has(a.camel) ? STACK_PRI.get(a.camel) : Infinity;
+        const rb = STACK_PRI.has(b.camel) ? STACK_PRI.get(b.camel) : Infinity;
+        if (ra !== rb) return ra - rb;
+        // tie-break if both missing or equal
+      }
+      const ag=a.crazy?1:0, bg=b.crazy?1:0; if(ag!==bg) return ag-bg;
+      const idx=x=> x.crazy ? CRAZY.findIndex(y=>y.id===x.camel) : RACERS.findIndex(y=>y.id===x.camel);
+      return idx(a)-idx(b);
+    });
+    board.set(space, arr.map(x=>x.camel)); // bottom -> top
+  }
     return board;
   }
 
@@ -236,9 +243,12 @@
   }
 
   // === Interactive state ===
-  let legBoard; // Map space->stack (bottom->top)
-  let usedDice; // ids in order
+  let legBoard;   // Map space->stack (bottom->top)
+  let usedDice;   // ids in order
   let finished;
+  // When present, preserves the previous stack orientation across resets
+  let STACK_PRI = null; // Map<camelId, number> lower = closer to bottom
+
 
   function resetLeg(){
     legBoard = buildInitialBoard();
@@ -420,7 +430,22 @@
     // Copy current board positions into the Setup inputs and reset the leg
     const trackLen = clamp(num('#trackLen',16),6,40);
     const pos = positionsFromBoard(legBoard);
-  
+
+    // >>> NEW: capture current stack orientation (unique, bottom gets smaller priority)
+    STACK_PRI = new Map();
+    (function captureStackOrder() {
+      let counter = 0;
+      // We only need relative order within each space; counter ensures unique, stable ordering
+      for (const [space, stack] of legBoard.entries()) {
+        // stack is bottom -> top already by our model
+        for (let i = 0; i < stack.length; i++) {
+          const cid = stack[i];
+          STACK_PRI.set(cid, counter++);
+        }
+      }
+    })();
+    // <<< NEW
+    
     // Racers: board is 0-indexed -> Setup wants 1-indexed start spaces
     RACERS.forEach(c=>{
       const p = pos.get(c.id);
