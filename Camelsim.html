@@ -90,6 +90,7 @@
         </select>
       </label>
       <button id="applyBtn">Apply move</button>
+      <button id="rollBtn" title="Pick a random remaining die and roll 1–3">Roll a die</button>
       <button id="resetBtn" title="Reset the leg to setup state">Reset</button>
       <span class="note" id="status" aria-live="polite"></span>
     </div>
@@ -133,6 +134,9 @@
   const shuffle=(arr)=>{ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
   const num=(sel,def)=>{ const n=el(sel); const v=(n&&n.value!=null)? n.value : def; const t=parseInt(v,10); return Number.isFinite(t)? t : def; };
   const safe = (fn, ctx) => { try { return fn(); } catch(e){ console.error(e); if(ctx){ const s=el('#status'); if(s) s.innerHTML = `<span class="error">${ctx}: ${e.message}</span>`; } return undefined; } };
+  const randInt = (a,b) => Math.floor(Math.random()*(b-a+1))+a; // inclusive
+  const displayName = (id) => id==='grey' ? 'Grey' : (RACERS.find(x=>x.id===id)?.name || id);
+  const remainingDice = () => ['blue','green','red','yellow','purple','grey'].filter(d=>!usedDice.includes(d));
 
   // === Build Setup Rows ===
   function buildRows(){
@@ -419,6 +423,22 @@
       const roll = parseInt(el('#moveSelect').value,10);
       if(applyUserMove(die, roll)) runSimulationsForCurrentState();
     });
+    
+    el('#rollBtn').addEventListener('click', ()=>{
+      if(finished){ el('#status').innerHTML = '<span class="error">Leg already finished.</span>'; return; }
+      if(usedDice.length>=5){ el('#status').innerHTML = '<span class="error">No dice left this leg.</span>'; return; }
+      const rem = remainingDice();
+      if(!rem.length){ el('#status').innerHTML = '<span class="error">No dice left this leg.</span>'; return; }
+      const die = rem[Math.floor(Math.random()*rem.length)];
+      const roll = randInt(1,3);
+      if(applyUserMove(die, roll)){
+        el('#dieSelect').value = die;
+        el('#moveSelect').value = String(roll);
+        el('#status').innerHTML = `Rolled <b>${displayName(die)}</b> → <b>${roll}</b>`;
+        runSimulationsForCurrentState();
+      }
+    });
+    
     el('#resetBtn').addEventListener('click', resetLeg);
     const btn=el('#runTestsBtn'); if(btn) btn.addEventListener('click', runTests);
 
