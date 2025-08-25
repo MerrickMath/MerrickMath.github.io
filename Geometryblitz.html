@@ -11,7 +11,6 @@
       --muted: #374151;
       --text: #111827;
       --ring: 0 0 0 3px rgba(59,130,246,.35);
-      /* Bright palette */
       --green: #4ade80;
       --red: #f87171;
       --orange: #fb923c;
@@ -30,12 +29,12 @@
     button { appearance:none; border:0; padding:10px 14px; border-radius:12px; background:#e5e7eb; font-weight:600; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.12); }
     button:hover { filter:brightness(1.05); }
 
-    .layout { display:grid; grid-template-columns: 260px 1fr; gap:18px; align-items:start; }
+    .layout { display:grid; grid-template-columns: 1fr; gap:18px; align-items:start; }
 
     .legend { background:#f3f4f6; padding:14px; border-radius:16px; box-shadow:0 6px 14px rgba(0,0,0,.08); }
-    .legend h3 { margin:0 0 8px 0; font-size:16px; color:var(--muted); }
-    .row { display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
-    .pill { display:flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:#e5e7eb; font-size:13px; }
+    .legend h3 { margin:0 0 8px 0; font-size:16px; color:var(--muted); text-align:center; }
+    .legend-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; }
+    .pill { display:flex; align-items:center; gap:6px; justify-content:center; padding:6px 8px; border-radius:12px; background:#e5e7eb; font-size:13px; }
     .dot { width:12px; height:12px; border-radius:50%; border:2px solid #111827; }
 
     .card { background:var(--card); padding:16px; border-radius:16px; box-shadow:0 6px 14px rgba(0,0,0,.12); }
@@ -44,43 +43,39 @@
     .slot.correct { outline: var(--ring); }
     svg { width:90%; height:90%; }
 
-    .status { margin-top:10px; font-size:14px; color:var(--muted); min-height:22px; }
-
-    .brand { position:fixed; bottom:10px; left:0; right:0; text-align:center; font-size:12px; color:#6b7280; }
+    .status { margin-top:10px; font-size:14px; color:var(--muted); min-height:22px; text-align:center; }
 
     .label { position:absolute; bottom:6px; left:50%; transform:translateX(-50%); font-size:12px; padding:2px 8px; border-radius:999px; background:#e5e7eb; color:var(--text); border:1px solid rgba(0,0,0,.08); z-index:2; pointer-events:none; }
     .hidden { display:none; }
-  .defs { margin: 16px auto; max-width: 980px; }
+
+    .defs { margin: 16px auto; max-width: 980px; }
   </style>
 </head>
 <body>
   <div class="page">
     <div class="topbar">
       <h1>Geometry Blitz</h1>
+      <div style='font-size:14px; color:#6b7280; margin-top:2px;'>Math with Mr. Merrick</div>
       <div class="controls">
         <button id="btnShow">Show solution</button>
         <button id="btnNew">New card</button>
       </div>
     </div>
 
-    <div class="layout">
-      <!-- Legend LEFT -->
-      <aside class="legend" aria-label="Home colors legend">
-        <h3>Home colors</h3>
-        <div class="row" id="legendRow"></div>
-      </aside>
+    <!-- Legend TOP -->
+    <aside class="legend" aria-label="Home colors legend">
+      <h3>Home colors</h3>
+      <div class="legend-grid" id="legendRow"></div>
+    </aside>
 
-      <!-- Card RIGHT -->
-      <section class="card">
-        <div class="grid" id="grid" role="group" aria-label="Card with shapes"></div>
-        <div id="status" class="status" aria-live="polite"></div>
-      </section>
-    </div>
+    <!-- Card BELOW -->
+    <section class="card">
+      <div class="grid" id="grid" role="group" aria-label="Card with shapes"></div>
+      <div id="status" class="status" aria-live="polite"></div>
+    </section>
   </div>
-  
 
   <script>
-    // ===== Data =====
     const SHAPES = ["Triangle", "Kite", "Trapezoid", "Parallelogram", "Pentagon", "Hexagon"];
     const HOME = {
       Triangle:   css("--green"),
@@ -92,12 +87,6 @@
     };
     const COLORS = Object.values(HOME);
 
-    /*
-      Shape variants: 5 per type.
-      Constraints to avoid rhombi (all four sides equal):
-      - Kites: two pairs of adjacent equal sides (TR=RB, TL=LB) with the two pair lengths different (a!=b).
-      - Parallelograms: opposite sides parallel & equal; adjacent sides have DIFFERENT lengths (AB!=BC).
-    */
     const VARIANTS = {
       Triangle: [
         [[90,15],[15,165],[165,165]],
@@ -106,7 +95,7 @@
         [[30,150],[150,150],[90,40]],
         [[50,160],[140,160],[95,30]]
       ],
-      Kite: [ // symmetric about vertical axis; pairs of adjacent equal lengths, but a != b
+      Kite: [
         [[90,20],[150,90],[90,160],[40,90]],
         [[90,24],[145,94],[90,156],[35,94]],
         [[90,28],[140,96],[90,152],[40,96]],
@@ -120,12 +109,12 @@
         [[45,45],[135,45],[150,160],[15,160]],
         [[55,35],[125,35],[160,165],[20,165]]
       ],
-      Parallelogram: [ // AB width vs BC slanted height; choose values so AB != BC
-        [[30,50],[160,50],[130,160],[0,160]],   // AB=130, BC≈114
-        [[40,40],[170,40],[140,150],[10,150]],  // AB=130, BC≈114
-        [[30,60],[150,60],[120,160],[0,160]],   // AB=120, BC≈104
-        [[50,45],[160,45],[135,155],[25,155]],  // AB=110, BC≈112
-        [[20,55],[165,55],[135,165],[-10,165]]  // AB=145, BC≈114
+      Parallelogram: [
+        [[30,50],[160,50],[130,160],[0,160]],
+        [[40,40],[170,40],[140,150],[10,150]],
+        [[30,60],[150,60],[120,160],[0,160]],
+        [[50,45],[160,45],[135,155],[25,155]],
+        [[20,55],[165,55],[135,165],[-10,165]]
       ],
       Pentagon: [
         regPoly(90,95,75,5),
@@ -143,22 +132,18 @@
       ]
     };
 
-    // ===== Elements =====
     const gridEl = document.getElementById('grid');
     const statusEl = document.getElementById('status');
     const btnNew = document.getElementById('btnNew');
     const btnShow = document.getElementById('btnShow');
     const legendRow = document.getElementById('legendRow');
 
-    // ===== State =====
     let state = { items: [], solution: null };
 
-    // ===== Utils =====
     function css(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
     function sample(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
     function shuffle(arr){ return arr.slice().sort(()=>Math.random()-.5); }
 
-    // ===== Legend =====
     function makeLegend(){
       legendRow.innerHTML = '';
       SHAPES.forEach(s => {
@@ -170,7 +155,6 @@
       });
     }
 
-    // ===== SVG drawing =====
     function svgBox(){ const s = document.createElementNS('http://www.w3.org/2000/svg','svg'); s.setAttribute('viewBox','0 0 180 180'); return s; }
     function poly(points, fill){
       const p = document.createElementNS('http://www.w3.org/2000/svg','polygon');
@@ -189,10 +173,9 @@
     function drawShape(shape,color){
       const svg = svgBox();
       const g = document.createElementNS('http://www.w3.org/2000/svg','g');
-      // Rotation policy to keep silhouettes distinct and avoid diamond-like confusion
       let angleSet = [0,30,60,90,120,150,180,210,240,270,300,330];
-      if(shape==='Kite') angleSet = [0,90,180,270];                // cardinal only
-      if(shape==='Parallelogram') angleSet = [20,200,340,160];     // noticeably slanted
+      if(shape==='Kite') angleSet = [0,90,180,270];
+      if(shape==='Parallelogram') angleSet = [20,200,340,160];
       const angle = angleSet[Math.floor(Math.random()*angleSet.length)];
       g.setAttribute('transform', `rotate(${angle} 90 90)`);
       const pts = sample(VARIANTS[shape]);
@@ -201,7 +184,6 @@
       return svg;
     }
 
-    // ===== Card generation =====
     function renderCard(shapes, colors){
       gridEl.innerHTML = '';
       state.items = [];
@@ -216,44 +198,27 @@
     }
 
     function computeSolution(){
-      // home-color rule
       const homeIdxs = state.items.map((it,idx)=>it.color===HOME[it.shape]?idx:-1).filter(i=>i!==-1);
       if(homeIdxs.length === 1){
         const idx = homeIdxs[0];
         return { type:'home', target: state.items[idx].shape, index: idx, explain: `${state.items[idx].shape} appears in its home color.` };
       }
-      // absent rule
       const shownShapes = state.items.map(it=>it.shape);
       const shownColors = state.items.map(it=>it.color);
       const cands = SHAPES.filter(s => !shownShapes.includes(s) && !shownColors.includes(HOME[s]));
       if(cands.length === 1){
         return { type:'absent', target: cands[0], index: -1, explain: `${cands[0]} is the only shape whose shape and home color are both missing.` };
       }
-      // none
       return { type:'none', target:null, index:-1, explain:'No solution on this card.' };
-    }
-
-    function pickDistinctColors(baseList){
-      const used = new Set();
-      const out = [];
-      for(const want of baseList){
-        if(want && !used.has(want)) { out.push(want); used.add(want); continue; }
-        const pool = COLORS.filter(c=>!used.has(c));
-        const pick = sample(pool);
-        out.push(pick); used.add(pick);
-      }
-      return out;
     }
 
     function newCard(){
       statusEl.textContent = '';
-      // 30% home-match, 55% absent-solution, 15% random (may be none)
       const r = Math.random();
       if(r < 0.30){
         const target = sample(SHAPES);
         const others = shuffle(SHAPES.filter(s=>s!==target)).slice(0,3);
         const chosen = [target, ...others];
-        // colors: target home, others non-home & all distinct
         const colors = [];
         colors.push(HOME[target]);
         const used = new Set([HOME[target]]);
@@ -264,23 +229,20 @@
         }
         renderCard(chosen, colors);
       } else if(r < 0.85){
-        // guaranteed-unique absent solution
-        const T = sample(SHAPES);            // answer (absent)
-        let U = sample(SHAPES); while(U===T) U = sample(SHAPES); // also absent
-        const shown = SHAPES.filter(s=>s!==T && s!==U);          // 4 shapes shown
-        // colors: exclude HOME[T], include HOME[U], all distinct
+        const T = sample(SHAPES);
+        let U = sample(SHAPES); while(U===T) U = sample(SHAPES);
+        const shown = SHAPES.filter(s=>s!==T && s!==U);
         const available = COLORS.filter(c=>c!==HOME[T]);
         const colors = [HOME[U]];
         const rest = available.filter(c=>c!==HOME[U]);
         const shuffled = shuffle(rest);
         while(colors.length<4) colors.push(shuffled.shift());
-        // derangement: no shown shape in its own home color
         let assign = shuffle(colors), tries=0;
         while(shown.some((s,i)=>assign[i]===HOME[s]) && tries<200){ assign = shuffle(colors); tries++; }
         renderCard(shown, assign);
       } else {
         const chosen = shuffle(SHAPES).slice(0,4);
-        const colors = shuffle(COLORS).slice(0,4); // distinct colors
+        const colors = shuffle(COLORS).slice(0,4);
         renderCard(chosen, colors);
       }
       state.solution = computeSolution();
@@ -301,7 +263,6 @@
         : `Answer: <strong>${state.solution.target}</strong> — ${state.solution.explain}`;
     }
 
-    // ===== Events =====
     btnNew.addEventListener('click', newCard);
     btnShow.addEventListener('click', showSolution);
     window.addEventListener('keydown', e=>{
@@ -310,7 +271,6 @@
       if(k==='s') showSolution();
     });
 
-    // ===== Init =====
     makeLegend();
     newCard();
   </script>
