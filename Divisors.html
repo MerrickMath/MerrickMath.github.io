@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Divisor Trainer — 2·3·5·7</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --panel: #fdfdfd;
+      --muted: #555;
+      --text: #000;
+      --accent: #3366ff;
+      --accent-2: #009966;
+      --chip: #f1f1f1;
+      --line: #ddd;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font:500 16px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+
+    .container{max-width:900px;margin:32px auto;padding:0 16px 48px}
+
+    header{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;margin-bottom:16px}
+    h1{margin:0;font-size:clamp(22px,2.4vw,28px);letter-spacing:.2px}
+
+    .timer{font-variant-numeric:tabular-nums;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 14px;box-shadow:var(--shadow);display:inline-flex;gap:10px;align-items:center}
+    .timer .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-2);display:inline-block;box-shadow:0 0 10px var(--accent-2)}
+
+    .controls{display:flex;gap:8px}
+    button,select,input[type="text"]{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--text);padding:10px 14px;border-radius:12px;font-weight:600;cursor:pointer;transition:transform .05s ease, background .2s ease, border-color .2s ease;box-shadow:var(--shadow)}
+    input[type="text"]{cursor:text}
+    button:hover{transform:translateY(-1px)}
+    button.primary{background:linear-gradient(180deg,var(--accent),#254eda);border-color:transparent;color:#fff}
+    button.ghost{background:var(--chip)}
+
+    .toolbar{display:grid;grid-template-columns:1fr auto;gap:12px;margin:16px 0 22px}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+
+    .meta{display:grid;grid-template-columns:1fr;gap:10px}
+    .fact{display:grid;grid-template-columns:130px 1fr;gap:8px;align-items:baseline}
+    .fact .k{color:var(--muted)}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{background:var(--chip);border:1px dashed var(--line);padding:6px 10px;border-radius:999px;font-size:13px;color:var(--muted)}
+
+    .footer{margin-top:20px;color:var(--muted);font-size:13px}
+    code{background:var(--chip);padding:2px 6px;border-radius:6px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Divisor Trainer — 2·3·5·7</h1>
+      <div class="timer" id="timer"><span class="dot"></span><span id="clock">00:00</span></div>
+      <div class="controls">
+        <button id="startBtn" class="ghost" title="Start timer">Start</button>
+        <button id="pauseBtn" class="ghost" title="Pause timer">Pause</button>
+        <button id="resetBtn" class="ghost" title="Reset timer">Reset</button>
+      </div>
+    </header>
+
+    <section class="toolbar">
+      <div class="panel">
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <span style="color:var(--muted)">Primes:</span>
+          <label class="chip"><input type="checkbox" id="p2" checked> 2</label>
+          <label class="chip"><input type="checkbox" id="p3" checked> 3</label>
+          <label class="chip"><input type="checkbox" id="p5" checked> 5</label>
+          <label class="chip"><input type="checkbox" id="p7" checked> 7</label>
+          <span class="chip">Max exponent per prime:
+            <select id="maxExp">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3" selected>3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </span>
+          <span class="chip">Seed: <input id="seed" type="text" placeholder="random" style="border:0;background:transparent;outline:none;width:120px;color:var(--text)"></span>
+          <button id="genBtn" class="primary">Generate</button>
+        </div>
+      </div>
+      <div class="panel" style="display:flex;gap:8px;justify-content:flex-end;align-items:center;">
+        <button id="toggleDivs" class="ghost">Show / Hide Divisors</button>
+        <button id="copyBtn" class="ghost">Copy</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="meta" id="meta"></div>
+    </section>
+
+    <section class="panel" id="divisorsPanel" style="margin-top:16px;">
+      <div class="fact"><div class="k">Divisors (<span id="dCount">0</span>):</div><div id="divisors"></div></div>
+    </section>
+
+    <div class="footer">Single-file, no libraries. Perfect for GitHub Pages.</div>
+  </div>
+
+  <script>
+    const clockEl = document.getElementById('clock');
+    let running=false, t0=0, accum=0, rafId=null;
+    const fmt = ms => { const s=Math.floor(ms/1000), m=Math.floor(s/60); return String(m).padStart(2,'0')+":"+String(s%60).padStart(2,'0'); };
+    function tick(){ if(!running) return; const now=performance.now(); clockEl.textContent=fmt(accum + (now - t0)); rafId=requestAnimationFrame(tick); }
+    function startTimer(){ if(running) return; running=true; t0=performance.now(); tick(); }
+    function pauseTimer(){ if(!running) return; running=false; cancelAnimationFrame(rafId); accum += performance.now() - t0; }
+    function resetTimer(){ running=false; cancelAnimationFrame(rafId); accum=0; clockEl.textContent='00:00'; }
+    document.getElementById('startBtn').addEventListener('click', startTimer);
+    document.getElementById('pauseBtn').addEventListener('click', pauseTimer);
+    document.getElementById('resetBtn').addEventListener('click', resetTimer);
+
+    const primesAll = [2,3,5,7];
+    function powBigInt(p,e){ let r=1n, P=BigInt(p); for(let i=0;i<e;i++) r*=P; return r; }
+    function product(arr){ return arr.reduce((a,b)=>a*b,1n); }
+    function seededRng(seedStr){ let h=2166136261>>>0; for(let i=0;i<seedStr.length;i++){ h^=seedStr.charCodeAt(i); h=Math.imul(h,16777619);} let x=(h^0x9e3779b9)>>>0; return ()=> (x=(Math.imul(x,1664525)+1013904223)>>>0)/2**32; }
+
+    function pickExponents(maxExp, rng){
+      const selected = primesAll.filter((p,i)=>document.getElementById('p'+p).checked);
+      if(!selected.length){ alert('Select at least one prime.'); return null; }
+      const exps = {}; let nonZero=0;
+      for(const p of selected){ const e=Math.floor((rng?rng():Math.random())*(maxExp+1)); exps[p]=e; if(e>0) nonZero++; }
+      if(nonZero===0){ const pi=selected[Math.floor((rng?rng():Math.random())*selected.length)]; exps[pi]=1; }
+      return exps;
+    }
+
+    function allDivisors(exps){
+      const entries = Object.entries(exps).map(([p,e])=>({p:Number(p),e})).sort((a,b)=>a.p-b.p);
+      const res=[]; function dfs(i,acc){ if(i===entries.length){ res.push(acc); return; } const {p,e}=entries[i]; let mul=1n; for(let k=0;k<=e;k++){ dfs(i+1, acc*mul); mul*=BigInt(p);} }
+      dfs(0,1n); return res.sort((a,b)=> a<b?-1:a>b?1:0);
+    }
+
+    function renderMeta(exps){
+      const metas = document.getElementById('meta'); metas.innerHTML='';
+      const parts = Object.entries(exps).sort((a,b)=>a[0]-b[0]).map(([p,e])=> `${p}<sup>${e}</sup>`);
+      const primes = Object.keys(exps).map(Number).sort((a,b)=>a-b);
+      const nVal = product(primes.map(p=>powBigInt(p, exps[p])));
+      const dCount = Object.values(exps).reduce((a,e)=>a*(BigInt(e)+1n),1n);
+      metas.insertAdjacentHTML('beforeend', `
+        <div class="fact"><div class="k">Factorization</div><div><strong>n</strong> = ${parts.join(' · ')}</div></div>
+        <div class="fact"><div class="k">Value</div><div><code>${nVal.toString()}</code></div></div>
+        <div class="fact"><div class="k"># Divisors</div><div><code>${dCount.toString()}</code></div></div>
+        <div class="fact"><div class="k">Primes used</div><div class="chips">${primes.map(p=>`<span class="chip">${p}</span>`).join('')}</div></div>
+      `);
+      return nVal;
+    }
+
+    function renderDivisors(list){
+      const el = document.getElementById('divisors');
+      document.getElementById('dCount').textContent=String(list.length);
+      const per=24, chunks=[]; for(let i=0;i<list.length;i+=per){ chunks.push(`<div>${list.slice(i,i+per).map(x=>x.toString()).join(', ')}</div>`); }
+      el.innerHTML = chunks.join('');
+    }
+
+    async function copyOut(exps, divs){
+      const parts=Object.entries(exps).sort((a,b)=>a[0]-b[0]).map(([p,e])=>`${p}^${e}`);
+      const nVal=product(Object.keys(exps).map(Number).sort((a,b)=>a-b).map(p=>powBigInt(p,exps[p])));
+      const text=`n = ${parts.join(' * ')} = ${nVal.toString()}\nDivisors (${divs.length}):\n${divs.map(d=>d.toString()).join(', ')}`;
+      try{ await navigator.clipboard.writeText(text); alert('Copied!'); }catch(e){ alert('Copy failed'); }
+    }
+
+    function generate(){
+      const maxExp=parseInt(document.getElementById('maxExp').value,10);
+      const seed=document.getElementById('seed').value.trim();
+      const rng = seed? seededRng(seed) : null;
+      const exps=pickExponents(maxExp, rng);
+      if(!exps) return;
+      const nVal=renderMeta(exps);
+      const divs=allDivisors(exps);
+      renderDivisors(divs);
+      window.__state={exps,divs,nVal};
+    }
+
+    document.getElementById('genBtn').addEventListener('click', generate);
+    document.getElementById('toggleDivs').addEventListener('click', ()=>{
+      const p=document.getElementById('divisorsPanel'); p.style.display = p.style.display==='none'? '': 'none';
+    });
+    document.getElementById('copyBtn').addEventListener('click', ()=>{ if(window.__state) copyOut(window.__state.exps, window.__state.divs); });
+
+    generate();
+  </script>
+</body>
+</html>
