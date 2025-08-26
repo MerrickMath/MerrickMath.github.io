@@ -55,7 +55,7 @@
     .toolbar{display:grid;grid-template-columns:1fr auto;gap:12px;margin:16px 0 22px}
     .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
 
-    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px}
     @media (max-width:900px){.grid{grid-template-columns:1fr}header{grid-template-columns:1fr;gap:10px}}
 
     .meta{display:grid;grid-template-columns:1fr;gap:10px}
@@ -209,7 +209,9 @@
     }
 
     // Copy
-    async function copyOut(exps, divs){ const parts=Object.entries(exps).sort((a,b)=>a[0]-b[0]).map(([p,e])=>`${p}^${e}`); const nVal=product(Object.keys(exps).map(Number).sort((a,b)=>a-b).map(p=>powBigInt(p,exps[p]))); const text=`n = ${parts.join(' * ')} = ${nVal.toString()}\nDivisors (${divs.length}):\n${divs.map(d=>d.toString()).join(', ')}`; try{ await navigator.clipboard.writeText(text); alert('Copied!'); }catch(e){ alert('Copy failed'); }}
+    async function copyOut(exps, divs){ const parts=Object.entries(exps).sort((a,b)=>a[0]-b[0]).map(([p,e])=>`${p}^${e}`); const nVal=product(Object.keys(exps).map(Number).sort((a,b)=>a-b).map(p=>powBigInt(p,exps[p]))); const text=`n = ${parts.join(' * ')} = ${nVal.toString()}
+Divisors (${divs.length}):
+${divs.map(d=>d.toString()).join(', ')}`; try{ await navigator.clipboard.writeText(text); alert('Copied!'); }catch(e){ alert('Copy failed'); }}
 
     // Generate
     function generate(){
