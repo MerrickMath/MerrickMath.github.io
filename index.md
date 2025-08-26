@@ -214,7 +214,7 @@ show_header: false
         <li class="linkitem"><a href="https://MerrickMath.github.io/Graphblitz.html" data-ext="true"><span>Graph Blitz</span></a></li>
         <li class="linkitem"><a href="https://MerrickMath.github.io/Geometryblitz.html" data-ext="true"><span>Geometry Blitz</span></a></li>
         <li class="linkitem"><a href="https://MerrickMath.github.io/Camelsim.html" data-ext="true"><span>Camel Racing Simulation</span></a></li>
-        <li class="linkitem"><a href="https://MerrickMath.github.io/Mixture.html" data-ext="true"><span>Visal Mixture Game</span></a></li>
+        <li class="linkitem"><a href="https://MerrickMath.github.io/Mixture.html" data-ext="true"><span>Vial Mixture Game</span></a></li>
         <li class="linkitem"><a href="https://playset.netlify.app" data-ext="true"><span>Set Game</span></a></li>
         <li class="linkitem"><a href="https://www.mathplayground.com" target="_blank" rel="noopener"><span>Math Playground</span></a></li>
       </ul>
