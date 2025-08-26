@@ -15,7 +15,13 @@
     .space{height:84px;background:#fff;border:1px dashed var(--line);border-radius:8px;display:flex;flex-direction:column-reverse;align-items:center;justify-content:flex-start;padding:4px}
     .camel{width:18px;height:12px;border-radius:3px;border:1px solid rgba(0,0,0,.15);margin:2px 0}
     .camel.crazy{outline:2px dashed #000;outline-offset:1px}
-    .row{display:grid;grid-template-columns:200px 1fr;gap:10px;align-items:center;padding:6px 0}
+    .row{
+      display:grid;
+      grid-template-columns:200px 110px auto; /* label | number input | arrows */
+      gap:10px;
+      align-items:center;
+      padding:4px 0;
+    }
     .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;margin-top:10px}
     .controls{margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
     .controls input, .controls select{width:120px}
