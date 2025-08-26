@@ -34,6 +34,9 @@
     details.debug{margin-top:8px}
     details.debug summary{cursor:pointer}
     #status[aria-live]{min-height:1.2em}
+    .miniBtn{padding:4px 8px;font-size:12px;border-radius:8px;background:#eef2ff;border:1px solid #c7d2fe}
+    .miniBtn:disabled{opacity:.5;cursor:not-allowed}
+    .row .inline-controls{display:flex;gap:6px;align-items:center}
   </style>
 </head>
 <body>
@@ -151,21 +154,32 @@
     rowsR.appendChild(make('div',{className:'row',innerHTML:'<div><b>Camel</b></div><div><b>Start space (1-indexed)</b></div>'}));
     RACERS.forEach(c=>{
       const row=make('div',{className:'row'});
-      row.append(
-        make('div',{innerHTML:`<span style="font-weight:700;color:${c.color}">${c.name}</span>`}),
-        make('input',{type:'number',min:1,max:100,step:1,value:1,id:`pos-${c.id}`})
-      );
+      const label=make('div',{innerHTML:`<span style="font-weight:700;color:${c.color}">${c.name}</span>`});
+      const pos=make('input',{type:'number',min:1,max:100,step:1,value:1,id:`pos-${c.id}`});
+      const controls=make('div',{className:'inline-controls'});
+      const up=make('button',{className:'miniBtn',title:'Move up (higher in stack)',textContent:'▲'});
+      const down=make('button',{className:'miniBtn',title:'Move down (closer to bottom)',textContent:'▼'});
+      up.addEventListener('click',()=>bumpCamel(c.id,'up'));
+      down.addEventListener('click',()=>bumpCamel(c.id,'down'));
+      controls.append(up,down);
+      row.append(label,pos,controls);
       rowsR.appendChild(row);
+
     });
 
     rowsC.appendChild(make('div',{className:'row',innerHTML:'<div><b>Camel</b></div><div><b>Spaces from finish (1 = last space)</b></div>'}));
     CRAZY.forEach(c=>{
       const row=make('div',{className:'row'});
-      const textColor = c.id==='white' ? '#111827' : c.color; // ensure white label visible
-      row.append(
-        make('div',{innerHTML:`<span style="font-weight:700;color:${textColor}">${c.name}</span>`}),
-        make('input',{type:'number',min:1,max:100,step:1,value:1,id:`pos-${c.id}`})
-      );
+      const textColor = c.id==='white' ? '#111827' : c.color;
+      const label=make('div',{innerHTML:`<span style="font-weight:700;color:${textColor}">${c.name}</span>`});
+      const pos=make('input',{type:'number',min:1,max:100,step:1,value:1,id:`pos-${c.id}`});
+      const controls=make('div',{className:'inline-controls'});
+      const up=make('button',{className:'miniBtn',title:'Move up (higher in stack)',textContent:'▲'});
+      const down=make('button',{className:'miniBtn',title:'Move down (closer to bottom)',textContent:'▼'});
+      up.addEventListener('click',()=>bumpCamel(c.id,'up'));
+      down.addEventListener('click',()=>bumpCamel(c.id,'down'));
+      controls.append(up,down);
+      row.append(label,pos,controls);
       rowsC.appendChild(row);
     });
   }
@@ -191,16 +205,23 @@
       groups.get(space).push({camel:c.id,crazy:true});
     });
 
-    // auto stack: racers bottom (RACERS order), then crazy (CRAZY order)
-    const board=new Map();
-    for(const [space,arr] of groups.entries()){
-      arr.sort((a,b)=>{
-        const ag=a.crazy?1:0, bg=b.crazy?1:0; if(ag!==bg) return ag-bg;
-        const idx=x=> x.crazy ? CRAZY.findIndex(y=>y.id===x.camel) : RACERS.findIndex(y=>y.id===x.camel);
-        return idx(a)-idx(b);
-      });
-      board.set(space, arr.map(x=>x.camel)); // bottom -> top
-    }
+    // auto stack: if we have a saved priority, use it to preserve orientation;
+  // otherwise fall back to default rule (racers bottom, crazy on top; Blue→Purple; Black→White)
+  const board=new Map();
+  for (const [space, arr] of groups.entries()) {
+    arr.sort((a,b)=>{
+      if (STACK_PRI && STACK_PRI instanceof Map) {
+        const ra = STACK_PRI.has(a.camel) ? STACK_PRI.get(a.camel) : Infinity;
+        const rb = STACK_PRI.has(b.camel) ? STACK_PRI.get(b.camel) : Infinity;
+        if (ra !== rb) return ra - rb;
+        // tie-break if both missing or equal
+      }
+      const ag=a.crazy?1:0, bg=b.crazy?1:0; if(ag!==bg) return ag-bg;
+      const idx=x=> x.crazy ? CRAZY.findIndex(y=>y.id===x.camel) : RACERS.findIndex(y=>y.id===x.camel);
+      return idx(a)-idx(b);
+    });
+    board.set(space, arr.map(x=>x.camel)); // bottom -> top
+  }
     return board;
   }
 
@@ -236,9 +257,12 @@
   }
 
   // === Interactive state ===
-  let legBoard; // Map space->stack (bottom->top)
-  let usedDice; // ids in order
+  let legBoard;   // Map space->stack (bottom->top)
+  let usedDice;   // ids in order
   let finished;
+  // When present, preserves the previous stack orientation across resets
+  let STACK_PRI = null; // Map<camelId, number> lower = closer to bottom
+
 
   function resetLeg(){
     legBoard = buildInitialBoard();
@@ -420,7 +444,22 @@
     // Copy current board positions into the Setup inputs and reset the leg
     const trackLen = clamp(num('#trackLen',16),6,40);
     const pos = positionsFromBoard(legBoard);
-  
+
+    // >>> NEW: capture current stack orientation (unique, bottom gets smaller priority)
+    STACK_PRI = new Map();
+    (function captureStackOrder() {
+      let counter = 0;
+      // We only need relative order within each space; counter ensures unique, stable ordering
+      for (const [space, stack] of legBoard.entries()) {
+        // stack is bottom -> top already by our model
+        for (let i = 0; i < stack.length; i++) {
+          const cid = stack[i];
+          STACK_PRI.set(cid, counter++);
+        }
+      }
+    })();
+    // <<< NEW
+    
     // Racers: board is 0-indexed -> Setup wants 1-indexed start spaces
     RACERS.forEach(c=>{
       const p = pos.get(c.id);
@@ -446,6 +485,87 @@
     if(s) s.innerHTML = `<b>Starting next leg</b> from current positions.`;
   }
 
+
+  // Map current Setup inputs -> space index for a camel id
+  function spaceFromInputs(cid){
+    const trackLen=clamp(num('#trackLen',16),6,40);
+    if (cid==='black' || cid==='white'){
+      const f=num(`#pos-${cid}`,1);
+      return clamp(trackLen - f, 0, trackLen-1);
+    } else {
+      const s=num(`#pos-${cid}`,1);
+      return clamp(s-1,0,trackLen-1);
+    }
+  }
+  
+  // Build groups per space from the current inputs
+  function groupsFromInputs(){
+    const m=new Map();
+    CAMELS.forEach(cfg=>{
+      const space=spaceFromInputs(cfg.id);
+      if(!m.has(space)) m.set(space,[]);
+      m.get(space).push(cfg.id);
+    });
+  
+    // default fallback ordering within a space (racers bottom Blue→Purple; crazy on top Black→White)
+    const defaultRank = (id)=>{
+      const rec = CAMELS.find(x=>x.id===id);
+      if(rec.crazy) return 100 + CRAZY.findIndex(y=>y.id===id); // crazy above racers
+      return RACERS.findIndex(y=>y.id===id);
+    };
+  
+    for(const [s,arr] of m){
+      arr.sort((a,b)=>{
+        if(STACK_PRI instanceof Map){
+          const ra=STACK_PRI.get(a), rb=STACK_PRI.get(b);
+          if(ra!=null && rb!=null && ra!==rb) return ra-rb;
+        }
+        // fallback deterministic default
+        const ac = (a==='black'||a==='white') ? 1 : 0;
+        const bc = (b==='black'||b==='white') ? 1 : 0;
+        if(ac!==bc) return ac-bc;
+        return defaultRank(a)-defaultRank(b);
+      });
+    }
+    return m;
+  }
+  
+  // Ensure we have a STACK_PRI seeded from current inputs
+  function ensurePriorityFromInputs(){
+    if(!(STACK_PRI instanceof Map)) STACK_PRI = new Map();
+    const groups=groupsFromInputs();
+    let counter=0;
+    for(const [,arr] of groups){
+      for(const id of arr){
+        if(!STACK_PRI.has(id)) STACK_PRI.set(id, counter++);
+      }
+    }
+  }
+  
+  // Move a camel one step within its space (dir: 'up' = toward top; 'down' = toward bottom)
+  function bumpCamel(cid, dir){
+    ensurePriorityFromInputs();
+    const space=spaceFromInputs(cid);
+    const groups=groupsFromInputs();
+    const arr=groups.get(space)||[];
+    if(!arr.length) return;
+    const idx=arr.indexOf(cid);
+    if(idx===-1) return;
+  
+    const targetIdx = dir==='up' ? idx+1 : idx-1;
+    if(targetIdx<0 || targetIdx>=arr.length) return;
+  
+    const other=arr[targetIdx];
+    const a=STACK_PRI.get(cid);
+    const b=STACK_PRI.get(other);
+    STACK_PRI.set(cid,b);
+    STACK_PRI.set(other,a);
+  
+    // Redraw preview and, if no inputs yet, sync live
+    updatePreview();
+  }
+
+  
   
   // === Init ===
   function updatePreview(){
