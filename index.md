@@ -180,7 +180,7 @@ show_header: false
       <h2 id="sec-courses">Current Courses</h2>
       <ul class="linklist">
         <li class="linkitem">
-          <a href="https://merrickmath.github.io/MerrickMath.github.io-APSTAT/" data-ext="true" aria-label="AP Statistics">
+          <a href="https://merrickmath.github.io/APSTAT/" data-ext="true" aria-label="AP Statistics">
             <span>AP Statistics</span>
             <span class="badge active" aria-hidden="true">Active</span>
           </a>
@@ -192,7 +192,7 @@ show_header: false
           </a>
         </li>
         <li class="linkitem">
-          <a href="https://merrickmath.github.io/MerrickMath.github.io-Div34Math" data-ext="true" aria-label="Math 10">
+          <a href="https://merrickmath.github.io/Div34Math/" data-ext="true" aria-label="Math 10">
             <span>Math 10</span>
             <span class="badge">Course</span>
           </a>
