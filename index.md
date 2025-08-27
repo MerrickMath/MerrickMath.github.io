@@ -212,7 +212,7 @@ show_header: false
       </ul>
     </section>
     <!-- Games -->
-    <section aria-labelledby="sec-challenges">
+    <section aria-labelledby="sec-games">
       <h2 id="sec-challenges">Games</h2>
       <ul class="linklist">
         <li class="linkitem"><a href="https://MerrickMath.github.io/Camelsim.html" data-ext="true"><span>Camel Racing Simulation</span></a></li>
@@ -224,7 +224,7 @@ show_header: false
       </ul>
     </section>
     <!-- Contests -->
-    <section aria-labelledby="sec-cool">
+    <section aria-labelledby="sec-contests">
       <h2 id="sec-cool">Contests</h2>
       <ul class="linklist">
         <li class="linkitem"><a href="https://www.cemc.uwaterloo.ca/contests/past_contests.html" target="_blank" rel="noopener"><span>CEMC Past Contests</span></a></li>
