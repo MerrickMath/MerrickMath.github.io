@@ -209,14 +209,12 @@ show_header: false
     <section aria-labelledby="sec-challenges">
       <h2 id="sec-challenges">Games</h2>
       <ul class="linklist">
-        <li class="linkitem"><a href="https://MerrickMath.github.io/PAT.html" data-ext="true"><span>PAT 6 Practice</span></a></li>
+        <li class="linkitem"><a href="https://MerrickMath.github.io/Camelsim.html" data-ext="true"><span>Camel Racing Simulation</span></a></li>
         <li class="linkitem"><a href="https://MerrickMath.github.io/CoordinateGame.html" data-ext="true"><span>Coordinate Dash</span></a></li>
         <li class="linkitem"><a href="https://MerrickMath.github.io/Graphblitz.html" data-ext="true"><span>Graph Blitz</span></a></li>
         <li class="linkitem"><a href="https://MerrickMath.github.io/Geometryblitz.html" data-ext="true"><span>Geometry Blitz</span></a></li>
-        <li class="linkitem"><a href="https://MerrickMath.github.io/Camelsim.html" data-ext="true"><span>Camel Racing Simulation</span></a></li>
         <li class="linkitem"><a href="https://MerrickMath.github.io/Mixture.html" data-ext="true"><span>Vial Mixture Game</span></a></li>
         <li class="linkitem"><a href="https://playset.netlify.app" data-ext="true"><span>Set Game</span></a></li>
-        <li class="linkitem"><a href="https://www.mathplayground.com" target="_blank" rel="noopener"><span>Math Playground</span></a></li>
       </ul>
     </section>
     <!-- Contests -->
