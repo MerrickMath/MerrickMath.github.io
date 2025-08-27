@@ -198,7 +198,7 @@ show_header: false
           </a>
         </li>
         <li class="linkitem">
-          <a href="https://merrickmath.github.io/LinearAlgebra/" data-ext="true" aria-label="Linear Algebra">
+          <a href="https://merrickmath.github.io/D2Math/" data-ext="true" aria-label="Linear Algebra">
             <span>Division 2 Math</span>
             <span class="badge">Course</span>
           </a>
