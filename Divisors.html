@@ -6,46 +6,37 @@
   <title>Divisor Trainer — 2·3·5·7</title>
   <style>
     :root {
-      --bg: #ffffff;
-      --panel: #fdfdfd;
-      --muted: #555;
-      --text: #000;
-      --accent: #3366ff;
-      --accent-2: #009966;
-      --chip: #f1f1f1;
-      --line: #ddd;
-      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --bg: #fafafa;
+      --panel: #ffffff;
+      --muted: #4b5563;
+      --text: #111827;
+      --accent: #1d4ed8;
+      --accent-2: #15803d;
+      --chip: #f8fafc;
+      --line: #e5e7eb;
+      --shadow: 0 1px 4px rgba(0,0,0,0.05);
     }
-
     *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font:500 16px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
-
-    .container{max-width:900px;margin:32px auto;padding:0 16px 48px}
-
-    header{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;margin-bottom:16px}
-    h1{margin:0;font-size:clamp(22px,2.4vw,28px);letter-spacing:.2px}
-
-    .timer{font-variant-numeric:tabular-nums;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 14px;box-shadow:var(--shadow);display:inline-flex;gap:10px;align-items:center}
-    .timer .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-2);display:inline-block;box-shadow:0 0 10px var(--accent-2)}
-
-    .controls{display:flex;gap:8px}
-    button,select,input[type="text"]{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--text);padding:10px 14px;border-radius:12px;font-weight:600;cursor:pointer;transition:transform .05s ease, background .2s ease, border-color .2s ease;box-shadow:var(--shadow)}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"Latin Modern Roman","Computer Modern Serif",Georgia,Cambria,"Times New Roman",Times,serif;font-size:14px;}
+    .container{max-width:900px;margin:0 auto;padding:20px}
+    header{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;margin-bottom:12px}
+    h1{margin:0;font-size:1.6rem;letter-spacing:.2px}
+    .timer{font-variant-numeric:tabular-nums;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 10px;display:inline-flex;gap:8px;align-items:center;font-size:13px}
+    .timer .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-2);display:inline-block;box-shadow:0 0 8px var(--accent-2)}
+    .controls{display:flex;gap:6px}
+    button,select,input[type="text"]{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--text);padding:6px 10px;border-radius:6px;font-size:13px;cursor:pointer;transition:background .15s ease;border-color:var(--line)}
     input[type="text"]{cursor:text}
-    button:hover{transform:translateY(-1px)}
-    button.primary{background:linear-gradient(180deg,var(--accent),#254eda);border-color:transparent;color:#fff}
+    button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
     button.ghost{background:var(--chip)}
-
-    .toolbar{display:grid;grid-template-columns:1fr auto;gap:12px;margin:16px 0 22px}
-    .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
-
-    .meta{display:grid;grid-template-columns:1fr;gap:10px}
-    .fact{display:grid;grid-template-columns:130px 1fr;gap:8px;align-items:baseline}
+    .toolbar{display:grid;grid-template-columns:1fr auto;gap:8px;margin:10px 0 14px}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;box-shadow:var(--shadow)}
+    .meta{display:grid;grid-template-columns:1fr;gap:6px;font-size:13px}
+    .fact{display:grid;grid-template-columns:110px 1fr;gap:6px;align-items:baseline}
     .fact .k{color:var(--muted)}
-    .chips{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{background:var(--chip);border:1px dashed var(--line);padding:6px 10px;border-radius:999px;font-size:13px;color:var(--muted)}
-
-    .footer{margin-top:20px;color:var(--muted);font-size:13px}
-    code{background:var(--chip);padding:2px 6px;border-radius:6px}
+    .chips{display:flex;gap:6px;flex-wrap:wrap}
+    .chip{background:var(--chip);border:1px dashed var(--line);padding:4px 8px;border-radius:999px;font-size:12px;color:var(--muted)}
+    .footer{margin-top:14px;color:var(--muted);font-size:12px}
+    code{background:var(--chip);padding:2px 4px;border-radius:4px;font-size:12px}
   </style>
 </head>
 <body>
@@ -54,21 +45,21 @@
       <h1>Divisor Trainer — 2·3·5·7</h1>
       <div class="timer" id="timer"><span class="dot"></span><span id="clock">00:00</span></div>
       <div class="controls">
-        <button id="startBtn" class="ghost" title="Start timer">Start</button>
-        <button id="pauseBtn" class="ghost" title="Pause timer">Pause</button>
-        <button id="resetBtn" class="ghost" title="Reset timer">Reset</button>
+        <button id="startBtn" class="ghost">Start</button>
+        <button id="pauseBtn" class="ghost">Pause</button>
+        <button id="resetBtn" class="ghost">Reset</button>
       </div>
     </header>
 
     <section class="toolbar">
       <div class="panel">
-        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px">
           <span style="color:var(--muted)">Primes:</span>
           <label class="chip"><input type="checkbox" id="p2" checked> 2</label>
           <label class="chip"><input type="checkbox" id="p3" checked> 3</label>
           <label class="chip"><input type="checkbox" id="p5" checked> 5</label>
           <label class="chip"><input type="checkbox" id="p7" checked> 7</label>
-          <span class="chip">Max exponent per prime:
+          <span class="chip">Max exp:
             <select id="maxExp">
               <option value="1">1</option>
               <option value="2">2</option>
@@ -77,11 +68,11 @@
               <option value="5">5</option>
             </select>
           </span>
-          <span class="chip">Seed: <input id="seed" type="text" placeholder="random" style="border:0;background:transparent;outline:none;width:120px;color:var(--text)"></span>
+          <span class="chip">Seed: <input id="seed" type="text" placeholder="random" style="border:0;background:transparent;outline:none;width:100px;color:var(--text);font-size:13px"></span>
           <button id="genBtn" class="primary">Generate</button>
         </div>
       </div>
-      <div class="panel" style="display:flex;gap:8px;justify-content:flex-end;align-items:center;">
+      <div class="panel" style="display:flex;gap:6px;justify-content:flex-end;align-items:center;">
         <button id="toggleDivs" class="ghost">Show / Hide Divisors</button>
         <button id="copyBtn" class="ghost">Copy</button>
       </div>
@@ -91,7 +82,7 @@
       <div class="meta" id="meta"></div>
     </section>
 
-    <section class="panel" id="divisorsPanel" style="margin-top:16px;">
+    <section class="panel" id="divisorsPanel" style="margin-top:10px;">
       <div class="fact"><div class="k">Divisors (<span id="dCount">0</span>):</div><div id="divisors"></div></div>
     </section>
 
@@ -148,7 +139,7 @@
     function renderDivisors(list){
       const el = document.getElementById('divisors');
       document.getElementById('dCount').textContent=String(list.length);
-      const per=24, chunks=[]; for(let i=0;i<list.length;i+=per){ chunks.push(`<div>${list.slice(i,i+per).map(x=>x.toString()).join(', ')}</div>`); }
+      const per=30, chunks=[]; for(let i=0;i<list.length;i+=per){ chunks.push(`<div>${list.slice(i,i+per).map(x=>x.toString()).join(', ')}</div>`); }
       el.innerHTML = chunks.join('');
     }
 
