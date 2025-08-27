@@ -198,7 +198,7 @@ show_header: false
           </a>
         </li>
         <li class="linkitem">
-          <a href="https://merrickmath.github.io/MerrickMath.github.io-LinearAlgebra/" data-ext="true" aria-label="Linear Algebra">
+          <a href="https://merrickmath.github.io/LinearAlgebra/" data-ext="true" aria-label="Linear Algebra">
             <span>Linear Algebra</span>
             <span class="badge">Elective</span>
           </a>
