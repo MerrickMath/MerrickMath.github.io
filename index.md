@@ -186,20 +186,20 @@ show_header: false
           </a>
         </li>
         <li class="linkitem">
-          <a href="https://merrickmath.github.io/Datascience/" data-ext="true" aria-label="Introduction to Data Science">
-            <span>Introduction to Data Science</span>
+          <a href="https://merrickmath.github.io/Datascience/" data-ext="true" aria-label="Data Science">
+            <span>Data Science</span>
             <span class="badge">Elective</span>
           </a>
         </li>
         <li class="linkitem">
-          <a href="https://merrickmath.github.io/Div34Math/" data-ext="true" aria-label="Math 10">
-            <span>Division 3 Math</span>
+          <a href="https://merrickmath.github.io/Div34Math/" data-ext="true" aria-label="D3 Math">
+            <span>D3 Mathematics</span>
             <span class="badge active" aria-hidden="true">Active</span>
           </a>
         </li>
         <li class="linkitem">
           <a href="https://merrickmath.github.io/D2Math/" data-ext="true" aria-label="Linear Algebra">
-            <span>Division 2 Math</span>
+            <span>D2 Mathematics</span>
             <span class="badge active" aria-hidden="true">Active</span>
           </a>
         </li>
