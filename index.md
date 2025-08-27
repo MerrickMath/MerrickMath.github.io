@@ -188,12 +188,18 @@ show_header: false
         <li class="linkitem">
           <a href="https://merrickmath.github.io/Datascience/" data-ext="true" aria-label="Introduction to Data Science">
             <span>Introduction to Data Science</span>
-            <span class="badge">Course</span>
+            <span class="badge">Elective</span>
           </a>
         </li>
         <li class="linkitem">
           <a href="https://merrickmath.github.io/Div34Math/" data-ext="true" aria-label="Math 10">
-            <span>Math 10</span>
+            <span>Division 3 Math</span>
+            <span class="badge">Course</span>
+          </a>
+        </li>
+        <li class="linkitem">
+          <a href="https://merrickmath.github.io/LinearAlgebra/" data-ext="true" aria-label="Linear Algebra">
+            <span>Division 2 Math</span>
             <span class="badge">Course</span>
           </a>
         </li>
