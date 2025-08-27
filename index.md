@@ -193,13 +193,13 @@ show_header: false
         </li>
         <li class="linkitem">
           <a href="https://merrickmath.github.io/Div34Math/" data-ext="true" aria-label="D3 Math">
-            <span>D3 Mathematics</span>
+            <span>Division 3 Mathematics</span>
             <span class="badge active" aria-hidden="true">Active</span>
           </a>
         </li>
         <li class="linkitem">
           <a href="https://merrickmath.github.io/D2Math/" data-ext="true" aria-label="Linear Algebra">
-            <span>D2 Mathematics</span>
+            <span>Division 2 Mathematics</span>
             <span class="badge active" aria-hidden="true">Active</span>
           </a>
         </li>
