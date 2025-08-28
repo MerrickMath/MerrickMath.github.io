@@ -74,30 +74,42 @@
 
     
    @media print {
-      @page { size: letter portrait; margin: 0.6in; }
+      /* Force multi-column in print (Chrome/Edge/WebKit sometimes drop it) */
+      .two-col {
+        /* explicit multi-column with prefixes */
+        -webkit-columns: 2 auto;
+        columns: 2 auto;
+        -webkit-column-count: 2;
+        column-count: 2;
+        -webkit-column-gap: 0.8rem;
+        column-gap: 0.8rem;
+        column-fill: auto;
+        width: 100%;
+      }
     
-      body { padding:0; max-width:none; font-size: 11pt; line-height: 1.25; }
-    
-      .controls { display:none !important; }
-      .paper { box-shadow:none; border:none; }
-      .solutions { border:none; background:none; }
-    
-      .two-col { column-gap: 0.8rem; column-fill: auto; }
-      ol { margin:0.1rem 0 0.8rem 1.1rem; }
-      li { 
-        margin:0.4rem 0 0.7rem;
+      /* Prevent lists from breaking the column flow / collapsing */
+      .two-col > ol {
+        margin: 0.1rem 0 0.8rem 1.1rem;
+        padding: 0;
         break-inside: avoid;
-        -webkit-column-break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      .two-col li {
+        display: block;
+        break-inside: avoid;
         page-break-inside: avoid;
       }
     
-      .box { padding:0.5rem 0.6rem; margin:0.5rem 0 0.7rem; }
-      .meta { margin-bottom:0.3rem; }
-      .qline { overflow-wrap:anywhere; }
+      /* KaTeX: avoid block-level display blowing the column width */
+      .katex-display {
+        display: inline;
+        margin: 0;
+      }
     
-      /* page break control */
-      #exam { break-after: page; page-break-after: always; }
-      #solutions { break-before: page; page-break-before: always; }
+      /* Ensure the printable area is predictable so columns are honored */
+      @page { size: letter portrait; margin: 0.6in; }
+      body { max-width: none; }
+      #exam, #solutions { width: 100%; }
     }
 
   </style>
