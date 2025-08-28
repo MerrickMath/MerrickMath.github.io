@@ -316,6 +316,15 @@
       };
     }
 
+    function genSmallMinusBig(rng){
+      const small = randi(rng, 10, 99);   // 2-digit
+      const big   = randi(rng, 100, 999); // 3-digit
+      return {
+        q: `What is $${small}-${big}$?`,
+        a: `${small - big}`  // will always be negative
+      };
+    }
+
     function genSubtractNegative(rng){const p=randi(rng,5,70), q=randi(rng,5,70); return { q:`What is $${p} - (-${q})$?`, a:`${p+q}` }; }
     function genMixedMinusMixed(rng){
       function randMixed(){const w=randi(rng,1,5), d=randi(rng,2,8), n=randi(rng,1,d-1); return {w,n,d};}
@@ -364,7 +373,7 @@
 
       const section2Fns = [
         function(r){const a=randi(r,444,999), b=randi(r,2,9), c=b*10; return { q:`What is $${(a/100).toFixed(2)}\\times ${c}$?`, a:`${round2((a/100)*c)}` };},
-        genMixedMinusMixed, genIntegerDivision, genNegPlusNeg, genPosPlusPos, genDecSub,
+        genMixedMinusMixed, genIntegerDivision, genNegPlusNeg, genSmallMinusBig, genDecSub,
         genDecSub, genFracAdd, genPercentOf, genIntTimesProperFrac, genSubtractNegative,
         genMixedPlusMixed, genIntMul, genPrimeExponentSum, genDecSubRound, genDecAddRound
       ];
