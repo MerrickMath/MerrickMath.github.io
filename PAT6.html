@@ -73,60 +73,76 @@
     }
 
     
-   @media print {
-      /* Page box */
-      @page { size: letter portrait; margin: 0.55in; }
+    /* --- FORCE-COMPACT PRINT LAYOUT: 1 page questions, 1 page solutions --- */
+    @media print {
+      /* Page box + tighter margins */
+      @page { size: letter portrait; margin: 0.5in; }
     
-      /* Compact typography so each section fits one page */
-      body { max-width: none; font-size: 10.5pt; line-height: 1.22; padding: 0; }
+      /* Smaller, tighter typography for print */
+      body { max-width:none; padding:0; font-size: 10pt; line-height: 1.18; }
     
-      /* Hide UI chrome */
+      /* Hide UI; strip chrome */
       .controls { display: none !important; }
-      .paper { box-shadow: none; border: none; }
-      .solutions { border: none; background: none; }
+      .paper { box-shadow:none; border:none; }
+      .solutions { border:none; background:none; }
     
-      /* Ensure columns are honored when printing */
+      /* QUESTIONS (already 2-col) — tighten columns further */
       .two-col {
         -webkit-columns: 2 auto;
         columns: 2 auto;
         -webkit-column-count: 2;
         column-count: 2;
-        -webkit-column-gap: 0.7rem;
-        column-gap: 0.7rem;
-        column-fill: auto;  /* best cross-browser behavior */
-        width: 100%;
+        -webkit-column-gap: 0.5rem;
+        column-gap: 0.5rem;
+        column-fill: auto;
       }
     
-      /* Tighter list spacing; avoid item splits */
+      /* SOLUTIONS — make them 2-column in print to fit one page */
+      #solutions ol {
+        -webkit-columns: 2 auto;
+        columns: 2 auto;
+        -webkit-column-count: 2;
+        column-count: 2;
+        -webkit-column-gap: 0.5rem;
+        column-gap: 0.5rem;
+        column-fill: auto;
+        margin: 0.1rem 0 0.6rem 1.0rem; /* similar to questions */
+        padding: 0;
+      }
+    
+      /* List spacing (applies to both sections) */
       ol { margin: 0.1rem 0 0.6rem 1.0rem; padding: 0; }
       li {
-        margin: 0.35rem 0 0.55rem;
-        break-inside: avoid;
-        page-break-inside: avoid;
-        -webkit-column-break-inside: avoid;
+        margin: 0.28rem 0 0.45rem;
+        break-inside: avoid; page-break-inside: avoid; -webkit-column-break-inside: avoid;
       }
     
-      /* Math & question text behave in columns */
-      .katex-display { display: inline; margin: 0; }
-      .qline { overflow-wrap: anywhere; }
+      /* Tighten question blocks */
+      .box { padding: 0.4rem 0.5rem; margin: 0.4rem 0 0.6rem; }
+      .meta { margin-bottom: 0.2rem; font-size: 9pt; }
     
-      /* Kill any in-document forced breaks so #exam stays one page */
-      .page-break { break-before: auto; page-break-before: auto; display: none !important; }
+      /* Keep math from blowing column width */
+      .katex-display { display:inline; margin:0; }
+      .katex { font-size: 0.92em; }          /* slightly smaller KaTeX */
+      .qline { overflow-wrap: anywhere; }    /* allow wrapping */
     
-      /* Page control: questions page first, solutions start on page 2 */
+      /* Remove any manual breaks so questions can pack on one page */
+      .page-break { display:none !important; break-before:auto; page-break-before:auto; }
+    
+      /* Force the two pages */
       #exam { break-after: page; page-break-after: always; }
       #solutions { break-before: page; page-break-before: always; }
     
-      /* Print-only title before the exam (since .controls is hidden) */
+      /* Print-only title (since .controls is hidden) */
       #exam::before {
         content: "Math 6 – PAT Part A Generator";
         display: block;
         font-weight: bold;
-        font-size: 14pt;
-        margin: 0 0 0.35rem 0;
-        text-align: left;
+        font-size: 13pt;
+        margin: 0 0 0.3rem 0;
       }
     }
+
 
   </style>
 </head>
