@@ -130,8 +130,15 @@
       .page-break { display:none !important; break-before:auto; page-break-before:auto; }
     
       /* Force the two pages */
-      #exam { break-after: page; page-break-after: always; }
-      #solutions { break-before: page; page-break-before: always; }
+      /* Page control — only one forced break */
+      #exam {
+        break-after: page;
+        page-break-after: always;   /* legacy */
+      }
+      #solutions {
+        break-before: auto !important;
+        page-break-before: auto !important;  /* legacy */
+}
     
       /* Print-only title (since .controls is hidden) */
       #exam::before {
