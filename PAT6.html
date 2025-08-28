@@ -8,6 +8,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+  <!-- PDF deps -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" referrerpolicy="no-referrer"></script>
+
 
   <style>
     :root { --text-width: 6.5in; --margin: 0.6in; }
@@ -41,7 +45,13 @@
     li { break-inside: avoid; margin:.75rem 0 1.25rem; } /* spacing between questions */
 
     /* Keep each question on one line */
-    .qline { white-space: nowrap; display: inline-block; width: 100%; }
+    /* was: .qline { white-space: nowrap; display: inline-block; width: 100%; } */
+    .qline {
+      display: block;
+      white-space: normal;         /* allow wrapping */
+      overflow-wrap: anywhere;     /* break long chunks if needed */
+      width: 100%;
+    }
     .no-break { white-space: nowrap; }
 
     .box { border:1px solid #444; padding:.7rem .8rem; margin:.8rem 0 1rem; border-radius:8px; }
@@ -51,6 +61,22 @@
 
     .page-break { page-break-before: always; margin-top: 1rem; }
 
+    .controls {
+      display: flex;
+      flex-direction: column; /* stack title and buttons */
+      gap: .6rem;
+    }
+    .title-row h1 {
+      margin: 0;
+    }
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem 1rem;
+      align-items: center;
+    }
+
+    
     @media print {
       body { padding:0; max-width:none; }
       .controls { display:none !important; }
@@ -62,12 +88,17 @@
 </head>
 <body>
   <div class="controls">
-    <h1>Math 6 – PAT Part A Generator</h1>
+  <div class="title-row">
+    <h1> Math 6 – PAT Part A Generator </h1>
+  </div>
+  <div class="button-row">
     <label>Seed <input id="seed" type="number" placeholder="random"></label>
     <button class="btn" id="genBtn">Generate</button>
     <button class="btn" id="toggleBtn">Show solutions</button>
+    <button class="btn" id="pdfBtn">Export PDF</button>
     <div id="timer" style="margin-left:auto;font-weight:bold;">00:00</div>
   </div>
+</div>
 
   <div id="exam" class="paper"></div>
   <div id="solutions" class="paper solutions" style="display:none"></div>
@@ -321,6 +352,54 @@
 
     window.addEventListener('load', generate);
     window.addEventListener('load', renderMath);
+
+    // --- PDF Export ---
+    document.getElementById('pdfBtn').addEventListener('click', async () => {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+    
+      const examEl = document.getElementById('exam');
+      const solEl  = document.getElementById('solutions');
+    
+      // Ensure solutions are visible during export (restore afterwards)
+      const wasHidden = (solEl.style.display === 'none' || solEl.style.display === '');
+      solEl.style.display = ''; // show
+    
+      // Build a temporary wrapper so we don't mutate the page
+      const wrapper = document.createElement('div');
+      wrapper.style.padding = '0.5in';
+      wrapper.style.fontFamily = '"Times New Roman", Times, serif';
+    
+      const examClone = examEl.cloneNode(true);
+      const solClone  = solEl.cloneNode(true);
+    
+      // Optional title headers in the PDF
+      const h1 = document.createElement('h2');
+      h1.textContent = 'PAT Part A – Questions';
+      const h2 = document.createElement('h2');
+      h2.style.pageBreakBefore = 'always';
+      h2.textContent = 'Solutions';
+    
+      wrapper.appendChild(h1);
+      wrapper.appendChild(examClone);
+      wrapper.appendChild(h2);
+      wrapper.appendChild(solClone);
+    
+      await doc.html(wrapper, {
+        x: 30, y: 30, width: 550, // ~7.6in content width on letter
+        autoPaging: 'text',
+        callback: d => {
+          // Try to include the seed in the file name if present
+          const seedText = document.querySelector('.meta')?.textContent || '';
+          const seed = (seedText.match(/Seed:\\s*(\\d+)/) || [,''])[1];
+          d.save(`math6-pat${seed ? '-seed-' + seed : ''}.pdf`);
+        }
+      });
+    
+      // Restore original solutions visibility
+      if (wasHidden) solEl.style.display = 'none';
+    });
+        
   </script>
 </body>
 </html>
