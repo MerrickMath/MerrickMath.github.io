@@ -8,10 +8,6 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
-  <!-- PDF deps -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" referrerpolicy="no-referrer"></script>
-
 
   <style>
     :root { --text-width: 6.5in; --margin: 0.6in; }
@@ -84,6 +80,17 @@
       .solutions { border:none; background:none; }
       .page-break { page-break-before: always; }
     }
+    /* Improves page margins in the PDF */
+    @media print {
+      @page { margin: 0.6in; } /* matches your --margin */
+      .two-col { column-fill: auto; }    /* better column balance */
+      li { 
+        break-inside: avoid; 
+        -webkit-column-break-inside: avoid; 
+        page-break-inside: avoid; 
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -354,50 +361,28 @@
     window.addEventListener('load', renderMath);
 
     // --- PDF Export ---
-    document.getElementById('pdfBtn').addEventListener('click', async () => {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+    // Replace the whole jsPDF handler with this print-based one
+    document.getElementById('pdfBtn').addEventListener('click', () => {
+      const solEl = document.getElementById('solutions');
+      const toggleBtn = document.getElementById('toggleBtn');
     
-      const examEl = document.getElementById('exam');
-      const solEl  = document.getElementById('solutions');
-    
-      // Ensure solutions are visible during export (restore afterwards)
+      // Remember current visibility and ensure solutions are visible for the print
       const wasHidden = (solEl.style.display === 'none' || solEl.style.display === '');
-      solEl.style.display = ''; // show
+      if (wasHidden) {
+        solEl.style.display = '';        // show solutions for export
+        toggleBtn.textContent = 'Hide solutions';
+      }
     
-      // Build a temporary wrapper so we don't mutate the page
-      const wrapper = document.createElement('div');
-      wrapper.style.padding = '0.5in';
-      wrapper.style.fontFamily = '"Times New Roman", Times, serif';
+      // Let KaTeX finish (it already has by this point), then print
+      setTimeout(() => {
+        window.print();
     
-      const examClone = examEl.cloneNode(true);
-      const solClone  = solEl.cloneNode(true);
-    
-      // Optional title headers in the PDF
-      const h1 = document.createElement('h2');
-      h1.textContent = 'PAT Part A – Questions';
-      const h2 = document.createElement('h2');
-      h2.style.pageBreakBefore = 'always';
-      h2.textContent = 'Solutions';
-    
-      wrapper.appendChild(h1);
-      wrapper.appendChild(examClone);
-      wrapper.appendChild(h2);
-      wrapper.appendChild(solClone);
-    
-      await doc.html(wrapper, {
-        x: 30, y: 30, width: 550, // ~7.6in content width on letter
-        autoPaging: 'text',
-        callback: d => {
-          // Try to include the seed in the file name if present
-          const seedText = document.querySelector('.meta')?.textContent || '';
-          const seed = (seedText.match(/Seed:\\s*(\\d+)/) || [,''])[1];
-          d.save(`math6-pat${seed ? '-seed-' + seed : ''}.pdf`);
+        // After the print dialog closes, restore the original visibility
+        if (wasHidden) {
+          solEl.style.display = 'none';
+          toggleBtn.textContent = 'Show solutions';
         }
-      });
-    
-      // Restore original solutions visibility
-      if (wasHidden) solEl.style.display = 'none';
+      }, 0);
     });
         
   </script>
