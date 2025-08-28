@@ -73,22 +73,31 @@
     }
 
     
-    @media print {
-      body { padding:0; max-width:none; }
+   @media print {
+      @page { size: letter portrait; margin: 0.6in; }
+    
+      body { padding:0; max-width:none; font-size: 11pt; line-height: 1.25; }
+    
       .controls { display:none !important; }
       .paper { box-shadow:none; border:none; }
       .solutions { border:none; background:none; }
-      .page-break { page-break-before: always; }
-    }
-    /* Improves page margins in the PDF */
-    @media print {
-      @page { margin: 0.6in; } /* matches your --margin */
-      .two-col { column-fill: auto; }    /* better column balance */
+    
+      .two-col { column-gap: 0.8rem; column-fill: auto; }
+      ol { margin:0.1rem 0 0.8rem 1.1rem; }
       li { 
-        break-inside: avoid; 
-        -webkit-column-break-inside: avoid; 
-        page-break-inside: avoid; 
+        margin:0.4rem 0 0.7rem;
+        break-inside: avoid;
+        -webkit-column-break-inside: avoid;
+        page-break-inside: avoid;
       }
+    
+      .box { padding:0.5rem 0.6rem; margin:0.5rem 0 0.7rem; }
+      .meta { margin-bottom:0.3rem; }
+      .qline { overflow-wrap:anywhere; }
+    
+      /* page break control */
+      #exam { break-after: page; page-break-after: always; }
+      #solutions { break-before: page; page-break-before: always; }
     }
 
   </style>
