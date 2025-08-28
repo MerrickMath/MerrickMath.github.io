@@ -74,42 +74,58 @@
 
     
    @media print {
-      /* Force multi-column in print (Chrome/Edge/WebKit sometimes drop it) */
+      /* Page box */
+      @page { size: letter portrait; margin: 0.55in; }
+    
+      /* Compact typography so each section fits one page */
+      body { max-width: none; font-size: 10.5pt; line-height: 1.22; padding: 0; }
+    
+      /* Hide UI chrome */
+      .controls { display: none !important; }
+      .paper { box-shadow: none; border: none; }
+      .solutions { border: none; background: none; }
+    
+      /* Ensure columns are honored when printing */
       .two-col {
-        /* explicit multi-column with prefixes */
         -webkit-columns: 2 auto;
         columns: 2 auto;
         -webkit-column-count: 2;
         column-count: 2;
-        -webkit-column-gap: 0.8rem;
-        column-gap: 0.8rem;
-        column-fill: auto;
+        -webkit-column-gap: 0.7rem;
+        column-gap: 0.7rem;
+        column-fill: auto;  /* best cross-browser behavior */
         width: 100%;
       }
     
-      /* Prevent lists from breaking the column flow / collapsing */
-      .two-col > ol {
-        margin: 0.1rem 0 0.8rem 1.1rem;
-        padding: 0;
+      /* Tighter list spacing; avoid item splits */
+      ol { margin: 0.1rem 0 0.6rem 1.0rem; padding: 0; }
+      li {
+        margin: 0.35rem 0 0.55rem;
         break-inside: avoid;
         page-break-inside: avoid;
+        -webkit-column-break-inside: avoid;
       }
-      .two-col li {
+    
+      /* Math & question text behave in columns */
+      .katex-display { display: inline; margin: 0; }
+      .qline { overflow-wrap: anywhere; }
+    
+      /* Kill any in-document forced breaks so #exam stays one page */
+      .page-break { break-before: auto; page-break-before: auto; display: none !important; }
+    
+      /* Page control: questions page first, solutions start on page 2 */
+      #exam { break-after: page; page-break-after: always; }
+      #solutions { break-before: page; page-break-before: always; }
+    
+      /* Print-only title before the exam (since .controls is hidden) */
+      #exam::before {
+        content: "Math 6 – PAT Part A Generator";
         display: block;
-        break-inside: avoid;
-        page-break-inside: avoid;
+        font-weight: bold;
+        font-size: 14pt;
+        margin: 0 0 0.35rem 0;
+        text-align: left;
       }
-    
-      /* KaTeX: avoid block-level display blowing the column width */
-      .katex-display {
-        display: inline;
-        margin: 0;
-      }
-    
-      /* Ensure the printable area is predictable so columns are honored */
-      @page { size: letter portrait; margin: 0.6in; }
-      body { max-width: none; }
-      #exam, #solutions { width: 100%; }
     }
 
   </style>
@@ -382,27 +398,31 @@
     window.addEventListener('load', renderMath);
 
     // --- PDF Export ---
-    // Replace the whole jsPDF handler with this print-based one
+    // Print-to-PDF handler that respects the print CSS above
     document.getElementById('pdfBtn').addEventListener('click', () => {
       const solEl = document.getElementById('solutions');
       const toggleBtn = document.getElementById('toggleBtn');
     
-      // Remember current visibility and ensure solutions are visible for the print
+      // Ensure solutions are visible for page 2
       const wasHidden = (solEl.style.display === 'none' || solEl.style.display === '');
       if (wasHidden) {
-        solEl.style.display = '';        // show solutions for export
+        solEl.style.display = '';
         toggleBtn.textContent = 'Hide solutions';
       }
     
-      // Let KaTeX finish (it already has by this point), then print
+      // Optionally add a temporary class if you later want special print tweaks
+      document.body.classList.add('print-compact');
+    
+      // Open the system print dialog (use "Save as PDF")
       setTimeout(() => {
         window.print();
     
-        // After the print dialog closes, restore the original visibility
+        // Restore the original state after the dialog closes
         if (wasHidden) {
           solEl.style.display = 'none';
           toggleBtn.textContent = 'Show solutions';
         }
+        document.body.classList.remove('print-compact');
       }, 0);
     });
         
