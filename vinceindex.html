@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mathematics with Dr. Vince</title>
+  <!-- Use Cormorant font for elegant math styling -->
+  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    
+  :root{
+    --bg:#fafafa;
+    --surface:#ffffff;
+    --surface-alt:#fff7ed;
+    --text:#1e293b;
+    --muted:#64748b;
+    --indigo:#0d9488; /* teal */
+    --purple:#f59e0b; /* amber */
+    --ring:rgba(13,148,136,.28);
+    --shadow:0 10px 25px rgba(2,6,23,.08);
+    --radius:18px;
+  }
+
+  body,.page-header,.main-content,header,footer{background:var(--bg) !important;border:0 !important;}
+  body{margin:0;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-family:'Cormorant', serif;color:var(--text);line-height:1.6;}
+  .banner{width:100%;background:linear-gradient(135deg,#648DB3,#5459AC,#52357B);color:#fff;padding:12px 10px;}
+  .banner__inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:center;}
+  .banner__title{margin:0;font-weight:700;font-size:clamp(22px,3vw,36px);letter-spacing:.2px;text-align:center;font-family:'Cormorant', serif;}
+  .container{max-width:1100px;margin:14px auto 56px;padding:0 20px;}
+  header{display:grid;gap:8px;justify-items:center;text-align:center;margin:8px 0 20px;}
+  header .quote{font-size:1.05rem;color:var(--muted);max-width:70ch;margin:0;font-style:italic;font-family:'Cormorant', serif;}
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;}
+  section{grid-column:span 12;background:var(--surface);border:1px solid #e5e7eb;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 18px 10px;}
+  @media (min-width:860px){section{grid-column:span 4;}}
+  section h2{margin:2px 2px 12px;font-size:clamp(1.3rem,2.4vw,1.7rem);font-weight:400;letter-spacing:.2px;color:var(--indigo);border-bottom:2px solid #e8eafc;padding-bottom:.2rem;font-family:'Cormorant', serif;}
+  ul.linklist{list-style:none;padding:0;margin:0;display:grid;gap:8px;}
+  .linkitem a{display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;color:var(--indigo);background:var(--surface-alt);padding:10px 12px;border-radius:12px;border:1px solid var(--ring);transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;outline-offset:3px;font-weight:600;}
+  .linkitem a:hover,.linkitem a:focus{transform:translateY(-1px);box-shadow:0 10px 18px rgba(2,6,23,.10);border-color:var(--indigo);background:#e9ecff;}
+  .badge{display:inline-block;font-size:.72rem;letter-spacing:.15px;line-height:1;padding:6px 8px;border-radius:999px;background:#eef1fb;color:var(--purple);border:1px solid var(--ring);}
+  .badge.active{background:#ede8ff;color:var(--purple);}
+  footer{margin-top:28px;text-align:center;color:var(--muted);font-size:.9rem;font-family:'Cormorant', serif;}
+  .title-wrap{text-align:center;margin:8px 0 8px;}
+  .title-logo{display:block;width:450px;height:auto;margin:0 auto -10px;}
+  .page-title{margin:0;font-weight:400;text-align:center;font-size:clamp(28px, 4vw, 44px);color:var(--indigo);line-height:1.2;font-family:'Cormorant', serif;}
+  .email-link{display:inline-block;margin-top:.15em;color:inherit;text-decoration:none;}
+  .email-link:focus{outline:2px solid var(--ring);outline-offset:3px;border-radius:8px;}
+  .my-svg-icon{fill:currentColor;vertical-align:middle;width:24px;height:24px;}
+  .email-link:hover{color:var(--purple);} 
+  </style>
+</head>
+<body>
+<!-- body content remains the same -->
+<div class="title-wrap">
+  <!-- Gaussian SVG -->
+  <!-- Simple grid with several functions -->
+  <svg class="title-logo" xmlns="http://www.w3.org/2000/svg"
+       viewBox="0 0 420 140" role="img"
+       aria-label="Coordinate grid with several functions">
+    <title>Functions on a grid</title>
+  
+    <!-- Grid (minor + major) -->
+    <defs>
+      <!-- minor grid every 20px -->
+      <pattern id="gridMinor" width="20" height="20" patternUnits="userSpaceOnUse">
+        <path d="M20 0H0V20" fill="none" stroke="var(--ring)" stroke-width="0.6"/>
+      </pattern>
+      <!-- major grid every 100px -->
+      <pattern id="gridMajor" width="100" height="100" patternUnits="userSpaceOnUse">
+        <path d="M100 0H0V100" fill="none" stroke="#e5e7eb" stroke-width="1.1"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#gridMinor)"/>
+    <rect width="100%" height="100%" fill="url(#gridMajor)"/>
+  
+    <!-- Axes (centered) -->
+    <line x1="0" y1="70" x2="420" y2="70" stroke="var(--text)" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="210" y1="0" x2="210" y2="140" stroke="var(--text)" stroke-width="1.5" stroke-linecap="round"/>
+  
+    <!-- Functions -->
+    <!-- 1) Sine-like curve -->
+    <path d="M 10 70
+             C 45 40, 80 40, 115 70
+             S 185 100, 220 70
+             S 290 40, 325 70
+             S 395 100, 410 70"
+          fill="none" stroke="var(--indigo)" stroke-width="2" stroke-linecap="round"/>
+  
+    <!-- 2) Quadratic-like curve (opens up) -->
+    <path d="M 24 102
+             Q 210 12 396 102"
+          fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round"/>
+  
+    <!-- 3) Exponential-like growth -->
+    <path d="M 24 116
+             C 120 114, 175 104, 240 80
+             S 340 42, 396 22"
+          fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round"/>
+  
+  </svg>
+  <h1 class="page-title">Mathematics with Dr. Vince</h1>
+  <a href="mailto:vincent.chan@renertschool.ca" class="email-link" aria-label="Email Vincent Chan">
+    <svg class="my-svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M12 .02c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.99 6.98l-6.99 5.666-6.991-5.666h13.981zm.01 10h-14v-8.505l7 5.673 7-5.672v8.504z"/>
+    </svg>
+  </a>
+</div>
+
+<div class="container">
+  <header>
+    <p class="quote"><em>“Talent is important, but how one develops and nurtures it is even more so.”</em> — Terence Tao</p>
+  </header>
+
+  <main id="main" class="grid" aria-label="Main sections">
+    <section aria-labelledby="sec-courses">
+      <h2 id="sec-courses">Current Courses</h2>
+      <ul class="linklist">
+        <li class="linkitem"><a href="https://vchan2.github.io/2025gr1/" data-ext="true" aria-label="Grade 1 Math"><span>Grade 1 Mathematics</span><span class="badge active" aria-hidden="true">Active</span></a></li>
+        <li class="linkitem"><a href="https://vchan2.github.io/2025gr45/" data-ext="true" aria-label="Grade 4/5 Math"><span>Grade 4/5 Mathematics</span><span class="badge active" aria-hidden="true">Active</span></a></li>
+        <li class="linkitem"><a href="https://vchan2.github.io/2025gr6/" data-ext="true" aria-label="Grade 6 Math"><span>Grade 6 Mathematics</span><span class="badge active" aria-hidden="true">Active</span></a></li>
+        <li class="linkitem"><a href="https://vchan2.github.io/2025APCalculusBC/" data-ext="true" aria-label="AP Calculus BC"><span>AP Calculus BC</span><span class="badge active" aria-hidden="true">Active</span></a></li>
+        <li class="linkitem"><a href="https://vchan2.github.io/D2Crux/" data-ext="true" aria-label="Division 2 Crux"><span>Division 2 Crux Mathematicorum</span><span class="badge">Elective</span></a></li>
+        <li class="linkitem"><a href="https://vchan2.github.io/D3Crux/" data-ext="true" aria-label="Division 3 Crux"><span>Division 3 Crux Mathematicorum</span><span class="badge">Elective</span></a></li>
+      </ul>
+    </section>
+    <section aria-labelledby="sec-games">
+      <h2 id="sec-games">Games</h2>
+      <ul class="linklist">
+        <li class="linkitem"><a href="https://merrickmath.github.io/Camelrace.html" data-ext="true"><span>Camel Racing Simulation</span></a></li>
+        <li class="linkitem"><a href="https://merrickmath.github.io/CoordinateGame.html" data-ext="true"><span>Coordinate Dash</span></a></li>
+        <li class="linkitem"><a href="https://merrickmath.github.io/Graphblitz.html" data-ext="true"><span>Graph Blitz</span></a></li>
+        <li class="linkitem"><a href="https://merrickmath.github.io/Geometryblitz.html" data-ext="true"><span>Geometry Blitz</span></a></li>
+        <li class="linkitem"><a href="https://merrickmath.github.io/Mixture.html" data-ext="true"><span>Vial Mixture Game</span></a></li>
+        <li class="linkitem"><a href="https://playset.netlify.app" data-ext="true"><span>Set Game</span></a></li>
+      </ul>
+    </section>
+    <section aria-labelledby="sec-contests">
+      <h2 id="sec-contests">Contests</h2>
+      <ul class="linklist">
+        <li class="linkitem"><a href="https://www.cemc.uwaterloo.ca/contests/past_contests.html" target="_blank" rel="noopener"><span>CEMC Past Contests</span></a></li>
+        <li class="linkitem"><a href="https://artofproblemsolving.com/wiki/index.php/AMC_Problems_and_Solutions" target="_blank" rel="noopener"><span>AMC Problems and Solutions</span></a></li>
+        <li class="linkitem"><a href="https://mathkangaroo.ca/samples/en" target="_blank" rel="noopener"><span>Kangaroo Math Past Contests</span></a></li>
+        <li class="linkitem"><a href="https://science.ucalgary.ca/mathematics-statistics/engagement/educational-outreach/math-nite" target="_blank" rel="noopener"><span>Math Nite</span></a></li>
+        <li class="linkitem"><a href="https://renertmath.github.io/renertrabbit.html" target="_blank" rel="noopener"><span>Renert Rabbit</span></a></li>
+      </ul>
+    </section>
+    <section aria-labelledby="sec-challenges">
+      <h2 id="sec-challenges">Challenges</h2>
+      <ul class="linklist">
+        <li class="linkitem"><a href="https://renertmath.github.io/RenertMath-CelebrateMath/" data-ext="true"><span>CoSMOS 2020</span></a></li>
+        <li class="linkitem"><a href="https://vchan2.github.io/Challenges/Fruit_puzzle.pdf" data-ext="true"><span>Fruit Algebra puzzle - over 95% of people cannot solve this!</span></a></li>
+      </ul>
+    </section>
+    <section aria-labelledby="sec-more">
+      <h2 id="sec-more">More Cool Stuff</h2>
+      <ul class="linklist">
+        <li class="linkitem"><a href="https://www.3blue1brown.com" target="_blank" rel="noopener"><span>3 Blue 1 Brown</span></a></li>
+        <li class="linkitem"><a href="https://www.veritasium.com" target="_blank" rel="noopener"><span>Veritasium</span></a></li>
+        <li class="linkitem"><a href="https://www.youtube.com/user/standupmaths" target="_blank" rel="noopener"><span>Stand Up Maths</span></a></li>
+        <li class="linkitem"><a href="https://www.youtube.com/numberphile" target="_blank" rel="noopener"><span>Numberphile</span></a></li>
+        <li class="linkitem"><a href="https://krazydad.com/tablet/puzzles.php" target="_blank" rel="noopener"><span>Krazy Dad Interactive Puzzles</span></a></li>
+        <li class="linkitem"><a href="https://www.puzzle-star-battle.com" target="_blank" rel="noopener"><span>Logic Puzzles Galore</span></a></li>
+        <li class="linkitem"><a href="https://mathpickle.com" target="_blank" rel="noopener"><span>Math Pickle</span></a></li>
+        <li class="linkitem"><a href="https://www.datacamp.com" target="_blank" rel="noopener"><span>DataCamp</span></a></li>
+      </ul>
+    </section>
+  </main>
+  <footer></footer>
+</div>
+<script>
+(function(){
+  const nav = performance.getEntriesByType('navigation')[0];
+  const isReload = nav && (nav.type === 'reload' || nav.type === 'back_forward');
+  if (!location.hash) {
+    window.addEventListener('load', function () { window.scrollTo(0,0); });
+    window.addEventListener('pageshow', function (e) { if (e.persisted || isReload) { window.scrollTo(0,0); } });
+  }
+})();
+</script>  
+</body>
+</html>
