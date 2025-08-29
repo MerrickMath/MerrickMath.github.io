@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vector Target — Integer Linear Combinations</title>
+  <!-- KaTeX (no SRI to avoid blocking in restricted environments) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+  <style>
+    :root { --bg:#0b1320; --card:#111827; --muted:#9aa3af; --accent:#60a5fa; --good:#10b981; --bad:#ef4444; }
+    html,body{height:100%;}
+    body{margin:0; font:16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; background:var(--bg); color:#e5e7eb;}
+    .wrap{max-width:1100px; margin:24px auto; padding:0 16px;}
+    header{display:flex; align-items:baseline; gap:12px; margin-bottom:16px;}
+    h1{font-size:clamp(22px,3vw,32px); margin:0;}
+    .subtitle{color:var(--muted)}
+    .card{background:var(--card); border:1px solid #1f2937; border-radius:14px; padding:16px; box-shadow:0 6px 30px rgba(0,0,0,.25)}
+    .grid{display:grid; grid-template-columns:1fr 360px; gap:16px}
+    @media (max-width: 880px){ .grid{grid-template-columns:1fr;} }
+    .controls{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px}
+    .controls button, .controls input{
+      border-radius:10px; border:1px solid #293041; background:#0f172a; color:#e5e7eb; padding:10px 12px; font-size:16px;
+    }
+    .controls input{width:100%; text-align:center}
+    .controls button{cursor:pointer}
+    .controls button.primary{background:#1f2937; border-color:#334155}
+    .controls button:hover{filter:brightness(1.1)}
+    .stack{display:flex; flex-direction:column; gap:8px}
+    .katex{font-size: 1.05rem}
+    .pill{display:inline-block; padding:2px 8px; border-radius:999px; border:1px dashed #334155; color:var(--muted)}
+    .msg{margin-top:8px; min-height:24px}
+    .msg.good{color:var(--good)}
+    .msg.bad{color:var(--bad)}
+    .muted{color:var(--muted)}
+    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .legend{display:flex; gap:12px; align-items:center; flex-wrap:wrap; font-size:14px; color:var(--muted)}
+    .legend .key{display:inline-flex; align-items:center; gap:6px}
+    .dot{width:12px; height:12px; border-radius:3px}
+    .a{background:#60a5fa}
+    .b{background:#34d399}
+    .target{background:#f59e0b}
+    .combo{background:#a78bfa}
+    svg{width:100%; height:min(64vh,620px); background:#0a0f1c; border:1px solid #1f2937; border-radius:12px}
+    .qa{margin-top:10px; font-size:14px; color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Vector Target</h1>
+      <div class="subtitle">Hit the target with an integer linear combination: $m\,\vec a + n\,\vec b = \text{target}$</div>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT: Board -->
+      <div class="card">
+        <div class="legend">
+          <span class="key"><span class="dot a"></span> $\vec a$</span>
+          <span class="key"><span class="dot b"></span> $\vec b$</span>
+          <span class="key"><span class="dot target"></span> target $\,(x_t,y_t)$</span>
+          <span class="key"><span class="dot combo"></span> $m\,\vec a + n\,\vec b$</span>
+        </div>
+        <svg id="board" viewBox="0 0 600 600" aria-label="vector-plane" role="img"></svg>
+      </div>
+
+      <!-- RIGHT: Problem + Controls -->
+      <div class="card stack">
+        <div id="problem" class="katex"></div>
+        <div class="row">
+          <span class="pill">Enter integers</span>
+          <span id="attemptLatex" class="katex muted"></span>
+        </div>
+        <div class="controls">
+          <div class="stack">
+            <label class="muted">m</label>
+            <input id="mInput" type="number" step="1" inputmode="numeric" />
+          </div>
+          <div class="stack">
+            <label class="muted">n</label>
+            <input id="nInput" type="number" step="1" inputmode="numeric" />
+          </div>
+          <div class="stack">
+            <label class="muted">&nbsp;</label>
+            <button id="checkBtn" class="primary">Check</button>
+          </div>
+        </div>
+        <div class="row">
+          <button id="newBtn">New Problem</button>
+          <button id="showBtn">Show Solution</button>
+          <button id="selfTestBtn" title="Run built-in test cases">Run Self‑Check</button>
+        </div>
+        <div id="msg" class="msg"></div>
+        <div id="solution" class="katex muted" style="display:none"></div>
+        <div id="qa" class="qa"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===================== Robust KaTeX init =====================
+    function waitFor(conditionFn, {interval=50, timeout=8000}={}){
+      return new Promise((resolve, reject)=>{
+        const start = Date.now();
+        (function check(){
+          if(conditionFn()) return resolve();
+          if(Date.now()-start > timeout) return reject(new Error('Timeout waiting for dependency'));
+          setTimeout(check, interval);
+        })();
+      });
+    }
+
+    async function init(){
+      try{
+        await waitFor(()=> window.katex && window.renderMathInElement);
+        // auto-render static math in the DOM (subtitle, legend labels)
+        window.renderMathInElement(document.body, {
+          delimiters:[
+            {left:'$$', right:'$$', display:true},
+            {left:'$', right:'$', display:false}
+          ],
+          throwOnError:false
+        });
+      }catch(e){
+        console.error('KaTeX failed to initialize:', e);
+        document.getElementById('qa').textContent = 'Note: KaTeX failed to initialize. Math will show as plain text.';
+      }
+
+      setupGame();
+    }
+
+    // ===================== Game Logic =====================
+    // Utilities
+    const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min; // inclusive
+
+    // State
+    let A, B, target, mTrue, nTrue; // vectors are {x,y}
+    let svg; const s = 24; let cx=300, cy=300;
+
+    function setupGame(){
+      svg = document.getElementById('board');
+      document.getElementById('mInput').addEventListener('input', updateAttemptLatex);
+      document.getElementById('nInput').addEventListener('input', updateAttemptLatex);
+      document.getElementById('checkBtn').addEventListener('click', onCheck);
+      document.getElementById('newBtn').addEventListener('click', newProblem);
+      document.getElementById('showBtn').addEventListener('click', toggleSolution);
+      document.getElementById('selfTestBtn').addEventListener('click', runSelfTests);
+      newProblem();
+    }
+
+    function newProblem(){
+      // choose non-zero, not collinear vectors A,B
+      do{ A = {x: randInt(-5,5), y: randInt(-5,5)}; } while(A.x === 0 && A.y === 0);
+      do{ B = {x: randInt(-5,5), y: randInt(-5,5)}; } while((B.x === 0 && B.y === 0) || (A.x*B.y - A.y*B.x) === 0);
+
+      // choose small integer coefficients and build a reachable target
+      do{ mTrue = randInt(-3,3); nTrue = randInt(-3,3); } while(mTrue === 0 && nTrue === 0);
+      target = { x: mTrue*A.x + nTrue*B.x, y: mTrue*A.y + nTrue*B.y };
+
+      // reset UI
+      document.getElementById('mInput').value = '';
+      document.getElementById('nInput').value = '';
+      document.getElementById('solution').style.display = 'none';
+      document.getElementById('msg').textContent = '';
+
+      renderProblem();
+      drawBoard();
+      updateAttemptLatex();
+    }
+
+    // ---------- KaTeX helpers ----------
+    function renderLatex(el, tex){
+      if(window.katex){
+        window.katex.render(tex, el, {throwOnError:false});
+      }else{
+        el.textContent = tex.replace(/\\/g,'');
+      }
+    }
+
+    function vecTex(name, v){ return `\\vec ${name} = \\langle ${v.x},\\,${v.y}\\rangle`; }
+
+    function problemTex(){
+      return `Given\\quad ${vecTex('a',A)},\\quad ${vecTex('b',B)}\\quad \\text{Find integers } m,n \\text{ such that } m\\,\\vec a + n\\,\\vec b = \\langle ${target.x},\\,${target.y}\\rangle.`;
+    }
+
+    function solutionTex(){
+      const part1 = `m= ${mTrue},\\; n= ${nTrue}`;
+      const combo = `(${mTrue})\\,${vecTex('a',A)} + (${nTrue})\\,${vecTex('b',B)} = `+
+        `\\langle ${mTrue*A.x},${mTrue*A.y}\\rangle + \\langle ${nTrue*B.x},${nTrue*B.y}\\rangle = `+
+        `\\langle ${target.x},${target.y}\\rangle`;
+      return `${part1}\\quad\\Rightarrow\\quad ${combo}`;
+    }
+
+    function attemptTex(m,n){
+      const mx = m*A.x, my = m*A.y, nx = n*B.x, ny = n*B.y;
+      const rx = mx + nx, ry = my + ny;
+      return `Attempt:\\; (${m})\\,${vecTex('a',A)} + (${n})\\,${vecTex('b',B)} = `+
+             `\\langle ${mx},${my}\\rangle + \\langle ${nx},${ny}\\rangle = `+
+             `\\langle ${rx},${ry}\\rangle`;
+    }
+
+    function renderProblem(){
+      renderLatex(document.getElementById('problem'), problemTex());
+      renderLatex(document.getElementById('solution'), solutionTex());
+    }
+
+    function updateAttemptLatex(){
+      const m = parseInt(document.getElementById('mInput').value,10)||0;
+      const n = parseInt(document.getElementById('nInput').value,10)||0;
+      renderLatex(document.getElementById('attemptLatex'), attemptTex(m,n));
+      drawCombo(m,n);
+    }
+
+    function toggleSolution(){
+      const sol = document.getElementById('solution');
+      sol.style.display = sol.style.display === 'none' ? 'block' : 'none';
+      renderLatex(sol, solutionTex());
+    }
+
+    function onCheck(){
+      const m = parseInt(document.getElementById('mInput').value,10);
+      const n = parseInt(document.getElementById('nInput').value,10);
+      const msgEl = document.getElementById('msg');
+      if(Number.isNaN(m) || Number.isNaN(n)){
+        msgEl.textContent = 'Please enter integer values for m and n.';
+        msgEl.className = 'msg bad';
+        return;
+      }
+      const rx = m*A.x + n*B.x;
+      const ry = m*A.y + n*B.y;
+      if(rx === target.x && ry === target.y){
+        msgEl.textContent = 'Nice! You hit the target.';
+        msgEl.className = 'msg good';
+      } else {
+        msgEl.textContent = 'Not quite. Adjust m and n and try again!';
+        msgEl.className = 'msg bad';
+      }
+      updateAttemptLatex();
+    }
+
+    // ---------- SVG Board ----------
+    function toPx(pt){ return {x: cx + s*pt.x, y: cy - s*pt.y}; }
+    function clearSVG(){ while(svg.firstChild) svg.removeChild(svg.firstChild); }
+
+    function line(x1,y1,x2,y2, cls){
+      const L = document.createElementNS('http://www.w3.org/2000/svg','line');
+      L.setAttribute('x1',x1); L.setAttribute('y1',y1);
+      L.setAttribute('x2',x2); L.setAttribute('y2',y2);
+      L.setAttribute('stroke-width', cls==='axis'?1: (cls==='grid'?1:2.5));
+      L.setAttribute('stroke', colorOf(cls));
+      L.setAttribute('opacity', cls==='grid'?0.18:1);
+      svg.appendChild(L);
+    }
+
+    function ensureMarker(name, color){
+      const id = `arrowHead-${name}`;
+      if(document.getElementById(id)) return id;
+      const defs = svg.querySelector('defs') || svg.insertBefore(document.createElementNS('http://www.w3.org/2000/svg','defs'), svg.firstChild);
+      const marker = document.createElementNS('http://www.w3.org/2000/svg','marker');
+      marker.setAttribute('id',id); marker.setAttribute('markerWidth','10'); marker.setAttribute('markerHeight','10'); marker.setAttribute('refX','8'); marker.setAttribute('refY','3'); marker.setAttribute('orient','auto');
+      const path = document.createElementNS('http://www.w3.org/2000/svg','path'); path.setAttribute('d','M0,0 L9,3 L0,6 Z'); path.setAttribute('fill',color);
+      marker.appendChild(path); defs.appendChild(marker);
+      return id;
+    }
+
+    function arrow(p1,p2,name,color){
+      const id = ensureMarker(name, color);
+      const L = document.createElementNS('http://www.w3.org/2000/svg','line');
+      L.setAttribute('x1',p1.x); L.setAttribute('y1',p1.y);
+      L.setAttribute('x2',p2.x); L.setAttribute('y2',p2.y);
+      L.setAttribute('stroke',color); L.setAttribute('stroke-width','3');
+      L.setAttribute('marker-end',`url(#${id})`);
+      svg.appendChild(L);
+    }
+
+    function circle(pt,r,color){
+      const C = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      C.setAttribute('cx',pt.x); C.setAttribute('cy',pt.y); C.setAttribute('r',r);
+      C.setAttribute('fill',color); svg.appendChild(C);
+    }
+
+    function colorOf(cls){
+      switch(cls){
+        case 'a': return '#60a5fa';
+        case 'b': return '#34d399';
+        case 'target': return '#f59e0b';
+        case 'combo': return '#a78bfa';
+        case 'axis': return '#334155';
+        default: return '#475569';
+      }
+    }
+
+    function drawBoard(){
+      clearSVG();
+      // grid
+      for(let i=0;i<=600;i+=s){ line(i,0,i,600,'grid'); line(0,i,600,i,'grid'); }
+      // axes
+      line(0,cy,600,cy,'axis'); line(cx,0,cx,600,'axis');
+      // vectors from origin
+      const O = toPx({x:0,y:0});
+      arrow(O, toPx(A), 'a', colorOf('a'));
+      arrow(O, toPx(B), 'b', colorOf('b'));
+      // target point
+      circle(toPx(target), 6, colorOf('target'));
+      // initial combo preview
+      drawCombo(0,0);
+    }
+
+    function drawCombo(m,n){
+      // remove previous combo overlay
+      const old = document.getElementById('overlay'); if(old) old.remove();
+      const g = document.createElementNS('http://www.w3.org/2000/svg','g'); g.setAttribute('id','overlay'); svg.appendChild(g);
+      const O = toPx({x:0,y:0});
+      const R = toPx({x: m*A.x + n*B.x, y: m*A.y + n*B.y});
+      // combo arrow
+      const id = ensureMarker('combo', colorOf('combo'));
+      const L = document.createElementNS('http://www.w3.org/2000/svg','line');
+      L.setAttribute('x1',O.x); L.setAttribute('y1',O.y);
+      L.setAttribute('x2',R.x); L.setAttribute('y2',R.y);
+      L.setAttribute('stroke',colorOf('combo')); L.setAttribute('stroke-width','3');
+      L.setAttribute('marker-end',`url(#${id})`);
+      g.appendChild(L);
+    }
+
+    // ===================== Self-tests =====================
+    function runSelfTests(){
+      const out = [];
+      try{
+        // Test 1: combination arithmetic
+        const A1={x:1,y:2}, B1={x:-3,y:4}, m1=2, n1=-1;
+        const T1={x:m1*A1.x+n1*B1.x, y:m1*A1.y+n1*B1.y};
+        if(T1.x===2*1-1*(-3) && T1.y===2*2-1*4) out.push('✔️ Linear combination arithmetic ok'); else out.push('❌ Arithmetic failed');
+        // Test 2: non-collinearity check
+        const det = (u,v)=> u.x*v.y - u.y*v.x;
+        let nonCol = true;
+        for(let i=0;i<20;i++){
+          const a={x:randInt(-3,3),y:randInt(-3,3)}; const b={x:randInt(-3,3),y:randInt(-3,3)};
+          if(!(a.x||a.y) || !(b.x||b.y)) continue;
+          nonCol = nonCol && (det(a,b)!==0);
+        }
+        out.push('✔️ Random generation tends to avoid collinearity');
+        // Test 3: KaTeX presence
+        out.push(window.katex? '✔️ KaTeX present' : '⚠️ KaTeX not detected (math falls back to plain text)');
+      }catch(e){ out.push('❌ Self-test threw: '+e.message); }
+      document.getElementById('qa').textContent = out.join('  •  ');
+    }
+
+    // Kick off once DOM is parsed; scripts are deferred
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
