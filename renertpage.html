@@ -33,21 +33,28 @@
       --divider: rgba(0,119,182,.28);
     }
 
-    body{margin:0;font-family:'STIX Two Text', serif;color:var(--text);line-height:1.6;background:var(--bg);}
+    body{
+      margin:0;
+      font-family:'STIX Two Text', serif;
+      color:var(--text);
+      line-height:1.6;
+      background:var(--indigo);  /* full page background is dark blue */
+    }
+
     .container{max-width:1100px;margin:0 auto;padding:20px;}
     header{
       text-align:center;
-      margin:40px 0;
-      background: var(--blue);   /* use your primary blue */
-      padding:40px 20px;         /* add padding so the dark block looks intentional */
-      border-radius: var(--radius);
+      margin:20px 0 40px;
+      background:none;
     }
+
     .maintopmarina{max-width:200px;display:block;margin:0 auto 20px;}
     .page-title{
       font-size:clamp(28px,4vw,44px);
-      color:#ffffff;   /* white text */
+      color:#ffffff;  /* white text on dark blue background */
       margin:0;
     }
+
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;}
     section{
       grid-column:span 12;
