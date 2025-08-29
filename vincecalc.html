@@ -6,59 +6,57 @@
   <title>AP Calculus BC – Dr. Vince</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-  /*
-    Color scheme
-    ────────────
-    I set CSS variables so you can drop in hex codes from your palette
-    (color-hex palette 1064019). Replace the five values below as needed.
-  */
   :root{
-    --brand-1:#1A2980;   /* header gradient start */
-    --brand-2:#26D0CE;   /* header gradient end   */
-    --accent:#514a9d;    /* h2 + borders          */
-    --link:#0AB9DC;      /* link color            */
-    --ink:#606c71;       /* body text             */
-    --bg:#f9fafc;        /* page background        */
-    --card:#ffffff;      /* card background        */
-    --muted:#819198;     /* muted text             */
-    --stroke:#e8eaf2;    /* light borders/shadows  */
+    /* Calm academic palette */
+    --brand-1:#1A2980;   /* deep indigo */
+    --brand-2:#26D0CE;   /* teal */
+    --accent:#514a9d;    /* headings */
+    --link:#0AB9DC;      /* links */
+    --ink:#606c71;       /* body text */
+    --bg:#f9fafc;        /* page bg */
+    --card:#ffffff;      /* cards */
+    --muted:#819198;     /* secondary text */
+    --stroke:#e8eaf2;    /* borders */
   }
 
-  /* Page shell */
-  body{margin:0;font-family:'Cormorant',serif;color:var(--ink);line-height:1.5;background:var(--bg)}
-  header{ text-align:center; padding:1.5rem 1rem; background:linear-gradient(135deg,var(--brand-1),var(--brand-2)); color:#fff; box-shadow:0 3px 8px rgba(0,0,0,.12); }
+  html,body{height:100%}
+  body{margin:0;font-family:'Cormorant',serif;color:var(--ink);line-height:1.55;background:var(--bg)}
+
+  /* Header */
+  header{ text-align:center; padding:1.6rem 1rem; background:linear-gradient(135deg,var(--brand-1),var(--brand-2)); color:#fff; box-shadow:0 3px 8px rgba(0,0,0,.12); }
   header h1{ margin:0; font-weight:700; font-size:clamp(26px,3.8vw,40px); }
-  header p{ margin-top:.3rem; font-size:1.05rem; opacity:.9; }
+  header p{ margin-top:.3rem; font-size:1.05rem; opacity:.92; }
   .contact-icon svg{ fill:#fff; }
 
+  /* Layout */
   main{ max-width:1000px; margin:1.5rem auto; padding:0 1rem; display:grid; gap:1rem; }
 
+  /* Cards/sections */
   section, article{ background:var(--card); border-radius:10px; padding:1rem 1.2rem; box-shadow:0 4px 12px rgba(0,0,0,.05); border:1px solid var(--stroke); }
   section a{ color:var(--link); text-decoration:none; font-weight:600; }
   section a:hover{ color:var(--brand-1); text-decoration:underline; }
 
   h2{ color:var(--accent); font-weight:600; border-bottom:2px solid var(--brand-1); padding-bottom:.2rem; margin:0 0 .6rem; }
-  h3{ margin:.6rem 0 .4rem; color:var(--brand-1); font-weight:600; font-size:1.05rem; }
+  h3{ margin:.6rem 0 .4rem; color:var(--brand-1); font-weight:600; font-size:1.06rem; }
 
   ul{ line-height:1.4; margin:.4rem 0; padding-left:1rem; }
   li{ margin:.2rem 0; }
 
-  /* Quicklinks */
+  /* Quick links */
   .quicklinks{ display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.6rem; margin:.6rem 0; }
   .quicklinks a{ display:inline-block; background:#e6f9fc; color:var(--brand-1)!important; padding:.5rem .8rem; border-radius:6px; text-align:center; border:1px solid #b8ecf5; font-size:.95rem; transition:background .2s ease, transform .15s ease; }
   .quicklinks a:hover{ background:#d0f3fa; transform:translateY(-1px); }
 
-  /* Notes / highlights */
-  .note{ border-left:4px solid #2f855a; background:#f6fffa; padding:.75rem 1rem; border-radius:6px; }
+  /* Notes */
+  .note{ border-left:4px solid #2f855a; background:#f6fffa; padding:.8rem 1rem; border-radius:8px; }
   .muted{ color:var(--muted); font-style:italic; }
 
-  footer{ margin-top:1.2rem; text-align:center; color:#777; font-size:.85rem; }
-
-  /* Exam info */
-  .exam-countdown{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin:.6rem 0;padding:.75rem 1rem;border:1px solid var(--stroke);border-radius:10px;background:#f3f9ff}
+  /* Countdown pill INSIDE note */
+  .exam-countdown{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin:.1rem 0 .6rem 0}
   .exam-countdown strong{color:var(--brand-1)}
   .pill{display:inline-block;padding:.35rem .6rem;border-radius:999px;background:var(--brand-1);color:#fff;font-weight:700}
-  .hint{font-size:.9rem;color:var(--muted)}
+
+  footer{ margin-top:1.2rem; text-align:center; color:#777; font-size:.85rem; }
   </style>
 </head>
 <body>
@@ -73,13 +71,6 @@
   </header>
 
   <main>
-    <div class="exam-countdown" role="group" aria-label="Exam information">
-        <strong>AP Exam:</strong>
-        <span>Monday, May 11, 2026, 8:00 AM</span>
-        <span class="pill" id="days-left" aria-live="polite">—</span>
-      </div>
-    
-    <!-- Quicklinks -->
     <div class="quicklinks" aria-label="Quick links">
       <a href="#updates">Updates</a>
       <a href="#schedule">Schedule</a>
@@ -99,7 +90,6 @@
 
     <section id="schedule">
       <h2>Schedule</h2>
-      <p>Tentative schedule for upcoming classes:</n></p>
       <ul>
         <li><strong>Week of Jun. 9</strong>
           <ul>
@@ -135,6 +125,7 @@
 
     <section id="exams">
       <h2>Exams</h2>
+
       <p><strong>Unit 10 final unit test</strong> scheduled for <b>Monday, March 24</b> (in class). Majority of questions focus on 10.10–10.15. You should be able to:</p>
       <ul>
         <li>Determine convergence/divergence (partial sums, geometric, nth-term, p-series, comparison, alternating series, ratio, absolute convergence)</li>
@@ -145,6 +136,11 @@
       <p><em>Exam weighting:</em> 17.5. Note: any material from Units 1–9 and 10.1–10.9 is fair game.</p>
 
       <div class="note" style="margin:.6rem 0">
+        <div class="exam-countdown" role="group" aria-label="Exam information">
+          <strong>AP Exam:</strong>
+          <span>Monday, May 11, 2026, 8:00 AM</span>
+          <span class="pill" id="days-left" aria-live="polite">—</span>
+        </div>
         <p><strong>Final exam information:</strong> 8:00 AM, Monday, May 12, 5th floor</p>
         <table style="width:100%;border-collapse:collapse;text-align:center">
           <tr>
@@ -185,7 +181,6 @@
       </div>
     </section>
 
-
     <section id="online-resources">
       <h2>Online Resources</h2>
       <ul>
@@ -199,7 +194,7 @@
         <li>Brachistochrone curve: <a href="https://www.youtube.com/shorts/zzf9rZWAa90">ActionLab (short)</a> · <a href="https://www.youtube.com/watch?v=Cld0p3a43fU">3Blue1Brown (16 min)</a></li>
         <li><a href="http://webspace.ship.edu/msrenault/GeoGebraCalculus/derivative_intuitive_chain_rule.html">Interactive: Chain Rule</a></li>
         <li>Optimization visuals: <a href="https://www.desmos.com/calculator/l3bpllxpmb">Cable to two points</a> · <a href="https://www.desmos.com/calculator/stfesdxk3f">Distance to √x</a></li>
-        <li>Concavity visual: <a href="https://www.desmos.com/calculator/rn3t3zbamk">Curve, tangent, and f&#39;&#39;</a></li>
+        <li>Concavity visual: <a href="https://www.desmos.com/calculator/rn3t3zbamk">Curve, tangent, and f''</a></li>
         <li>Trig: <a href="https://mathisonian.github.io/trig/etymology/">Etymology of trig functions</a> · <a href="https://vchan2.github.io/2021Calculus/Trig_derivatives_proofs.pdf">Proofs of trig derivatives</a></li>
         <li>DE: <a href="https://www.geogebra.org/m/W7dAdgqc">Slope field plotter</a> · <a href="https://vchan2.github.io/APCalculus/7.9_Logistic_model_derivation.pdf">Logistic model derivation</a></li>
         <li>Integration: <a href="https://www.desmos.com/calculator/tyqezuilba">8.2 example</a> · <a href="https://www.desmos.com/calculator/q3avtnrgoq">Volume: cross sections</a> · <a href="https://www.geogebra.org/classic/XArpgR3A">Volume (GeoGebra)</a> · <a href="https://www.desmos.com/calculator/0ir4zzke9i">Volumes of revolution</a></li>
@@ -209,7 +204,7 @@
     <section id="practice-problems">
       <h2>Practice Problems</h2>
       <ul>
-        <li><a href="2022APCalculusBC/calculus_readiness.pdf">Calculus readiness test</a> (<a href="2022APCalculusBC/calculus_readiness_sol.pdf">Answers</a>)</li>
+        <li><a href="https://vchan2.github.io/2022APCalculusBC/calculus_readiness.pdf">Calculus readiness test</a> (<a href="https://vchan2.github.io/2022APCalculusBC/calculus_readiness_sol.pdf">Answers</a>)</li>
         <li><strong>Unit 1</strong>
           <ul>
             <li><a href="https://vchan2.github.io/2022APCalculusBC/Limits(graphical).pdf">Limits (graphical)</a> (<a href="https://vchan2.github.io/2022APCalculusBC/Limits(graphical)_sol.pdf">Answers</a>)</li>
@@ -217,7 +212,7 @@
         </li>
         <li><strong>Units 3–5</strong>
           <ul>
-            <li><a href="vchan2.github.io/APCalculus/practice_derivatives.pdf">Derivative practice</a> (answers included)</li>
+            <li><a href="https://vchan2.github.io/APCalculus/practice_derivatives.pdf">Derivative practice</a> (answers included)</li>
           </ul>
         </li>
         <li><strong>Unit 6</strong>
@@ -226,8 +221,8 @@
             <li><a href="https://vchan2.github.io/2023APCalculusBC/6.3_Numerical_Integration.pdf">Numerical Integration worksheet</a> (<a href="https://vchan2.github.io/2023APCalculusBC/6.3_Numerical_Integration_sol.pdf">Solutions</a>)</li>
             <li><a href="https://vchan2.github.io/2021Calculus/6.9_WS%201%20on%20substitution.pdf">Worksheet 1 on substitution</a></li>
             <li><a href="https://vchan2.github.io/2021Calculus/6.9_WS%202%20on%20substitution.pdf">Worksheet 2 on substitution</a></li>
-            <li><a href="https://vchan2.github.io/2021Calculus/6.10_WS%20on%20Long%20Division%20and%20Completing%20the%20Square.pdf">Long division & completing the square</a></li>
-            <li><a href="https://vchan2.github.io/2021Calculus/6.14_practice.pdf">Various integration techniques</a> (<a href="https://vchan2.github.io/2021Calculus/6.14_practice_sol.pdf">Solutions</a>)</li>
+            <li><a href="https://vchan2.github.io/2021Calculus/6.10_WS%20on%20Long%20Division%20and%20Completing%20the%20Square.pdf">Worksheet on long division & completing the square</a></li>
+            <li><a href="https://vchan2.github.io/2021Calculus/6.14_practice.pdf">Practice with various integration techniques</a> (<a href="https://vchan2.github.io/2021Calculus/6.14_practice_sol.pdf">Solutions</a>)</li>
             <li><a href="https://vchan2.github.io/2024APCalculusBC/IntegrationBee2024partial.pdf">Integration Bee</a> (<a href="https://vchan2.github.io/2024APCalculusBC/IntegrationBee2024partial_sol.pdf">Solutions</a>)</li>
           </ul>
         </li>
@@ -239,8 +234,8 @@
         </li>
         <li><strong>Unit 8</strong>
           <ul>
-            <li><a href="https://vchan2.github.io/2021Calculus/8_Volumes.pdf">Volumes 1 (examples)</a> (<a href="https://vchan2.github.io/2021Calculus/8_Volumes_sol.pdf">Solutions</a>)</li>
-            <li><a href="https://vchan2.github.io/2021Calculus/8_Volumes2.pdf">Volumes 2 (general)</a> (<a href="https://vchan2.github.io/2021Calculus/8_Volumes2_sol.pdf">Solutions</a>)</li>
+            <li><a href="https://vchan2.github.io/2021Calculus/8_Volumes.pdf">Volumes 1 (specific examples)</a> (<a href="https://vchan2.github.io/2021Calculus/8_Volumes_sol.pdf">Solutions</a>)</li>
+            <li><a href="https://vchan2.github.io/2021Calculus/8_Volumes2.pdf">Volumes 2 (more general)</a> (<a href="https://vchan2.github.io/2021Calculus/8_Volumes2_sol.pdf">Solutions</a>)</li>
           </ul>
         </li>
         <li><strong>Unit 10</strong>
@@ -250,16 +245,16 @@
         </li>
         <li><strong>Mini-maths</strong>
           <ul>
-            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_09_13_(6.1-6.3).pdf">Sept 13 (6.1–6.3)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_09_13_(6.1-6.3)_sol.pdf">Solutions</a>)</li>
-            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_09_27_(6.4-6.14).pdf">Sept 27 (6.4–6.14)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_09_27_(6.4-6.14)_sol.pdf">Solutions</a>)</li>
-            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_10_25_(7.1-7.5).pdf">Oct 25 (7.1–7.5)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_10_25_(7.1-7.5)_sol.pdf">Solutions</a>)</li>
-            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_10_30_(7.6-7.9).pdf">Oct 30 (7.6–7.9)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_10_30_(7.6-7.9)_sol.pdf">Solutions</a>)</li>
-            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_11_22_(8.1-8.6).pdf">Nov 22 (8.1–8.6)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_11_22_(8.1-8.6)_sol.pdf">Solutions</a>)</li>
-            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_12_04_(8.7-8.13).pdf">Dec 4 (8.7–8.13)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_12_04_(8.7-8.13)_sol.pdf">Solutions</a>)</li>
-            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2025_01_10_(9.1-9.6).pdf">Jan 10 (9.1–9.6)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2025_01_10_(9.1-9.6)_sol.pdf">Solutions</a>)</li>
-            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2025_01_22_(9.6-9.9).pdf">Jan 22 (9.6–9.9)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2025_01_22_(9.6-9.9)_sol.pdf">Solutions</a>)</li>
-            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2025_02_14_(10.1-10.9).pdf">Feb 14 (10.1–10.9)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2025_02_14_(10.1-10.9)_sol.pdf">Solutions</a>)</li>
-            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2025_03_19_(10.10-10.15).pdf">Mar 19 (10.10–10.15)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2025_03_19_(10.10-10.15)_sol.pdf">Solutions</a>)</li>
+            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_09_13_(6.1-6.3).pdf">Mini-math Sep 13 (6.1–6.3)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_09_13_(6.1-6.3)_sol.pdf">Solutions</a>)</li>
+            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_09_27_(6.4-6.14).pdf">Mini-math Sep 27 (6.4–6.14)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_09_27_(6.4-6.14)_sol.pdf">Solutions</a>)</li>
+            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_10_25_(7.1-7.5).pdf">Mini-math Oct 25 (7.1–7.5)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_10_25_(7.1-7.5)_sol.pdf">Solutions</a>)</li>
+            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_10_30_(7.6-7.9).pdf">Mini-math Oct 30 (7.6–7.9)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_10_30_(7.6-7.9)_sol.pdf">Solutions</a>)</li>
+            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_11_22_(8.1-8.6).pdf">Mini-math Nov 22 (8.1–8.6)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_11_22_(8.1-8.6)_sol.pdf">Solutions</a>)</li>
+            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_12_04_(8.7-8.13).pdf">Mini-math Dec 4 (8.7–8.13)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2024_12_04_(8.7-8.13)_sol.pdf">Solutions</a>)</li>
+            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2025_01_10_(9.1-9.6).pdf">Mini-math Jan 10 (9.1–9.6)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2025_01_10_(9.1-9.6)_sol.pdf">Solutions</a>)</li>
+            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2025_01_22_(9.6-9.9).pdf">Mini-math Jan 22 (9.6–9.9)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2025_01_22_(9.6-9.9)_sol.pdf">Solutions</a>)</li>
+            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2025_02_14_(10.1-10.9).pdf">Mini-math Feb 14 (10.1–10.9)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2025_02_14_(10.1-10.9)_sol.pdf">Solutions</a>)</li>
+            <li><a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2025_03_19_(10.10-10.15).pdf">Mini-math Mar 19 (10.10–10.15)</a> (<a href="https://vchan2.github.io/2024APCalculusBC/mm/Mini-math_Div3_4_2025_03_19_(10.10-10.15)_sol.pdf">Solutions</a>)</li>
           </ul>
         </li>
       </ul>
@@ -267,27 +262,25 @@
 
     <section id="challenges">
       <h2>Challenges</h2>
-      <h3>Calculus-based</h3>
       <ul>
-        <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit01_01A_weird_limit.pdf">Unit 1: A weird limit</a> — Find a function whose limit at 0⁺ DNE.</li>
+        <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit01_01A_weird_limit.pdf">Unit 1: A weird limit</a> – limit at 0⁺ DNE example.</li>
         <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit01_02Continuous_nowhere.pdf">Unit 1: Continuous nowhere</a></li>
-        <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit01_03Continuous_on_irrationals.pdf">Unit 1: Continuous on the irrationals</a></li>
-        <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit01_04Continuous_on_rationals.pdf">Unit 1: Continuous on the rationals</a></li>
+        <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit01_03Continuous_on_irrationals.pdf">Unit 1: Continuous on irrationals</a></li>
+        <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit01_04Continuous_on_rationals.pdf">Unit 1: Continuous on rationals</a></li>
         <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit02_01Continuous_but_not_differentiable.pdf">Unit 2: Continuous but not differentiable</a></li>
         <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit02_02Differentiability_for_piecewise.pdf">Unit 2: Differentiability for piecewise</a></li>
         <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit02_01Continuous_but_not_differentiable.pdf">Unit 3: Continuous but nowhere differentiable</a></li>
         <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit06_01Integral.pdf">Unit 6: An integral</a></li>
         <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit06_02Integration_by_parts.pdf">Unit 6: Integration by parts</a></li>
-        <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit06_03Coefficients_in_PFD.pdf">Unit 6: PFD coefficients</a></li>
+        <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit06_03Coefficients_in_PFD.pdf">Unit 6: Coefficients in PFD</a></li>
         <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit06_04An_Improper_Integral.pdf">Unit 6: An improper integral</a></li>
-        <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit07_01separation_of_variables_division_by_0.pdf">Unit 7: Separation of variables (dividing by 0)</a></li>
+        <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit07_01separation_of_variables_division_by_0.pdf">Unit 7: SOV & division by 0</a></li>
         <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit09_bat_curve.pdf">Unit 9: Bat curve</a></li>
-        <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit10_01Challenging_series.pdf">Unit 10: A challenging series</a></li>
-        <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit10_02Sparse_harmonic_series.pdf">Unit 10: Sparse harmonic series</a></li>
+        <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit10_01Challenging_series.pdf">Unit 10: Challenging series</a></li>
+        <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit10_02Sparse_harmonic_series.pdf">Unit 10: Sparse Harmonic Series</a></li>
         <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit10_03DivergenceTest2.pdf">Unit 10: Divergence Test II</a></li>
         <li><a href="https://vchan2.github.io/Challenges/Calculus/Unit10_04Sum_of_product.pdf">Unit 10: Sum of product</a></li>
       </ul>
-
       <h3>Assorted</h3>
       <ul>
         <li><a href="https://vincentchan02.wixsite.com/cosmospuzzle">CoSMOS 2020 Challenge</a></li>
@@ -306,50 +299,38 @@
     </section>
 
     <footer>
-      <small>Last updated: <span id="last-updated">—</span></small>
+      <small>Last updated: Aug 29, 2025</small>
     </footer>
   </main>
 
+  <!-- Countdown script: fixed to Calgary time (MDT, UTC-06:00) for May -->
   <script>
-    (function(){
-      const el=document.getElementById('last-updated');
-      if(!el) return;
-      const d=new Date();
-      el.textContent=d.toLocaleDateString(undefined,{month:'short',day:'2-digit',year:'numeric'});
-    })();
-  </script>
-
-  <script>
-    (function(){
-      // Fixed AP Exam date (local time): Monday, May 11, 2026 at 8:00 AM
-      var pill = document.getElementById('days-left');
-      if(!pill) return;
-
-      // months are 0-indexed: 4 = May
-      var target = new Date(2026, 4, 11, 8, 0, 0);
-
-      function wholeDaysUntil(t){
-        var now = new Date();
-        // compare by date (midnight) so time-of-day doesn’t wobble the count
-        var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        var examDay = new Date(t.getFullYear(), t.getMonth(), t.getDate());
-        var msPerDay = 24*60*60*1000;
-        return Math.round((examDay - today)/msPerDay);
+  (function(){
+    var EXAM_DATE = new Date('2026-05-11T08:00:00-06:00');
+    var pill = document.getElementById('days-left');
+    if(!pill) return;
+    function update(){
+      var now = new Date();
+      var diff = EXAM_DATE - now;
+      var oneDay = 24*60*60*1000;
+      if(diff <= 0 && Math.abs(diff) < oneDay){
+        pill.textContent = 'Exam today';
+        pill.setAttribute('aria-label','Exam is today');
+        return;
       }
-
-      function render(){
-        var d = wholeDaysUntil(target);
-        if(d > 1) pill.textContent = d + ' days';
-        else if(d === 1) pill.textContent = '1 day';
-        else if(d === 0) pill.textContent = 'Today!';
-        else pill.textContent = Math.abs(d) + ' days ago';
+      if(diff < 0){
+        pill.textContent = 'Done';
+        pill.setAttribute('aria-label','Exam has passed');
+        return;
       }
-
-      render();
-      // Refresh occasionally so it rolls over after midnight without a reload
-      setInterval(render, 60*60*1000);
-    })();
+      var days = Math.ceil(diff/oneDay);
+      if(days > 1){ pill.textContent = days + ' days'; pill.setAttribute('aria-label', days + ' days until exam'); }
+      else if(days === 1){ pill.textContent = '1 day'; pill.setAttribute('aria-label','1 day until exam'); }
+      else { var hours = Math.ceil(diff/(60*60*1000)); pill.textContent = hours + ' hr'; pill.setAttribute('aria-label', hours + ' hours until exam'); }
+    }
+    update();
+    setInterval(update, 60*60*1000);
+  })();
   </script>
-
 </body>
 </html>
