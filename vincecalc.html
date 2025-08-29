@@ -6,34 +6,59 @@
   <title>AP Calculus BC – Dr. Vince</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-  body{margin:0;font-family:'Cormorant',serif;color:#606c71;line-height:1.5;background:#f9fafc}
-  header{ text-align:center; padding:1.5rem 1rem; background:linear-gradient(135deg,#1A2980,#26D0CE); color:#fff; box-shadow:0 3px 8px rgba(0,0,0,.12); }
+  /*
+    Color scheme
+    ────────────
+    I set CSS variables so you can drop in hex codes from your palette
+    (color-hex palette 1064019). Replace the five values below as needed.
+  */
+  :root{
+    --brand-1:#1A2980;   /* header gradient start */
+    --brand-2:#26D0CE;   /* header gradient end   */
+    --accent:#514a9d;    /* h2 + borders          */
+    --link:#0AB9DC;      /* link color            */
+    --ink:#606c71;       /* body text             */
+    --bg:#f9fafc;        /* page background        */
+    --card:#ffffff;      /* card background        */
+    --muted:#819198;     /* muted text             */
+    --stroke:#e8eaf2;    /* light borders/shadows  */
+  }
+
+  /* Page shell */
+  body{margin:0;font-family:'Cormorant',serif;color:var(--ink);line-height:1.5;background:var(--bg)}
+  header{ text-align:center; padding:1.5rem 1rem; background:linear-gradient(135deg,var(--brand-1),var(--brand-2)); color:#fff; box-shadow:0 3px 8px rgba(0,0,0,.12); }
   header h1{ margin:0; font-weight:700; font-size:clamp(26px,3.8vw,40px); }
   header p{ margin-top:.3rem; font-size:1.05rem; opacity:.9; }
   .contact-icon svg{ fill:#fff; }
 
   main{ max-width:1000px; margin:1.5rem auto; padding:0 1rem; display:grid; gap:1rem; }
 
-  section, article{ background:#fff; border-radius:10px; padding:1rem 1.2rem; box-shadow:0 4px 12px rgba(0,0,0,.05); border:1px solid #e8eaf2; }
-  section a{ color:#0AB9DC; text-decoration:none; font-weight:600; }
-  section a:hover{ color:#1A2980; text-decoration:underline; }
+  section, article{ background:var(--card); border-radius:10px; padding:1rem 1.2rem; box-shadow:0 4px 12px rgba(0,0,0,.05); border:1px solid var(--stroke); }
+  section a{ color:var(--link); text-decoration:none; font-weight:600; }
+  section a:hover{ color:var(--brand-1); text-decoration:underline; }
 
-  h2{ color:#514a9d; font-weight:600; border-bottom:2px solid #1A2980; padding-bottom:.2rem; margin:0 0 .6rem; }
-  h3{ margin:.6rem 0 .4rem; color:#1A2980; font-weight:600; font-size:1.05rem; }
+  h2{ color:var(--accent); font-weight:600; border-bottom:2px solid var(--brand-1); padding-bottom:.2rem; margin:0 0 .6rem; }
+  h3{ margin:.6rem 0 .4rem; color:var(--brand-1); font-weight:600; font-size:1.05rem; }
 
   ul{ line-height:1.4; margin:.4rem 0; padding-left:1rem; }
   li{ margin:.2rem 0; }
 
   /* Quicklinks */
   .quicklinks{ display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:.6rem; margin:.6rem 0; }
-  .quicklinks a{ display:inline-block; background:#e6f9fc; color:#1A2980!important; padding:.5rem .8rem; border-radius:6px; text-align:center; border:1px solid #b8ecf5; font-size:.95rem; transition:background .2s ease, transform .15s ease; }
+  .quicklinks a{ display:inline-block; background:#e6f9fc; color:var(--brand-1)!important; padding:.5rem .8rem; border-radius:6px; text-align:center; border:1px solid #b8ecf5; font-size:.95rem; transition:background .2s ease, transform .15s ease; }
   .quicklinks a:hover{ background:#d0f3fa; transform:translateY(-1px); }
 
+  /* Notes / highlights */
   .note{ border-left:4px solid #2f855a; background:#f6fffa; padding:.75rem 1rem; border-radius:6px; }
-
-  .muted{ color:#819198; font-style:italic; }
+  .muted{ color:var(--muted); font-style:italic; }
 
   footer{ margin-top:1.2rem; text-align:center; color:#777; font-size:.85rem; }
+
+  /* Exam info */
+  .exam-countdown{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin:.6rem 0;padding:.75rem 1rem;border:1px solid var(--stroke);border-radius:10px;background:#f3f9ff}
+  .exam-countdown strong{color:var(--brand-1)}
+  .pill{display:inline-block;padding:.35rem .6rem;border-radius:999px;background:var(--brand-1);color:#fff;font-weight:700}
+  .hint{font-size:.9rem;color:var(--muted)}
   </style>
 </head>
 <body>
@@ -68,7 +93,7 @@
 
     <section id="schedule">
       <h2>Schedule</h2>
-      <p>Tentative schedule for upcoming classes:</p>
+      <p>Tentative schedule for upcoming classes:</n></p>
       <ul>
         <li><strong>Week of Jun. 9</strong>
           <ul>
@@ -104,6 +129,13 @@
 
     <section id="exams">
       <h2>Exams</h2>
+
+      <div class="exam-countdown" role="group" aria-label="Exam information">
+        <strong>AP Exam:</strong>
+        <span>Monday, May 11, 2026, 8:00 AM</span>
+        <span class="pill" id="days-left" aria-live="polite">—</span>
+      </div>
+
       <p><strong>Unit 10 final unit test</strong> scheduled for <b>Monday, March 24</b> (in class). Majority of questions focus on 10.10–10.15. You should be able to:</p>
       <ul>
         <li>Determine convergence/divergence (partial sums, geometric, nth-term, p-series, comparison, alternating series, ratio, absolute convergence)</li>
@@ -112,12 +144,14 @@
         <li>Find radius/interval of convergence; build series via substitution/ops/diff/integration</li>
       </ul>
       <p><em>Exam weighting:</em> 17.5. Note: any material from Units 1–9 and 10.1–10.9 is fair game.</p>
+
       <div class="note" style="margin:.6rem 0">
         <p><strong>Final exam information:</strong> 8:00 AM, Monday, May 12, 5th floor</p>
-        <img src="https://vchan2.github.io/2021Calculus/Exam_info.png" alt="Exam info" style="max-width:100%;height:auto;border-radius:6px;border:1px solid #e8eaf2"/>
+        <img src="https://vchan2.github.io/2021Calculus/Exam_info.png" alt="Exam info" style="max-width:100%;height:auto;border-radius:6px;border:1px solid var(--stroke)"/>
         <p>Part I: MCQ &nbsp;•&nbsp; Part II: FRQ</p>
       </div>
     </section>
+
 
     <section id="online-resources">
       <h2>Online Resources</h2>
@@ -251,5 +285,38 @@
       el.textContent=d.toLocaleDateString(undefined,{month:'short',day:'2-digit',year:'numeric'});
     })();
   </script>
+
+  <script>
+    (function(){
+      // Fixed AP Exam date (local time): Monday, May 11, 2026 at 8:00 AM
+      var pill = document.getElementById('days-left');
+      if(!pill) return;
+
+      // months are 0-indexed: 4 = May
+      var target = new Date(2026, 4, 11, 8, 0, 0);
+
+      function wholeDaysUntil(t){
+        var now = new Date();
+        // compare by date (midnight) so time-of-day doesn’t wobble the count
+        var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        var examDay = new Date(t.getFullYear(), t.getMonth(), t.getDate());
+        var msPerDay = 24*60*60*1000;
+        return Math.round((examDay - today)/msPerDay);
+      }
+
+      function render(){
+        var d = wholeDaysUntil(target);
+        if(d > 1) pill.textContent = d + ' days';
+        else if(d === 1) pill.textContent = '1 day';
+        else if(d === 0) pill.textContent = 'Today!';
+        else pill.textContent = Math.abs(d) + ' days ago';
+      }
+
+      render();
+      // Refresh occasionally so it rolls over after midnight without a reload
+      setInterval(render, 60*60*1000);
+    })();
+  </script>
+
 </body>
 </html>
