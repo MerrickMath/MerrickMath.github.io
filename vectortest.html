@@ -4,13 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Vector Target — Integer Linear Combinations</title>
-  <!-- KaTeX (explicit render; no auto-render to avoid stray escapes) -->
+  <!-- KaTeX (explicit render) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
   <style>
     :root{
       --bg:#ffffff; --ink:#0f172a; --muted:#475569; --soft:#f8fafc; --card:#ffffff; --border:#e2e8f0;
-      --a:#1d4ed8; --b:#059669; --target:#d97706; --combo:#7c3aed;
+      --u:#1d4ed8; --v:#059669; --stepA:#ef4444; --stepB:#f59e0b; --result:#7c3aed;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -45,23 +45,23 @@
       <button id="showBtn" class="btn">Show Solution</button>
     </div>
 
-    <!-- Two separate boards for a and b; math labels BELOW each plot -->
+    <!-- Two separate boards for u and v; math labels BELOW each plot -->
     <div class="boards">
       <div class="card">
-        <p class="title">Vector a</p>
-        <svg id="boardA" class="board" viewBox="0 0 420 340"></svg>
-        <div id="labelA" class="label katex"></div>
+        <p class="title">Vector u</p>
+        <svg id="boardU" class="board" viewBox="0 0 420 340"></svg>
+        <div id="labelU" class="label katex"></div>
       </div>
       <div class="card">
-        <p class="title">Vector b</p>
-        <svg id="boardB" class="board" viewBox="0 0 420 340"></svg>
-        <div id="labelB" class="label katex"></div>
+        <p class="title">Vector v</p>
+        <svg id="boardV" class="board" viewBox="0 0 420 340"></svg>
+        <div id="labelV" class="label katex"></div>
       </div>
     </div>
 
     <!-- Solution board appears at the bottom when toggled; auto-fits to content -->
     <div id="solutionWrap" class="card" style="display:none; margin-top:16px">
-      <p class="title">Solution</p>
+      <p class="title">Solution (visual for a·u + b·v only)</p>
       <svg id="boardSolution" class="board" viewBox="0 0 1000 420"></svg>
       <div id="solution" class="katex" style="margin-top:10px"></div>
     </div>
@@ -71,7 +71,7 @@
   </div>
 
   <script>
-    // ====== KaTeX helpers (explicit render, no auto-render) ======
+    // ====== KaTeX helpers ======
     function waitFor(cond,{interval=50,timeout=8000}={}){return new Promise((res,rej)=>{const t=Date.now();(function chk(){if(cond())return res();if(Date.now()-t>timeout)return rej(new Error('Timeout'));setTimeout(chk,interval)})()})}
     function kx(el, tex){ if(window.katex){ window.katex.render(tex, el, {throwOnError:false}); } else { el.textContent = tex; } }
 
@@ -79,29 +79,30 @@
     const R=(a,b)=>Math.floor(Math.random()*(b-a+1))+a; // inclusive
     const det=(u,v)=>u.x*v.y-u.y*v.x;
 
-    let A,B,target,mTrue,nTrue;
+    let U,V,target,aTrue,bTrue;
 
     function newInstance(){
-      do{A={x:R(-5,5),y:R(-5,5)}}while(A.x===0&&A.y===0);
-      do{B={x:R(-5,5),y:R(-5,5)}}while((B.x===0&&B.y===0)||det(A,B)===0);
-      do{mTrue=R(-3,3);nTrue=R(-3,3)}while(mTrue===0&&nTrue===0);
-      target={x:mTrue*A.x+nTrue*B.x,y:mTrue*A.y+nTrue*B.y};
+      do{U={x:R(-5,5),y:R(-5,5)}}while(U.x===0&&U.y===0);
+      do{V={x:R(-5,5),y:R(-5,5)}}while((V.x===0&&V.y===0)||det(U,V)===0);
+      do{aTrue=R(-3,3);bTrue=R(-3,3)}while(aTrue===0&&bTrue===0);
+      target={x:aTrue*U.x+bTrue*V.x,y:aTrue*U.y+bTrue*V.y};
     }
 
-    // ====== TeX generators (DOUBLE-BACKSLASHED) ======
+    // ====== TeX generators (double-escaped for KaTeX) ======
     const vecTex = (name,v)=>`\\vec{${name}}=\\langle ${v.x},\\,${v.y}\\rangle`;
     const targetTex = ()=>`\\text{Target: }\\langle ${target.x},\\,${target.y}\\rangle`;
-    const subtitleTex = ()=>`\\text{Find integers } m,n \\text{ such that } m\\,\\vec{a}+n\\,\\vec{b} \\text{ hits the target.}`;
+    const subtitleTex = ()=>`\\text{Find integers } a,b \\text{ such that } a\\,\\vec{u}+b\\,\\vec{v} \\text{ hits the target.}`;
     const solutionTex = ()=>{
-      const lhs = `(${mTrue})\\,\\vec{a}+(${nTrue})\\,\\vec{b}`;
-      const p1 = `=\\; \\langle ${mTrue*A.x},${mTrue*A.y}\\rangle + \\langle ${nTrue*B.x},${nTrue*B.y}\\rangle`;
+      const lhs = `(${aTrue})\\,\\vec{u}+(${bTrue})\\,\\vec{v}`;
+      const p1 = `=\\; \\langle ${aTrue*U.x},${aTrue*U.y}\\rangle + \\langle ${bTrue*V.x},${bTrue*V.y}\\rangle`;
       const p2 = `=\\; \\langle ${target.x},${target.y}\\rangle`;
-      return `m=${mTrue},\\; n=${nTrue}\\quad\\Rightarrow\\quad ${lhs}\\; ${p1}\\; ${p2}`;
+      return `a=${aTrue},\\; b=${bTrue}\\quad\\Rightarrow\\quad ${lhs}\\; ${p1}\\; ${p2}`;
     };
 
     // ====== SVG utilities ======
     const mk=n=>document.createElementNS('http://www.w3.org/2000/svg',n);
     function gridAxes(svg,cx,cy,w,h,s){
+      // 1-unit gridlines (spacing = s pixels per unit)
       for(let x=0;x<=w;x+=s){const L=mk('line');L.setAttribute('x1',x);L.setAttribute('y1',0);L.setAttribute('x2',x);L.setAttribute('y2',h);L.setAttribute('stroke','#e2e8f0');L.setAttribute('stroke-width','1');svg.appendChild(L)}
       for(let y=0;y<=h;y+=s){const L=mk('line');L.setAttribute('x1',0);L.setAttribute('y1',y);L.setAttribute('x2',w);L.setAttribute('y2',y);L.setAttribute('stroke','#e2e8f0');L.setAttribute('stroke-width','1');svg.appendChild(L)}
       const axX=mk('line'); axX.setAttribute('x1',0); axX.setAttribute('y1',cy); axX.setAttribute('x2',w); axX.setAttribute('y2',cy); axX.setAttribute('stroke','#94a3b8'); axX.setAttribute('stroke-width','1.5'); svg.appendChild(axX);
@@ -110,27 +111,25 @@
     }
     function ensureMarker(svg,id,color){ if(svg.querySelector(`#${id}`)) return id; const defs=svg.querySelector('defs')||svg.insertBefore(mk('defs'), svg.firstChild); const m=mk('marker'); m.setAttribute('id',id); m.setAttribute('markerWidth','10'); m.setAttribute('markerHeight','10'); m.setAttribute('refX','8'); m.setAttribute('refY','3'); m.setAttribute('orient','auto'); const p=mk('path'); p.setAttribute('d','M0,0 L9,3 L0,6 Z'); p.setAttribute('fill',color); m.appendChild(p); defs.appendChild(m); return id; }
 
-    function drawFixedBoard(svg, vec){
+    function drawVectorBoard(svg, vec, colorVar){
       const w=+svg.viewBox.baseVal.width, h=+svg.viewBox.baseVal.height; svg.innerHTML='';
-      const s=20, cx=w/2, cy=h/2; gridAxes(svg,cx,cy,w,h,s);
+      const s=20, cx=w/2, cy=h/2; // 1 unit = 20px; gridlines every 1 unit
+      gridAxes(svg,cx,cy,w,h,s);
       const toPx=pt=>({x:cx+s*pt.x, y:cy-s*pt.y});
       const css=getComputedStyle(document.documentElement);
-      const color = vec===A ? css.getPropertyValue('--a') : css.getPropertyValue('--b');
-      const id = ensureMarker(svg, vec===A? 'ah-a' : 'ah-b', color);
-      const L=mk('line');
+      const color = css.getPropertyValue(colorVar);
+      const id = ensureMarker(svg, `ah-${colorVar.slice(2)}`, color);
       const p1=toPx({x:0,y:0}), p2=toPx(vec);
-      L.setAttribute('x1',p1.x); L.setAttribute('y1',p1.y); L.setAttribute('x2',p2.x); L.setAttribute('y2',p2.y);
-      L.setAttribute('stroke',color); L.setAttribute('stroke-width','3'); L.setAttribute('marker-end',`url(#${id})`);
-      svg.appendChild(L);
+      const L=mk('line'); L.setAttribute('x1',p1.x); L.setAttribute('y1',p1.y); L.setAttribute('x2',p2.x); L.setAttribute('y2',p2.y); L.setAttribute('stroke',color); L.setAttribute('stroke-width','3'); L.setAttribute('marker-end',`url(#${id})`); svg.appendChild(L);
     }
 
     function drawSolutionBoard(svg){
       const w=+svg.viewBox.baseVal.width, h=+svg.viewBox.baseVal.height; svg.innerHTML='';
       const O={x:0,y:0};
-      const Astep={x:mTrue*A.x, y:mTrue*A.y};
-      const Bstep={x:nTrue*B.x, y:nTrue*B.y};
+      const Astep={x:aTrue*U.x, y:aTrue*U.y};
+      const Bstep={x:bTrue*V.x, y:bTrue*V.y};
       const P2={x:Astep.x+Bstep.x, y:Astep.y+Bstep.y}; // equals target
-      const pts=[O,A,B,target,Astep,P2];
+      const pts=[O,Astep,P2];
       let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
       for(const p of pts){ minX=Math.min(minX,p.x); maxX=Math.max(maxX,p.x); minY=Math.min(minY,p.y); maxY=Math.max(maxY,p.y); }
       const pad=1.5; minX-=pad; maxX+=pad; minY-=pad; maxY+=pad;
@@ -138,7 +137,7 @@
       const s=Math.min((w-40)/rangeX, (h-40)/rangeY);
       const cx=(0-minX)*s+20, cy=(maxY-0)*s+20;
       const toPx=pt=>({x:(pt.x-minX)*s+20, y:(maxY-pt.y)*s+20});
-      // grid
+      // grid (1-unit)
       const xStart=Math.ceil(minX), xEnd=Math.floor(maxX);
       const yStart=Math.ceil(minY), yEnd=Math.floor(maxY);
       for(let x=xStart;x<=xEnd;x++){const L=mk('line');L.setAttribute('x1',(x-minX)*s+20);L.setAttribute('y1',20);L.setAttribute('x2',(x-minX)*s+20);L.setAttribute('y2',h-20);L.setAttribute('stroke','#e2e8f0');L.setAttribute('stroke-width','1');svg.appendChild(L)}
@@ -147,31 +146,27 @@
       const axX=mk('line'); axX.setAttribute('x1',20); axX.setAttribute('y1',cy); axX.setAttribute('x2',w-20); axX.setAttribute('y2',cy); axX.setAttribute('stroke','#94a3b8'); axX.setAttribute('stroke-width','1.5'); svg.appendChild(axX);
       const axY=mk('line'); axY.setAttribute('x1',cx); axY.setAttribute('y1',20); axY.setAttribute('x2',cx); axY.setAttribute('y2',h-20); axY.setAttribute('stroke','#94a3b8'); axY.setAttribute('stroke-width','1.5'); svg.appendChild(axY);
       const ODot=mk('circle'); ODot.setAttribute('cx',cx); ODot.setAttribute('cy',cy); ODot.setAttribute('r','2.5'); ODot.setAttribute('fill','#64748b'); svg.appendChild(ODot);
-      // arrows + target
+      // draw only the linear combination visually: a*u then + b*v, then resultant
       const css=getComputedStyle(document.documentElement);
       const arrow=(p1,p2,color,name)=>{ const id=ensureMarker(svg,`ah-${name}`,color); const L=mk('line'); L.setAttribute('x1',p1.x); L.setAttribute('y1',p1.y); L.setAttribute('x2',p2.x); L.setAttribute('y2',p2.y); L.setAttribute('stroke',color); L.setAttribute('stroke-width','3'); L.setAttribute('marker-end',`url(#${id})`); svg.appendChild(L); };
-      const dot=(pt,color,r=5)=>{ const C=mk('circle'); C.setAttribute('cx',pt.x); C.setAttribute('cy',pt.y); C.setAttribute('r',r); C.setAttribute('fill',color); svg.appendChild(C); };
-      arrow(toPx({x:0,y:0}), toPx(A), css.getPropertyValue('--a'), 'a');
-      arrow(toPx({x:0,y:0}), toPx(B), css.getPropertyValue('--b'), 'b');
-      dot(toPx(target), css.getPropertyValue('--target'));
       const Aend=toPx(Astep), Bend=toPx(P2);
-      arrow(toPx({x:0,y:0}), Aend, css.getPropertyValue('--combo'), 'c1');
-      arrow(Aend, Bend, css.getPropertyValue('--combo'), 'c2');
-      arrow(toPx({x:0,y:0}), toPx(P2), css.getPropertyValue('--combo'), 'c');
+      arrow(toPx({x:0,y:0}), Aend, css.getPropertyValue('--stepA'), 'stepA'); // a*U
+      arrow(Aend, Bend, css.getPropertyValue('--stepB'), 'stepB');             // + b*V
+      arrow(toPx({x:0,y:0}), Bend, css.getPropertyValue('--result'), 'result'); // resultant
     }
 
     // ====== Mount ======
     async function mount(){
       await waitFor(()=>window.katex);
       newInstance();
-      // Render static math: subtitle + target + labels under plots
+      // Render math: subtitle + target + labels under plots
       kx(document.getElementById('subtitle'), subtitleTex());
       kx(document.getElementById('problem'), targetTex());
-      kx(document.getElementById('labelA'), vecTex('a', A));
-      kx(document.getElementById('labelB'), vecTex('b', B));
-      // Draw vector boards
-      drawFixedBoard(document.getElementById('boardA'), A);
-      drawFixedBoard(document.getElementById('boardB'), B);
+      kx(document.getElementById('labelU'), vecTex('u', U));
+      kx(document.getElementById('labelV'), vecTex('v', V));
+      // Draw vector boards with 1-unit gridlines
+      drawVectorBoard(document.getElementById('boardU'), U, '--u');
+      drawVectorBoard(document.getElementById('boardV'), V, '--v');
       // Button behavior
       const btn=document.getElementById('showBtn');
       let shown=false;
@@ -181,7 +176,7 @@
         if(shown){ drawSolutionBoard(document.getElementById('boardSolution')); kx(document.getElementById('solution'), solutionTex()); }
       });
       // Self-checks
-      const qa=[]; try{ qa.push(window.katex? '✔︎ KaTeX ready':'⚠︎ KaTeX missing'); const t={x:mTrue*A.x+nTrue*B.x,y:mTrue*A.y+nTrue*B.y}; qa.push((t.x===target.x&&t.y===target.y)?'✔︎ arithmetic':'✗ arithmetic'); }catch(e){ qa.push('✗ self-check: '+e.message) } document.getElementById('qa').textContent = qa.join('  •  ');
+      const qa=[]; try{ qa.push(window.katex? '✔︎ KaTeX ready':'⚠︎ KaTeX missing'); const t={x:aTrue*U.x+bTrue*V.x,y:aTrue*U.y+bTrue*V.y}; qa.push((t.x===target.x&&t.y===target.y)?'✔︎ arithmetic':'✗ arithmetic'); }catch(e){ qa.push('✗ self-check: '+e.message) } document.getElementById('qa').textContent = qa.join('  •  ');
     }
 
     document.addEventListener('DOMContentLoaded', mount);
