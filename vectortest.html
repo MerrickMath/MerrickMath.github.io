@@ -30,6 +30,8 @@
     svg.board{width:100%; height:340px; background:#fff; border:1px solid var(--border); border-radius:12px}
     .label{margin-top:8px; text-align:center}
     .note{margin-top:8px; color:var(--muted); font-size:14px}
+    .katex .uColor { color: var(--u); }
+    .katex .vColor { color: var(--v); }
   </style>
 </head>
 <body>
@@ -48,12 +50,10 @@
     <!-- Two separate boards for u and v; math labels BELOW each plot -->
     <div class="boards">
       <div class="card">
-        <p class="title">Vector u</p>
         <svg id="boardU" class="board" viewBox="0 0 420 340"></svg>
         <div id="labelU" class="label katex"></div>
       </div>
       <div class="card">
-        <p class="title">Vector v</p>
         <svg id="boardV" class="board" viewBox="0 0 420 340"></svg>
         <div id="labelV" class="label katex"></div>
       </div>
@@ -73,7 +73,13 @@
   <script>
     // ====== KaTeX helpers ======
     function waitFor(cond,{interval=50,timeout=8000}={}){return new Promise((res,rej)=>{const t=Date.now();(function chk(){if(cond())return res();if(Date.now()-t>timeout)return rej(new Error('Timeout'));setTimeout(chk,interval)})()})}
-    function kx(el, tex){ if(window.katex){ window.katex.render(tex, el, {throwOnError:false}); } else { el.textContent = tex; } }
+    function kx(el, tex){
+      if (window.katex) {
+        window.katex.render(tex, el, { throwOnError: false, trust: true });
+      } else {
+        el.textContent = tex;
+      }
+    }
 
     // ====== Random instance generation ======
     const R=(a,b)=>Math.floor(Math.random()*(b-a+1))+a; // inclusive
@@ -88,16 +94,28 @@
       target={x:aTrue*U.x+bTrue*V.x,y:aTrue*U.y+bTrue*V.y};
     }
 
-    // ====== TeX generators (double-escaped for KaTeX) ======
-    const vecTex = (name,v)=>`\\vec{${name}}=\\langle ${v.x},\\,${v.y}\\rangle`;
-    const targetTex = ()=>`\\text{Target: }\\langle ${target.x},\\,${target.y}\\rangle`;
-    const subtitleTex = ()=>`\\text{Find integers } a,b \\text{ such that } a\\,\\vec{u}+b\\,\\vec{v} \\text{ hits the target.}`;
-    const solutionTex = ()=>{
-      const lhs = `(${aTrue})\\,\\vec{u}+(${bTrue})\\,\\vec{v}`;
-      const p1 = `=\\; \\langle ${aTrue*U.x},${aTrue*U.y}\\rangle + \\langle ${bTrue*V.x},${bTrue*V.y}\\rangle`;
-      const p2 = `=\\; \\langle ${target.x},${target.y}\\rangle`;
-      return `a=${aTrue},\\; b=${bTrue}\\quad\\Rightarrow\\quad ${lhs}\\; ${p1}\\; ${p2}`;
+    // ====== TeX generators (colored vectors + a_n, b) ======
+    const vecTex = (name, v) => {
+      const cls = name === 'u' ? 'uColor' : 'vColor';
+      const sym = name === 'u' ? '\\vec{u}' : '\\vec{v}';
+      // Use \htmlClass to color the symbol to match the SVG vector
+      return `\\htmlClass{${cls}}{${sym}}=\\langle ${v.x},\\,${v.y}\\rangle`;
     };
+    
+    const targetTex = () =>
+      `\\text{Target: }\\langle ${target.x},\\,${target.y}\\rangle`;
+    
+    const subtitleTex = () =>
+      `\\text{Find integers } a_n,b \\text{ such that } a_n\\,\\htmlClass{uColor}{\\vec{u}}+b\\,\\htmlClass{vColor}{\\vec{v}} \\text{ hits the target.}`;
+    
+    const solutionTex = () => {
+      const lhs = `(${aTrue})\\,\\htmlClass{uColor}{\\vec{u}}+(${bTrue})\\,\\htmlClass{vColor}{\\vec{v}}`;
+      const p1  = `=\\; \\langle ${aTrue*U.x},${aTrue*U.y}\\rangle + \\langle ${bTrue*V.x},${bTrue*V.y}\\rangle`;
+      const p2  = `=\\; \\langle ${target.x},${target.y}\\rangle`;
+      return `a_n=${aTrue},\\; b=${bTrue}\\quad\\Rightarrow\\quad ${lhs}\\; ${p1}\\; ${p2}`;
+    };
+
+
 
     // ====== SVG utilities ======
     const mk=n=>document.createElementNS('http://www.w3.org/2000/svg',n);
