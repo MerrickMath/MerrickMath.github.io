@@ -113,8 +113,12 @@
     <!-- Problem statement (ONLY the target point) + Show Solution button -->
     <div class="row" style="align-items:center; justify-content:space-between">
       <div id="problem" class="katex"></div>
-      <button id="showBtn" class="btn">Show Solution</button>
+      <div style="display:flex; gap:8px">
+        <button id="newBtn" class="btn">New Problem</button>
+        <button id="showBtn" class="btn">Show Solution</button>
+      </div>
     </div>
+
 
     <!-- Two separate boards for u and v; math labels BELOW each plot -->
     <div class="boards">
@@ -285,6 +289,22 @@
         shown=!shown; btn.textContent = shown? 'Hide Solution' : 'Show Solution';
         const wrap=document.getElementById('solutionWrap'); wrap.style.display = shown? 'block':'none';
         if(shown){ drawSolutionBoard(document.getElementById('boardSolution')); kx(document.getElementById('solution'), solutionTex()); }
+      });
+      // New Problem button behavior
+      const newBtn = document.getElementById('newBtn');
+      newBtn.addEventListener('click', ()=>{
+        newInstance();
+        // re-render math labels
+        kx(document.getElementById('subtitle'), subtitleTex());
+        kx(document.getElementById('problem'), targetTex());
+        kx(document.getElementById('labelU'), vecTex('u', U));
+        kx(document.getElementById('labelV'), vecTex('v', V));
+        // redraw boards
+        drawVectorBoard(document.getElementById('boardU'), U, '--u');
+        drawVectorBoard(document.getElementById('boardV'), V, '--v');
+        // reset solution area
+        document.getElementById('solutionWrap').style.display = 'none';
+        document.getElementById('showBtn').textContent = 'Show Solution';
       });
     }
 
