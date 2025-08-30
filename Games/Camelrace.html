@@ -1,1 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Camel Racing — Interactive Leg Simulator</title>
+  <style>
+    :root{--bg:#f6f8fb;--ink:#0d1b2a;--muted:#5b6b88;--card:#fff;--line:#d8e0ef;--accent1:#93c5fd;--accent2:#60a5fa}
+    body{font-family: 'Latin Modern Roman', 'Computer Modern Serif', serif;background:var(--bg);color:var(--ink);margin:0}
+    .wrap{max-width:1100px;margin:24px auto;padding:0 16px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px;box-shadow:0 4px 10px rgba(13,27,42,.05)}
+    h1{margin:0 0 4px}
+    .subtitle{color:#374151;margin:0 0 12px}
+    .track{display:grid;grid-template-columns:repeat(var(--len),26px);gap:4px;align-items:end;margin-bottom:12px}
+    .space{height:84px;background:#fff;border:1px dashed var(--line);border-radius:8px;display:flex;flex-direction:column-reverse;align-items:center;justify-content:flex-start;padding:4px}
+    .camel{width:18px;height:12px;border-radius:3px;border:1px solid rgba(0,0,0,.15);margin:2px 0}
+    .camel.crazy{outline:2px dashed #000;outline-offset:1px}
+    .row{
+      display:grid;
+      grid-template-columns:200px 110px auto; /* label | number input | arrows */
+      gap:10px;
+      align-items:center;
+      padding:4px 0;
+    }
+    .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;margin-top:10px}
+    .controls{margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .controls input, .controls select{width:120px}
+    input[type=number], select{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px}
+    input[type=number]:focus, select:focus{outline:2px solid var(--accent1);border-color:var(--accent1)}
+    button{cursor:pointer;background:linear-gradient(180deg,var(--accent1),var(--accent2));color:#05152b;font-weight:800;border:none;padding:10px 14px;border-radius:10px}
+    table{border-collapse:collapse;width:100%}
+    th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:center}
+    .mono{font-variant-numeric:tabular-nums}
+    .note{font-size:12px;color:var(--muted)}
+    .nowrap{white-space:nowrap}
+    .scroller{max-height:360px;overflow:auto}
+    .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;background:#eef2ff;border:1px solid #c7d2fe;font-size:12px}
+    .dot{width:10px;height:10px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.15)}
+    .error{color:#b91c1c}
+    details.debug{margin-top:8px}
+    details.debug summary{cursor:pointer}
+    #status[aria-live]{min-height:1.2em}
+    .miniBtn{padding:4px 8px;font-size:12px;border-radius:8px;background:#eef2ff;border:1px solid #c7d2fe}
+    .miniBtn:disabled{opacity:.5;cursor:not-allowed}
+    .row .inline-controls{display:flex;gap:6px;align-items:center}
+    /* Collapsible cards */
+    details.card{padding:0}
+    details.card > summary{
+      list-style:none;
+      cursor:pointer;
+      padding:16px;
+      border-bottom:1px solid var(--line);
+      font-weight:700;
+    }
+    details.card > summary::-webkit-details-marker{display:none}
+    details.card[open] > summary{border-bottom-color:transparent}
+    details.card .card-body{padding:16px}
+    /* Make dropdown summaries look like clickable headers */
+    details.card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    details.card > summary::-webkit-details-marker { display: none; }
+    details.card > summary::after {
+      content: "▶";
+      font-size: 0.9em;
+      transition: transform 0.2s ease;
+    }
+    details.card[open] > summary::after {
+      transform: rotate(90deg);
+    }
+    details.card > summary:hover {
+      background: #f0f4ff;
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Camel Racing — Interactive Leg Simulator</h1>
+  <p class="subtitle">Math with Mr. Merrick</p>
+  <p class="subtitle">Enter a die result (e.g., <i>Red moves 2</i>), then I simulate the <b>remainder of the leg</b> (exactly 5 dice total this leg). If the <b>grey</b> die is chosen, <b>one</b> crazy camel (black or white) moves backward 1–3.</p>
+  <p><a href="https://merrickmath.github.io/Materials/CamelProblems.pdf" target="_blank"> In-class problems (PDF) </a></p>
+  <p><a href="https://merrickmath.github.io/Materials/CamelScorecard.pdf" target="_blank"> Scorecard (full class version) </a></p>
+  <!-- Setup (shared) -->
+  <section class="card" id="setup">
+    <h2>Setup</h2>
+    <div id="board" class="track" style="--len:16"></div>
 
+    <div class="row"><strong>Track length</strong><input id="trackLen" type="number" value="16" min="6" max="40" /></div>
+    <div class="row"><strong>Simulations per step</strong><input id="sims" type="number" value="500" min="1" max="100000" /></div>
+
+    <h3>Racing camels (start from space 1 and move forward)</h3>
+    <div id="rows-racers"></div>
+
+    <h3>Crazy camels (start near the finish and move backward)</h3>
+    <div id="rows-crazy"></div>
+
+    <div class="legend">
+      <span class="pill"><span class="dot" style="background:#3b82f6"></span> Blue</span>
+      <span class="pill"><span class="dot" style="background:#22c55e"></span> Green</span>
+      <span class="pill"><span class="dot" style="background:#ef4444"></span> Red</span>
+      <span class="pill"><span class="dot" style="background:#eab308"></span> Yellow</span>
+      <span class="pill"><span class="dot" style="background:#a855f7"></span> Purple</span>
+      <span class="pill"><span class="dot" style="background:#111827"></span> Black (crazy)</span>
+      <span class="pill"><span class="dot" style="background:#ffffff;border-color:#cbd5e1"></span> <span style="color:#111827">White (crazy)</span></span>
+    </div>
+    <p class="note">At equal start spaces, stacks are auto-ordered: racers on the bottom (Blue→Purple), crazy on top (Black→White).</p>
+  </section>
+
+  <!-- Interactive inputs for this leg -->
+  <section class="card" id="interactive">
+    <h2>Enter die results</h2>
+    <div class="controls">
+      <label>Die
+        <select id="dieSelect">
+          <option value="blue">Blue</option>
+          <option value="green">Green</option>
+          <option value="red">Red</option>
+          <option value="yellow">Yellow</option>
+          <option value="purple">Purple</option>
+          <option value="grey">Grey</option>
+        </select>
+      </label>
+      <label>Moves
+        <select id="moveSelect">
+          <option value="1">1</option>
+          <option value="2" selected>2</option>
+          <option value="3">3</option>
+        </select>
+      </label>
+      <button id="applyBtn">Apply move</button>
+      <button id="rollBtn" title="Pick a random remaining die and roll 1–3">Roll a die</button>
+      <button id="nextLegBtn" title="Copy current board into Setup and reset dice">Start next leg</button>
+      <button id="resetBtn" title="Reset the leg to setup state">Reset</button>
+      <span class="note" id="status" aria-live="polite"></span>
+
+    </div>
+
+    <div style="margin-top:10px" id="usedDiceLine" class="note">No inputs yet.</div>
+    <h3 style="margin-top:12px">Board view</h3>
+    <div id="liveBoard" class="track" style="--len:16"></div>
+
+  </section>
+
+  <details class="card collapsible">
+    <summary>Placement stats (after completing the leg from current state)</summary>
+    <div class="card-body">
+      <div id="placementStats">Loading…</div>
+    </div>
+  </details>
+
+
+  <details class="card collapsible">
+    <summary>Remainder simulations</summary>
+    <div class="card-body">
+      <div id="legsTable" class="scroller">Loading…</div>
+    </div>
+  </details>
+
+
+</div>
+
+<script>
+(function(){
+  // === Config ===
+  const RACERS=[
+    {id:'blue',name:'Blue',color:'#3b82f6'},
+    {id:'green',name:'Green',color:'#22c55e'},
+    {id:'red',name:'Red',color:'#ef4444'},
+    {id:'yellow',name:'Yellow',color:'#eab308'},
+    {id:'purple',name:'Purple',color:'#a855f7'}
+  ];
+  const CRAZY=[
+    {id:'black',name:'Black (crazy)',color:'#111827',crazy:true},
+    {id:'white',name:'White (crazy)',color:'#ffffff',border:'#cbd5e1',crazy:true},
+  ];
+  const CAMELS=[...RACERS,...CRAZY];
+
+  // === Utils ===
+  const el=s=>document.querySelector(s);
+  const make=(t,p={})=>Object.assign(document.createElement(t),p);
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+  const isCrazyId=cid=>cid==='black'||cid==='white';
+  const shuffle=(arr)=>{ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+  const num=(sel,def)=>{ const n=el(sel); const v=(n&&n.value!=null)? n.value : def; const t=parseInt(v,10); return Number.isFinite(t)? t : def; };
+  const safe = (fn, ctx) => { try { return fn(); } catch(e){ console.error(e); if(ctx){ const s=el('#status'); if(s) s.innerHTML = `<span class="error">${ctx}: ${e.message}</span>`; } return undefined; } };
+  const randInt = (a,b) => Math.floor(Math.random()*(b-a+1))+a; // inclusive
+  const displayName = (id) => id==='grey' ? 'Grey' : (RACERS.find(x=>x.id===id)?.name || id);
+  const remainingDice = () => ['blue','green','red','yellow','purple','grey'].filter(d=>!usedDice.includes(d));
+
+  // === Build Setup Rows ===
+  function buildRows(){
+    const rowsR=el('#rows-racers'); const rowsC=el('#rows-crazy');
+    rowsR.innerHTML=''; rowsC.innerHTML='';
+
+    rowsR.appendChild(make('div',{className:'row',innerHTML:'<div><b>Camel</b></div><div><b>Start space (1-indexed)</b></div>'}));
+    RACERS.forEach(c=>{
+      const row=make('div',{className:'row'});
+      const label=make('div',{innerHTML:`<span style="font-weight:700;color:${c.color}">${c.name}</span>`});
+      const pos=make('input',{type:'number',min:1,max:100,step:1,value:1,id:`pos-${c.id}`});
+      const controls=make('div',{className:'inline-controls'});
+      const up=make('button',{className:'miniBtn',title:'Move up (higher in stack)',textContent:'▲'});
+      const down=make('button',{className:'miniBtn',title:'Move down (closer to bottom)',textContent:'▼'});
+      up.addEventListener('click',()=>bumpCamel(c.id,'up'));
+      down.addEventListener('click',()=>bumpCamel(c.id,'down'));
+      controls.append(up,down);
+      row.append(label,pos,controls);
+      rowsR.appendChild(row);
+
+    });
+
+    rowsC.appendChild(make('div',{className:'row',innerHTML:'<div><b>Camel</b></div><div><b>Spaces from finish (1 = last space)</b></div>'}));
+    CRAZY.forEach(c=>{
+      const row=make('div',{className:'row'});
+      const textColor = c.id==='white' ? '#111827' : c.color;
+      const label=make('div',{innerHTML:`<span style="font-weight:700;color:${textColor}">${c.name}</span>`});
+      const pos=make('input',{type:'number',min:1,max:100,step:1,value:1,id:`pos-${c.id}`});
+      const controls=make('div',{className:'inline-controls'});
+      const up=make('button',{className:'miniBtn',title:'Move up (higher in stack)',textContent:'▲'});
+      const down=make('button',{className:'miniBtn',title:'Move down (closer to bottom)',textContent:'▼'});
+      up.addEventListener('click',()=>bumpCamel(c.id,'up'));
+      down.addEventListener('click',()=>bumpCamel(c.id,'down'));
+      controls.append(up,down);
+      row.append(label,pos,controls);
+      rowsC.appendChild(row);
+    });
+  }
+
+  // === Board helpers ===
+  function buildInitialBoard(){
+    const trackLen=clamp(num('#trackLen',16),6,40);
+    const groups=new Map();
+
+    // racers: convert 1-indexed input to 0-indexed board
+    RACERS.forEach(c=>{
+      const s=num(`#pos-${c.id}`,1);
+      const space=clamp(s-1,0,trackLen-1);
+      if(!groups.has(space)) groups.set(space,[]);
+      groups.get(space).push({camel:c.id,crazy:false});
+    });
+
+    // crazy: from finish (1=last space) -> 0-indexed board
+    CRAZY.forEach(c=>{
+      const f=num(`#pos-${c.id}`,1);
+      const space=clamp(trackLen - f, 0, trackLen-1);
+      if(!groups.has(space)) groups.set(space,[]);
+      groups.get(space).push({camel:c.id,crazy:true});
+    });
+
+    // auto stack: if we have a saved priority, use it to preserve orientation;
+  // otherwise fall back to default rule (racers bottom, crazy on top; Blue→Purple; Black→White)
+  const board=new Map();
+  for (const [space, arr] of groups.entries()) {
+    arr.sort((a,b)=>{
+      if (STACK_PRI && STACK_PRI instanceof Map) {
+        const ra = STACK_PRI.has(a.camel) ? STACK_PRI.get(a.camel) : Infinity;
+        const rb = STACK_PRI.has(b.camel) ? STACK_PRI.get(b.camel) : Infinity;
+        if (ra !== rb) return ra - rb;
+        // tie-break if both missing or equal
+      }
+      const ag=a.crazy?1:0, bg=b.crazy?1:0; if(ag!==bg) return ag-bg;
+      const idx=x=> x.crazy ? CRAZY.findIndex(y=>y.id===x.camel) : RACERS.findIndex(y=>y.id===x.camel);
+      return idx(a)-idx(b);
+    });
+    board.set(space, arr.map(x=>x.camel)); // bottom -> top
+  }
+    return board;
+  }
+
+  function drawBoard(board, target = '#board'){
+    const trackLen=num('#trackLen',16);
+    const boardEl=el(target);
+    if(!boardEl) return;
+    boardEl.style.setProperty('--len',String(trackLen));
+    boardEl.innerHTML='';
+    for(let s=0;s<trackLen;s++){
+      const cell=make('div',{className:'space'});
+      const stack=board.get(s)||[];
+      stack.forEach(cid=>{
+        const cfg=CAMELS.find(x=>x.id===cid);
+        const cam=make('div',{className:'camel'+(cfg&&cfg.crazy?' crazy':''),title:(cfg?cfg.name:cid)});
+        if(cfg){ cam.style.background=cfg.color; if(cfg.border) cam.style.borderColor=cfg.border; }
+        cell.appendChild(cam);
+      });
+      boardEl.appendChild(cell);
+    }
+  }
+
+
+  function locate(board,camel){ for(const[s,stack] of board.entries()){ const i=stack.indexOf(camel); if(i!==-1) return {space:s,index:i}; } return {space:-1,index:-1}; }
+  function positionsFromBoard(board){ const pos=new Map(); for(const[s,stack] of board.entries()){ for(let i=0;i<stack.length;i++){ pos.set(stack[i], s); } } return pos; }
+  function placementsFromBoard(board){
+    const racers=new Set(RACERS.map(c=>c.id));
+    let maxSpace=-Infinity; for(const k of board.keys()) if(k>maxSpace) maxSpace=k;
+    const order=[]; // furthest first; within a space, top ahead
+    for(let s=maxSpace; s>=-100; s--){ if(!board.has(s)) continue; const stack=board.get(s); for(let i=stack.length-1;i>=0;i--){ const cid=stack[i]; if(racers.has(cid)) order.push(cid); } }
+    const placement=new Map(); order.forEach((cid,idx)=> placement.set(cid, idx+1));
+    return placement;
+  }
+
+  // === Interactive state ===
+  let legBoard;   // Map space->stack (bottom->top)
+  let usedDice;   // ids in order
+  let finished;
+  // When present, preserves the previous stack orientation across resets
+  let STACK_PRI = null; // Map<camelId, number> lower = closer to bottom
+
+
+  function resetLeg(){
+    legBoard = buildInitialBoard();
+    usedDice = [];
+    finished = false;
+    drawBoard(legBoard);                 // setup board
+    drawBoard(legBoard, '#liveBoard');   // live board in Enter die results
+    updateUsedDiceLine();
+    const s=el('#status'); if(s) s.textContent = '';
+    // Immediately compute results before any input
+    runSimulationsForCurrentState();
+  }
+
+  function updateUsedDiceLine(){
+    if(!usedDice.length){ el('#usedDiceLine').textContent = 'No inputs yet.'; return; }
+    const names = usedDice.map(d=> d==='grey' ? 'Grey' : (RACERS.find(x=>x.id===d)?.name||d));
+    el('#usedDiceLine').textContent = `Inputs this leg: ${names.join(', ')}`;
+  }
+
+  // Apply a single user-specified move to the live leg board
+  function applyUserMove(die, roll){
+    if(finished){ el('#status').innerHTML = '<span class="error">Leg already finished.</span>'; return false; }
+    if(usedDice.includes(die)){ el('#status').innerHTML = '<span class="error">That die was already used this leg.</span>'; return false; }
+    if(usedDice.length>=5){ el('#status').innerHTML = '<span class="error">A leg has exactly 5 dice.</span>'; return false; }
+
+    if(die==='grey'){
+      const crazy = Math.random() < 0.5 ? 'black' : 'white';
+      const loc = locate(legBoard, crazy); if(loc.space!==-1){
+        const movers = legBoard.get(loc.space).slice(loc.index);
+        const stayers = legBoard.get(loc.space).slice(0,loc.index);
+        if(stayers.length) legBoard.set(loc.space,stayers); else legBoard.delete(loc.space);
+        const dest = Math.max(0, loc.space - roll);
+        const destStack = legBoard.get(dest) || [];
+        destStack.push(...movers); legBoard.set(dest, destStack);
+      }
+    } else {
+      const loc = locate(legBoard, die); if(loc.space!==-1){
+        const movers = legBoard.get(loc.space).slice(loc.index);
+        const stayers = legBoard.get(loc.space).slice(0,loc.index);
+        if(stayers.length) legBoard.set(loc.space,stayers); else legBoard.delete(loc.space);
+        const dest = loc.space + roll;
+        const destStack = legBoard.get(dest) || [];
+        destStack.push(...movers); legBoard.set(dest, destStack);
+        const trackLen=num('#trackLen',16);
+        if(dest>=trackLen) finished = true;
+      }
+    }
+    usedDice.push(die);
+    updateUsedDiceLine();
+    drawBoard(legBoard);                // setup board
+    drawBoard(legBoard, '#liveBoard');  // live board
+    el('#status').textContent = '';
+    return true;
+  }
+
+  // Complete remainder of leg randomly and capture moves + final positions
+  function simulateRemainderOnce(trackLen){
+    const board = new Map(); for(const[k,v] of legBoard.entries()) board.set(k, v.slice());
+    let done = finished;
+    const remainingAll = ['blue','green','red','yellow','purple','grey'].filter(d=>!usedDice.includes(d));
+    const need = Math.max(0, 5 - usedDice.length);
+    const bag = shuffle(remainingAll).slice(0, need);
+    const moves=[];
+    for(const die of bag){ if(done) break;
+      if(die==='grey'){
+        const crazy = Math.random() < 0.5 ? 'black' : 'white';
+        const roll = 1 + Math.floor(Math.random()*3);
+        const loc = locate(board, crazy); if(loc.space!==-1){
+          const movers=board.get(loc.space).slice(loc.index);
+          const stayers=board.get(loc.space).slice(0,loc.index);
+          if(stayers.length) board.set(loc.space,stayers); else board.delete(loc.space);
+          const dest=Math.max(0, loc.space - roll);
+          const destStack=board.get(dest)||[]; destStack.push(...movers); board.set(dest,destStack);
+        }
+        moves.push({camel:crazy, roll});
+      } else {
+        const roll = 1 + Math.floor(Math.random()*3);
+        const loc = locate(board, die); if(loc.space!==-1){
+          const movers=board.get(loc.space).slice(loc.index);
+          const stayers=board.get(loc.space).slice(0,loc.index);
+          if(stayers.length) board.set(loc.space,stayers); else board.delete(loc.space);
+          const dest=loc.space + roll; const destStack=board.get(dest)||[]; destStack.push(...movers); board.set(dest,destStack);
+          if(dest>=trackLen) { done = true; }
+        }
+        moves.push({camel:die, roll});
+      }
+    }
+    return { moves, positions: positionsFromBoard(board), placement: placementsFromBoard(board) };
+  }
+
+  function runSimulationsForCurrentState(){
+    const sims = clamp(num('#sims',500),1,100000);
+    const trackLen = clamp(num('#trackLen',16),6,40);
+    const stats=new Map(); RACERS.forEach(c=> stats.set(c.id,[0,0,0,0,0]));
+    const legs=[];
+    for(let i=0;i<sims;i++){
+      const res = simulateRemainderOnce(trackLen);
+      legs.push(res);
+      RACERS.forEach(c=>{ const p=res.placement.get(c.id); if(p>=1&&p<=5){ const a=stats.get(c.id); a[p-1]++; } });
+    }
+    renderPlacementStats(stats, sims);
+    renderLegsTable(legs);
+  }
+
+  function renderPlacementStats(stats, total){
+    const container=el('#placementStats');
+    let html='<table><thead><tr><th>Camel</th><th>1st</th><th>2nd</th><th>3rd</th><th>4th</th><th>5th</th></tr></thead><tbody>';
+    RACERS.forEach(c=>{
+      const arr = stats.get(c.id)||[0,0,0,0,0];
+      const pct=n=> total? ((n/total*100).toFixed(1)+'%') : '0.0%';
+      html+=`<tr><td style="text-align:left">${c.name}</td>`+
+            `<td class="mono">${arr[0]} <span class="note">(${pct(arr[0])})</span></td>`+
+            `<td class="mono">${arr[1]} <span class="note">(${pct(arr[1])})</span></td>`+
+            `<td class="mono">${arr[2]} <span class="note">(${pct(arr[2])})</span></td>`+
+            `<td class="mono">${arr[3]} <span class="note">(${pct(arr[3])})</span></td>`+
+            `<td class="mono">${arr[4]} <span class="note">(${pct(arr[4])})</span></td>`+
+            `</tr>`;
+    });
+    html+='</tbody></table>';
+    container.innerHTML=html;
+  }
+
+  function renderLegsTable(legs){
+    const container=el('#legsTable');
+    if(!legs?.length){ container.innerHTML='No simulations to display.'; return; }
+    let html='<div class="scroller"><table><thead><tr><th>#</th><th>Dice order</th>';
+    [...RACERS,...CRAZY].forEach(c=>{ html+=`<th class="nowrap">${c.name}</th>`; });
+    html+='</tr></thead><tbody>';
+    legs.slice(0,200).forEach((leg,idx)=>{
+      const order=leg.moves.map(m=>{
+        const isCrazy = (m.camel==='black'||m.camel==='white');
+        const label = isCrazy ? (m.camel==='black'?'Black':'White') : (RACERS.find(r=>r.id===m.camel)?.name||m.camel);
+        return `${label}:${m.roll}${isCrazy?'←':''}`;
+      }).join(', ');
+      html+=`<tr><td class="mono">${idx+1}</td><td style="text-align:left">${order}</td>`;
+      [...RACERS,...CRAZY].forEach(c=>{
+        const posIdx = leg.positions.get(c.id);
+        const val = (posIdx==null)? '—' : (posIdx+1);
+        html+=`<td class="mono">${val}</td>`;
+      });
+      html+='</tr>';
+    });
+    html+='</tbody></table></div>';
+    if(legs.length>200) html+='<p class="note">Showing first 200 of '+legs.length+' simulated completions.</p>';
+    container.innerHTML=html;
+  }
+
+  // === Developer tests ===
+  function runTests(){
+    const out=[]; const push=(ok,msg)=>out.push((ok?'✅ ':'❌ ')+msg);
+    try{
+      // Test 1: default setup mapping
+      const board = buildInitialBoard();
+      const trackLen = num('#trackLen',16);
+      const blue = locate(board,'blue');
+      const black = locate(board,'black');
+      push(blue.space===0, `Blue starts at space 0 (got ${blue.space})`);
+      push(black.space===trackLen-1, `Black starts at last space index ${trackLen-1} (got ${black.space})`);
+
+      // Test 2: placements ordering rule (top of stack ahead on same space)
+      const testBoard=new Map();
+      testBoard.set(5,['blue','red']); // blue bottom, red top -> red ahead of blue
+      const plc = placementsFromBoard(testBoard);
+      push(plc.get('red')===1 && plc.get('blue')===2, `Top-of-stack ahead on same space`);
+
+      // Test 3: simulate remainder with all 5 dice already used
+      const savedUsed = usedDice; const savedBoard = legBoard; const savedFinished = finished;
+      usedDice=['blue','green','red','yellow','purple']; finished=false; legBoard=new Map([[0,['blue']]]);
+      const res = simulateRemainderOnce(trackLen);
+      push(Array.isArray(res.moves) && res.moves.length===0, `No moves when 5 dice already used`);
+      // restore
+      usedDice=savedUsed; legBoard=savedBoard; finished=savedFinished;
+    }catch(e){ push(false, 'Unexpected error: '+e.message); console.error(e); }
+    el('#tests').innerText = out.join('\n');
+  }
+
+
+  function commitBoardToSetup(){
+    // Copy current board positions into the Setup inputs and reset the leg
+    const trackLen = clamp(num('#trackLen',16),6,40);
+    const pos = positionsFromBoard(legBoard);
+
+    // >>> NEW: capture current stack orientation (unique, bottom gets smaller priority)
+    STACK_PRI = new Map();
+    (function captureStackOrder() {
+      let counter = 0;
+      // We only need relative order within each space; counter ensures unique, stable ordering
+      for (const [space, stack] of legBoard.entries()) {
+        // stack is bottom -> top already by our model
+        for (let i = 0; i < stack.length; i++) {
+          const cid = stack[i];
+          STACK_PRI.set(cid, counter++);
+        }
+      }
+    })();
+    // <<< NEW
+    
+    // Racers: board is 0-indexed -> Setup wants 1-indexed start spaces
+    RACERS.forEach(c=>{
+      const p = pos.get(c.id);
+      if(p != null){
+        const inp = el(`#pos-${c.id}`);
+        if(inp) inp.value = String(p + 1);
+      }
+    });
+  
+    // Crazy: Setup expects "spaces from finish" (1 = last space)
+    CRAZY.forEach(c=>{
+      const p = pos.get(c.id);
+      if(p != null){
+        const fromFinish = Math.max(1, trackLen - p);
+        const inp = el(`#pos-${c.id}`);
+        if(inp) inp.value = String(fromFinish);
+      }
+    });
+  
+    // Rebuild leg from these new inputs
+    resetLeg();
+    const s = el('#status');
+    if(s) s.innerHTML = `<b>Starting next leg</b> from current positions.`;
+  }
+
+
+  // Map current Setup inputs -> space index for a camel id
+  function spaceFromInputs(cid){
+    const trackLen=clamp(num('#trackLen',16),6,40);
+    if (cid==='black' || cid==='white'){
+      const f=num(`#pos-${cid}`,1);
+      return clamp(trackLen - f, 0, trackLen-1);
+    } else {
+      const s=num(`#pos-${cid}`,1);
+      return clamp(s-1,0,trackLen-1);
+    }
+  }
+  
+  // Build groups per space from the current inputs
+  function groupsFromInputs(){
+    const m=new Map();
+    CAMELS.forEach(cfg=>{
+      const space=spaceFromInputs(cfg.id);
+      if(!m.has(space)) m.set(space,[]);
+      m.get(space).push(cfg.id);
+    });
+  
+    // default fallback ordering within a space (racers bottom Blue→Purple; crazy on top Black→White)
+    const defaultRank = (id)=>{
+      const rec = CAMELS.find(x=>x.id===id);
+      if(rec.crazy) return 100 + CRAZY.findIndex(y=>y.id===id); // crazy above racers
+      return RACERS.findIndex(y=>y.id===id);
+    };
+  
+    for(const [s,arr] of m){
+      arr.sort((a,b)=>{
+        if(STACK_PRI instanceof Map){
+          const ra=STACK_PRI.get(a), rb=STACK_PRI.get(b);
+          if(ra!=null && rb!=null && ra!==rb) return ra-rb;
+        }
+        // fallback deterministic default
+        const ac = (a==='black'||a==='white') ? 1 : 0;
+        const bc = (b==='black'||b==='white') ? 1 : 0;
+        if(ac!==bc) return ac-bc;
+        return defaultRank(a)-defaultRank(b);
+      });
+    }
+    return m;
+  }
+  
+  // Ensure we have a STACK_PRI seeded from current inputs
+  function ensurePriorityFromInputs(){
+    if(!(STACK_PRI instanceof Map)) STACK_PRI = new Map();
+    const groups=groupsFromInputs();
+    let counter=0;
+    for(const [,arr] of groups){
+      for(const id of arr){
+        if(!STACK_PRI.has(id)) STACK_PRI.set(id, counter++);
+      }
+    }
+  }
+  
+  // Move a camel one step within its space (dir: 'up' = toward top; 'down' = toward bottom)
+  function bumpCamel(cid, dir){
+    ensurePriorityFromInputs();
+    const space=spaceFromInputs(cid);
+    const groups=groupsFromInputs();
+    const arr=groups.get(space)||[];
+    if(!arr.length) return;
+    const idx=arr.indexOf(cid);
+    if(idx===-1) return;
+  
+    const targetIdx = dir==='up' ? idx+1 : idx-1;
+    if(targetIdx<0 || targetIdx>=arr.length) return;
+  
+    const other=arr[targetIdx];
+    const a=STACK_PRI.get(cid);
+    const b=STACK_PRI.get(other);
+    STACK_PRI.set(cid,b);
+    STACK_PRI.set(other,a);
+  
+    // Redraw preview and, if no inputs yet, sync live
+    updatePreview();
+  }
+
+  
+  
+  // === Init ===
+  function updatePreview(){
+    const newBoard = buildInitialBoard();
+    if(!usedDice || usedDice.length===0){
+      // Before any inputs, keep live state in sync with setup
+      legBoard = newBoard;
+      runSimulationsForCurrentState();
+    }
+    drawBoard(newBoard, '#board');      // Setup board
+    drawBoard(legBoard, '#liveBoard');  // Live board
+  }
+
+  function init(){
+    buildRows();
+    el('#setup').addEventListener('input', updatePreview);
+    el('#trackLen').addEventListener('input', updatePreview);
+
+    el('#applyBtn').addEventListener('click', ()=>{
+      const die = el('#dieSelect').value;
+      const roll = parseInt(el('#moveSelect').value,10);
+      if(applyUserMove(die, roll)) runSimulationsForCurrentState();
+    });
+    
+    el('#rollBtn').addEventListener('click', ()=>{
+      if(finished){ el('#status').innerHTML = '<span class="error">Leg already finished.</span>'; return; }
+      if(usedDice.length>=5){ el('#status').innerHTML = '<span class="error">No dice left this leg.</span>'; return; }
+      const rem = remainingDice();
+      if(!rem.length){ el('#status').innerHTML = '<span class="error">No dice left this leg.</span>'; return; }
+      const die = rem[Math.floor(Math.random()*rem.length)];
+      const roll = randInt(1,3);
+      if(applyUserMove(die, roll)){
+        el('#dieSelect').value = die;
+        el('#moveSelect').value = String(roll);
+        el('#status').innerHTML = `Rolled <b>${displayName(die)}</b> → <b>${roll}</b>`;
+        runSimulationsForCurrentState();
+      }
+    });
+    
+    el('#resetBtn').addEventListener('click', resetLeg);
+    const btn=el('#runTestsBtn'); if(btn) btn.addEventListener('click', runTests);
+
+    el('#nextLegBtn').addEventListener('click', commitBoardToSetup);
+
+    // Start fresh
+    resetLeg();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
+</script>
+</body>
+</html>
