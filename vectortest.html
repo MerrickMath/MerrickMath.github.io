@@ -33,6 +33,75 @@
     .katex .uColor { color: var(--u); }
     .katex .vColor { color: var(--v); }
   </style>
+
+  <style id="theme-override">
+  /* --- palette like the Shopping Math doc (keeps your u/v/result colors) --- */
+  :root{
+    --bg:#fafafa;
+    --card:#ffffff; 
+    --muted:#4b5563;
+    --text:#111827;
+    --accent:#1d4ed8;       /* unused here but useful if you add primary buttons */
+    --accent-weak:#e0e7ff;  /* ditto */
+    --ok:#15803d;
+    --error:#b91c1c;
+    --border:#e5e7eb;
+  }
+
+  /* --- global type & page frame (serif, 14px, centered wrap) --- */
+  html,body{
+    margin:0; padding:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Latin Modern Roman","Computer Modern Serif",Georgia,Cambria,"Times New Roman",Times,serif;
+    font-size:14px;
+    line-height:1.45;
+  }
+  .wrap{ max-width:900px; margin:0 auto; padding:20px; }
+
+  /* --- headings like the sample --- */
+  h1,h2{
+    line-height:1.2; margin:0 0 8px;
+    font-family:"Latin Modern Roman","Computer Modern Serif",Georgia,serif;
+    font-weight:400;
+  }
+  h1{ font-size:1.6rem; text-align:center; margin-bottom:12px; }
+  /* Your page doesn’t use <h2>, but this harmonizes any .title you have: */
+  .title{ font-size:1.1rem; margin:0 0 8px; color:var(--muted); font-weight:600; }
+
+  /* --- cards / panels --- */
+  .card{
+    background:var(--card);
+    box-shadow:0 1px 4px rgba(0,0,0,.05);
+    border-radius:8px;
+    padding:12px;
+    border:1px solid var(--border);
+    margin-top:10px;
+  }
+
+  /* --- buttons like the sample (simple, neutral) --- */
+  .btn{
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:6px 10px;
+    background:#ffffff;
+    color:var(--text);
+    cursor:pointer;
+    transition:background .15s ease;
+    font-family:inherit;
+    font-size:13px;
+  }
+  .btn:hover{ background:#f9fafb; }
+
+  /* --- small text styles to match feel --- */
+  .subtitle{ color:var(--muted); }
+  .note{ color:var(--muted); font-size:12px; }
+
+  /* --- math sizing (keeps KaTeX, just slightly smaller to match 14px base) --- */
+  .katex { font-size: 1rem; }
+</style>
+
+  
 </head>
 <body>
   <div class="wrap">
