@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Divisibility Shootout</title>
+  <!-- Fonts: clean UI + LaTeX-like text -->
+  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      /* Light theme */
+      --bg: #f8fafc;           /* slate-50 */
+      --panel: #ffffff;        /* white */
+      --card: #ffffff;         /* white */
+      --accent: #0ea5e9;       /* sky-500 */
+      --accent-2: #8b5cf6;     /* violet-600 */
+      --accent-3: #f59e0b; /* amber-500 */
+      --accent-4: #ec4899; /* pink-500 */
+      --good: #16a34a;         /* green-600 */
+      --bad: #dc2626;          /* red-600 */
+      --text: #0f172a;         /* slate-900 */
+      --muted: #475569;        /* slate-600 */
+      --ring: rgba(2,132,199,.25);
+      --shadow: 0 10px 30px rgba(2, 6, 23, .06), inset 0 0 0 1px rgba(15, 23, 42, .04);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:
+        radial-gradient(1200px 800px at 10% -10%, rgba(139,92,246,.12), transparent 60%),
+        radial-gradient(1200px 800px at 110% 10%, rgba(14,165,233,.10), transparent 60%),
+        var(--bg);
+      color:var(--text); font-family: 'STIX Two Text', Georgia, 'Times New Roman', serif;
+    }
+    header {
+      max-width: 1100px;
+      margin: 32px auto 10px;
+      padding: 0 20px;
+    
+      display: flex;
+      justify-content: center; /* center horizontally */
+      align-items: center;     /* center vertically */
+    }
+    .title{
+      font-weight:700; letter-spacing:.3px; font-size: clamp(24px, 3.2vw, 40px);
+      line-height:1.1; display:flex; align-items:center; gap:12px;
+    }
+    .badge{font-size:12px; padding:4px 8px; border-radius:999px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#fff; font-weight:700}
+    .panel{
+      max-width:1100px; margin:0 auto; padding:20px; display:grid; gap:16px;
+      grid-template-columns: 1fr; 
+    }
+    .controls{
+      background:linear-gradient(180deg, rgba(255,255,255,1), rgba(255,255,255,.96));
+      border-radius: var(--radius); padding:16px; box-shadow: var(--shadow);
+      display:grid; grid-template-columns: repeat(12, 1fr); gap:12px; align-items:center;
+      border:1px solid rgba(15,23,42,.06);
+    }
+    .controls > *:not(.spacer){grid-column: span 12}
+    @media(min-width:700px){
+      .controls > .group{grid-column: span 5}
+      .controls > .score{grid-column: span 3}
+      .controls > .actions{grid-column: span 4}
+    }
+    label{font-size:12px; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); display:block; margin-bottom:6px; font-weight:600}
+    select, button, input[type="number"]{
+      width:100%; padding:12px 14px; border-radius:12px; border:1px solid rgba(15,23,42,.12);
+      background: #ffffff; color:var(--text); font-weight:600; font-size:15px; outline:none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
+    }
+    select:focus, button:focus{outline: 3px solid var(--ring); outline-offset:2px}
+    button{cursor:pointer; transition: transform .06s ease, filter .2s ease, background .2s ease}
+    /* Generic hover for all buttons */
+    button:hover {
+      background: #f1f5f9; /* light slate background */
+    }
+    
+    /* Keep the gradient button (if you still use .primary) distinct */
+    button.primary:hover {
+      filter: brightness(1.05);
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+    }
+    button.primary{background: linear-gradient(135deg, var(--accent), var(--accent-2)); color:#fff; border:none; font-weight:800}
+    button.primary:hover{filter:brightness(1.02)}
+    button.primary:active{transform: translateY(1px)}
+    .score{display:flex; gap:16px; align-items:flex-end; justify-content:flex-start}
+    .score .stat{background: rgba(15,23,42,.04); padding:10px 12px; border-radius:12px; box-shadow: inset 0 0 0 1px rgba(15,23,42,.06)}
+    .stat .big{font-weight:700; font-size:22px}
+    .stat .small{font-size:12px; color:var(--muted)}
+
+    /* Rule card uses the same LaTeX-like serif */
+    .rule{
+      background: #ffffff;
+      border-radius: var(--radius); padding:14px 16px; box-shadow: var(--shadow); line-height:1.35;
+      border:1px solid rgba(15,23,42,.06);
+    }
+    .rule .k{font-variant-numeric: tabular-nums; font-weight:600; padding:2px 8px; border-radius:9px; background:rgba(139,92,246,.12);}
+
+    .grid{
+      display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:16px;
+      max-width:1100px; margin:2px auto; padding:10px 20px 32px;
+    }
+    @media(min-width:820px){
+      .grid{grid-template-columns: repeat(4, minmax(0, 1fr));}
+    }
+    .tile{
+      user-select:none; -webkit-tap-highlight-color: transparent;
+      position:relative; isolation:isolate; text-align:center; padding:30px 10px;
+      border-radius: 22px; background: radial-gradient(120% 120% at 20% 10%, rgba(14,165,233,.15), transparent 60%), var(--card);
+      box-shadow: var(--shadow); font-weight:700; font-size: clamp(28px, 5vw, 44px);
+      letter-spacing:.02em; transition: transform .12s ease, box-shadow .12s ease, background .25s ease, outline-color .25s ease;
+      outline: 2px solid transparent; border:1px solid rgba(15,23,42,.06);
+    }
+    .tile:hover{transform: translateY(-2px)}
+    .tile:active{transform: translateY(0)}
+    .tile.correct{background: linear-gradient(160deg, rgba(34,197,94,.16), rgba(14,165,233,.10)); outline-color: rgba(34,197,94,.5)}
+    .tile.wrong{background: linear-gradient(160deg, rgba(220,38,38,.16), rgba(139,92,246,.10)); outline-color: rgba(220,38,38,.5)}
+    .tile.reveal::after{content:"✓"; position:absolute; right:12px; top:8px; font-size:20px; color:var(--good); opacity:.85}
+
+    .toast{position:fixed; left:50%; bottom:24px; transform:translateX(-50%);
+      background:#0f172a; border:1px solid rgba(255,255,255,.18); color:#ffffff;
+      padding:12px 16px; border-radius:12px; box-shadow: var(--shadow); font-weight:700; display:none}
+    .toast.show{display:block; animation: toast 1.5s ease forwards}
+    @keyframes toast{0%{opacity:0; transform:translate(-50%, 4px)} 15%{opacity:1; transform:translate(-50%, 0)} 85%{opacity:1} 100%{opacity:0; transform:translate(-50%, -4px)}}
+
+    .footer{max-width:1100px; margin:0 auto 26px; padding:0 20px; color:var(--muted); font-size:12px; text-align:center}
+    .kbd{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; padding:2px 6px; border-radius:6px; background:rgba(15,23,42,.06); border:1px solid rgba(15,23,42,.12)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title">Divisibility Shootout</div>
+  </header>
+
+  <section class="panel">
+    <div class="controls">
+      <div class="group">
+        <label for="nSelect">Divisible by</label>
+        <select id="nSelect" aria-label="Choose n (1–12)">
+          <option value="1">1</option>
+          <option value="2" selected>2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+        </select>
+      </div>
+
+      <div class="score">
+        <div class="stat">
+          <div class="big" id="round">1</div>
+          <div class="small">Round</div>
+        </div>
+        <div class="stat">
+          <div class="big" id="points">0</div>
+          <div class="small">Points</div>
+        </div>
+        <div class="stat">
+          <div class="big" id="streak">0</div>
+          <div class="small">Streak</div>
+        </div>
+      </div>
+
+      <div class="actions" style="display:flex; gap:10px">
+        <button id="newRoundBtn" title="Next set (Enter)">New Round</button>
+        <button id="revealBtn" title="Show the answer (Space)">Reveal</button>
+        <button id="resetBtn" title="Reset score (R)">Reset</button>
+      </div>
+
+      <div class="rule" id="ruleBox">
+        <strong style="font-family:'STIX Two Text', Georgia, serif; letter-spacing:.08em; font-size:12px; color:var(--muted); text-transform:uppercase;">Rule</strong><br>
+        <span id="ruleText">Even numbers are divisible by <span class="k">2</span>.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid" id="grid" aria-live="polite" aria-label="Choices grid">
+    <!-- Tiles will be injected here -->
+  </section>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="footer">
+    Pro tip: press <span class="kbd">Enter</span> for a new round, <span class="kbd">Space</span> to reveal, and <span class="kbd">R</span> to reset.
+  </div>
+
+  <script>
+    const rules = {
+      1: "Every integer is divisible by 1 — any tile works.",
+      2: "An even number (last digit 0,2,4,6,8) is divisible by 2.",
+      3: "Sum of digits is a multiple of 3.",
+      4: "Last two digits form a number divisible by 4.",
+      5: "Last digit is 0 or 5.",
+      6: "Divisible by both 2 and 3.",
+      7: "No simple test — try dividing or use mental math.",
+      8: "Last three digits form a number divisible by 8.",
+      9: "Sum of digits is a multiple of 9.",
+      10: "Ends with 0.",
+      11: "(Sum of alternating digits) is a multiple of 11.",
+      12: "Divisible by both 3 and 4."
+    };
+
+    const gridEl = document.getElementById('grid');
+    const nSelect = document.getElementById('nSelect');
+    const roundEl = document.getElementById('round');
+    const pointsEl = document.getElementById('points');
+    const streakEl = document.getElementById('streak');
+    const newRoundBtn = document.getElementById('newRoundBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const ruleText = document.getElementById('ruleText');
+    const toast = document.getElementById('toast');
+
+    let round = 1, points = 0, streak = 0;
+    let answerIndex = 0; // 0..3
+    let currentN = parseInt(nSelect.value, 10);
+
+    function showToast(msg){
+      toast.textContent = msg; toast.classList.remove('show');
+      void toast.offsetWidth; // restart animation
+      toast.classList.add('show');
+    }
+
+    function randint(a,b){ // inclusive
+      return Math.floor(Math.random()*(b-a+1))+a;
+    }
+
+    function sampleUniqueNotMultiple(n, count, min, max, avoidSet){
+      const out = new Set();
+      let tries = 0;
+      while(out.size < count && tries < 5000){
+        const x = randint(min,max);
+        if((x % n !== 0 || n === 1) && !out.has(x) && !avoidSet.has(x)) out.add(x);
+        tries++;
+      }
+      return Array.from(out);
+    }
+
+    function generateRound(){
+      currentN = parseInt(nSelect.value, 10);
+      ruleText.innerHTML = (rules[currentN]||'');
+
+      gridEl.innerHTML = '';
+      const min = 10, max = 999; // nice practice range
+
+      // Pick one correct answer (multiple of n) — if n=1, any number will be treated as correct
+      let correct;
+      if(currentN === 1){
+        correct = randint(min, max);
+      } else {
+        const k = randint(Math.ceil(min/currentN), Math.floor(max/currentN));
+        correct = k * currentN;
+      }
+
+      const avoid = new Set([correct]);
+      const wrongs = sampleUniqueNotMultiple(currentN, 3, min, max, avoid);
+
+      // In rare case we couldn't find enough wrongs (e.g., extreme constraints), regenerate
+      if(wrongs.length < 3){
+        return generateRound();
+      }
+
+      // Place in random order
+      const choices = wrongs.slice();
+      answerIndex = randint(0,3);
+      choices.splice(answerIndex, 0, correct);
+
+      choices.forEach((num, idx)=>{
+        const tile = document.createElement('button');
+        tile.className = 'tile';
+        tile.setAttribute('aria-label', `Choice ${idx+1}: ${num}`);
+        tile.textContent = num.toLocaleString();
+        tile.addEventListener('click', ()=> handleChoice(idx, tile, num));
+        gridEl.appendChild(tile);
+      });
+    }
+
+    function handleChoice(idx, tile, value){
+      const isCorrect = (currentN === 1) ? true : (idx === answerIndex);
+      const tiles = Array.from(document.querySelectorAll('.tile'));
+
+      if(isCorrect){
+        tile.classList.add('correct','reveal');
+        points += 10; streak += 1; round += 1;
+        pointsEl.textContent = points; streakEl.textContent = streak; roundEl.textContent = round;
+        showToast(`Nice! ${value} is divisible by ${currentN}.`);
+        setTimeout(generateRound, 600);
+      } else {
+        tile.classList.add('wrong');
+        tiles[answerIndex]?.classList.add('reveal');
+        streak = 0; points = Math.max(0, points - 3); round += 1;
+        pointsEl.textContent = points; streakEl.textContent = streak; roundEl.textContent = round;
+        showToast(`Not quite. Try another round!`);
+        setTimeout(generateRound, 900);
+      }
+    }
+
+    function reveal(){
+      const tiles = Array.from(document.querySelectorAll('.tile'));
+      tiles.forEach((t,i)=>{ if(i===answerIndex || currentN===1) t.classList.add('reveal'); });
+    }
+
+    function reset(){ round=1; points=0; streak=0; roundEl.textContent=1; pointsEl.textContent=0; streakEl.textContent=0; generateRound(); showToast('Score reset.'); }
+
+    // Events
+    nSelect.addEventListener('change', ()=>{ round=1; streak=0; roundEl.textContent=1; streakEl.textContent=0; generateRound(); });
+    newRoundBtn.addEventListener('click', generateRound);
+    revealBtn.addEventListener('click', reveal);
+    resetBtn.addEventListener('click', reset);
+    window.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){ e.preventDefault(); generateRound(); }
+      if(e.code === 'Space'){ e.preventDefault(); reveal(); }
+      if(e.key.toLowerCase() === 'r'){ e.preventDefault(); reset(); }
+    });
+
+    // Start
+    generateRound();
+  </script>
+</body>
+</html>

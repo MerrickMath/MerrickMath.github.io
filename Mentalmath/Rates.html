@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rates — Interactive Practice</title>
+  <style>
+    :root{
+      --bg:#fafafa;
+      --card:#ffffff; 
+      --muted:#4b5563;
+      --text:#111827;
+      --accent:#1d4ed8;
+      --accent-weak:#e0e7ff;
+      --ok:#15803d;
+      --error:#b91c1c;
+      --border:#e5e7eb;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"Latin Modern Roman","Computer Modern Serif",Georgia,Cambria,"Times New Roman",Times,serif;font-size:14px;}
+    .wrap{max-width:900px;margin:0 auto;padding:20px}
+    h1,h2{line-height:1.2;margin:0 0 8px;font-family:"Latin Modern Roman","Computer Modern Serif",Georgia,serif}
+    h1{font-size:1.6rem;text-align:center;margin-bottom:12px}
+    h2{font-size:1.1rem;}
+    p{color:var(--muted);font-size:13px}
+    .card{background:var(--card);box-shadow:0 1px 4px rgba(0,0,0,.05);border-radius:8px;padding:12px;border:1px solid var(--border);margin-top:10px}
+    .toolbar{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+    button{border:1px solid var(--border);border-radius:6px;padding:6px 10px;background:white;color:var(--text);cursor:pointer;transition:background .15s ease; font-family:inherit;font-size:13px}
+    button:hover{background:#f9fafb}
+    .btn-primary{background:var(--accent);color:white;border-color:var(--accent)}
+    .btn-primary:hover{filter:brightness(1.05)}
+    .pill{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border:1px solid var(--border);border-radius:999px;background:#f8fafc;color:var(--muted);font-size:.75rem}
+    .mono{font-family:"Latin Modern Mono","Courier New",monospace;font-size:13px}
+    .problem{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px dashed var(--border)}
+    .problem:last-child{border-bottom:0}
+    .idx{opacity:.7;min-width:2ch}
+    .solution{display:none;color:var(--ok);font-size:13px}
+    input[type="text"]{outline:none;padding:4px 6px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--text);min-width:120px;font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Rates — Interactive Practice</h1>
+      <p class="muted">Practice solving <b>rate problems</b>. Problems start simple and get harder.</p>
+      <div class="toolbar">
+        <button id="btn-new" class="btn-primary">New Set</button>
+        <button id="btn-toggle">Show Solutions</button>
+        <button id="btn-check">Quick Check</button>
+        <span class="pill">Set: <span id="seed-label" class="mono"></span></span>
+      </div>
+    </header>
+
+    <section class="card" id="rates">
+      <h2>Practice Questions</h2>
+      <div id="list-rates"></div>
+    </section>
+
+    <div class="footer" style="font-size:12px;margin-top:8px;color:#6b7280">Use <b>New Set</b> for fresh numbers. Toggle <b>Show/Hide Solutions</b> anytime.</div>
+  </div>
+
+  <script>
+    const rng = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+    const makeRow = (idx, text, solText) => {
+      const row = document.createElement('div');
+      row.className = 'problem';
+      const left = document.createElement('div');
+      left.innerHTML = `<span class="idx">${idx}.</span> ${text}`;
+      const right = document.createElement('div');
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'ans';
+      input.className = 'mono';
+      const sol = document.createElement('div');
+      sol.className = 'solution mono';
+      sol.textContent = solText;
+      right.appendChild(input);
+      right.appendChild(sol);
+      row.appendChild(left);
+      row.appendChild(right);
+      input.addEventListener('keydown', (e)=>{ if(e.key==='Enter') quickJudge(input, solText); });
+      return {row, input, sol};
+    }
+
+    const approxEqual = (typed, correct) => {
+      const cleaned = (s)=> String(s).replace(/[^0-9.\-]/g,'');
+      const t = parseFloat(cleaned(typed));
+      const c = parseFloat(cleaned(correct));
+      if (isNaN(t) || isNaN(c)) return false;
+      return Math.abs(t - c) <= 0.01;
+    }
+
+    const quickJudge = (input, solText) => {
+      const ok = approxEqual(input.value, solText);
+      input.style.outline = ok ? `2px solid var(--ok)` : `2px solid var(--error)`;
+      input.style.background = ok ? '#ecfdf5' : '#fef2f2';
+      setTimeout(()=>{ input.style.outline = ''; }, 600);
+    }
+
+    function genRatesSet(){
+      const set = [];
+      set.push({q:`A car travels ${rng(200,400)} km in ${rng(4,8)} hours. How many km per hour?`, a:( (rng(200,400)/rng(4,8)).toFixed(2) )});
+      set.push({q:`A factory makes ${rng(5,15)} toys per minute. How many in 30 minutes?`, a:(rng(5,15)*30).toFixed(0)});
+      set.push({q:`A jogger runs ${rng(3,6)} km in ${rng(25,40)} minutes. Speed in km/min?`, a:( (rng(3,6)/rng(25,40)).toFixed(2) )});
+      set.push({q:`Oil flows at ${rng(100,150)} L every 4 minutes. L per minute?`, a:( (rng(100,150)/4).toFixed(2) )});
+      set.push({q:`Arjun is paid $${rng(40,60)} for 2 hours. Pay per hour?`, a:( (rng(40,60)/2).toFixed(2) )});
+      set.push({q:`Berries picked at ${rng(40,60)} per minute. How many in 12 minutes?`, a:(rng(40,60)*12).toFixed(0)});
+      set.push({q:`At ${rng(4,7)} problems/min, how long for 200 problems?`, a:(200/rng(4,7)).toFixed(2)});
+      set.push({q:`A bus travels ${rng(360,600)} km in ${rng(6,12)} hours. Average speed (km/h)?`, a:( (rng(360,600)/rng(6,12)).toFixed(2) )});
+      set.push({q:`A machine produces ${rng(150,300)} parts in ${rng(5,10)} minutes. Parts per hour?`, a:( (rng(150,300)/rng(5,10)*60).toFixed(0) )});
+      set.push({q:`A worker is paid $${rng(200,300)} for ${rng(4,8)} days. Daily pay?`, a:( (rng(200,300)/rng(4,8)).toFixed(2) )});
+      set.push({q:`A cyclist covers ${rng(20,40)} km in ${rng(45,60)} minutes. Speed in km/h?`, a:( (rng(20,40)/(rng(45,60)/60)).toFixed(2) )});
+      set.push({q:`It costs $${rng(90,120)} to rent a car for 3 days. Cost per week (7 days)?`, a:( (rng(90,120)/3*7).toFixed(2) )});
+      set.push({q:`A pool fills at ${rng(80,120)} gal every 5 min. Gallons in 1 hour?`, a:( (rng(80,120)/5*60).toFixed(0) )});
+      set.push({q:`A heart beats ${rng(250,270)} times in 3 minutes. How many in 1 hour?`, a:( (rng(250,270)/3*60).toFixed(0) )});
+      set.push({q:`A tire spins 300 times in 1.5 min. How many in 10 min?`, a:(300/1.5*10).toFixed(0)});
+      set.push({q:`Mark types ${rng(200,250)} words/min. How many in 15 min?`, a:(rng(200,250)*15).toFixed(0)});
+      return set;
+    }
+
+    function renderAll(){
+      const seed = Math.random().toString(36).slice(2,8).toUpperCase();
+      document.getElementById('seed-label').textContent = seed;
+      const list = document.getElementById('list-rates');
+      list.innerHTML = '';
+      const probs = genRatesSet();
+      window._nodes = [];
+      probs.forEach((p,i)=>{
+        const {row, input, sol} = makeRow(i+1, p.q, p.a);
+        list.appendChild(row);
+        window._nodes.push({input, sol});
+      });
+      hideSolutions();
+      document.getElementById('btn-toggle').textContent = 'Show Solutions';
+    }
+
+    function showSolutions(){ document.querySelectorAll('.solution').forEach(el=> el.style.display = 'block'); }
+    function hideSolutions(){ document.querySelectorAll('.solution').forEach(el=> el.style.display = 'none'); }
+    function toggleSolutions(){
+      const anyHidden = Array.from(document.querySelectorAll('.solution')).some(el=> el.style.display==='none');
+      if(anyHidden){ showSolutions(); this.textContent = 'Hide Solutions'; }
+      else { hideSolutions(); this.textContent = 'Show Solutions'; }
+    }
+    function quickCheckAll(){ (window._nodes||[]).forEach(({input, sol})=> quickJudge(input, sol.textContent)); }
+
+    document.getElementById('btn-new').addEventListener('click', renderAll);
+    document.getElementById('btn-toggle').addEventListener('click', toggleSolutions);
+    document.getElementById('btn-check').addEventListener('click', quickCheckAll);
+
+    renderAll();
+  </script>
+</body>
+</html>

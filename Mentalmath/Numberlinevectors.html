@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Number Line Drills</title>
+  <style>
+    :root{
+      --bg:#fafafa; --card:#ffffff; --muted:#4b5563; --text:#111827; --accent:#1d4ed8; --accent-weak:#e0e7ff;
+      --ok:#15803d; --error:#b91c1c; --border:#e5e7eb;
+      --col1:#1d4ed8; --col2:#16a34a; --col3:#dc2626;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"Latin Modern Roman","Computer Modern Serif",Georgia,Cambria,"Times New Roman",Times,serif;font-size:14px}
+    .wrap{max-width:900px;margin:0 auto;padding:20px}
+    h1,h2{line-height:1.2;margin:0 0 8px;font-family:"Latin Modern Roman","Computer Modern Serif",Georgia,serif}
+    h1{font-size:1.6rem;text-align:center;margin-bottom:12px}
+    h2{font-size:1.1rem}
+    p{color:var(--muted);font-size:13px}
+    .card{background:var(--card);box-shadow:0 1px 4px rgba(0,0,0,.05);border-radius:8px;padding:12px;border:1px solid var(--border);margin-top:10px}
+    .toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}
+    button{border:1px solid var(--border);border-radius:6px;padding:6px 10px;background:white;color:var(--text);cursor:pointer;transition:background .15s ease; font-family:inherit;font-size:13px}
+    button:hover{background:#f9fafb}
+    .btn-primary{background:var(--accent);color:white;border-color:var(--accent)}
+    .btn-primary:hover{filter:brightness(1.03)}
+    .pill{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border:1px solid var(--border);border-radius:999px;background:#f8fafc;color:var(--muted);font-size:.75rem}
+    .mono{font-family:"Latin Modern Mono","Courier New",monospace;font-size:13px}
+    .problem{display:flex;flex-direction:column;gap:6px;padding:12px 0;border-bottom:1px dashed var(--border)}
+    .problem:last-child{border-bottom:0}
+    .solution{display:none;color:var(--ok);font-size:13px;text-align:right}
+    input[type="text"]{outline:none;padding:4px 6px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--text);min-width:120px;font-size:13px}
+    select{padding:6px;border-radius:6px;border:1px solid var(--border);background:#fff;font-family:inherit;font-size:13px}
+    label{font-size:12px;color:var(--muted)}
+    svg{width:100%; height:100px; display:block;}
+    .footer{margin-top:16px;font-size:12px;color:#6b7280}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>— Number Line Questions —</h1>
+      <p class="muted">Each problem <b>is the number line</b>. Enter the missing distance (?).</p>
+      <div class="toolbar">
+        <button id="btn-new" class="btn-primary">New Set</button>
+        <button id="btn-toggle">Show Solutions</button>
+        <button id="btn-check">Quick Check</button>
+        <span class="pill">Set: <span id="seed-label" class="mono"></span></span>
+        <span class="pill">Digits (N):
+          <select id="digits">
+            <option value="both">3 or 4</option>
+            <option value="3">3‑digit</option>
+            <option value="4">4‑digit</option>
+          </select>
+        </span>
+        <span class="pill">Count:
+          <select id="count">
+            <option>5</option>
+            <option>10</option>
+            <option>15</option>
+            <option>20</option>
+          </select>
+        </span>
+      </div>
+    </header>
+
+    <section class="card" id="drills">
+      <h2>Practice Set</h2>
+      <div id="problem-list"></div>
+    </section>
+
+    <div class="footer">Tip: Use <b>New Set</b> for fresh numbers. Toggle <b>Show/Hide Solutions</b>.</div>
+  </div>
+
+  <script>
+    const rng = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+    const choice = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const fmt = (n)=> new Intl.NumberFormat('en-CA').format(n);
+
+    function seededLabel(){ return Math.random().toString(36).slice(2,8).toUpperCase(); }
+    function newN(digits){
+      if(digits==='3') return rng(100,999);
+      if(digits==='4') return rng(1000,9999);
+      return Math.random()<0.5? rng(100,999):rng(1000,9999);
+    }
+
+    function genProblem(digits){
+      const mode = Math.random()<0.5 ? 'plus' : 'minus';
+      const unknown = choice(['box','a','N']);
+      let N = newN(digits);
+      let a, box, minA, maxA;
+
+      if (mode === 'plus') {
+        minA = Math.max(10, Math.ceil(0.10 * N));
+        maxA = Math.min(999, Math.floor(0.90 * N));
+        if (maxA < minA) maxA = minA;
+        a = rng(minA, maxA);
+        box = N - a;
+      } else {
+        if (N > 8999) N = rng(100, 8999);
+        minA = Math.max(10, Math.ceil(N/9));
+        maxA = Math.min(999, 9999 - N);
+        if (maxA < minA) {
+          const newUpper = Math.max(100, Math.min(8999, N-1));
+          N = newUpper;
+          minA = Math.max(10, Math.ceil(N/9));
+          maxA = Math.min(999, 9999-N);
+        }
+        if (maxA < minA) maxA = minA;
+        a = rng(minA, maxA);
+        box = N + a;
+      }
+
+      let sol;
+      if (unknown==='box') sol = fmt(box);
+      else if (unknown==='a') sol = fmt(a);
+      else sol = fmt(N);
+
+      return {mode,a,N,box,unknown,sol};
+    }
+
+    function genProblemNegativeVariant(digits){
+      // 50/50 choose a negative style
+      if (Math.random() < 0.5) {
+        // MINUS with NEGATIVE N: box - a = N < 0
+        let box, a, N, tries = 0;
+        do {
+          box = rng(120, 800);
+          const minA = Math.max(Math.ceil(0.10 * box), box + 20);
+          const maxA = Math.min(999, box + 400);
+          if (minA > maxA) { tries++; continue; }
+          a = rng(minA, maxA);
+          N = box - a; // negative
+          tries++;
+        } while ((Math.min(Math.abs(N), a) < 0.10 * box) && tries < 20);
+        const unknown = choice(['N','a','box']);
+        const sol = unknown==='N' ? fmt(N) : (unknown==='a' ? fmt(a) : fmt(box));
+        return { mode:'minus', a, N, box, unknown, sol };
+      } else {
+        // PLUS with NEGATIVE a: box + a = N, a < 0
+        let N, a, box, tries = 0;
+        do {
+          N = (digits === '3') ? rng(300, 999)
+              : (digits === '4' ? rng(1200, 9000)
+              : (Math.random()<0.5? rng(300,999):rng(1200,9000)));
+          const minMag = Math.ceil(0.10 * N);
+          const maxMag = Math.max(minMag, Math.floor(0.50 * N));
+          const magA = rng(minMag, maxMag);
+          a = -magA;
+          box = N - a; // > N
+          tries++;
+        } while (((Math.min(box, Math.abs(a)) < 0.10 * N) || box > 9999) && tries < 20);
+        const unknown = choice(['N','a','box']);
+        const sol = unknown==='N' ? fmt(N) : (unknown==='a' ? fmt(a) : fmt(box));
+        return { mode:'plus', a, N, box, unknown, sol };
+      }
+    }
+
+    function approxIntEqual(typed, correct){
+      const cleaned=(s)=> String(s).replace(/[^0-9\-]/g,'');
+      const t=parseInt(cleaned(typed),10);
+      const c=parseInt(cleaned(correct),10);
+      if(isNaN(t)||isNaN(c)) return false;
+      return t===c;
+    }
+    function quickJudge(input,solText){
+      const ok=approxIntEqual(input.value,solText);
+      input.style.outline=ok?`2px solid var(--ok)`: `2px solid var(--error)`;
+      input.style.background=ok?'#ecfdf5':'#fef2f2';
+      setTimeout(()=>{input.style.outline='';},600);
+    }
+
+    function makeRow(idx,prob){
+      const row=document.createElement('div');
+      row.className='problem';
+      const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+      row.appendChild(svg);
+      const right=document.createElement('div');
+      right.style.display='flex'; right.style.flexDirection='column'; right.style.alignItems='end'; right.style.gap='4px';
+      const input=document.createElement('input'); input.type='text'; input.placeholder='answer'; input.className='mono';
+      const sol=document.createElement('div'); sol.className='solution mono'; sol.textContent=prob.sol;
+      right.appendChild(input); right.appendChild(sol);
+      row.appendChild(right);
+      input.addEventListener('keydown',(e)=>{if(e.key==='Enter')quickJudge(input,sol.textContent);});
+      renderNumberLine(svg,prob);
+      return {row,input,sol,svg,prob};
+    }
+
+    function renderNumberLine(svg, prob){
+      const W = 800, H = 120, pad = 36;
+      // Auto-scale to include negatives if present
+      const minVal = Math.min(0, prob.N, prob.box);
+      const maxVal = Math.max(0, prob.N, prob.box);
+      const span = Math.max(1, maxVal - minVal);
+      const x = (v) => pad + ((v - minVal) / span) * (W - 2 * pad);
+
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      svg.setAttribute('viewBox', '0 0 800 120');
+
+      const g = (n) => document.createElementNS('http://www.w3.org/2000/svg', n);
+
+      const baseY = H - 30;
+      const line = g('line');
+      line.setAttribute('x1', pad);
+      line.setAttribute('x2', W - pad);
+      line.setAttribute('y1', baseY);
+      line.setAttribute('y2', baseY);
+      line.setAttribute('stroke', '#111827');
+      line.setAttribute('stroke-width', '2');
+      svg.appendChild(line);
+
+      const defs = g('defs');
+      function addMarker(id, color){
+        const m = g('marker');
+        m.setAttribute('id', id);
+        m.setAttribute('markerWidth', '6');
+        m.setAttribute('markerHeight', '6');
+        m.setAttribute('refX', '5');
+        m.setAttribute('refY', '3');
+        m.setAttribute('orient', 'auto');
+        const tip = g('path');
+        tip.setAttribute('d', 'M0,0 L6,3 L0,6 Z');
+        tip.setAttribute('fill', color);
+        m.appendChild(tip);
+        defs.appendChild(m);
+      }
+      addMarker('arrow1', 'var(--col1)');
+      addMarker('arrow2', 'var(--col2)');
+      addMarker('arrow3', 'var(--col3)');
+      svg.appendChild(defs);
+
+      function markerFor(color){
+        if (color.indexOf('col2') !== -1) return 'url(#arrow2)';
+        if (color.indexOf('col3') !== -1) return 'url(#arrow3)';
+        return 'url(#arrow1)';
+      }
+
+      function arrow(x1, y1, x2, y2, color){
+        const path = g('line');
+        path.setAttribute('x1', x1);
+        path.setAttribute('y1', y1);
+        path.setAttribute('x2', x2);
+        path.setAttribute('y2', y2);
+        path.setAttribute('stroke', color);
+        path.setAttribute('stroke-width', '3');
+        path.setAttribute('marker-end', markerFor(color));
+        svg.appendChild(path);
+      }
+
+      function label(cx, cy, txt, color){
+        const t = g('text');
+        t.setAttribute('x', cx);
+        t.setAttribute('y', cy);
+        t.setAttribute('text-anchor', 'middle');
+        t.setAttribute('font-size', '13');
+        t.setAttribute('fill', color);
+        t.textContent = txt;
+        svg.appendChild(t);
+      }
+
+      if (prob.mode === 'plus') {
+        arrow(x(0), baseY - 10, x(prob.N), baseY - 10, 'var(--col1)');
+        label((x(0) + x(prob.N)) / 2, baseY - 20, prob.unknown==='N'? '?' : fmt(prob.N), 'var(--col1)');
+
+        arrow(x(0), baseY - 35, x(prob.box), baseY - 35, 'var(--col2)');
+        label((x(0) + x(prob.box)) / 2, baseY - 45, prob.unknown==='box'? '?' : fmt(prob.box), 'var(--col2)');
+
+        arrow(x(prob.box), baseY - 60, x(prob.N), baseY - 60, 'var(--col3)');
+        label((x(prob.box) + x(prob.N)) / 2, baseY - 70, prob.unknown==='a'? '?' : fmt(prob.a), 'var(--col3)');
+      } else {
+        arrow(x(0), baseY - 10, x(prob.box), baseY - 10, 'var(--col1)');
+        label((x(0) + x(prob.box)) / 2, baseY - 20, prob.unknown==='box'? '?' : fmt(prob.box), 'var(--col1)');
+
+        arrow(x(0), baseY - 35, x(prob.N), baseY - 35, 'var(--col2)');
+        label((x(0) + x(prob.N)) / 2, baseY - 45, prob.unknown==='N'? '?' : fmt(prob.N), 'var(--col2)');
+
+        arrow(x(prob.N), baseY - 60, x(prob.box), baseY - 60, 'var(--col3)');
+        label((x(prob.N) + x(prob.box)) / 2, baseY - 70, prob.unknown==='a'? '?' : fmt(prob.a), 'var(--col3)');
+      }
+    }
+
+    function renderAll(){
+      const seed=seededLabel();
+      document.getElementById('seed-label').textContent=seed;
+      const list=document.getElementById('problem-list');
+      list.innerHTML='';
+      const digits=document.getElementById('digits').value;
+      const count=parseInt(document.getElementById('count').value,10);
+      window._nodes=[];
+      for(let i=0;i<count;i++){
+        const useNeg = Math.random() < 0.25;
+        const p = useNeg ? genProblemNegativeVariant(digits) : genProblem(digits);
+        const {row,input,sol,svg}=makeRow(i+1,p);
+        list.appendChild(row);
+        window._nodes.push({input,sol,svg,p});
+      }
+      hideSolutions();
+      document.getElementById('btn-toggle').textContent='Show Solutions';
+    }
+
+    function showSolutions(){document.querySelectorAll('.solution').forEach(el=>el.style.display='block');}
+    function hideSolutions(){document.querySelectorAll('.solution').forEach(el=>el.style.display='none');}
+    function toggleSolutions(){const anyHidden=Array.from(document.querySelectorAll('.solution')).some(el=>el.style.display==='none'); if(anyHidden){showSolutions();this.textContent='Hide Solutions';} else{hideSolutions();this.textContent='Show Solutions';}}
+    function quickCheckAll(){(window._nodes||[]).forEach(({input,sol})=>quickJudge(input,sol.textContent));}
+
+    document.getElementById('btn-new').addEventListener('click',renderAll);
+    document.getElementById('btn-toggle').addEventListener('click',toggleSolutions);
+    document.getElementById('btn-check').addEventListener('click',quickCheckAll);
+    document.getElementById('digits').addEventListener('change',renderAll);
+    document.getElementById('count').addEventListener('change',renderAll);
+
+    renderAll();
+  </script>
+</body>
+</html>
