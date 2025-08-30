@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Math 6 – PAT Part A Generator</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+
+  <style>
+    :root { --text-width: 6.5in; --margin: 0.6in; }
+    html, body { background:#fff; color:#111; }
+    body {
+      font-family: "Times New Roman", Times, serif;
+      margin: 0 auto;
+      max-width: calc(var(--text-width) + 2*var(--margin));
+      padding: 1rem;
+      line-height: 1.35;
+    }
+
+    /* Header controls (simplified) */
+    .controls {
+      display:flex; flex-wrap:wrap; gap:.6rem 1rem; align-items:center;
+      border:1px solid #ddd; border-radius:10px; padding:.8rem 1rem; margin-bottom:1rem; background:#fafafa;
+    }
+    .controls h1 { font-size:1.25rem; margin:0 .75rem 0 0; }
+    .controls label { display:flex; align-items:center; gap:.35rem; }
+    .controls input[type="number"] {
+      width: 14ch; padding:.35rem .45rem; border:1px solid #bbb; border-radius:6px; font-family:inherit;
+    }
+    .btn { padding:.45rem .8rem; border:1px solid #bbb; border-radius:8px; background:#fff; cursor:pointer; }
+    .btn:hover { border-color:#333; box-shadow:0 1px 4px rgba(0,0,0,.08); }
+
+    .paper { border:1px solid #ddd; border-radius:12px; padding:.9rem 1rem; background:#fff; box-shadow:0 1px 6px rgba(0,0,0,.05); }
+    .meta { font-size:.9rem; color:#444; margin-bottom:.5rem; }
+
+    .two-col { column-count:2; column-gap:1.2rem; }
+    ol { margin:.1rem 0 1.2rem 1.25rem; padding:0; }
+    li { break-inside: avoid; margin:.75rem 0 1.25rem; } /* spacing between questions */
+
+    /* Keep each question on one line */
+    /* was: .qline { white-space: nowrap; display: inline-block; width: 100%; } */
+    .qline {
+      display: block;
+      white-space: normal;         /* allow wrapping */
+      overflow-wrap: anywhere;     /* break long chunks if needed */
+      width: 100%;
+    }
+    .no-break { white-space: nowrap; }
+
+    .box { border:1px solid #444; padding:.7rem .8rem; margin:.8rem 0 1rem; border-radius:8px; }
+    .box .center { text-align:center; }
+
+    .solutions { background:#f7f7f7; border:1px dashed #bbb; border-radius:12px; padding:.8rem 1rem; margin-top:1rem; }
+
+    .page-break { page-break-before: always; margin-top: 1rem; }
+
+    .controls {
+      display: flex;
+      flex-direction: column; /* stack title and buttons */
+      gap: .6rem;
+    }
+    .title-row h1 {
+      margin: 0;
+    }
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem 1rem;
+      align-items: center;
+    }
+
+    
+    /* --- FORCE-COMPACT PRINT LAYOUT: 1 page questions, 1 page solutions --- */
+    @media print {
+      /* Page box + tighter margins */
+      @page { size: letter portrait; margin: 0.5in; }
+    
+      /* Smaller, tighter typography for print */
+      body { max-width:none; padding:0; font-size: 10pt; line-height: 1.18; }
+    
+      /* Hide UI; strip chrome */
+      .controls { display: none !important; }
+      .paper { box-shadow:none; border:none; }
+      .solutions { border:none; background:none; }
+    
+      /* QUESTIONS (already 2-col) — tighten columns further */
+      .two-col {
+        -webkit-columns: 2 auto;
+        columns: 2 auto;
+        -webkit-column-count: 2;
+        column-count: 2;
+        -webkit-column-gap: 0.5rem;
+        column-gap: 0.5rem;
+        column-fill: auto;
+      }
+    
+      /* SOLUTIONS — make them 2-column in print to fit one page */
+      #solutions ol {
+        -webkit-columns: 2 auto;
+        columns: 2 auto;
+        -webkit-column-count: 2;
+        column-count: 2;
+        -webkit-column-gap: 0.5rem;
+        column-gap: 0.5rem;
+        column-fill: auto;
+        margin: 0.1rem 0 0.6rem 1.0rem; /* similar to questions */
+        padding: 0;
+      }
+    
+      /* List spacing (applies to both sections) */
+      ol { margin: 0.1rem 0 0.6rem 1.0rem; padding: 0; }
+      li {
+        margin: 0.28rem 0 0.45rem;
+        break-inside: avoid; page-break-inside: avoid; -webkit-column-break-inside: avoid;
+      }
+    
+      /* Tighten question blocks */
+      .box { padding: 0.4rem 0.5rem; margin: 0.4rem 0 0.6rem; }
+      .meta { margin-bottom: 0.2rem; font-size: 9pt; }
+    
+      /* Keep math from blowing column width */
+      .katex-display { display:inline; margin:0; }
+      .katex { font-size: 0.92em; }          /* slightly smaller KaTeX */
+      .qline { overflow-wrap: anywhere; }    /* allow wrapping */
+    
+      /* Remove any manual breaks so questions can pack on one page */
+      .page-break { display:none !important; break-before:auto; page-break-before:auto; }
+    
+      /* Force the two pages */
+      /* Page control — only one forced break */
+      #exam {
+        break-after: page;
+        page-break-after: always;   /* legacy */
+      }
+      #solutions {
+        break-before: auto !important;
+        page-break-before: auto !important;  /* legacy */
+}
+    
+      /* Print-only title (since .controls is hidden) */
+      #exam::before {
+        content: "Math 6 – PAT Part A Generator";
+        display: block;
+        font-weight: bold;
+        font-size: 13pt;
+        margin: 0 0 0.3rem 0;
+      }
+    }
+
+
+  </style>
+</head>
+<body>
+  <div class="controls">
+  <div class="title-row">
+    <h1> Math 6 – PAT Part A Generator </h1>
+  </div>
+  <div class="button-row">
+    <label>Seed <input id="seed" type="number" placeholder="random"></label>
+    <button class="btn" id="genBtn">Generate</button>
+    <button class="btn" id="toggleBtn">Show solutions</button>
+    <button class="btn" id="pdfBtn">Export PDF</button>
+    <div id="timer" style="margin-left:auto;font-weight:bold;">00:00</div>
+  </div>
+</div>
+
+  <div id="exam" class="paper"></div>
+  <div id="solutions" class="paper solutions" style="display:none"></div>
+
+  <script>
+    // ---- Timer ----
+    let timerInterval;
+    let startTime;
+    
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval); // reset if running
+      startTime = Date.now();
+      updateTimer();
+      timerInterval = setInterval(updateTimer, 1000);
+    }
+    
+    function updateTimer() {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+      const secs = String(elapsed % 60).padStart(2, '0');
+      document.getElementById('timer').textContent = `${mins}:${secs}`;
+    }
+    // ---------- KaTeX ----------
+    function renderMath() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left:'$$', right:'$$', display:true},
+          {left:'$',  right:'$',  display:false}
+        ],
+        throwOnError: false
+      });
+    }
+
+    // Robustly keep the final '?' with the preceding content and avoid line breaks
+    function keepQuestionMark(html){
+      html = html.replace(/(\?)(\s*(?:<\/[^>]+>\s*)*)$/,'<span class="no-break">&nbsp;?</span>$2');
+      html = html.replace(/\?(\s*<\/)/g,'<span class="no-break">&nbsp;?</span>$1');
+      return html;
+    }
+
+    // ---------- Random helpers ----------
+    function mulberry32(a){return function(){var t=a+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;}}
+    function randi(rng, lo, hi){return Math.floor(rng()*(hi-lo+1))+lo;}
+    function choice(rng,a){return a[Math.floor(rng()*a.length)];}
+    function round2(x){return Math.round(x*100)/100;}
+
+    // ---------- Fractions & formatting ----------
+    function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a;}
+    function reduceFrac(n,d){const g=gcd(n,d);return[n/g,d/g];}
+    function toMixed(n,d){const w=Math.trunc(n/d);const r=n-w*d;if(r===0)return{w,n:0,d:1};const [nn,dd]=reduceFrac(r,d);return{w,n:nn,d:dd};}
+    function fracTex(n,d){return `\\dfrac{${n}}{${d}}`;}
+    function mixedTex(w,n,d){return n===0?`${w}`:`${w}\\dfrac{${n}}{${d}}`;}
+
+    // Wrap TeX answers so KaTeX renders them in the solutions panel
+    function wrapMathIfNeeded(ans){
+      if (typeof ans !== 'string') ans = String(ans);
+      const hasMath = /\\|[\^\{\}%]/.test(ans);
+      const alreadyWrapped = ans.trim().startsWith('$') && ans.trim().endsWith('$');
+      return (hasMath && !alreadyWrapped) ? `$${ans}$` : ans;
+    }
+
+
+    // ---------- Answers store ----------
+    function Answers(){ this.items=[]; }
+    Answers.prototype.add=function(ans){ this.items.push(wrapMathIfNeeded(ans)); };
+    Answers.prototype.render=function(seed){
+      const lis=this.items.map(a=>`<li>${a}</li>`).join('');
+      return `<h3>Solutions (Seed ${seed})</h3><ol>${lis}</ol>`;
+    };
+
+    // ---------- Problem generators ----------
+    function genAddFourBlocks(rng){
+      let a=randi(rng,11,99), b=randi(rng,100,999), c=randi(rng,11,99), d=randi(rng,100,999);
+      const sum=(1000*a+b)+(1000*c+d);
+      return { q:`What is $${a}$ $${b}+${c}$ $${d}$?`, a:`${sum}` };
+    }
+    function genDollarAdd(rng){
+      let a=randi(rng,1001,9999), b=randi(rng,1001,9999);
+      const A=(a/100).toFixed(2), B=(b/100).toFixed(2);
+      return { q:`What is $\\$${A} + \\$${B}$?`, a:`${((a/100)+(b/100)).toFixed(2)}` };
+    }
+    function genDecimalSubSafe(rng){
+      let a=randi(rng,101,999), b=randi(rng,101,999); while(a<b){a=randi(rng,101,999);b=randi(rng,101,999);}
+      const A=(a/10).toFixed(1), B=(b/10).toFixed(1);
+      return { q:`What is $${A} - ${B}$?`, a:`${((a/10)-(b/10)).toFixed(2)}` };
+    }
+    function genMulSmall(rng){const a=randi(rng,11,99), b=randi(rng,11,99); return { q:`What is $${a}\\times${b}$?`, a:`${a*b}` }; }
+    function genMulMed(rng){const a=randi(rng,21,99), b=randi(rng,111,999); return { q:`What is $${a}\\times${b}$?`, a:`${a*b}` }; }
+    function genDivClean(rng){let a=randi(rng,111,999), b=randi(rng,3,9); while(a%b!==0){a=randi(rng,111,999);b=randi(rng,3,9);} return { q:`What is $${a}\\div${b}$?`, a:`${a/b}` }; }
+    function genOnesTensHundredsAdd(rng){const a=randi(rng,5,9), b=randi(rng,3,9), c=randi(rng,111,999); return { q:`What is $${a}+${(b/10)}+${(c/100)}$?`, a:`${round2(a+(b/10)+(c/100))}` }; }
+    function genMinusFourBlocks(rng){let a=randi(rng,11,99), b=randi(rng,100,999), c=randi(rng,11,99), d=randi(rng,100,999); while(a<c){a=randi(rng,11,99);c=randi(rng,11,99);} const diff=(1000*a+b)-(1000*c+d); return { q:`What is $${a}$ $${b}-${c}$ $${d}$?`, a:`${diff}` }; }
+    function genDecTimesInt(rng){const a=randi(rng,101,999), b=randi(rng,2,9); return { q:`What is $${(a/10)} \\times ${b}$?`, a:`${round2((a/10)*b)}` }; }
+    function genDecDivIntClean(rng){let a=randi(rng,111,999), b=randi(rng,3,9); while(a%b!==0){a=randi(rng,111,999);b=randi(rng,3,9);} return { q:`What is $${(a/10).toFixed(1)}\\div${b}$?`, a:`${round2((a/10)/b)}` }; }
+    function genHundredthDivIntClean(rng){let a=randi(rng,1111,9999), b=randi(rng,3,9); while(a%b!==0){a=randi(rng,1111,9999);b=randi(rng,3,9);} return { q:`What is $${(a/100).toFixed(2)}\\div${b}$?`, a:`${round2((a/100)/b)}` }; }
+    function genDecMinusHundredth(rng){let a=randi(rng,11,99), b=randi(rng,111,999); while(a<(b/100)){a=randi(rng,11,99);b=randi(rng,111,999);} return { q:`What is $${a}-${(b/100).toFixed(2)}$?`, a:`${round2(a-(b/100))}` }; }
+    function genTenthsMinusHundredths(rng){let a=randi(rng,11,99), b=randi(rng,111,999); while((a/10)<(b/100)){a=randi(rng,11,99);b=randi(rng,111,999);} return { q:`What is $${(a/10).toFixed(1)}-${(b/100).toFixed(2)}$?`, a:`${round2((a/10)-(b/100))}` }; }
+    function genFillInProductBox(rng){
+      const a=randi(rng,1111,9999), b=randi(rng,3,9); const prod=round2(a*b/10); const prodStr=prod.toFixed(2);
+      let i=randi(rng,0,prodStr.length-1); while(prodStr[i]==='.') i=randi(rng,0,prodStr.length-1);
+      const revealed=prodStr.slice(0,i)+'\\underline{\\phantom{0}}'+prodStr.slice(i+1);
+      return {
+        block:true,
+        q:`
+          <div class="box">
+            <div class="center">$${(a/10).toFixed(1)}\\times ${b} = ${revealed}$</div>
+          </div>
+          <div><em>Use the information above to answer the next question.</em></div>
+          In the equation above, which digit could be placed in the blank to make the equation correct?
+        `,
+        a: `${prodStr[i]}`
+      };
+    }
+    function genPercentOf(rng){const pct=choice(rng,[5,10,15,20,25,30,40,50,60,70,75,80,90]), base=randi(rng,20,150); return { q:`What is $${pct}\\%$ of $${base}$?`, a:`${round2((pct/100)*base)}` }; }
+    function genIntTimesProperFrac(rng){const k=randi(rng,2,12), den=randi(rng,2,12), num=randi(rng,1,den-1); const n=k*num,d=den; const mix=toMixed(n,d); return { q:`$${k}\\times ${fracTex(num,den)} = \\square\\,\\dfrac{\\square}{\\square}$`, a:`$${mixedTex(mix.w,mix.n,mix.d)}$` }; }
+    function genIntegerDivision(rng){const divisor=randi(rng,2,21), quotient=randi(rng,6,99), dividend=divisor*quotient; return { q:`What is $${dividend}\\div${divisor}$?`, a:`${quotient}` }; }
+    function genNegPlusNeg(rng){const m=randi(rng,3,30), n=randi(rng,3,30); return { q:`What is $(-${m})+(-${n})$?`, a:`-${m+n}` }; }
+    function genPosPlusPos(rng){const x=randi(rng,5,60), y=randi(rng,5,60); return { q:`What is $(${x})+(${y})$?`, a:`${x+y}` }; }
+    function genDecSub(rng){const a=randi(rng,800,3000), b=randi(rng,100,a); return { q:`What is $(${(a/100).toFixed(2)})-(${(b/100).toFixed(2)})$?`, a:`${((a-b)/100).toFixed(2)}` }; }
+    function genFracAdd(rng){
+      const d1=randi(rng,2,12), n1=randi(rng,1,d1-1), d2=randi(rng,2,12), n2=randi(rng,1,d2-1);
+      let N=n1*d2+n2*d1, D=d1*d2; [N,D]=reduceFrac(N,D);
+      const ans = D===1 ? `${N}` : `\\dfrac{${N}}{${D}}`;
+      return { q:`What is $${fracTex(n1,d1)} + ${fracTex(n2,d2)}$?`, a: `$${ans}$` };
+    }
+    function genDecAddRound(rng){
+      // Generate three random decimals
+      const a = (randi(rng, 100, 999) / 100).toFixed(2); // 1.00–9.99
+      const b = (randi(rng, 100, 999) / 100).toFixed(2);
+      const c = (randi(rng, 100, 999) / 100).toFixed(2);
+      const sum = parseFloat(a) + parseFloat(b) + parseFloat(c);
+      const ans = (Math.round(sum * 10) / 10).toFixed(1); // round to nearest tenth
+      return {
+        q: `Calculate $${a}+${b}+${c}$ rounded to the nearest tenth.`,
+        a: ans
+      };
+    }
+    
+    function genDecSubRound(rng){
+      // Generate two decimals with subtraction safe (a > b)
+      let a = randi(rng, 1000, 9999) / 100; // 10.00–99.99
+      let b = randi(rng, 1000, 9999) / 100;
+      if (a < b) [a, b] = [b, a]; // ensure a ≥ b
+      const diff = a - b;
+      const ans = (Math.round(diff * 100) / 100).toFixed(2); // nearest hundredth
+      return {
+        q: `Calculate $${a.toFixed(2)} - ${b.toFixed(2)}$ rounded to the nearest hundredth.`,
+        a: ans
+      };
+    }
+
+    function genSmallMinusBig(rng){
+      const small = randi(rng, 10, 99);   // 2-digit
+      const big   = randi(rng, 100, 999); // 3-digit
+      return {
+        q: `What is $${small}-${big}$?`,
+        a: `${small - big}`  // will always be negative
+      };
+    }
+
+    function genSubtractNegative(rng){const p=randi(rng,5,70), q=randi(rng,5,70); return { q:`What is $${p} - (-${q})$?`, a:`${p+q}` }; }
+    function genMixedMinusMixed(rng){
+      function randMixed(){const w=randi(rng,1,5), d=randi(rng,2,8), n=randi(rng,1,d-1); return {w,n,d};}
+      let A=randMixed(), B=randMixed();
+      const Ai={n:A.w*A.d+A.n,d:A.d}, Bi={n:B.w*B.d+B.n,d:B.d};
+      if (Ai.n/Ai.d < Bi.n/Bi.d) { [A,B]=[B,A]; }
+      const Ai2={n:A.w*A.d+A.n,d:A.d}, Bi2={n:B.w*B.d+B.n,d:B.d};
+      let N=Ai2.n*Bi2.d - Bi2.n*Ai2.d, D=Ai2.d*Bi2.d;
+      const mix=toMixed(N,D);
+      return { q:`$${A.w}\\dfrac{${A.n}}{${A.d}} - ${B.w}\\dfrac{${B.n}}{${B.d}} = \\square\\,\\dfrac{\\square}{\\square}$`, a:`$${mixedTex(mix.w,mix.n,mix.d)}$` };
+    }
+    function genMixedPlusMixed(rng){
+      function randMixed(){const w=randi(rng,1,5), d=randi(rng,2,9), n=randi(rng,1,d-1); return {w,n,d};}
+      const A=randMixed(), B=randMixed();
+      const Ai={n:A.w*A.d+A.n,d:A.d}, Bi={n:B.w*B.d+B.n,d:B.d};
+      let N=Ai.n*Bi.d + Bi.n*Ai.d, D=Ai.d*Bi.d;
+      const mix=toMixed(N,D);
+      return { q:`$${A.w}\\dfrac{${A.n}}{${A.d}} + ${B.w}\\dfrac{${B.n}}{${B.d}} = \\square\\,\\dfrac{\\square}{\\square}$`, a:`$${mixedTex(mix.w,mix.n,mix.d)}$` };
+    }
+    function genIntMul(rng){const m1=randi(rng,12,999), m2=randi(rng,12,99); return { q:`What is $${m1}\\times${m2}$?`, a:`${m1*m2}` }; }
+    function genPrimeExponentSum(rng){const a=randi(rng,0,6), b=randi(rng,0,4), c=randi(rng,0,3); const N=(2**a)*(3**b)*(5**c); return { q:`$${N}=2^a 3^b 5^c$. What is $a+b+c$?`, a:`${a+b+c}` }; }
+
+    // ---------- Build exam ----------
+    function buildExam(rng){
+      const A=new Answers();
+      const section1Fns = [
+        genAddFourBlocks, genDollarAdd, genDecimalSubSafe, genMulSmall, genMulMed, genDivClean,
+        genOnesTensHundredsAdd, genMinusFourBlocks, genDecTimesInt, genDecDivIntClean,
+        genHundredthDivIntClean, genTenthsMinusHundredths, genDecMinusHundredth, genHundredthDivIntClean
+      ];
+      const header = `
+        <div class="two-col"><ol>
+          ${section1Fns.map(fn=>{
+            const {q,a}=fn(rng); A.add(a);
+            const qFixed = keepQuestionMark(q);
+            return `<li><span class="qline">${qFixed}</span></li>`;
+          }).join("")}
+        </ol></div>
+      `;
+
+      const fill = genFillInProductBox(rng); A.add(fill.a);
+      const infoBlock = `
+        ${keepQuestionMark(fill.q)}
+        <div class="page-break"></div>
+      `;
+
+      const section2Fns = [
+        function(r){const a=randi(r,444,999), b=randi(r,2,9), c=b*10; return { q:`What is $${(a/100).toFixed(2)}\\times ${c}$?`, a:`${round2((a/100)*c)}` };},
+        genMixedMinusMixed, genIntegerDivision, genNegPlusNeg, genSmallMinusBig, genDecSub,
+        genDecSub, genFracAdd, genPercentOf, genIntTimesProperFrac, genSubtractNegative,
+        genMixedPlusMixed, genIntMul, genPrimeExponentSum, genDecSubRound, genDecAddRound
+      ];
+      const second = `
+        <div class="two-col"><ol start="16">
+          ${section2Fns.map(fn=>{
+            const {q,a}=fn(rng); A.add(a);
+            const qFixed = keepQuestionMark(q);
+            return `<li><span class="qline">${qFixed}</span></li>`;
+          }).join("")}
+        </ol></div>
+      `;
+      return { html: header + infoBlock + second, answers:A };
+    }
+
+    // ---------- UI wiring ----------
+    const examEl=document.getElementById('exam');
+    const solEl=document.getElementById('solutions');
+    const genBtn=document.getElementById('genBtn');
+    const toggleBtn=document.getElementById('toggleBtn');
+
+    let solutionsVisible = false;
+
+    function generate(){
+      const seedInput=document.getElementById('seed').value;
+      const seed=seedInput ? Number(seedInput) : Math.floor(Math.random()*1e9);
+      const rng=mulberry32(seed);
+      const { html, answers } = buildExam(rng);
+      examEl.innerHTML = html;
+    
+      solEl.innerHTML = answers.render(seed);
+      solEl.style.display = solutionsVisible ? '' : 'none';
+      toggleBtn.textContent = solutionsVisible ? 'Hide solutions' : 'Show solutions';
+    
+      renderMath();
+    
+      const meta=document.createElement('div');
+      meta.className='meta';
+      meta.textContent=`Seed: ${seed}`;
+      examEl.prepend(meta);
+    
+      // ⏱️ Start timer
+      startTimer();
+    }
+
+    genBtn.addEventListener('click', generate);
+    toggleBtn.addEventListener('click', ()=>{
+      solutionsVisible = !solutionsVisible;
+      solEl.style.display = solutionsVisible ? '' : 'none';
+      toggleBtn.textContent = solutionsVisible ? 'Hide solutions' : 'Show solutions';
+    });
+
+    window.addEventListener('load', generate);
+    window.addEventListener('load', renderMath);
+
+    // --- PDF Export ---
+    // Print-to-PDF handler that respects the print CSS above
+    document.getElementById('pdfBtn').addEventListener('click', () => {
+      const solEl = document.getElementById('solutions');
+      const toggleBtn = document.getElementById('toggleBtn');
+    
+      // Ensure solutions are visible for page 2
+      const wasHidden = (solEl.style.display === 'none' || solEl.style.display === '');
+      if (wasHidden) {
+        solEl.style.display = '';
+        toggleBtn.textContent = 'Hide solutions';
+      }
+    
+      // Optionally add a temporary class if you later want special print tweaks
+      document.body.classList.add('print-compact');
+    
+      // Open the system print dialog (use "Save as PDF")
+      setTimeout(() => {
+        window.print();
+    
+        // Restore the original state after the dialog closes
+        if (wasHidden) {
+          solEl.style.display = 'none';
+          toggleBtn.textContent = 'Show solutions';
+        }
+        document.body.classList.remove('print-compact');
+      }, 0);
+    });
+        
+  </script>
+</body>
+</html>
