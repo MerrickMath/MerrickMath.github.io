@@ -119,14 +119,39 @@
 
     // ====== SVG utilities ======
     const mk=n=>document.createElementNS('http://www.w3.org/2000/svg',n);
-    function gridAxes(svg,cx,cy,w,h,s){
-      // 1-unit gridlines (spacing = s pixels per unit)
-      for(let x=0;x<=w;x+=s){const L=mk('line');L.setAttribute('x1',x);L.setAttribute('y1',0);L.setAttribute('x2',x);L.setAttribute('y2',h);L.setAttribute('stroke','#e2e8f0');L.setAttribute('stroke-width','1');svg.appendChild(L)}
-      for(let y=0;y<=h;y+=s){const L=mk('line');L.setAttribute('x1',0);L.setAttribute('y1',y);L.setAttribute('x2',w);L.setAttribute('y2',y);L.setAttribute('stroke','#e2e8f0');L.setAttribute('stroke-width','1');svg.appendChild(L)}
-      const axX=mk('line'); axX.setAttribute('x1',0); axX.setAttribute('y1',cy); axX.setAttribute('x2',w); axX.setAttribute('y2',cy); axX.setAttribute('stroke','#94a3b8'); axX.setAttribute('stroke-width','1.5'); svg.appendChild(axX);
-      const axY=mk('line'); axY.setAttribute('x1',cx); axY.setAttribute('y1',0); axY.setAttribute('x2',cx); axY.setAttribute('y2',h); axY.setAttribute('stroke','#94a3b8'); axY.setAttribute('stroke-width','1.5'); svg.appendChild(axY);
-      const O=mk('circle'); O.setAttribute('cx',cx); O.setAttribute('cy',cy); O.setAttribute('r','2.5'); O.setAttribute('fill','#64748b'); svg.appendChild(O);
+    // Replace your entire gridAxes() with this version
+    function gridAxes(svg, cx, cy, w, h, s) {
+      // vertical lines: ... cx-2s, cx-s, cx, cx+s, cx+2s ...
+      const mk = n => document.createElementNS('http://www.w3.org/2000/svg', n);
+      const addLine = (x1,y1,x2,y2,stroke='#e2e8f0',sw=1) => {
+        const L = mk('line');
+        L.setAttribute('x1', x1); L.setAttribute('y1', y1);
+        L.setAttribute('x2', x2); L.setAttribute('y2', y2);
+        L.setAttribute('stroke', stroke);
+        L.setAttribute('stroke-width', sw);
+        L.setAttribute('shape-rendering', 'crispEdges');
+        svg.appendChild(L);
+      };
+    
+      // Draw vertical grid lines, centered on cx
+      for (let x = cx; x <= w; x += s) addLine(x, 0, x, h);
+      for (let x = cx - s; x >= 0; x -= s) addLine(x, 0, x, h);
+    
+      // Draw horizontal grid lines, centered on cy
+      for (let y = cy; y <= h; y += s) addLine(0, y, w, y);
+      for (let y = cy - s; y >= 0; y -= s) addLine(0, y, w, y);
+    
+      // Axes
+      addLine(0, cy, w, cy, '#94a3b8', 1.5);  // x-axis
+      addLine(cx, 0, cx, h, '#94a3b8', 1.5);  // y-axis
+    
+      // Origin dot
+      const O = mk('circle');
+      O.setAttribute('cx', cx); O.setAttribute('cy', cy);
+      O.setAttribute('r', '2.5'); O.setAttribute('fill', '#64748b');
+      svg.appendChild(O);
     }
+
     function ensureMarker(svg,id,color){ if(svg.querySelector(`#${id}`)) return id; const defs=svg.querySelector('defs')||svg.insertBefore(mk('defs'), svg.firstChild); const m=mk('marker'); m.setAttribute('id',id); m.setAttribute('markerWidth','10'); m.setAttribute('markerHeight','10'); m.setAttribute('refX','8'); m.setAttribute('refY','3'); m.setAttribute('orient','auto'); const p=mk('path'); p.setAttribute('d','M0,0 L9,3 L0,6 Z'); p.setAttribute('fill',color); m.appendChild(p); defs.appendChild(m); return id; }
 
     function drawVectorBoard(svg, vec, colorVar){
