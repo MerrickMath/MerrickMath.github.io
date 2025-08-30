@@ -67,7 +67,6 @@
     </div>
 
     <p class="note">Click “Show Solution” to reveal one valid integer combination and a tip‑to‑tail visualization on a separate, auto‑sized board at the bottom. Reload to generate a new instance.</p>
-    <div id="qa" class="note"></div>
   </div>
 
   <script>
@@ -106,13 +105,13 @@
       `\\text{Target: }\\langle ${target.x},\\,${target.y}\\rangle`;
     
     const subtitleTex = () =>
-      `\\text{Find integers } a_n,b \\text{ such that } a_n\\,\\htmlClass{uColor}{\\vec{u}}+b\\,\\htmlClass{vColor}{\\vec{v}} \\text{ hits the target.}`;
+      `\\text{Find integers } a,b \\text{ such that } a\\,\\htmlClass{uColor}{\\vec{u}}+b\\,\\htmlClass{vColor}{\\vec{v}} \\text{ hits the target.}`;
     
     const solutionTex = () => {
       const lhs = `(${aTrue})\\,\\htmlClass{uColor}{\\vec{u}}+(${bTrue})\\,\\htmlClass{vColor}{\\vec{v}}`;
       const p1  = `=\\; \\langle ${aTrue*U.x},${aTrue*U.y}\\rangle + \\langle ${bTrue*V.x},${bTrue*V.y}\\rangle`;
       const p2  = `=\\; \\langle ${target.x},${target.y}\\rangle`;
-      return `a_n=${aTrue},\\; b=${bTrue}\\quad\\Rightarrow\\quad ${lhs}\\; ${p1}\\; ${p2}`;
+      return `a=${aTrue},\\; b=${bTrue}\\quad\\Rightarrow\\quad ${lhs}\\; ${p1}\\; ${p2}`;
     };
 
 
@@ -218,8 +217,6 @@
         const wrap=document.getElementById('solutionWrap'); wrap.style.display = shown? 'block':'none';
         if(shown){ drawSolutionBoard(document.getElementById('boardSolution')); kx(document.getElementById('solution'), solutionTex()); }
       });
-      // Self-checks
-      const qa=[]; try{ qa.push(window.katex? '✔︎ KaTeX ready':'⚠︎ KaTeX missing'); const t={x:aTrue*U.x+bTrue*V.x,y:aTrue*U.y+bTrue*V.y}; qa.push((t.x===target.x&&t.y===target.y)?'✔︎ arithmetic':'✗ arithmetic'); }catch(e){ qa.push('✗ self-check: '+e.message) } document.getElementById('qa').textContent = qa.join('  •  ');
     }
 
     document.addEventListener('DOMContentLoaded', mount);
