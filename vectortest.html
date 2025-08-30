@@ -4,350 +4,229 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Vector Target — Integer Linear Combinations</title>
-  <!-- KaTeX (no SRI to avoid blocking in restricted environments) -->
+  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
   <style>
-    :root { --bg:#0b1320; --card:#111827; --muted:#9aa3af; --accent:#60a5fa; --good:#10b981; --bad:#ef4444; }
-    html,body{height:100%;}
-    body{margin:0; font:16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; background:var(--bg); color:#e5e7eb;}
-    .wrap{max-width:1100px; margin:24px auto; padding:0 16px;}
-    header{display:flex; align-items:baseline; gap:12px; margin-bottom:16px;}
-    h1{font-size:clamp(22px,3vw,32px); margin:0;}
-    .subtitle{color:var(--muted)}
-    .card{background:var(--card); border:1px solid #1f2937; border-radius:14px; padding:16px; box-shadow:0 6px 30px rgba(0,0,0,.25)}
-    .grid{display:grid; grid-template-columns:1fr 360px; gap:16px}
-    @media (max-width: 880px){ .grid{grid-template-columns:1fr;} }
-    .controls{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px}
-    .controls button, .controls input{
-      border-radius:10px; border:1px solid #293041; background:#0f172a; color:#e5e7eb; padding:10px 12px; font-size:16px;
+    :root{
+      --bg:#ffffff; --ink:#0f172a; --muted:#475569; --soft:#f8fafc; --card:#ffffff; --border:#e2e8f0;
+      --a:#1d4ed8; --b:#059669; --target:#d97706; --combo:#7c3aed;
     }
-    .controls input{width:100%; text-align:center}
-    .controls button{cursor:pointer}
-    .controls button.primary{background:#1f2937; border-color:#334155}
-    .controls button:hover{filter:brightness(1.1)}
-    .stack{display:flex; flex-direction:column; gap:8px}
-    .katex{font-size: 1.05rem}
-    .pill{display:inline-block; padding:2px 8px; border-radius:999px; border:1px dashed #334155; color:var(--muted)}
-    .msg{margin-top:8px; min-height:24px}
-    .msg.good{color:var(--good)}
-    .msg.bad{color:var(--bad)}
-    .muted{color:var(--muted)}
-    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
-    .legend{display:flex; gap:12px; align-items:center; flex-wrap:wrap; font-size:14px; color:var(--muted)}
-    .legend .key{display:inline-flex; align-items:center; gap:6px}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font:16px/1.45 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial; color:var(--ink); background:var(--bg);} 
+    .wrap{max-width:1100px; margin:28px auto; padding:0 16px;}
+    header{display:flex; align-items:baseline; gap:12px; margin-bottom:18px}
+    h1{font-size:clamp(22px,3vw,32px); margin:0}
+    .subtitle{color:var(--muted)}
+    .row{display:flex; gap:16px; flex-wrap:wrap}
+    .card{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px}
+    .title{font-weight:600; color:var(--muted); margin:0 0 8px 0}
+    .katex{font-size:1.05rem}
+    .btn{appearance:none; border:1px solid var(--border); background:var(--soft); color:var(--ink); padding:10px 12px; border-radius:10px; cursor:pointer}
+    .btn:hover{filter:brightness(0.98)}
+    .boards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:8px}
+    @media (max-width: 960px){ .boards{grid-template-columns:1fr} }
+    svg.board{width:100%; height:340px; background:#fff; border:1px solid var(--border); border-radius:12px}
+    .legend{display:flex; gap:16px; align-items:center; flex-wrap:wrap; color:var(--muted); font-size:14px; margin-top:8px}
+    .key{display:inline-flex; align-items:center; gap:6px}
     .dot{width:12px; height:12px; border-radius:3px}
-    .a{background:#60a5fa}
-    .b{background:#34d399}
-    .target{background:#f59e0b}
-    .combo{background:#a78bfa}
-    svg{width:100%; height:min(64vh,620px); background:#0a0f1c; border:1px solid #1f2937; border-radius:12px}
-    .qa{margin-top:10px; font-size:14px; color:var(--muted)}
+    .a{background:var(--a)} .b{background:var(--b)} .t{background:var(--target)} .c{background:var(--combo)}
+    .note{margin-top:8px; color:var(--muted); font-size:14px}
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
       <h1>Vector Target</h1>
-      <div class="subtitle">Hit the target with an integer linear combination: $m\,\vec a + n\,\vec b = \text{target}$</div>
+      <div class="subtitle">Find integers $m,n$ so that $m\,ec a + n\,ec b$ lands on the target point.</div>
     </header>
 
-    <div class="grid">
-      <!-- LEFT: Board -->
-      <div class="card">
-        <div class="legend">
-          <span class="key"><span class="dot a"></span> $\vec a$</span>
-          <span class="key"><span class="dot b"></span> $\vec b$</span>
-          <span class="key"><span class="dot target"></span> target $\,(x_t,y_t)$</span>
-          <span class="key"><span class="dot combo"></span> $m\,\vec a + n\,\vec b$</span>
-        </div>
-        <svg id="board" viewBox="0 0 600 600" aria-label="vector-plane" role="img"></svg>
-      </div>
+    <!-- Problem statement and Show Solution button -->
+    <div class="row" style="align-items:center; justify-content:space-between">
+      <div id="problem" class="katex"></div>
+      <button id="showBtn" class="btn">Show Solution</button>
+    </div>
 
-      <!-- RIGHT: Problem + Controls -->
-      <div class="card stack">
-        <div id="problem" class="katex"></div>
-        <div class="row">
-          <span class="pill">Enter integers</span>
-          <span id="attemptLatex" class="katex muted"></span>
+    <!-- Small boards for individual vectors -->
+    <div class="boards">
+      <div class="card">
+        <p class="title">Vector $ec a$</p>
+        <svg id="boardA" class="board" viewBox="0 0 420 340"></svg>
+      </div>
+      <div class="card">
+        <p class="title">Vector $ec b$</p>
+        <svg id="boardB" class="board" viewBox="0 0 420 340"></svg>
+      </div>
+      <div class="card">
+        <p class="title">Problem Board</p>
+        <svg id="boardMain" class="board" viewBox="0 0 420 340"></svg>
+        <div class="legend">
+          <span class="key"><span class="dot a"></span> $ec a$</span>
+          <span class="key"><span class="dot b"></span> $ec b$</span>
+          <span class="key"><span class="dot t"></span> target</span>
         </div>
-        <div class="controls">
-          <div class="stack">
-            <label class="muted">m</label>
-            <input id="mInput" type="number" step="1" inputmode="numeric" />
-          </div>
-          <div class="stack">
-            <label class="muted">n</label>
-            <input id="nInput" type="number" step="1" inputmode="numeric" />
-          </div>
-          <div class="stack">
-            <label class="muted">&nbsp;</label>
-            <button id="checkBtn" class="primary">Check</button>
-          </div>
-        </div>
-        <div class="row">
-          <button id="newBtn">New Problem</button>
-          <button id="showBtn">Show Solution</button>
-          <button id="selfTestBtn" title="Run built-in test cases">Run Self‑Check</button>
-        </div>
-        <div id="msg" class="msg"></div>
-        <div id="solution" class="katex muted" style="display:none"></div>
-        <div id="qa" class="qa"></div>
       </div>
     </div>
+
+    <!-- Solution board appears at the bottom when toggled -->
+    <div id="solutionWrap" class="card" style="display:none; margin-top:16px">
+      <p class="title">Solution Board (auto‑fit)</p>
+      <svg id="boardSolution" class="board" viewBox="0 0 1000 420"></svg>
+      <div id="solution" class="katex" style="margin-top:10px"></div>
+      <div class="legend">
+        <span class="key"><span class="dot a"></span> $ec a$</span>
+        <span class="key"><span class="dot b"></span> $ec b$</span>
+        <span class="key"><span class="dot t"></span> target</span>
+        <span class="key"><span class="dot c"></span> $m\,ec a + n\,ec b$</span>
+      </div>
+    </div>
+
+    <p class="note">Click “Show Solution” to reveal one valid integer combination and a tip‑to‑tail visualization on a separate, auto‑sized board at the bottom. Reload to generate a new instance.</p>
   </div>
 
   <script>
-    // ===================== Robust KaTeX init =====================
-    function waitFor(conditionFn, {interval=50, timeout=8000}={}){
-      return new Promise((resolve, reject)=>{
-        const start = Date.now();
-        (function check(){
-          if(conditionFn()) return resolve();
-          if(Date.now()-start > timeout) return reject(new Error('Timeout waiting for dependency'));
-          setTimeout(check, interval);
-        })();
-      });
-    }
+    // -------- KaTeX initialization guard --------
+    function waitFor(cond,{interval=50,timeout=8000}={}){return new Promise((res,rej)=>{const t=Date.now();(function chk(){if(cond())return res();if(Date.now()-t>timeout)return rej(new Error('Timeout'));setTimeout(chk,interval)})()})}
 
-    async function init(){
-      try{
-        await waitFor(()=> window.katex && window.renderMathInElement);
-        // auto-render static math in the DOM (subtitle, legend labels)
-        window.renderMathInElement(document.body, {
-          delimiters:[
-            {left:'$$', right:'$$', display:true},
-            {left:'$', right:'$', display:false}
-          ],
-          throwOnError:false
-        });
-      }catch(e){
-        console.error('KaTeX failed to initialize:', e);
-        document.getElementById('qa').textContent = 'Note: KaTeX failed to initialize. Math will show as plain text.';
-      }
+    // ---------- Random instance generation ----------
+    const randInt=(a,b)=>Math.floor(Math.random()*(b-a+1))+a; // inclusive
+    const det=(u,v)=>u.x*v.y-u.y*v.x;
 
-      setupGame();
-    }
+    let A,B,target,mTrue,nTrue;
 
-    // ===================== Game Logic =====================
-    // Utilities
-    const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min; // inclusive
-
-    // State
-    let A, B, target, mTrue, nTrue; // vectors are {x,y}
-    let svg; const s = 24; let cx=300, cy=300;
-
-    function setupGame(){
-      svg = document.getElementById('board');
-      document.getElementById('mInput').addEventListener('input', updateAttemptLatex);
-      document.getElementById('nInput').addEventListener('input', updateAttemptLatex);
-      document.getElementById('checkBtn').addEventListener('click', onCheck);
-      document.getElementById('newBtn').addEventListener('click', newProblem);
-      document.getElementById('showBtn').addEventListener('click', toggleSolution);
-      document.getElementById('selfTestBtn').addEventListener('click', runSelfTests);
-      newProblem();
-    }
-
-    function newProblem(){
-      // choose non-zero, not collinear vectors A,B
-      do{ A = {x: randInt(-5,5), y: randInt(-5,5)}; } while(A.x === 0 && A.y === 0);
-      do{ B = {x: randInt(-5,5), y: randInt(-5,5)}; } while((B.x === 0 && B.y === 0) || (A.x*B.y - A.y*B.x) === 0);
-
-      // choose small integer coefficients and build a reachable target
-      do{ mTrue = randInt(-3,3); nTrue = randInt(-3,3); } while(mTrue === 0 && nTrue === 0);
-      target = { x: mTrue*A.x + nTrue*B.x, y: mTrue*A.y + nTrue*B.y };
-
-      // reset UI
-      document.getElementById('mInput').value = '';
-      document.getElementById('nInput').value = '';
-      document.getElementById('solution').style.display = 'none';
-      document.getElementById('msg').textContent = '';
-
-      renderProblem();
-      drawBoard();
-      updateAttemptLatex();
+    function newInstance(){
+      do{A={x:randInt(-5,5),y:randInt(-5,5)}}while(A.x===0&&A.y===0);
+      do{B={x:randInt(-5,5),y:randInt(-5,5)}}while((B.x===0&&B.y===0)||det(A,B)===0);
+      do{mTrue=randInt(-3,3);nTrue=randInt(-3,3)}while(mTrue===0&&nTrue===0);
+      target={x:mTrue*A.x+nTrue*B.x,y:mTrue*A.y+nTrue*B.y};
     }
 
     // ---------- KaTeX helpers ----------
-    function renderLatex(el, tex){
-      if(window.katex){
-        window.katex.render(tex, el, {throwOnError:false});
-      }else{
-        el.textContent = tex.replace(/\\/g,'');
-      }
-    }
-
-    function vecTex(name, v){ return `\\vec ${name} = \\langle ${v.x},\\,${v.y}\\rangle`; }
-
+    function renderLatex(el, tex){ if(window.katex){katex.render(tex, el, {throwOnError:false});} else {el.textContent=tex} }
+    const vecTex=(name,v)=>`\vec ${name} = \langle ${v.x},\,${v.y}\rangle`;
     function problemTex(){
-      return `Given\\quad ${vecTex('a',A)},\\quad ${vecTex('b',B)}\\quad \\text{Find integers } m,n \\text{ such that } m\\,\\vec a + n\\,\\vec b = \\langle ${target.x},\\,${target.y}\\rangle.`;
+      return `Given\; ${vecTex('a',A)},\; ${vecTex('b',B)}\; \text{find integers } m,n \text{ such that } m\,\vec a+n\,\vec b = \langle ${target.x},\,${target.y}\rangle.`;
     }
-
     function solutionTex(){
-      const part1 = `m= ${mTrue},\\; n= ${nTrue}`;
-      const combo = `(${mTrue})\\,${vecTex('a',A)} + (${nTrue})\\,${vecTex('b',B)} = `+
-        `\\langle ${mTrue*A.x},${mTrue*A.y}\\rangle + \\langle ${nTrue*B.x},${nTrue*B.y}\\rangle = `+
-        `\\langle ${target.x},${target.y}\\rangle`;
-      return `${part1}\\quad\\Rightarrow\\quad ${combo}`;
+      const lhs=`(${mTrue})\,${vecTex('a',A)}+(${nTrue})\,${vecTex('b',B)}`;
+      const p1=`=\; \langle ${mTrue*A.x},${mTrue*A.y}\rangle + \langle ${nTrue*B.x},${nTrue*B.y}\rangle`;
+      const p2=`=\; \langle ${target.x},${target.y}\rangle`;
+      return `m=${mTrue},\; n=${nTrue}\quad\Rightarrow\quad ${lhs}\; ${p1}\; ${p2}`;
     }
 
-    function attemptTex(m,n){
-      const mx = m*A.x, my = m*A.y, nx = n*B.x, ny = n*B.y;
-      const rx = mx + nx, ry = my + ny;
-      return `Attempt:\\; (${m})\\,${vecTex('a',A)} + (${n})\\,${vecTex('b',B)} = `+
-             `\\langle ${mx},${my}\\rangle + \\langle ${nx},${ny}\\rangle = `+
-             `\\langle ${rx},${ry}\\rangle`;
-    }
-
-    function renderProblem(){
-      renderLatex(document.getElementById('problem'), problemTex());
-      renderLatex(document.getElementById('solution'), solutionTex());
-    }
-
-    function updateAttemptLatex(){
-      const m = parseInt(document.getElementById('mInput').value,10)||0;
-      const n = parseInt(document.getElementById('nInput').value,10)||0;
-      renderLatex(document.getElementById('attemptLatex'), attemptTex(m,n));
-      drawCombo(m,n);
-    }
-
-    function toggleSolution(){
-      const sol = document.getElementById('solution');
-      sol.style.display = sol.style.display === 'none' ? 'block' : 'none';
-      renderLatex(sol, solutionTex());
-    }
-
-    function onCheck(){
-      const m = parseInt(document.getElementById('mInput').value,10);
-      const n = parseInt(document.getElementById('nInput').value,10);
-      const msgEl = document.getElementById('msg');
-      if(Number.isNaN(m) || Number.isNaN(n)){
-        msgEl.textContent = 'Please enter integer values for m and n.';
-        msgEl.className = 'msg bad';
-        return;
-      }
-      const rx = m*A.x + n*B.x;
-      const ry = m*A.y + n*B.y;
-      if(rx === target.x && ry === target.y){
-        msgEl.textContent = 'Nice! You hit the target.';
-        msgEl.className = 'msg good';
-      } else {
-        msgEl.textContent = 'Not quite. Adjust m and n and try again!';
-        msgEl.className = 'msg bad';
-      }
-      updateAttemptLatex();
-    }
-
-    // ---------- SVG Board ----------
-    function toPx(pt){ return {x: cx + s*pt.x, y: cy - s*pt.y}; }
-    function clearSVG(){ while(svg.firstChild) svg.removeChild(svg.firstChild); }
-
-    function line(x1,y1,x2,y2, cls){
-      const L = document.createElementNS('http://www.w3.org/2000/svg','line');
-      L.setAttribute('x1',x1); L.setAttribute('y1',y1);
-      L.setAttribute('x2',x2); L.setAttribute('y2',y2);
-      L.setAttribute('stroke-width', cls==='axis'?1: (cls==='grid'?1:2.5));
-      L.setAttribute('stroke', colorOf(cls));
-      L.setAttribute('opacity', cls==='grid'?0.18:1);
-      svg.appendChild(L);
-    }
-
-    function ensureMarker(name, color){
-      const id = `arrowHead-${name}`;
-      if(document.getElementById(id)) return id;
-      const defs = svg.querySelector('defs') || svg.insertBefore(document.createElementNS('http://www.w3.org/2000/svg','defs'), svg.firstChild);
-      const marker = document.createElementNS('http://www.w3.org/2000/svg','marker');
-      marker.setAttribute('id',id); marker.setAttribute('markerWidth','10'); marker.setAttribute('markerHeight','10'); marker.setAttribute('refX','8'); marker.setAttribute('refY','3'); marker.setAttribute('orient','auto');
-      const path = document.createElementNS('http://www.w3.org/2000/svg','path'); path.setAttribute('d','M0,0 L9,3 L0,6 Z'); path.setAttribute('fill',color);
-      marker.appendChild(path); defs.appendChild(marker);
-      return id;
-    }
-
-    function arrow(p1,p2,name,color){
-      const id = ensureMarker(name, color);
-      const L = document.createElementNS('http://www.w3.org/2000/svg','line');
-      L.setAttribute('x1',p1.x); L.setAttribute('y1',p1.y);
-      L.setAttribute('x2',p2.x); L.setAttribute('y2',p2.y);
-      L.setAttribute('stroke',color); L.setAttribute('stroke-width','3');
-      L.setAttribute('marker-end',`url(#${id})`);
-      svg.appendChild(L);
-    }
-
-    function circle(pt,r,color){
-      const C = document.createElementNS('http://www.w3.org/2000/svg','circle');
-      C.setAttribute('cx',pt.x); C.setAttribute('cy',pt.y); C.setAttribute('r',r);
-      C.setAttribute('fill',color); svg.appendChild(C);
-    }
-
-    function colorOf(cls){
-      switch(cls){
-        case 'a': return '#60a5fa';
-        case 'b': return '#34d399';
-        case 'target': return '#f59e0b';
-        case 'combo': return '#a78bfa';
-        case 'axis': return '#334155';
-        default: return '#475569';
-      }
-    }
-
-    function drawBoard(){
-      clearSVG();
+    // ---------- SVG helpers ----------
+    function mk(n){return document.createElementNS('http://www.w3.org/2000/svg',n)}
+    function gridAxes(svg,cx,cy,w,h,s){
       // grid
-      for(let i=0;i<=600;i+=s){ line(i,0,i,600,'grid'); line(0,i,600,i,'grid'); }
+      for(let x=0;x<=w;x+=s){const L=mk('line');L.setAttribute('x1',x);L.setAttribute('y1',0);L.setAttribute('x2',x);L.setAttribute('y2',h);L.setAttribute('stroke','#e2e8f0');L.setAttribute('stroke-width','1');svg.appendChild(L)}
+      for(let y=0;y<=h;y+=s){const L=mk('line');L.setAttribute('x1',0);L.setAttribute('y1',y);L.setAttribute('x2',w);L.setAttribute('y2',y);L.setAttribute('stroke','#e2e8f0');L.setAttribute('stroke-width','1');svg.appendChild(L)}
       // axes
-      line(0,cy,600,cy,'axis'); line(cx,0,cx,600,'axis');
-      // vectors from origin
-      const O = toPx({x:0,y:0});
-      arrow(O, toPx(A), 'a', colorOf('a'));
-      arrow(O, toPx(B), 'b', colorOf('b'));
-      // target point
-      circle(toPx(target), 6, colorOf('target'));
-      // initial combo preview
-      drawCombo(0,0);
+      const axX=mk('line'); axX.setAttribute('x1',0); axX.setAttribute('y1',cy); axX.setAttribute('x2',w); axX.setAttribute('y2',cy); axX.setAttribute('stroke','#94a3b8'); axX.setAttribute('stroke-width','1.5'); svg.appendChild(axX);
+      const axY=mk('line'); axY.setAttribute('x1',cx); axY.setAttribute('y1',0); axY.setAttribute('x2',cx); axY.setAttribute('y2',h); axY.setAttribute('stroke','#94a3b8'); axY.setAttribute('stroke-width','1.5'); svg.appendChild(axY);
+      // origin dot
+      const O=mk('circle'); O.setAttribute('cx',cx); O.setAttribute('cy',cy); O.setAttribute('r','2.5'); O.setAttribute('fill','#64748b'); svg.appendChild(O);
+    }
+    function ensureMarker(svg,id,color){ if(svg.querySelector(`#${id}`)) return id; const defs=svg.querySelector('defs')||svg.insertBefore(mk('defs'), svg.firstChild); const m=mk('marker'); m.setAttribute('id',id); m.setAttribute('markerWidth','10'); m.setAttribute('markerHeight','10'); m.setAttribute('refX','8'); m.setAttribute('refY','3'); m.setAttribute('orient','auto'); const p=mk('path'); p.setAttribute('d','M0,0 L9,3 L0,6 Z'); p.setAttribute('fill',color); m.appendChild(p); defs.appendChild(m); return id; }
+
+    // fixed-scale boards (A,B,Main)
+    function drawFixedBoard(svg, vecs={}){
+      const w=+svg.viewBox.baseVal.width, h=+svg.viewBox.baseVal.height; svg.innerHTML='';
+      const s=20, cx=w/2, cy=h/2; gridAxes(svg,cx,cy,w,h,s);
+      const toPx=(pt)=>({x:cx+s*pt.x, y:cy-s*pt.y});
+      const arrow=(p1,p2,color,name)=>{ const id=ensureMarker(svg,`ah-${name}`,color); const L=mk('line'); L.setAttribute('x1',p1.x); L.setAttribute('y1',p1.y); L.setAttribute('x2',p2.x); L.setAttribute('y2',p2.y); L.setAttribute('stroke',color); L.setAttribute('stroke-width','3'); L.setAttribute('marker-end',`url(#${id})`); svg.appendChild(L); };
+      const dot=(pt,color,r=5)=>{ const C=mk('circle'); C.setAttribute('cx',pt.x); C.setAttribute('cy',pt.y); C.setAttribute('r',r); C.setAttribute('fill',color); svg.appendChild(C); };
+      const label=(pt,text)=>{ const T=mk('text'); T.setAttribute('x',pt.x+6); T.setAttribute('y',pt.y-6); T.setAttribute('fill','#0f172a'); T.setAttribute('font-size','12'); T.textContent=text; svg.appendChild(T); };
+      const css=getComputedStyle(document.documentElement);
+      if(vecs.A){ arrow(toPx({x:0,y:0}), toPx(vecs.A), css.getPropertyValue('--a'), 'a'); label(toPx(vecs.A),'a'); }
+      if(vecs.B){ arrow(toPx({x:0,y:0}), toPx(vecs.B), css.getPropertyValue('--b'), 'b'); label(toPx(vecs.B),'b'); }
+      if(vecs.target){ dot(toPx(vecs.target), css.getPropertyValue('--target')); label(toPx(vecs.target), `(${vecs.target.x}, ${vecs.target.y})`); }
     }
 
-    function drawCombo(m,n){
-      // remove previous combo overlay
-      const old = document.getElementById('overlay'); if(old) old.remove();
-      const g = document.createElementNS('http://www.w3.org/2000/svg','g'); g.setAttribute('id','overlay'); svg.appendChild(g);
-      const O = toPx({x:0,y:0});
-      const R = toPx({x: m*A.x + n*B.x, y: m*A.y + n*B.y});
-      // combo arrow
-      const id = ensureMarker('combo', colorOf('combo'));
-      const L = document.createElementNS('http://www.w3.org/2000/svg','line');
-      L.setAttribute('x1',O.x); L.setAttribute('y1',O.y);
-      L.setAttribute('x2',R.x); L.setAttribute('y2',R.y);
-      L.setAttribute('stroke',colorOf('combo')); L.setAttribute('stroke-width','3');
-      L.setAttribute('marker-end',`url(#${id})`);
-      g.appendChild(L);
+    // auto-fit board (Solution)
+    function drawSolutionBoard(svg){
+      const w=+svg.viewBox.baseVal.width, h=+svg.viewBox.baseVal.height; svg.innerHTML='';
+      // collect points to fit
+      const O={x:0,y:0};
+      const Astep={x:mTrue*A.x, y:mTrue*A.y};
+      const Bstep={x:nTrue*B.x, y:nTrue*B.y};
+      const P2={x:Astep.x+Bstep.x, y:Astep.y+Bstep.y}; // equals target
+      const pts=[O,A,B,target,Astep,P2];
+      // bounds with padding
+      let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+      for(const p of pts){ minX=Math.min(minX,p.x); maxX=Math.max(maxX,p.x); minY=Math.min(minY,p.y); maxY=Math.max(maxY,p.y); }
+      const pad=1.5; // extra units around
+      minX-=pad; maxX+=pad; minY-=pad; maxY+=pad;
+      // scale to fit
+      const rangeX=maxX-minX || 1, rangeY=maxY-minY || 1;
+      const s=Math.min((w-40)/rangeX, (h-40)/rangeY); // 20px padding each side
+      const cx = (0 - minX) * s + 20; // pixel where x=0 lands
+      const cy = (maxY - 0) * s + 20; // pixel where y=0 lands (invert y)
+
+      // grid (snap to integer ticks around bounds)
+      const xStart=Math.ceil(minX), xEnd=Math.floor(maxX);
+      const yStart=Math.ceil(minY), yEnd=Math.floor(maxY);
+      for(let x=xStart; x<=xEnd; x++){ const L=mk('line'); L.setAttribute('x1', (x-minX)*s+20); L.setAttribute('y1', 20); L.setAttribute('x2', (x-minX)*s+20); L.setAttribute('y2', h-20); L.setAttribute('stroke','#e2e8f0'); L.setAttribute('stroke-width','1'); svg.appendChild(L);} 
+      for(let y=yStart; y<=yEnd; y++){ const L=mk('line'); L.setAttribute('x1', 20); L.setAttribute('y1', (maxY-y)*s+20); L.setAttribute('x2', w-20); L.setAttribute('y2', (maxY-y)*s+20); L.setAttribute('stroke','#e2e8f0'); L.setAttribute('stroke-width','1'); svg.appendChild(L);} 
+      // axes
+      const axX=mk('line'); axX.setAttribute('x1',20); axX.setAttribute('y1',cy); axX.setAttribute('x2',w-20); axX.setAttribute('y2',cy); axX.setAttribute('stroke','#94a3b8'); axX.setAttribute('stroke-width','1.5'); svg.appendChild(axX);
+      const axY=mk('line'); axY.setAttribute('x1',cx); axY.setAttribute('y1',20); axY.setAttribute('x2',cx); axY.setAttribute('y2',h-20); axY.setAttribute('stroke','#94a3b8'); axY.setAttribute('stroke-width','1.5'); svg.appendChild(axY);
+      const ODot=mk('circle'); ODot.setAttribute('cx',cx); ODot.setAttribute('cy',cy); ODot.setAttribute('r','2.5'); ODot.setAttribute('fill','#64748b'); svg.appendChild(ODot);
+
+      const toPx=(pt)=>({x:(pt.x-minX)*s+20, y:(maxY-pt.y)*s+20});
+      const css=getComputedStyle(document.documentElement);
+      const arrow=(p1,p2,color,name)=>{ const id=ensureMarker(svg,`ah-${name}`,color); const L=mk('line'); L.setAttribute('x1',p1.x); L.setAttribute('y1',p1.y); L.setAttribute('x2',p2.x); L.setAttribute('y2',p2.y); L.setAttribute('stroke',color); L.setAttribute('stroke-width','3'); L.setAttribute('marker-end',`url(#${id})`); svg.appendChild(L); };
+      const dot=(pt,color,r=5)=>{ const C=mk('circle'); C.setAttribute('cx',pt.x); C.setAttribute('cy',pt.y); C.setAttribute('r',r); C.setAttribute('fill',color); svg.appendChild(C); };
+
+      // draw base vectors, target, components and resultant
+      arrow(toPx({x:0,y:0}), toPx(A), css.getPropertyValue('--a'), 'a');
+      arrow(toPx({x:0,y:0}), toPx(B), css.getPropertyValue('--b'), 'b');
+      dot(toPx(target), css.getPropertyValue('--target'));
+      // components tip-to-tail
+      const Aend = toPx({x:Astep.x, y:Astep.y});
+      const Bend = toPx({x:P2.x, y:P2.y});
+      arrow(toPx({x:0,y:0}), Aend, css.getPropertyValue('--combo'), 'c1');
+      arrow(Aend, Bend, css.getPropertyValue('--combo'), 'c2');
+      // resultant
+      arrow(toPx({x:0,y:0}), toPx(P2), css.getPropertyValue('--combo'), 'c');
     }
 
-    // ===================== Self-tests =====================
-    function runSelfTests(){
-      const out = [];
-      try{
-        // Test 1: combination arithmetic
-        const A1={x:1,y:2}, B1={x:-3,y:4}, m1=2, n1=-1;
-        const T1={x:m1*A1.x+n1*B1.x, y:m1*A1.y+n1*B1.y};
-        if(T1.x===2*1-1*(-3) && T1.y===2*2-1*4) out.push('✔️ Linear combination arithmetic ok'); else out.push('❌ Arithmetic failed');
-        // Test 2: non-collinearity check
-        const det = (u,v)=> u.x*v.y - u.y*v.x;
-        let nonCol = true;
-        for(let i=0;i<20;i++){
-          const a={x:randInt(-3,3),y:randInt(-3,3)}; const b={x:randInt(-3,3),y:randInt(-3,3)};
-          if(!(a.x||a.y) || !(b.x||b.y)) continue;
-          nonCol = nonCol && (det(a,b)!==0);
+    // ---------- Orchestration ----------
+    function drawAllFixed(){
+      drawFixedBoard(document.getElementById('boardA'), {A});
+      drawFixedBoard(document.getElementById('boardB'), {B});
+      drawFixedBoard(document.getElementById('boardMain'), {A,B,target});
+    }
+
+    function mount(){
+      newInstance();
+      renderLatex(document.getElementById('problem'), problemTex());
+      drawAllFixed();
+      const btn=document.getElementById('showBtn');
+      let shown=false;
+      btn.addEventListener('click', ()=>{
+        shown=!shown;
+        btn.textContent = shown? 'Hide Solution' : 'Show Solution';
+        document.getElementById('solutionWrap').style.display = shown? 'block':'none';
+        if(shown){
+          drawSolutionBoard(document.getElementById('boardSolution'));
+          renderLatex(document.getElementById('solution'), solutionTex());
         }
-        out.push('✔️ Random generation tends to avoid collinearity');
-        // Test 3: KaTeX presence
-        out.push(window.katex? '✔️ KaTeX present' : '⚠️ KaTeX not detected (math falls back to plain text)');
-      }catch(e){ out.push('❌ Self-test threw: '+e.message); }
-      document.getElementById('qa').textContent = out.join('  •  ');
+      });
+
+      // self-checks
+      try{
+        console.assert(det({x:1,y:0},{x:0,y:1})!==0, 'det should be nonzero for basis');
+        const t={x:mTrue*A.x+nTrue*B.x, y:mTrue*A.y+nTrue*B.y};
+        console.assert(t.x===target.x && t.y===target.y, 'target construction must be exact');
+      }catch(e){ console.warn('Self-check failed:', e); }
     }
 
-    // Kick off once DOM is parsed; scripts are deferred
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', async ()=>{
+      try{ await waitFor(()=>window.katex && window.renderMathInElement); window.renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}], throwOnError:false}); }catch(_){/* graceful */}
+      mount();
+    });
   </script>
 </body>
 </html>
