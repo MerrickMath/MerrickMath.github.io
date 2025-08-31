@@ -1,241 +1,746 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
+  <title>Math 10 — Unit 1 Quiz Generator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Divisor Tree Trainer — 2·3·5·7</title>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
   <style>
-    /* =======================
-       LIGHT THEME (default)
-       ======================= */
     :root {
-      --bg: #f7f7fb;
-      --panel: #ffffff;
-      --muted: #606775;
-      --text: #12141a;
-      --accent: #5b4bff;
-      --accent-2: #0fb67a;
-      --chip: #f1f2f6;
-      --line: #e7e9ef;
-      --shadow: 0 10px 25px rgba(16,24,40,.08);
+      --fg: #0f172a;
+      --muted: #475569;
+      --bg: #ffffff;
+      --card: #f8fafc;
+      --acc: #0ea5e9;
     }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0b0c10;
-        --panel: #12141a;
-        --muted: #9aa4b2;
-        --text: #e6e9ef;
-        --accent: #7c5cff;
-        --accent-2: #3ddc97;
-        --chip: #1b1f2a;
-        --line: #2a2f3a;
-        --shadow: 0 10px 30px rgba(0,0,0,.35);
-      }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--fg);
+      background: var(--bg);
+    }
+    header {
+      padding: 20px 16px;
+      border-bottom: 1px solid #e5e7eb;
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 12px;
+      align-items: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    button, .toggle {
+      border: 1px solid #cbd5e1;
+      background: var(--card);
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button.primary {
+      background: var(--acc);
+      color: white;
+      border-color: var(--acc);
+    }
+    main {
+      max-width: 900px;
+      margin: 24px auto 60px;
+      padding: 0 16px;
+    }
+    section {
+      background: var(--card);
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 18px;
+    }
+    section h2 {
+      margin: 6px 0 12px;
+      font-size: 18px;
+    }
+    .meta { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
+    ol.mc > li, ol.nr > li, ol.er > li {
+      margin: 10px 0;
+      padding-left: 4px;
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;background:var(--bg);color:var(--text);font:500 16px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+    /* four-column choices */
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px 14px;
+      margin: 8px 0 4px;
+      padding-left: 18px; /* to align <li> markers if any */
+      list-style: none;
+    }
+    .choices li::before {
+      content: attr(data-label) ") ";
+      font-weight: 700;
+      margin-right: 4px;
+    }
 
-    .container{max-width:1100px;margin:32px auto;padding:0 16px 48px}
+    .answer {
+      display: none;         /* hidden by default, toggled via .show-answers */
+      margin: 4px 0 0 2px;
+      font-size: 0.95rem;
+      color: #065f46;
+      background: #ecfdf5;
+      border: 1px solid #d1fae5;
+      border-radius: 8px;
+      padding: 6px 8px;
+    }
+    .show-answers .answer { display: inline-block; }
+    .muted { color: var(--muted); }
 
-    header{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;margin-bottom:16px}
-    h1{margin:0;font-size:clamp(22px,2.4vw,28px);letter-spacing:.2px}
-
-    .timer{font-variant-numeric:tabular-nums;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 14px;box-shadow:var(--shadow);display:inline-flex;gap:10px;align-items:center}
-    .timer .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-2);display:inline-block;box-shadow:0 0 10px var(--accent-2)}
-
-    .controls{display:flex;gap:8px}
-    button,select,input[type="text"]{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--text);padding:10px 14px;border-radius:12px;font-weight:600;cursor:pointer;transition:transform .05s ease, background .2s ease, border-color .2s ease;box-shadow:var(--shadow)}
-    input[type="text"]{cursor:text}
-    button:hover{transform:translateY(-1px)}
-    button.primary{background:linear-gradient(180deg,var(--accent),color-mix(in oklab,var(--accent),#000 6%));border-color:transparent;color:#fff}
-    button.ghost{background:var(--chip)}
-
-    .toolbar{display:grid;grid-template-columns:1fr auto;gap:12px;margin:16px 0 22px}
-    .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
-
-    .grid{display:grid;grid-template-columns:1fr;gap:16px}
-    @media (max-width:900px){.grid{grid-template-columns:1fr}header{grid-template-columns:1fr;gap:10px}}
-
-    .meta{display:grid;grid-template-columns:1fr;gap:10px}
-    .fact{display:grid;grid-template-columns:130px 1fr;gap:8px;align-items:baseline}
-    .fact .k{color:var(--muted)}
-    .chips{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{background:var(--chip);border:1px dashed var(--line);padding:6px 10px;border-radius:999px;font-size:13px;color:var(--muted)}
-
-    /* ===== Downward Tree (SVG) ===== */
-    .tree{overflow:auto;padding:8px;max-height:520px;border-radius:12px;background:linear-gradient(180deg,transparent,color-mix(in oklab,var(--chip),transparent 60%))}
-    .tree svg{width:100%;height:auto;display:block}
-    .tree .edge{stroke:var(--line);stroke-width:1.5;fill:none}
-    .tree .node-rect{fill:var(--panel);stroke:var(--line);stroke-width:1.2;rx:10}
-    .tree .node-text{font:700 12px ui-sans-serif,system-ui;fill:var(--text)}
-    .tree .step-text{font:500 11px ui-sans-serif,system-ui;fill:var(--muted)}
-
-    .footer{margin-top:20px;color:var(--muted);font-size:13px}
-    code{background:var(--chip);padding:2px 6px;border-radius:6px}
+    /* small print + code */
+    .foot {
+      text-align: center; color: var(--muted); font-size: 13px; margin-top: 18px;
+    }
+    code { background: #f1f5f9; padding: 1px 4px; border-radius: 6px; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Divisor Tree Trainer — 2·3·5·7</h1>
-      <div class="timer" id="timer"><span class="dot"></span><span id="clock">00:00</span></div>
-      <div class="controls">
-        <button id="startBtn" class="ghost" title="Start timer">Start</button>
-        <button id="pauseBtn" class="ghost" title="Pause timer">Pause</button>
-        <button id="resetBtn" class="ghost" title="Reset timer">Reset</button>
-      </div>
-    </header>
+  <header>
+    <h1>Math 10 — Unit 1 Quiz Generator</h1>
+    <div class="controls">
+      <label class="toggle">
+        <input id="answersToggle" type="checkbox" /> Show answers
+      </label>
+      <button id="regen" class="primary">Generate Quiz</button>
+    </div>
+  </header>
 
-    <section class="toolbar">
-      <div class="panel">
-        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
-          <span style="color:var(--muted)">Primes:</span>
-          <label class="chip"><input type="checkbox" id="p2" checked> 2</label>
-          <label class="chip"><input type="checkbox" id="p3" checked> 3</label>
-          <label class="chip"><input type="checkbox" id="p5" checked> 5</label>
-          <label class="chip"><input type="checkbox" id="p7" checked> 7</label>
-          <span class="chip">Max exponent per prime:
-            <select id="maxExp">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3" selected>3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select>
-          </span>
-          <span class="chip">Seed: <input id="seed" type="text" placeholder="random" style="border:0;background:transparent;outline:none;width:120px;color:var(--text)"></span>
-          <button id="genBtn" class="primary">Generate</button>
-        </div>
-      </div>
-      <div class="panel" style="display:flex;gap:8px;justify-content:flex-end;align-items:center;">
-        <button id="toggleDivs" class="ghost">Show / Hide Divisors</button>
-        <button id="copyBtn" class="ghost">Copy</button>
-      </div>
-    </section>
-
-    <section class="grid">
-      <div class="panel">
-        <div class="meta" id="meta"></div>
-        <details class="meta-adv"><summary style="cursor:pointer;color:var(--muted)">How the tree is built</summary>
-          At level <em>i</em>, choose an exponent <code>e_i ∈ [0,a_i]</code> for prime <code>p_i</code>. Multiply the running product by <code>p_i^{e_i}</code> and branch. Leaves are the positive divisors.
-        </details>
-      </div>
-      <div class="panel">
-        <div class="tree" id="tree"></div>
-      </div>
-    </section>
-
-    <section class="panel" id="divisorsPanel" style="margin-top:16px;">
-      <div class="fact"><div class="k">Divisors (<span id="dCount">0</span>):</div><div id="divisors"></div></div>
-    </section>
-
-    <div class="footer">Single-file, no libraries. Perfect for GitHub Pages.</div>
-  </div>
+  <main id="quizRoot" class="answers-hidden">
+    <!-- quiz will be injected here -->
+  </main>
 
   <script>
-    // ================= Timer =================
-    const clockEl = document.getElementById('clock');
-    let running=false, t0=0, accum=0, rafId=null;
-    const fmt = ms => { const s=Math.floor(ms/1000), m=Math.floor(s/60); return String(m).padStart(2,'0')+":"+String(s%60).padStart(2,'0'); };
-    function tick(){ if(!running) return; const now=performance.now(); clockEl.textContent=fmt(accum + (now - t0)); rafId=requestAnimationFrame(tick); }
-    function startTimer(){ if(running) return; running=true; t0=performance.now(); tick(); }
-    function pauseTimer(){ if(!running) return; running=false; cancelAnimationFrame(rafId); accum += performance.now() - t0; }
-    function resetTimer(){ running=false; cancelAnimationFrame(rafId); accum=0; clockEl.textContent='00:00'; }
-    document.getElementById('startBtn').addEventListener('click', startTimer);
-    document.getElementById('pauseBtn').addEventListener('click', pauseTimer);
-    document.getElementById('resetBtn').addEventListener('click', resetTimer);
+    // ---------- Math helpers ----------
+    const randInt = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
+    const sample = arr => arr[Math.floor(Math.random()*arr.length)];
+    const shuffle = arr => { for (let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; };
+    const unique = arr => Array.from(new Set(arr));
 
-    // =============== Random & Math utils ===============
-    const primesAll = [2,3,5,7];
-    function powBigInt(p,e){ let r=1n, P=BigInt(p); for(let i=0;i<e;i++) r*=P; return r; }
-    function product(arr){ return arr.reduce((a,b)=>a*b,1n); }
-    function seededRng(seedStr){ let h=2166136261>>>0; for(let i=0;i<seedStr.length;i++){ h^=seedStr.charCodeAt(i); h=Math.imul(h,16777619);} let x=(h^0x9e3779b9)>>>0; return ()=> (x=(Math.imul(x,1664525)+1013904223)>>>0)/2**32; }
+    const isPrime = n => {
+      if (n<2) return false;
+      if (n%2===0) return n===2;
+      for (let f=3; f*f<=n; f+=2) if (n%f===0) return false;
+      return true;
+    };
+    const randPrime = (a=50,b=300) => {
+      while (true) { const n=randInt(a,b); if (isPrime(n)) return n; }
+    };
+    const gcd = (a,b) => { a=Math.abs(a); b=Math.abs(b); while (b){[a,b]=[b,a%b];} return a; };
+    const lcm = (a,b) => Math.abs(a*b)/gcd(a,b);
 
-    function pickExponents(maxExp, rng){
-      const selected = primesAll.filter((p,i)=>document.getElementById('p'+p).checked);
-      if(!selected.length){ alert('Select at least one prime.'); return null; }
-      const exps = {}; let nonZero=0;
-      for(const p of selected){ const e=Math.floor((rng?rng():Math.random())*(maxExp+1)); exps[p]=e; if(e>0) nonZero++; }
-      if(nonZero===0){ const pi=selected[Math.floor((rng?rng():Math.random())*selected.length)]; exps[pi]=1; }
-      return exps; // {prime: exponent}
+    const primeFactors = (n) => {
+      const d = new Map();
+      let m=n, f=2;
+      while (f*f<=m){
+        while (m%f===0){ d.set(f,(d.get(f)||0)+1); m=Math.floor(m/f); }
+        f = (f===2) ? 3 : f+2;
+      }
+      if (m>1) d.set(m,(d.get(m)||0)+1);
+      return d;
+    };
+    const fmtFactorization = (map) => {
+      const parts = [...map.entries()].sort((a,b)=>a[0]-b[0]).map(([p,e]) => e===1? `${p}` : `${p}^{${e}}`);
+      return parts.join("\\cdot ");
+    };
+
+    const isPerfectSquare = n => Number.isInteger(Math.sqrt(n));
+    const randomNonSquare = (lo=2,hi=120) => {
+      while(true){ const n=randInt(lo,hi); if(!isPerfectSquare(n)) return n; }
+    };
+    const squarefreeSplit = n => {
+      let out=1, m=n;
+      for (let f=2; f*f<=m; f++){
+        while ((m%(f*f))===0){ out*=f; m=Math.floor(m/(f*f)); }
+      }
+      return [out,m]; // sqrt(n) = out * sqrt(m)
+    };
+    const mixedFromEntire = n => squarefreeSplit(n);
+
+    // ensure 4 options including 'correct', with a generator for extras
+    const ensureFour = (options, correct, gen) => {
+      const set = new Set(options); set.add(correct);
+      while (set.size<4){ const w=gen(); if(w!==correct) set.add(w); }
+      const out = Array.from(set);
+      if (out.length>4){
+        const others = out.filter(x=>x!==correct);
+        shuffle(others);
+        return [correct, ...others.slice(0,3)];
+      }
+      return out;
+    };
+
+    // HTML helpers
+    const el = (tag, cls, html) => {
+      const e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (html !== undefined) e.innerHTML = html;
+      return e;
+    };
+
+    // ----- Multiple-choice block -----
+    function mcBlock(questionHTML, options, correctValue) {
+      // options are TeX strings WITHOUT $...$
+      const letters = ["A","B","C","D"];
+      const idx = shuffle([0,1,2,3]);
+      const shuffled = idx.map(i => options[i]);
+      const letter = letters[shuffled.indexOf(correctValue)];
+      const li = el("li");
+      li.appendChild(el("div", "", questionHTML));
+      const ul = el("ul", "choices");
+      shuffled.forEach((opt,i)=>{
+        const liOpt = el("li");
+        liOpt.dataset.label = letters[i];
+        liOpt.innerHTML = `$${opt}$`;
+        ul.appendChild(liOpt);
+      });
+      li.appendChild(ul);
+      li.appendChild(el("div","answer", `<strong>Answer:</strong> ${letter}`));
+      return li;
     }
 
-    function allDivisors(exps){
-      const entries = Object.entries(exps).map(([p,e])=>({p:Number(p),e})).sort((a,b)=>a.p-b.p);
-      const res=[]; function dfs(i,acc){ if(i===entries.length){ res.push(acc); return; } const {p,e}=entries[i]; let mul=1n; for(let k=0;k<=e;k++){ dfs(i+1, acc*mul); mul*=BigInt(p);} }
-      dfs(0,1n); return res.sort((a,b)=> a<b?-1:a>b?1:0);
+    // ---------- Section A: Multiple Choice (16) ----------
+    function buildMC() {
+      const ol = el("ol","mc");
+
+      // 1) Which is prime?
+      {
+        const correct = randPrime(80,300).toString();
+        const pool = new Set();
+        while (pool.size<6) { const c = randInt(80,300); if (!isPrime(c)) pool.add(c.toString()); }
+        const base = [correct, ...Array.from(pool).slice(0,3)];
+        const gen = () => {
+          while(true){ const x=randInt(80,300); if(!isPrime(x)) return x.toString(); }
+        };
+        const opts = ensureFour(base, correct, gen);
+        ol.appendChild(mcBlock("Which of the following is a prime number?", opts, correct));
+      }
+
+      // 2) Factorization of N
+      {
+        const exps = new Map([[2,randInt(1,3)],[3,randInt(1,3)],[5,randInt(0,2)],[7,randInt(0,1)]]);
+        if (exps.get(5)===0 && exps.get(7)===0) exps.set(sample([5,7]),1);
+        let N=1; exps.forEach((e,p)=>{ N *= p**e; });
+        const correct = fmtFactorization(new Map([...exps].filter(([p,e])=>e>0)));
+        const distr = new Set();
+        while (distr.size<6){
+          const d = new Map(exps);
+          const k = sample([...d.keys()]);
+          d.set(k, Math.max(0, (d.get(k)>0)? d.get(k)+sample([-1,1]) : 1));
+          if ([...d.values()].every(v=>v===0)) d.set(k,1);
+          const s = fmtFactorization(new Map([...d].filter(([p,e])=>e>0)));
+          if (s!==correct) distr.add(s);
+        }
+        const base = [correct, ...Array.from(distr).slice(0,3)];
+        const gen = () => {
+          const p = sample([2,3,5,7]), e = randInt(1,4);
+          return fmtFactorization(new Map([[p,e]]));
+        };
+        const opts = ensureFour(base, correct, gen);
+        ol.appendChild(mcBlock(`The prime factorization of $${N}$ is`, opts, correct));
+      }
+
+      // 3) gcd
+      {
+        const a = randInt(90,220);
+        const b = Math.floor(a*randInt(2,4)/Math.max(1,randInt(2,4))) + randInt(1,30);
+        const g = gcd(a,b);
+        const cands = unique([g, Math.max(1,g-1), g*2, g+randInt(2,7)]);
+        while (cands.length<4) cands.push(g+randInt(1,10));
+        const base = cands.slice(0,4).map(String);
+        const gen = () => String(Math.max(1, g + sample([-7,-5,-3,-2,2,3,5,7])));
+        const opts = ensureFour(base, String(g), gen);
+        ol.appendChild(mcBlock(`$\\gcd(${a},\\,${b})$ equals`, opts, String(g)));
+      }
+
+      // 4) lcm
+      {
+        const a = randInt(10,30), b = randInt(10,30);
+        const L = lcm(a,b);
+        const base = [String(L), String(a*b), String(gcd(a,b)), String(a+b)];
+        const gen = () => String(L + sample([a, b, a+b]));
+        const opts = ensureFour(base, String(L), gen);
+        ol.appendChild(mcBlock(`$\\mathrm{lcm}(${a},\\,${b})$ equals`, opts, String(L)));
+      }
+
+      // 5) perfect square (all exponents even)
+      const fmtExp = (obj) => Object.entries(obj).map(([p,e])=>`${p}^{${e}}`).join("\\cdot ");
+      const makeExpSq = (even) => {
+        const ex = {2:randInt(1,4),3:randInt(1,4),5:randInt(1,4)};
+        if (even) { for (const k in ex) if (ex[k]%2!==0) ex[k]++; }
+        return ex;
+      };
+      {
+        const corr = makeExpSq(true);
+        const correct = fmtExp(corr);
+        const wrongs = Array.from({length:6}, ()=>fmtExp(makeExpSq(false)));
+        const base = [correct, ...wrongs.slice(0,3)];
+        const gen = () => fmtExp(makeExpSq(false));
+        const opts = ensureFour(base, correct, gen);
+        ol.appendChild(mcBlock("Which is a perfect square?", opts, correct));
+      }
+
+      // 6) perfect cube (exponents multiples of 3)
+      const makeExpCube = (m3) => {
+        const ex = {2:randInt(1,5), 3:randInt(1,5), 5:randInt(1,5)};
+        if (m3){ for (const k in ex){ ex[k] = ex[k] + ((3 - (ex[k]%3))%3); } }
+        return ex;
+      };
+      {
+        const corr = makeExpCube(true);
+        const correct = fmtExp(corr);
+        const wrongs = Array.from({length:6}, ()=>fmtExp(makeExpCube(false)));
+        const base = [correct, ...wrongs.slice(0,3)];
+        const gen = () => fmtExp(makeExpCube(false));
+        const opts = ensureFour(base, correct, gen);
+        ol.appendChild(mcBlock("Which is a perfect cube?", opts, correct));
+      }
+
+      // 7) write a*sqrt(b) as entire radical
+      {
+        const a = randInt(2,9), b = randomNonSquare(2,25);
+        const correct = `\\sqrt{${a*a}\\cdot ${b}}`;
+        const base = [
+          `\\sqrt{${a*b}}`,
+          correct,
+          `\\sqrt{${a**3}\\cdot ${b}}`,
+          `\\sqrt{${b}}`
+        ];
+        const gen = () => {
+          const A = randInt(2,12), B = randomNonSquare(2,25);
+          return `\\sqrt{${A*A}\\cdot ${B}}`;
+        };
+        const opts = ensureFour(base, correct, gen);
+        ol.appendChild(mcBlock(`Write $${a}\\sqrt{${b}}$ as an entire radical.`, opts, correct));
+      }
+
+      // 8) sqrt(n) -> mixed radical
+      {
+        const k = sample([2,3,5,6,7,10,12,15]);
+        const s = randInt(2,7);
+        const n = s*s*k;
+        const [A,B] = mixedFromEntire(n);
+        const correct = `${A}\\sqrt{${B}}`;
+        const base = [
+          `${(A%2===0)?A/2:A}\\sqrt{${B*4}}`,
+          correct,
+          `${s}\\sqrt{${k*2}}`,
+          `${2*s}\\sqrt{${(k%2===0)?k/2:k}}`
+        ].map(x=>x.replace(".0",""));
+        const gen = () => {
+          const kk=sample([2,3,5,6,7,10,12,15]), ss=randInt(2,7);
+          const [AA,BB]=mixedFromEntire(ss*ss*kk);
+          return `${AA}\\sqrt{${BB}}`;
+        };
+        const opts = ensureFour(base, correct, gen);
+        ol.appendChild(mcBlock(`Convert to mixed radical: $\\sqrt{${n}}$`, opts, correct));
+      }
+
+      // 9) Simplify sqrt(m x^a y^b), x,y>=0
+      {
+        const m=randInt(60,160), ax=randInt(2,7), by=randInt(2,7);
+        const [om,im]=squarefreeSplit(m);
+        const ox=Math.floor(ax/2), ix=ax%2, oy=Math.floor(by/2), iy=by%2;
+        const outside = (om>1?`${om}`:"") + (ox?`x^{${ox}}`:"") + (oy?`y^{${oy}}`:"") || "1";
+        let correct;
+        const inside = (im>1?`${im}`:"") + (ix?"x":"") + (iy?"y":"");
+        correct = inside ? (outside==="1" ? `\\sqrt{${inside}}` : `${outside}\\sqrt{${inside}}`) : outside;
+        const w1 = `${outside}\\sqrt{${m}}`;
+        const w2 = `${outside}\\sqrt{${im>1?im:1}}`;
+        const w3 = `\\sqrt{${m}}${ox?`x^{${ox}}`:""}${oy?`y^{${oy}}`:""}`;
+        const base = [correct,w1,w2,w3];
+        const gen = () => {
+          const mm=randInt(50,180); const [oo,ii]=squarefreeSplit(mm);
+          return ((oo>1?`${oo}`:"") + `\\sqrt{${ii}}`).replace(/^\\sqrt{1}$/, "1");
+        };
+        const opts = ensureFour(base, correct, gen);
+        ol.appendChild(mcBlock(`Simplify $\\sqrt{${m}\\,x^{${ax}}y^{${by}}}$ for $x,y\\ge 0$.`, opts, correct));
+      }
+
+      // 10) cube root of negative
+      {
+        const a = randInt(2,15);
+        const N = -(a**3);
+        const correct = String(-a);
+        const base = [correct, String(a), String(-(a-1)), String(-(a+1))];
+        const gen = () => String(-randInt(2,15));
+        const opts = ensureFour(base, correct, gen);
+        ol.appendChild(mcBlock(`$\\sqrt[3]{${N}}$ equals`, opts, correct));
+      }
+
+      // 11) irrational selection
+      {
+        const ns = randomNonSquare(2,120);
+        const a = randInt(1,20), b = sample([2,4,5,8,10,20,25,40]);
+        const g = gcd(a,b);
+        const A = a/g, B = b/g;
+        const rep = `${randInt(1,9)}${randInt(1,9)}`;
+        const correct = `\\sqrt{${ns}}`;
+        const base = [`0.${randInt(10,99)}`, `\\dfrac{${A}}{${B}}`, correct, `0.\\overline{${rep}}`];
+        const gen = () => `0.\\overline{${randInt(1,9)}${randInt(1,9)}}`;
+        const opts = ensureFour(base, correct, gen);
+        ol.appendChild(mcBlock("Which number is \\emph{irrational}?", opts, correct));
+      }
+
+      // 12) sqrt(m)*sqrt(n)
+      {
+        const m=randInt(6,25), n=randInt(6,25);
+        const prod=m*n;
+        const [A,B]=mixedFromEntire(prod);
+        const correct = (B===1)? `${A}` : `${A}\\sqrt{${B}}`;
+        const base = [correct, `\\sqrt{${prod}}`, `${A}\\sqrt{${m}}`, `${A}\\sqrt{${n}}`];
+        const gen = () => {
+          const mm=randInt(6,25), nn=randInt(6,25);
+          const [o,i]=mixedFromEntire(mm*nn);
+          return (i===1)? `${o}` : `${o}\\sqrt{${i}}`;
+        };
+        const opts = ensureFour(base, correct, gen);
+        ol.appendChild(mcBlock(`Simplify $\\sqrt{${m}}\\cdot \\sqrt{${n}}$.`, opts, correct));
+      }
+
+      // 13) rationalize 3/(sqrt(p)-sqrt(q))
+      {
+        let q=randInt(2,20), p=q+3;
+        if (isPerfectSquare(p)) p++;
+        if (isPerfectSquare(q)) q++;
+        const correct = `\\sqrt{${p}}+\\sqrt{${q}}`;
+        const base = [
+          correct,
+          `\\sqrt{${p}}-\\sqrt{${q}}`,
+          `\\dfrac{3(\\sqrt{${p}}+\\sqrt{${q}})}{${p-q}}`,
+          `\\dfrac{3(\\sqrt{${p}}-\\sqrt{${q}})}{${p-q}}`
+        ];
+        const gen = () => `\\sqrt{${randomNonSquare(2,25)}}+\\sqrt{${randomNonSquare(2,25)}}`;
+        const opts = ensureFour(base, correct, gen);
+        ol.appendChild(mcBlock(`Rationalize $\\dfrac{3}{\\sqrt{${p}}-\\sqrt{${q}}}$.`, opts, correct));
+      }
+
+      // 14) smallest set containing 0 (N={1,2,...})
+      {
+        const base = ["\\mathbb{N}","\\mathbb{W}","\\mathbb{Z}","\\mathbb{Q}"];
+        const correct = "\\mathbb{W}";
+        const gen = () => sample(["\\mathbb{N}","\\mathbb{W}","\\mathbb{Z}","\\mathbb{Q}"]);
+        const opts = ensureFour(base, correct, gen);
+        ol.appendChild(mcBlock("\\emph{Smallest} set containing $0$ is", opts, correct));
+      }
+
+      // 15) smallest set containing a/b
+      {
+        let a=randInt(2,30), b=randInt(2,30); const g=gcd(a,b); a/=g; b/=g;
+        const base = ["\\mathbb{N}","\\mathbb{W}","\\mathbb{Z}","\\mathbb{Q}"];
+        const correct = "\\mathbb{Q}";
+        const gen = () => sample(["\\mathbb{N}","\\mathbb{W}","\\mathbb{Z}","\\mathbb{Q}"]);
+        const opts = ensureFour(base, correct, gen);
+        ol.appendChild(mcBlock(`\\emph{Smallest} set containing $\\dfrac{${a}}{${b}}$ is`, opts, correct));
+      }
+
+      // 16) perfect fourth power
+      {
+        const s=randInt(3,9), c=s**4;
+        const correct = String(c);
+        const base = [String(c), String(c-1), String(c+1), String(s**3)];
+        const gen = () => String(randInt(2,9)**3);
+        const opts = ensureFour(base, correct, gen);
+        ol.appendChild(mcBlock("Which of the following is a perfect fourth power?", opts, correct));
+      }
+
+      return ol;
     }
 
-    // =============== UI renderers ===============
-    function renderMeta(exps){
-      const metas = document.getElementById('meta'); metas.innerHTML='';
-      const parts = Object.entries(exps).sort((a,b)=>a[0]-b[0]).map(([p,e])=> `${p}<sup>${e}</sup>`);
-      const primes = Object.keys(exps).map(Number).sort((a,b)=>a-b);
-      const nVal = product(primes.map(p=>powBigInt(p, exps[p])));
-      const dCount = Object.values(exps).reduce((a,e)=>a*(BigInt(e)+1n),1n);
-      metas.insertAdjacentHTML('beforeend', `
-        <div class="fact"><div class="k">Factorization</div><div><strong>n</strong> = ${parts.join(' · ')}</div></div>
-        <div class="fact"><div class="k">Value</div><div><code>${nVal.toString()}</code></div></div>
-        <div class="fact"><div class="k"># Divisors</div><div><code>${dCount.toString()}</code></div></div>
-        <div class="fact"><div class="k">Primes used</div><div class="chips">${primes.map(p=>`<span class="chip">${p}</span>`).join('')}</div></div>
-      `);
-      return nVal;
+    // ---------- Section B: Numeric Response (7) ----------
+    function buildNR() {
+      const ol = el("ol","nr");
+
+      // Helper to add a line with answer span
+      const add = (htmlProblem, answerMath) => {
+        const li = el("li");
+        li.innerHTML = htmlProblem;
+        li.appendChild(el("div","answer", `<strong>Answer:</strong> $${answerMath}$`));
+        ol.appendChild(li);
+      };
+
+      // NR1 gcd
+      {
+        const a=randInt(200,1000), b=randInt(200,1000);
+        add(`$\\gcd(${a},\\,${b})=$ <span class="muted">[answer here]</span>`, String(gcd(a,b)));
+      }
+
+      // NR2 lcm triple
+      {
+        const a=randInt(6,40), b=randInt(6,40), c=randInt(6,40);
+        const L = lcm(lcm(a,b),c);
+        add(`$\\mathrm{lcm}(${a},\\,${b},\\,${c})=$ <span class="muted">[answer here]</span>`, String(L));
+      }
+
+      // NR3 sum of exponents in factorization over 2,3,5,7
+      {
+        const ex = [randInt(1,3),randInt(1,3),randInt(1,3),randInt(1,3)];
+        const N = (2**ex[0])*(3**ex[1])*(5**ex[2])*(7**ex[3]);
+        add(`Let the prime factorization of $${N}$ be $2^{a}\\cdot 3^{b}\\cdot 5^{c}\\cdot 7^{d}$. Compute $a+b+c+d=$ <span class="muted">[answer here]</span>`, String(ex.reduce((s,x)=>s+x,0)));
+      }
+
+      // NR4 simplify sqrt(A x^m y^n)
+      {
+        const A=randInt(50,200), mx=randInt(2,8), ny=randInt(2,8);
+        const [oA,iA] = squarefreeSplit(A);
+        const ox=Math.floor(mx/2), oy=Math.floor(ny/2);
+        const ix=mx%2, iy=ny%2;
+        const outside = (oA>1?`${oA}`:"") + (ox?`x^{${ox}}`:"") + (oy?`y^{${oy}}`:"") || "1";
+        const inside = (iA>1?`${iA}`:"") + (ix?"x":"") + (iy?"y":"");
+        const ans = inside ? (outside==="1" ? `\\sqrt{${inside}}` : `${outside}\\sqrt{${inside}}`) : outside;
+        add(`Simplify completely: $\\sqrt{${A}x^{${mx}}y^{${ny}}}$ \\,(assume $x,y\\ge0$).`, ans);
+      }
+
+      // NR5 rationalize num/sqrt(den)
+      {
+        const num = sample([3,5,7,9]);
+        const den = sample([8,12,18,20,24,32,50]);
+        const [oD,iD]=squarefreeSplit(den);
+        // num/√den = (num * √den)/den = (num*oD/den)*√iD
+        const reduce = (a,b) => { const g=gcd(a,b); return [a/g, b/g]; };
+        let [p,q] = reduce(num*oD, den);
+        let ans;
+        if (iD===1){
+          ans = q===1 ? `${p}` : `\\dfrac{${p}}{${q}}`;
+        } else {
+          ans = q===1 ? `${p}\\sqrt{${iD}}` : `\\dfrac{${p}\\sqrt{${iD}}}{${q}}`;
+        }
+        add(`Rationalize and simplify: $\\dfrac{${num}}{\\sqrt{${den}}}$.`, ans);
+      }
+
+      // NR6 repeating decimal to fraction (randomized)
+      {
+        let display, num, den;
+        if (Math.random()<0.5){
+          const A=randInt(0,9), BC=randInt(0,99), DE=randInt(10,99);
+          const sA=`${A}`, sBC=`${BC}`.padStart(2,"0"), sDE=`${DE}`.padStart(2,"0");
+          display = `$${A}.${sBC}\\overline{${sDE}}$`;
+          const p = 10**(2+2), q = 10**2;
+          num = parseInt(`${A}${sBC}${sDE}`) - parseInt(`${A}${sBC}`);
+          den = p - q;
+        } else {
+          const X=randInt(0,29), YZ=randInt(10,99);
+          display = `$${X}.\\overline{${`${YZ}`.padStart(2,"0")}}$`;
+          num = X*99 + YZ;
+          den = 99;
+        }
+        const reduce = (a,b) => { const g=gcd(a,b); return [a/g, b/g]; };
+        const [p,q]=reduce(num,den);
+        const ans = q===1 ? `${p}` : `\\dfrac{${p}}{${q}}`;
+        add(`Convert ${display} to a fraction in simplest form.`, ans);
+      }
+
+      // NR7 cube root negative (random)
+      {
+        const a = randInt(2,19);
+        add(`Evaluate $\\sqrt[3]{-${a**3}}$.`, String(-a));
+      }
+
+      return ol;
     }
 
-    function renderDivisors(list){
-      const el = document.getElementById('divisors');
-      document.getElementById('dCount').textContent=String(list.length);
-      const per=24, chunks=[]; for(let i=0;i<list.length;i+=per){ chunks.push(`<div>${list.slice(i,i+per).map(x=>x.toString()).join(', ')}</div>`); }
-      el.innerHTML = chunks.join('');
+    // ---------- Section C: Extended Response ----------
+    function buildER() {
+      const ol = el("ol","er");
+
+      const addER = (htmlProblem, answerHTML) => {
+        const li = el("li");
+        li.innerHTML = htmlProblem;
+        li.appendChild(el("div","answer", `<strong>Answer (sketch):</strong> ${answerHTML}`));
+        ol.appendChild(li);
+      };
+
+      // ER1: bundle parts (a)-(e)
+      const wrapParts = partsHTML => {
+        const li = el("li");
+        li.innerHTML = `<div><strong>Prime Factors, GCD/LCM, Perfect Powers, Radicals, Series, Approximation</strong> <span class="muted">[14 marks]</span></div>
+        <ol type="a" style="margin-top:8px;">${partsHTML}</ol>`;
+        return li;
+      };
+
+      // (a) PF + gcd/lcm
+      const ERa = randInt(200,800), ERb = randInt(200,800);
+      const g = gcd(ERa,ERb), L = lcm(ERa,ERb);
+      const fa = fmtFactorization(primeFactors(ERa)), fb = fmtFactorization(primeFactors(ERb));
+      const partA = `
+        <li>Prime factorize $${ERa}$ and $${ERb}$. Hence determine $\\gcd(${ERa},${ERb})$ and $\\mathrm{lcm}(${ERa},${ERb})$. Explain how prime exponents determine each.
+          <div class="answer"><strong>Answer:</strong> $${ERa}=${fa}$, $${ERb}=${fb}$; $\\gcd=${g}$, $\\mathrm{lcm}=${L}$. GCD takes min exponents, LCM takes max.</div>
+        </li>`;
+
+      // (b) minimal m for cube
+      const Nexp = {2:randInt(1,3),3:randInt(1,3),5:randInt(1,3),7:randInt(1,3)};
+      const Ntex = fmtFactorization(new Map(Object.entries(Nexp).map(([p,e])=>[+p,e])));
+      const add = Object.fromEntries(Object.entries(Nexp).map(([p,e])=>[p, (3-(e%3))%3 ]));
+      const mtex = Object.entries(add).filter(([,k])=>k>0).map(([p,k])=>`${p}^{${k}}`).join("\\cdot ") || "1";
+      const partB = `
+        <li>Let $N=${Ntex}$. Decide whether $N$ is a perfect square and/or a perfect cube. If not a cube, find the least positive integer $m$ so that $Nm$ is a perfect cube.
+          <div class="answer"><strong>Answer:</strong> $m=${mtex}$ (raise each prime’s exponent to a multiple of 3).</div>
+        </li>`;
+
+      // (c) radicals simplification
+      const partC = `
+        <li>Simplify and write with radicals (no negative exponents):
+          <div>\\[ \\frac{\\sqrt{48x^{3}y^{2}}\\cdot \\sqrt{12xy}}{\\sqrt{3x}} \\quad (x,y\\ge0). \\]</div>
+          <div class="answer"><strong>Answer:</strong> $8x^{3/2}y\\sqrt{3y}$.</div>
+        </li>`;
+
+      // (d) Sum multiples of 2 or 3 in [L,U]
+      const Lb = randInt(80,150), Ub = randInt(900,1200);
+      const apSum = (L,U,s) => {
+        const first = Math.ceil(L/s)*s, last = Math.floor(U/s)*s;
+        if (first>last) return {n:0, S:0};
+        const n = Math.floor((last-first)/s)+1;
+        return {n, S: n*(first+last)/2};
+      };
+      const S2 = apSum(Lb,Ub,2), S3 = apSum(Lb,Ub,3), S6 = apSum(Lb,Ub,6);
+      const total = S2.S + S3.S - S6.S;
+      const partD = `
+        <li><strong>Series (Inclusion–Exclusion).</strong> Find the sum of all integers between $${Lb}$ and $${Ub}$ inclusive that are multiples of $2$ or $3$.
+          <div class="answer"><strong>Answer:</strong> $S=${total}$ with counts $n_2=${S2.n}, n_3=${S3.n}, n_6=${S6.n}$.</div>
+        </li>`;
+
+      // (e) Babylonian sqrt
+      const nB = randomNonSquare(50,120);
+      const x0 = Math.floor(Math.sqrt(nB));
+      const x1 = (x0 + nB/x0)/2;
+      const x2 = (x1 + nB/x1)/2;
+      const partE = `
+        <li><strong>Approximation (Babylonian/Newton).</strong> Use two iterations to approximate $\\sqrt{${nB}}$ to four decimal places.
+          <div class="answer"><strong>Answer:</strong> $x_0=${x0.toFixed(1)}$, $x_1=${x1.toFixed(9)}$, $x_2=${x2.toFixed(9)}$, so $\\sqrt{${nB}}\\approx ${x2.toFixed(4)}$.</div>
+        </li>`;
+
+      const li = wrapParts(partA + partB + partC + partD + partE);
+      ol.appendChild(li);
+      return ol;
     }
 
-    // Downward SVG tree
-    function renderTree(exps){
-      const box=document.getElementById('tree'); box.innerHTML='';
-      const entries=Object.entries(exps).map(([p,e])=>({p:Number(p),e})).sort((a,b)=>a.p-b.p);
-      function build(i, acc){ const node={val:acc, step:null, children:[]}; if(i>=entries.length) return node; const {p,e}=entries[i]; for(let k=0;k<=e;k++){ const child=build(i+1, acc*powBigInt(p,k)); child.step=`${p}^${k}`; node.children.push(child);} return node; }
-      const root=build(0,1n);
-      const levelGap=80, xGap=90, pad={x:20,y:20};
-      let leafX=0; function assignX(n,d){ n.depth=d; if(!n.children.length){ n.x=leafX*xGap; n.width=xGap; leafX++; } else { n.children.forEach(c=>assignX(c,d+1)); const first=n.children[0], last=n.children[n.children.length-1]; n.x=(first.x+last.x)/2; n.width=(last.x-first.x)+xGap; } }
-      assignX(root,0);
-      const maxDepth=(function md(n){ return n.children.length?1+Math.max(...n.children.map(md)):0; })(root);
-      const width=Math.max(root.width+pad.x*2,400), height=(maxDepth+1)*levelGap+pad.y*2;
-      const svgNS='http://www.w3.org/2000/svg'; const svg=document.createElementNS(svgNS,'svg'); svg.setAttribute('viewBox',`0 0 ${width} ${height}`);
-      function drawEdges(n){ const x=n.x+pad.x, y=n.depth*levelGap+pad.y; n.children.forEach(c=>{ const cx=c.x+pad.x, cy=c.depth*levelGap+pad.y; const path=document.createElementNS(svgNS,'path'); const midY=(y+cy)/2; path.setAttribute('d',`M ${x} ${y+24} C ${x} ${midY}, ${cx} ${midY}, ${cx} ${cy-24}`); path.setAttribute('class','edge'); svg.appendChild(path); drawEdges(c); }); }
-      function drawNodes(n){ const x=n.x+pad.x, y=n.depth*levelGap+pad.y; const g=document.createElementNS(svgNS,'g'); const rectW=74, rectH=32; const r=document.createElementNS(svgNS,'rect'); r.setAttribute('x',x-rectW/2); r.setAttribute('y',y-rectH/2); r.setAttribute('width',rectW); r.setAttribute('height',rectH); r.setAttribute('class','node-rect'); g.appendChild(r); const t=document.createElementNS(svgNS,'text'); t.setAttribute('x',x); t.setAttribute('y',y-2); t.setAttribute('text-anchor','middle'); t.setAttribute('dominant-baseline','middle'); t.setAttribute('class','node-text'); t.textContent=n.val.toString(); g.appendChild(t); if(n.step){ const ts=document.createElementNS(svgNS,'text'); ts.setAttribute('x',x); ts.setAttribute('y',y+rectH/2+14); ts.setAttribute('text-anchor','middle'); ts.setAttribute('class','step-text'); ts.textContent=`× ${n.step}`; g.appendChild(ts);} svg.appendChild(g); n.children.forEach(drawNodes); }
-      drawEdges(root); drawNodes(root); box.appendChild(svg);
+    // ---------- Section D: Number Systems ----------
+    function buildNumberSystems() {
+      const sec = el("section");
+      sec.appendChild(el("h2","", "D. Number Systems Matching & Classification"));
+
+      // Matching
+      const matchWrap = el("div");
+      matchWrap.innerHTML = `
+        <div><strong>Match each set symbol to its description.</strong> Use each letter once.</div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; margin-top:8px;">
+          <ol>
+            <li>$\\mathbb{N}$</li>
+            <li>$\\mathbb{W}$</li>
+            <li>$\\mathbb{Z}$</li>
+            <li>$\\mathbb{Q}$</li>
+            <li>$\\mathbb{I}$</li>
+            <li>$\\mathbb{R}$</li>
+          </ol>
+          <ol type="A">
+            <li>All real numbers that \\emph{cannot} be written as a fraction of integers (e.g., $\\sqrt{2},\\ \\pi$).</li>
+            <li>$\\{0,1,2,3,\\dots\\}$</li>
+            <li>All rational and irrational numbers on the number line.</li>
+            <li>$\\{1,2,3,\\dots\\}$</li>
+            <li>$\\{\\dots,-2,-1,0,1,2,\\dots\\}$</li>
+            <li>Numbers expressible as $\\dfrac{a}{b}$ with $a,b\\in\\mathbb{Z},\\,b\\ne 0$ (including terminating or repeating decimals).</li>
+          </ol>
+        </div>
+        <div class="answer"><strong>Answer:</strong> $1\\to D,\\;2\\to B,\\;3\\to E,\\;4\\to F,\\;5\\to A,\\;6\\to C$.</div>
+      `;
+      sec.appendChild(matchWrap);
+
+      // Classification
+      const classify = el("div");
+      classify.innerHTML = `
+        <div style="margin-top:12px;"><strong>Classify each number by the smallest set it belongs to:</strong></div>
+        <ol style="columns:2; -webkit-columns:2; -moz-columns:2; margin-top:6px;">
+          <li>$17$</li>
+          <li>$23$</li>
+          <li>$0.\\overline{33}$</li>
+          <li>$39$</li>
+          <li>$0.49$</li>
+          <li>$0.\\overline{55}$</li>
+        </ol>
+        <div class="answer"><strong>Answer:</strong> (i) $\\mathbb{N}$, (ii) $\\mathbb{N}$, (iii) $\\mathbb{Q}$, (iv) $\\mathbb{N}$, (v) $\\mathbb{Q}$, (vi) $\\mathbb{Q}$.</div>
+      `;
+      sec.appendChild(classify);
+      return sec;
     }
 
-    // Copy
-    async function copyOut(exps, divs){ const parts=Object.entries(exps).sort((a,b)=>a[0]-b[0]).map(([p,e])=>`${p}^${e}`); const nVal=product(Object.keys(exps).map(Number).sort((a,b)=>a-b).map(p=>powBigInt(p,exps[p]))); const text=`n = ${parts.join(' * ')} = ${nVal.toString()}
-Divisors (${divs.length}):
-${divs.map(d=>d.toString()).join(', ')}`; try{ await navigator.clipboard.writeText(text); alert('Copied!'); }catch(e){ alert('Copy failed'); }}
+    // ---------- Assemble full quiz ----------
+    function buildQuiz() {
+      const root = el("div");
+      // Section A
+      const secA = el("section");
+      secA.appendChild(el("h2","","A. Multiple Choice (16 questions, 1 mark each)"));
+      secA.appendChild(el("div","meta","Circle the best answer."));
+      secA.appendChild(buildMC());
+      root.appendChild(secA);
 
-    // Generate
-    function generate(){
-      const maxExp=parseInt(document.getElementById('maxExp').value,10);
-      const seed=document.getElementById('seed').value.trim();
-      const rng = seed? seededRng(seed) : null;
-      const exps=pickExponents(maxExp, rng);
-      if(!exps) return;
-      const nVal=renderMeta(exps);
-      const divs=allDivisors(exps);
-      renderDivisors(divs);
-      renderTree(exps);
-      window.__state={exps,divs,nVal};
+      // Section B
+      const secB = el("section");
+      secB.appendChild(el("h2","","B. Numeric Response (7 questions, 2 marks each)"));
+      secB.appendChild(el("div","meta","Write your final answer clearly."));
+      secB.appendChild(buildNR());
+      root.appendChild(secB);
+
+      // Section C
+      const secC = el("section");
+      secC.appendChild(el("h2","","C. Extended Response (1 question, 14 marks)"));
+      secC.appendChild(el("div","meta","Show full reasoning and use positive exponents in final answers."));
+      secC.appendChild(buildER());
+      root.appendChild(secC);
+
+      // Section D
+      root.appendChild(buildNumberSystems());
+
+      root.appendChild(el("div","foot","Refresh with the button above to regenerate a brand-new randomized quiz."));
+      return root;
     }
 
-    // Wire UI
-    document.getElementById('genBtn').addEventListener('click', generate);
-    document.getElementById('toggleDivs').addEventListener('click', ()=>{
-      const p=document.getElementById('divisorsPanel'); p.style.display = p.style.display==='none'? '': 'none';
-    });
-    document.getElementById('copyBtn').addEventListener('click', ()=>{ if(window.__state) copyOut(window.__state.exps, window.__state.divs); });
+    // ---------- Wiring ----------
+    const quizRoot = document.getElementById("quizRoot");
+    const regenBtn = document.getElementById("regen");
+    const ansToggle = document.getElementById("answersToggle");
 
-    // First run
-    generate();
+    function renderQuiz() {
+      quizRoot.innerHTML = "";
+      const quiz = buildQuiz();
+      // answers toggle class
+      quizRoot.classList.toggle("show-answers", ansToggle.checked);
+      quizRoot.appendChild(quiz);
+      // KaTeX render
+      renderMathInElement(quizRoot, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "\\[", right: "\\]", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\\(", right: "\\)", display: false}
+        ],
+        throwOnError: false
+      });
+    }
+
+    regenBtn.addEventListener("click", renderQuiz);
+    ansToggle.addEventListener("change", ()=> quizRoot.classList.toggle("show-answers", ansToggle.checked));
+
+    // first load
+    renderQuiz();
   </script>
 </body>
 </html>
