@@ -738,6 +738,10 @@
 
     regenBtn.addEventListener("click", renderQuiz);
     ansToggle.addEventListener("change", ()=> quizRoot.classList.toggle("show-answers", ansToggle.checked));
+    
+    // first load (after KaTeX auto-render is ready)
+    window.addEventListener("load", renderQuiz);
+    // (or: document.addEventListener("DOMContentLoaded", renderQuiz);  // also fine)
 
     // first load
     renderQuiz();
