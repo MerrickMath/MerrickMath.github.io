@@ -3,64 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Unit 1 Test Check — Interactive</title>
+  <title>Unit 1 Test Check — Interactive (KaTeX)</title>
   <style>
-    /* ---- Light theme with LaTeX-like typography ---- */
-    :root{
-      --bg:#faf9f6;          /* paper */
-      --panel:#ffffff;       /* card */
-      --ink:#1b1b1b;         /* primary text */
-      --muted:#5b5e6a;       /* secondary */
-      --border:#e6e3dc;      /* subtle lines */
-      --brand:#2563eb;       /* action */
-      --good:#16a34a;        /* correct highlight */
-    }
-    html,body{height:100%}
-    body{
-      margin:0;
-      background:var(--bg);
-      color:var(--ink);
-      font:17px/1.55 "KaTeX_Main","Latin Modern Roman","Computer Modern","STIX Two Text","Times New Roman",serif;
-      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-    }
-    .container{max-width:1100px;margin:0 auto;padding:28px}
-    header{display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:space-between;margin-bottom:12px}
-    header h1{font-size:clamp(22px,3vw,30px);margin:0;font-weight:700;letter-spacing:.1px}
-    header .sub{color:var(--muted);font-size:14px}
-    .toolbar{display:flex;flex-wrap:wrap;gap:10px}
-    button{appearance:none;border:1px solid var(--border);background:linear-gradient(180deg,#ffffff,#f7f7f7);color:#1b1b1b;padding:10px 14px;border-radius:12px;cursor:pointer;transition:.15s;box-shadow:0 1px 0 #fff inset}
-    button:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.08),0 1px 0 #fff inset}
-    button.brand{background:linear-gradient(180deg,#ebf2ff,#dbe8ff);border-color:#c8d6ff;color:#0f2b7f;font-weight:700}
-    button.outline{background:#fff}
-    .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 18px;box-shadow:0 10px 30px rgba(0,0,0,.05)}
-    .grid{display:grid;gap:14px}
-    .section{margin:18px 0 22px}
-    .section h2{margin:0 0 8px;font-size:20px}
-    .muted{color:var(--muted)}
-    .mc-choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px;margin-top:8px}
-    .choice{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:#fff}
-    .choice input{margin-top:4px}
-    .q{font-weight:600}
-    .kicker{font-size:12px;color:var(--muted);letter-spacing:.2px;text-transform:uppercase}
-    .num-box{display:flex;gap:10px;align-items:center;margin-top:8px}
-    .num-box input, .short input, select{flex:0 0 220px;max-width:300px;background:#fff;border:1px solid var(--border);color:var(--ink);padding:10px;border-radius:10px}
-    .short input{flex-basis:320px}
-    .answer-key{display:none}
-    .answer-key.show{display:block}
-    .key{padding:10px;border:1px dashed #ddd;border-radius:12px;background:#fff}
-    .pill{display:inline-block;padding:4px 10px;border-radius:999px;background:#fff;border:1px solid var(--border);font-size:12px;color:var(--muted)}
-    .row{display:flex;gap:12px;flex-wrap:wrap}
-    .match{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:center}
-    .match .left{font-weight:650}
-    .tag{font-weight:700}
-    .divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:10px 0}
-    .footnote{font-size:12px;color:var(--muted)}
-    .correct{outline:2px solid var(--good);border-radius:6px;padding:2px 4px}
-    .badge{background:#fff;border:1px solid var(--border);padding:2px 8px;border-radius:8px;font-size:12px;color:var(--muted)}
-    .sr-only{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
-    @media print{.toolbar{display:none} body{background:#fff;color:#111} .card{box-shadow:none}}
+    :root{ --bg:#faf9f6; --panel:#ffffff; --ink:#1b1b1b; --muted:#5b5e6a; --border:#e6e3dc; --brand:#2563eb; --good:#16a34a; }
+    body{ margin:0; background:var(--bg); color:var(--ink); font:17px/1.55 "KaTeX_Main","Latin Modern Roman","Computer Modern","STIX Two Text","Times New Roman",serif; }
+    .container{ max-width:1100px; margin:0 auto; padding:28px }
+    header{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-bottom:16px }
+    header h1{ margin:0; font-size:clamp(22px,3vw,30px); font-weight:700 }
+    header .sub{ color:var(--muted); font-size:14px }
+    .toolbar{ display:flex; gap:10px; flex-wrap:wrap }
+    button{ border:1px solid var(--border); background:#fff; padding:10px 14px; border-radius:12px; cursor:pointer }
+    button.brand{ background:#ebf2ff; border-color:#c8d6ff; color:#0f2b7f; font-weight:700 }
+    .card{ background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:18px; box-shadow:0 2px 8px rgba(0,0,0,.05); margin-bottom:16px }
+    .kicker{ font-size:12px; color:var(--muted); text-transform:uppercase }
+    .mc-choices{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:8px; margin-top:8px }
+    .choice{ display:flex; gap:8px; align-items:flex-start; border:1px solid var(--border); border-radius:10px; padding:8px; background:#fff }
+    .num-box input, .short input, select{ border:1px solid var(--border); padding:8px; border-radius:8px; width:260px }
+    #key[hidden]{ display:none !important }
+    .divider{ height:1px; background:var(--border); margin:12px 0 }
+    .correct{ color:var(--good); font-weight:600 }
   </style>
-  <!-- KaTeX (lightweight, LaTeX-quality) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
 </head>
 <body>
@@ -68,209 +30,169 @@
     <header>
       <div>
         <h1>Unit 1 Test Check — Interactive</h1>
-        <div class="sub">Same questions • choices randomized on each <span class="pill">Generate</span></div>
+        <div class="sub">Light theme • LaTeX-style text • KaTeX rendering • Randomized options</div>
       </div>
       <div class="toolbar">
         <button id="generate" class="brand">🔀 Generate New Version</button>
-        <button id="toggleKey" class="outline">🧠 Toggle Answer Key</button>
-        <button id="printBtn" class="outline">🖨️ Print</button>
+        <button id="toggleKey" aria-pressed="false">🧠 Show Answer Key</button>
+        <button id="printBtn">🖨️ Print</button>
       </div>
     </header>
 
-    <div id="quiz" class="grid"></div>
+    <div id="quiz"></div>
 
-    <section id="key" class="answer-key section">
+    <section id="key" hidden>
       <h2>Answer Key</h2>
-      <div class="key" id="keyContent"></div>
-      <div class="footnote">Tip: click <span class="pill">Generate</span> again to reshuffle the options without changing the correct answers.</div>
+      <div id="keyContent"></div>
     </section>
   </div>
 
   <script>
-    // -------- Utility helpers --------
-    const clone = (x) => JSON.parse(JSON.stringify(x));
-    function shuffle(arr){
-      for(let i=arr.length-1;i>0;i--){
-        const j=Math.floor(Math.random()*(i+1));
-        [arr[i],arr[j]]=[arr[j],arr[i]];
-      }
-      return arr;
-    }
+    // ---------- Helpers ----------
+    const clone = (x)=>JSON.parse(JSON.stringify(x));
+    function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+    function typeset(el){ if(window.renderMathInElement){ window.renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\(',right:'\)',display:false}],throwOnError:false}); } }
 
-    // -------- Question bank (TeX markup for KaTeX) --------
+    // ---------- Question Bank (fully escaped TeX) ----------
     const BANK = [
-      {type:'section', title:'A. Multiple Choice', note:'Select one option.'},
-      {type:'mc', q:'Which of the following is a prime number?', choices:['$227$','$104$','$236$','$171$'], answer:'$227$'},
-      {type:'mc', q:'The prime factorization of $150$ is', choices:['$2\cdot 3^{2}\cdot 5^{2}$','$2\cdot 3\cdot 5$','$2\cdot 5^{2}$','$2\cdot 3\cdot 5^{2}$'], answer:'$2\cdot 3\cdot 5^{2}$'},
-      {type:'mc', q:'$\gcd(129,\,154)$ equals', choices:['$1$','$2$','$4$','$3$'], answer:'$1$'},
-      {type:'mc', q:'$\mathrm{lcm}(13,\,24)$ equals', choices:['$37$','$312$','$349$','$1$'], answer:'$312$'},
-      {type:'mc', q:'Which is a perfect square?', choices:['$2^{3}\cdot 3^{1}\cdot 5^{4}$','$2^{4}\cdot 3^{4}\cdot 5^{2}$','$2^{4}\cdot 3^{4}\cdot 5^{3}$','$2^{3}\cdot 3^{2}\cdot 5^{1}$'], answer:'$2^{4}\cdot 3^{4}\cdot 5^{2}$'},
-      {type:'mc', q:'Which is a perfect cube?', choices:['$2^{1}\cdot 3^{1}\cdot 5^{5}$','$2^{4}\cdot 3^{4}\cdot 5^{2}$','$2^{3}\cdot 3^{3}\cdot 5^{1}$','$2^{6}\cdot 3^{3}\cdot 5^{6}$'], answer:'$2^{6}\cdot 3^{3}\cdot 5^{6}$'},
-      {type:'mc', q:'Write $3\sqrt{14}$ as an entire radical.', choices:['$\sqrt{14}$','$\sqrt{9\cdot 14}$','$\sqrt{27\cdot 14}$','$\sqrt{42}$'], answer:'$\sqrt{9\cdot 14}$'},
-      {type:'mc', q:'Convert to mixed radical: $\sqrt{18}$', choices:['$3\sqrt{8}$','$6\sqrt{1}$','$3\sqrt{4}$','$3\sqrt{2}$'], answer:'$3\sqrt{2}$'},
-      {type:'mc', q:'Simplify $\sqrt{87\,x^{6}y^{5}}$ for $x,y\ge 0$.', choices:['$x^{3}y^{2}\sqrt{87}$','$x^{3}y^{2}\sqrt{87y}$','$\sqrt{167}$','$\sqrt{87}x^{3}y^{2}$'], answer:'$x^{3}y^{2}\sqrt{87y}$'},
-      {type:'mc', q:'$\sqrt[3]{-1331}$ equals', choices:['$11$','$-12$','$-10$','$-11$'], answer:'$-11$'},
-      {type:'mc', q:'Which number is \emph{irrational}?', choices:['$0.\overline{88}$','$\sqrt{109}$','$\dfrac{3}{20}$','$0.73$'], answer:'$\sqrt{109}$'},
-      {type:'mc', q:'Simplify $\sqrt{10}\cdot \sqrt{30}$.', choices:['$10\sqrt{10}$','$10\sqrt{30}$','$\sqrt{300}$','$10\sqrt{3}$'], answer:'$10\sqrt{3}$'},
-      {type:'mc', q:'Rationalize $\dfrac{5}{\sqrt{22}-\sqrt{17}}$.', choices:['$\dfrac{5(\sqrt{22}+\sqrt{17})}{5}$','$\sqrt{22}+\sqrt{17}$','$\sqrt{22}-\sqrt{17}$','$\dfrac{5(\sqrt{22}-\sqrt{17})}{5}$'], answer:'$\sqrt{22}+\sqrt{17}$'},
-      {type:'mc', q:'“Smallest” set containing $0$ is', choices:['$\mathbb{Z}$','$\mathbb{N}$','$\mathbb{Q}$','$\mathbb{W}$'], answer:'$\mathbb{W}$'},
-      {type:'mc', q:'“Smallest” set containing $\dfrac{1}{4}$ is', choices:['$\mathbb{Q}$','$\mathbb{W}$','$\mathbb{N}$','$\mathbb{Z}$'], answer:'$\mathbb{Q}$'},
-      {type:'mc', q:'Which of the following is a perfect fourth power?', choices:['$27$','$82$','$80$','$81$'], answer:'$81$'},
+      { title:'A. Multiple Choice', note:'Select one option.', items:[
+        {type:'mc', q:'Which of the following is a prime number?', choices:['$227$','$104$','$236$','$171$'], answer:'$227$'},
+        {type:'mc', q:'The prime factorization of $150$ is', choices:['$2\cdot 3^{2}\cdot 5^{2}$','$2\cdot 3\cdot 5$','$2\cdot 5^{2}$','$2\cdot 3\cdot 5^{2}$'], answer:'$2\cdot 3\cdot 5^{2}$'},
+        {type:'mc', q:'$\gcd(129,\,154)$ equals', choices:['$1$','$2$','$4$','$3$'], answer:'$1$'},
+        {type:'mc', q:'$\mathrm{lcm}(13,\,24)$ equals', choices:['$37$','$312$','$349$','$1$'], answer:'$312$'},
+        {type:'mc', q:'Which is a perfect square?', choices:['$2^{3}\cdot 3^{1}\cdot 5^{4}$','$2^{4}\cdot 3^{4}\cdot 5^{2}$','$2^{4}\cdot 3^{4}\cdot 5^{3}$','$2^{3}\cdot 3^{2}\cdot 5^{1}$'], answer:'$2^{4}\cdot 3^{4}\cdot 5^{2}$'},
+        {type:'mc', q:'Which is a perfect cube?', choices:['$2^{1}\cdot 3^{1}\cdot 5^{5}$','$2^{4}\cdot 3^{4}\cdot 5^{2}$','$2^{3}\cdot 3^{3}\cdot 5^{1}$','$2^{6}\cdot 3^{3}\cdot 5^{6}$'], answer:'$2^{6}\cdot 3^{3}\cdot 5^{6}$'},
+        {type:'mc', q:'Write $3\sqrt{14}$ as an entire radical.', choices:['$\sqrt{14}$','$\sqrt{9\cdot 14}$','$\sqrt{27\cdot 14}$','$\sqrt{42}$'], answer:'$\sqrt{9\cdot 14}$'},
+        {type:'mc', q:'Convert to mixed radical: $\sqrt{18}$', choices:['$3\sqrt{8}$','$6\sqrt{1}$','$3\sqrt{4}$','$3\sqrt{2}$'], answer:'$3\sqrt{2}$'},
+        {type:'mc', q:'Simplify $\sqrt{87\,x^{6}y^{5}}$ for $x,y\ge 0$.', choices:['$x^{3}y^{2}\sqrt{87}$','$x^{3}y^{2}\sqrt{87y}$','$\sqrt{167}$','$\sqrt{87}x^{3}y^{2}$'], answer:'$x^{3}y^{2}\sqrt{87y}$'},
+        {type:'mc', q:'$\sqrt[3]{-1331}$ equals', choices:['$11$','$-12$','$-10$','$-11$'], answer:'$-11$'},
+        {type:'mc', q:'Which number is irrational?', choices:['$0\.\overline{88}$','$\sqrt{109}$','$\dfrac{3}{20}$','$0\.73$'], answer:'$\sqrt{109}$'},
+        {type:'mc', q:'Simplify $\sqrt{10}\cdot \sqrt{30}$.', choices:['$10\sqrt{10}$','$10\sqrt{30}$','$\sqrt{300}$','$10\sqrt{3}$'], answer:'$10\sqrt{3}$'},
+        {type:'mc', q:'Rationalize $\dfrac{5}{\sqrt{22}-\sqrt{17}}$.', choices:['$\dfrac{5(\sqrt{22}+\sqrt{17})}{5}$','$\sqrt{22}+\sqrt{17}$','$\sqrt{22}-\sqrt{17}$','$\dfrac{5(\sqrt{22}-\sqrt{17})}{5}$'], answer:'$\sqrt{22}+\sqrt{17}$'},
+        {type:'mc', q:'Smallest set containing $0$ is', choices:['$\mathbb{Z}$','$\mathbb{N}$','$\mathbb{Q}$','$\mathbb{W}$'], answer:'$\mathbb{W}$'},
+        {type:'mc', q:'Smallest set containing $\dfrac{1}{4}$ is', choices:['$\mathbb{Q}$','$\mathbb{W}$','$\mathbb{N}$','$\mathbb{Z}$'], answer:'$\mathbb{Q}$'},
+        {type:'mc', q:'Which of the following is a perfect fourth power?', choices:['$27$','$82$','$80$','$81$'], answer:'$81$'}
+      ]},
 
-      {type:'section', title:'B. Numeric Response', note:'Write your final answer in the box.'},
-      {type:'numeric', q:'Calculate $\gcd(795,\,606)$.', answer:'$3$'},
-      {type:'numeric', q:'Calculate $\mathrm{lcm}(11,\,22,\,17)$.', answer:'$374$'},
-      {type:'numeric', q:'Let the prime factorization of $10290$ be $2^{a}\cdot 3^{b}\cdot 5^{c}\cdot 7^{d}$. Compute $a+b+c+d$.', answer:'$6$'},
+      { title:'B. Numeric Response', note:'Write your final answer in the box.', items:[
+        {type:'numeric', q:'Calculate $\gcd(795,\,606)$.', answer:'$3$'},
+        {type:'numeric', q:'Calculate $\mathrm{lcm}(11,\,22,\,17)$.', answer:'$374$'},
+        {type:'numeric', q:'Let the prime factorization of $10290$ be $2^{a}\cdot 3^{b}\cdot 5^{c}\cdot 7^{d}$. Compute $a+b+c+d$.', answer:'$6$'}
+      ]},
 
-      {type:'section', title:'C. Written Response', note:'Show full reasoning; express final answers with positive exponents/radicals.'},
-      {type:'written', q:'Simplify completely: $\sqrt{39x^{4}y^{8}}$ (assume $x,y\ge0$).', answer:'$x^{2}y^{4}\sqrt{39}$'},
-      {type:'written', q:'Rationalize and simplify: $\dfrac{6}{\sqrt{32}}$.', answer:'$\dfrac{3\sqrt{2}}{4}$'},
-      {type:'written', q:'Convert $7.\overline{19}$ to a fraction in simplest form.', answer:'$\dfrac{712}{99}$'},
-      {type:'written', q:'Evaluate $\sqrt[3]{-2197}$.', answer:'$-13$'},
-      {type:'written', q:'Prime factorize $479$ and $237$. Hence determine $\gcd(479,237)$ and $\mathrm{lcm}(479,237)$. Explain how prime exponents determine each.', answer:'$479=479$, $237=3\cdot 79$. $\gcd=1$, $\mathrm{lcm}=113523$'},
-      {type:'written', q:'Let $N=2\cdot 3\cdot 5^{2}\cdot 7$. Decide whether $N$ is a perfect square and/or a perfect cube. If not a cube, find the least positive integer $m$ so that $Nm$ is a perfect cube. Justify.', answer:'$m=2^{2}\cdot 3^{2}\cdot 5^{1}\cdot 7^{2}$'},
-      {type:'written', q:'Simplify and write with radicals (no negative exponents): $\dfrac{\sqrt{102x^{3}y^{2}}\;\cdot\; \sqrt{12xy}}{\sqrt{3x}}$ ($x,y\ge0$).', answer:'$2xy\sqrt{102xy}$'},
-      {type:'written', q:'\textbf{Series (Inclusion–Exclusion).} Find the sum of all integers between $151$ and $1118$ inclusive that are multiples of $2$ or $3$.', answer:'$S=409253$ with counts $n_2=484,\ n_3=322,\ n_6=161$'},
-      {type:'written', q:'\textbf{Approximation (Babylonian/Newton).} Use two iterations to approximate $\sqrt{94}$ correct to four decimal places.', answer:'$x_0=9.0$; $x_1=9.722222222$; $x_2=9.695396825$; $\sqrt{94}\approx 9.6954$'},
+      { title:'C. Written Response', note:'Show full reasoning; express final answers with positive exponents/radicals.', items:[
+        {type:'written', q:'Simplify completely: $\sqrt{39x^{4}y^{8}}$ (assume $x,y\ge0$).', answer:'$x^{2}y^{4}\sqrt{39}$'},
+        {type:'written', q:'Rationalize and simplify: $\dfrac{6}{\sqrt{32}}$.', answer:'$\dfrac{3\sqrt{2}}{4}$'},
+        {type:'written', q:'Convert $7\.\overline{19}$ to a fraction in simplest form.', answer:'$\dfrac{712}{99}$'},
+        {type:'written', q:'Evaluate $\sqrt[3]{-2197}$.', answer:'$-13$'},
+        {type:'written', q:'Prime factorize $479$ and $237$. Hence determine $\gcd(479,237)$ and $\mathrm{lcm}(479,237)$. Explain how prime exponents determine each.', answer:'$479=479$, $237=3\cdot 79$. $\gcd=1$, $\mathrm{lcm}=113523$'},
+        {type:'written', q:'Let $N=2\cdot 3\cdot 5^{2}\cdot 7$. Decide whether $N$ is a perfect square and/or a perfect cube. If not a cube, find the least positive integer $m$ so that $Nm$ is a perfect cube. Justify.', answer:'$m=2^{2}\cdot 3^{2}\cdot 5^{1}\cdot 7^{2}$'},
+        {type:'written', q:'Simplify and write with radicals (no negative exponents): $\dfrac{\sqrt{102x^{3}y^{2}}\;\cdot\; \sqrt{12xy}}{\sqrt{3x}}$ ($x,y\ge0$).', answer:'$2xy\sqrt{102xy}$'},
+        {type:'written', q:'\textbf{Series (Inclusion\u2013Exclusion).} Find the sum of all integers between $151$ and $1118$ inclusive that are multiples of $2$ or $3$.', answer:'$S=409253$ with counts $n_2=484,\ n_3=322,\ n_6=161$'},
+        {type:'written', q:'\textbf{Approximation (Babylonian/Newton).} Use two iterations to approximate $\sqrt{94}$ correct to four decimal places.', answer:'$x_0=9\.0$; $x_1=9\.722222222$; $x_2=9\.695396825$; $\sqrt{94}\approx 9\.6954$'}
+      ]},
 
-      {type:'section', title:'D. Number Systems Matching & Classification'},
-      {type:'matching', kicker:'Match each set symbol to its description. Use each letter once.', left:[
-        {id:'1', text:'$\mathbb{N}$'}, {id:'2', text:'$\mathbb{W}$'}, {id:'3', text:'$\mathbb{Z}$'}, {id:'4', text:'$\mathbb{Q}$'}, {id:'5', text:'$\mathbb{I}$'}, {id:'6', text:'$\mathbb{R}$'}
-      ], right:[
-        {id:'D', text:'$\{1,2,3,\dots\}$'},
-        {id:'B', text:'$\{0,1,2,3,\dots\}$'},
-        {id:'E', text:'$\{\dots,-2,-1,0,1,2,\dots\}$'},
-        {id:'F', text:'Numbers $a/b$ with $a,b\in\mathbb{Z},\ b\ne 0$ (terminating or repeating decimals included).'},
-        {id:'A', text:'All real numbers that \emph{cannot} be written as a fraction of integers (e.g., $\sqrt{2},\ \pi$).'},
-        {id:'C', text:'All rational and irrational numbers on the number line.'}
-      ], key:{'1':'D','2':'B','3':'E','4':'F','5':'A','6':'C'}},
+      { title:'D. Number Systems Matching & Classification', items:[
+        {type:'matching', kicker:'Match each set symbol to its description. Use each letter once.', left:[
+          {id:'1', text:'$\mathbb{N}$'}, {id:'2', text:'$\mathbb{W}$'}, {id:'3', text:'$\mathbb{Z}$'}, {id:'4', text:'$\mathbb{Q}$'}, {id:'5', text:'$\mathbb{I}$'}, {id:'6', text:'$\mathbb{R}$'}
+        ], right:[
+          {id:'A', text:'All real numbers that \emph{cannot} be written as a fraction of integers (e.g., $\sqrt{2},\ \pi$).'},
+          {id:'B', text:'$\{0,1,2,3,\dots\}$'},
+          {id:'C', text:'All rational and irrational numbers on the number line.'},
+          {id:'D', text:'$\{1,2,3,\dots\}$'},
+          {id:'E', text:'$\{\dots,-2,-1,0,1,2,\dots\}$'},
+          {id:'F', text:'Numbers $a/b$ with $a,b\in\mathbb{Z},\ b\ne 0$ (terminating or repeating decimals included).'}
+        ], key:{'1':'D','2':'B','3':'E','4':'F','5':'A','6':'C'}},
 
-      {type:'classification', kicker:'Classify each number by the smallest set it belongs to.', items:[
-        {stem:'$17$', options:['$\mathbb{N}$','$\mathbb{W}$','$\mathbb{Z}$','$\mathbb{Q}$','$\mathbb{R}$'], answer:'$\mathbb{N}$'},
-        {stem:'$23$', options:['$\mathbb{N}$','$\mathbb{W}$','$\mathbb{Z}$','$\mathbb{Q}$','$\mathbb{R}$'], answer:'$\mathbb{N}$'},
-        {stem:'$0.\overline{33}$', options:['$\mathbb{Q}$','$\mathbb{R}$','$\mathbb{Z}$','$\mathbb{N}$','$\mathbb{W}$'], answer:'$\mathbb{Q}$'},
-        {stem:'$39$', options:['$\mathbb{N}$','$\mathbb{W}$','$\mathbb{Z}$','$\mathbb{Q}$','$\mathbb{R}$'], answer:'$\mathbb{N}$'},
-        {stem:'$0.49$', options:['$\mathbb{Q}$','$\mathbb{R}$','$\mathbb{Z}$','$\mathbb{N}$','$\mathbb{W}$'], answer:'$\mathbb{Q}$'},
-        {stem:'$0.\overline{55}$', options:['$\mathbb{Q}$','$\mathbb{R}$','$\mathbb{Z}$','$\mathbb{N}$','$\mathbb{W}$'], answer:'$\mathbb{Q}$'}
+        {type:'classification', kicker:'Classify each number by the smallest set it belongs to.', items:[
+          {stem:'$17$', options:['$\mathbb{N}$','$\mathbb{W}$','$\mathbb{Z}$','$\mathbb{Q}$','$\mathbb{R}$'], answer:'$\mathbb{N}$'},
+          {stem:'$23$', options:['$\mathbb{N}$','$\mathbb{W}$','$\mathbb{Z}$','$\mathbb{Q}$','$\mathbb{R}$'], answer:'$\mathbb{N}$'},
+          {stem:'$0\.\overline{33}$', options:['$\mathbb{Q}$','$\mathbb{R}$','$\mathbb{Z}$','$\mathbb{N}$','$\mathbb{W}$'], answer:'$\mathbb{Q}$'},
+          {stem:'$39$', options:['$\mathbb{N}$','$\mathbb{W}$','$\mathbb{Z}$','$\mathbb{Q}$','$\mathbb{R}$'], answer:'$\mathbb{N}$'},
+          {stem:'$0\.49$', options:['$\mathbb{Q}$','$\mathbb{R}$','$\mathbb{Z}$','$\mathbb{N}$','$\mathbb{W}$'], answer:'$\mathbb{Q}$'},
+          {stem:'$0\.\overline{55}$', options:['$\mathbb{Q}$','$\mathbb{R}$','$\mathbb{Z}$','$\mathbb{N}$','$\mathbb{W}$'], answer:'$\mathbb{Q}$'}
+        ]}
       ]}
     ];
 
+    // ---------- Render ----------
     const quizEl = document.getElementById('quiz');
     const keyEl = document.getElementById('key');
     const keyContent = document.getElementById('keyContent');
 
     function renderQuiz(){
-      quizEl.innerHTML = '';
-      keyContent.innerHTML = '';
+      quizEl.innerHTML='';
+      keyContent.innerHTML='';
 
-      const state = clone(BANK);
-      let qNum = 1, nrNum = 1, wrNum = 1;
+      let mcNum=1, nrNum=1, wrNum=1;
 
-      state.forEach(block=>{
-        if(block.type==='section'){
-          const sec = document.createElement('div');
-          sec.className='section';
-          sec.innerHTML = `<div class="row"><h2>${block.title}</h2>${block.note?`<span class="badge">${block.note}</span>`:''}</div><div class="divider"></div>`;
-          quizEl.appendChild(sec);
-          return;
-        }
+      BANK.forEach(section=>{
+        const card = document.createElement('div');
+        card.className='card';
+        card.innerHTML = `<h2>${section.title}</h2>${section.note?`<div class="kicker">${section.note}</div>`:''}<div class="divider"></div>`;
 
-        if(block.type==='mc'){
-          const card = document.createElement('div');
-          card.className='card';
-          const id = `q${qNum}`;
-          const shuffled = shuffle(block.choices.map(c=>({text:c, correct:c===block.answer})));
-          const opts = shuffled.map((c,i)=>{
-            const letter = String.fromCharCode(65+i);
-            return `<label class="choice"><input type="radio" name="${id}" value="${c.text}"><span><strong>(${letter})</strong> <span class="math">${c.text}</span></span></label>`
-          }).join('');
-          card.innerHTML = `<div class="kicker">Question ${qNum}</div><div class="q math">${block.q}</div><div class="mc-choices" role="group" aria-labelledby="${id}">${opts}</div>`;
-          quizEl.appendChild(card);
-          keyContent.innerHTML += `<div><span class="pill">Q${qNum}</span> <span class="correct math">${block.answer}</span></div>`;
-          qNum++;
-          return;
-        }
-
-        if(block.type==='numeric'){
-          const card = document.createElement('div');
-          card.className='card';
-          card.innerHTML = `<div class="kicker">NR${nrNum}</div><div class="q math">${block.q}</div><div class="num-box"><label class="sr-only" for="nr${nrNum}">Answer</label><input id="nr${nrNum}" type="text" inputmode="decimal" placeholder="Type answer"/></div>`;
-          quizEl.appendChild(card);
-          keyContent.innerHTML += `<div><span class="pill">NR${nrNum}</span> <span class="correct math">${block.answer}</span></div>`;
-          nrNum++;
-          return;
-        }
-
-        if(block.type==='written'){
-          const card = document.createElement('div');
-          card.className='card';
-          card.innerHTML = `<div class="kicker">WR${wrNum}</div><div class="q math">${block.q}</div><div class="short"><label class="sr-only" for="wr${wrNum}">Response</label><input id="wr${wrNum}" type="text" placeholder="Work shown / final answer"/></div>`;
-          quizEl.appendChild(card);
-          keyContent.innerHTML += `<div><span class="pill">WR${wrNum}</span> <span class="correct math">${block.answer}</span></div>`;
-          wrNum++;
-          return;
-        }
-
-        if(block.type==='matching'){
-          const card = document.createElement('div');
-          card.className='card';
-          const rightShuffled = shuffle(block.right.map(x=>clone(x)));
-          const rightOpts = rightShuffled.map(x=>`<option value="${x.id}">(${x.id}) ${x.text}</option>`).join('');
-
-          const rows = block.left.map((L,idx)=>{
-            return `<div class="match">
-              <div class="left math">${idx+1}. <span class="tag">${L.text}</span></div>
-              <div><select data-left="${L.id}"><option value="">— choose —</option>${rightOpts}</select></div>
-            </div>`;
-          }).join('');
-
-          const answerPairs = Object.entries(block.key).map(([k,v])=>`${k}→${v}`).join(', ');
-          card.innerHTML = `<div class="kicker">Matching</div><div class="q">${block.kicker||''}</div>${rows}`;
-          quizEl.appendChild(card);
-          keyContent.innerHTML += `<div><span class="pill">Matching</span> <span class="correct">${answerPairs}</span></div>`;
-          return;
-        }
-
-        if(block.type==='classification'){
-          const card = document.createElement('div');
-          card.className='card';
-          const itemsHTML = block.items.map((it,idx)=>{
-            const opts = shuffle(it.options.slice()).map((op,i)=>{
-              const name = `cls-${idx}`;
+        section.items.forEach(item=>{
+          if(item.type==='mc'){
+            const id = `q${mcNum}`;
+            const shuffled = shuffle(item.choices.map(c=>({text:c, correct:c===item.answer})));
+            const opts = shuffled.map((c,i)=>{
               const letter = String.fromCharCode(65+i);
-              return `<label class="choice"><input type="radio" name="${name}" value="${op}"><span><strong>(${letter})</strong> <span class="math">${op}</span></span></label>`;
+              return `<label class=\"choice\"><input type=\"radio\" name=\"${id}\" value=\"${c.text}\"><span>(${letter}) <span class=\"math\">${c.text}</span></span></label>`;
             }).join('');
-            return `<div class="section" style="margin:10px 0 0"><div class="math"><strong>(${idx+1})</strong> ${it.stem}</div><div class="mc-choices">${opts}</div></div>`;
-          }).join('');
-          const keyList = block.items.map((it,i)=>`(${i+1}) ${it.answer}`).join('; ');
-          card.innerHTML = `<div class="kicker">Classification</div><div class="q">${block.kicker||''}</div>${itemsHTML}`;
-          quizEl.appendChild(card);
-          keyContent.innerHTML += `<div><span class="pill">Classification</span> <span class="correct math">${keyList}</span></div>`;
-          return;
-        }
+            card.innerHTML += `<div class=\"kicker\">Q${mcNum}</div><div class=\"q math\">${item.q}</div><div class=\"mc-choices\">${opts}</div>`;
+            keyContent.innerHTML += `<div>Q${mcNum}: <span class=\"correct math\">${item.answer}</span></div>`;
+            mcNum++;
+          }
+          else if(item.type==='numeric'){
+            card.innerHTML += `<div class=\"kicker\">NR${nrNum}</div><div class=\"q math\">${item.q}</div><div class=\"num-box\"><input type=\"text\" inputmode=\"decimal\" placeholder=\"Type answer\"></div>`;
+            keyContent.innerHTML += `<div>NR${nrNum}: <span class=\"correct math\">${item.answer}</span></div>`;
+            nrNum++;
+          }
+          else if(item.type==='written'){
+            card.innerHTML += `<div class=\"kicker\">WR${wrNum}</div><div class=\"q math\">${item.q}</div><div class=\"short\"><input type=\"text\" placeholder=\"Work shown / final answer\"></div>`;
+            keyContent.innerHTML += `<div>WR${wrNum}: <span class=\"correct math\">${item.answer}</span></div>`;
+            wrNum++;
+          }
+          else if(item.type==='matching'){
+            const right = shuffle(item.right.slice());
+            const rightOpts = right.map(r=>`<option value=\"${r.id}\">(${r.id}) ${r.text}</option>`).join('');
+            const rows = item.left.map((L,idx)=>{
+              return `<div class=\"mc-choices\" style=\"grid-template-columns: 1fr 1fr;\"><div class=\"math\"><strong>${idx+1}.</strong> ${L.text}</div><div><select><option value=\"\">— choose —</option>${rightOpts}</select></div></div>`;
+            }).join('');
+            card.innerHTML += `<div class=\"kicker\">Matching</div><div>${item.kicker||''}</div>${rows}`;
+            const pairs = Object.entries(item.key).map(([k,v])=>`${k}→${v}`).join(', ');
+            keyContent.innerHTML += `<div>Matching: <span class=\"correct\">${pairs}</span></div>`;
+          }
+          else if(item.type==='classification'){
+            const itemsHTML = item.items.map((it,idx)=>{
+              const opts = shuffle(it.options.slice()).map((op,i)=>{
+                const name = `cls-${idx}`;
+                const letter = String.fromCharCode(65+i);
+                return `<label class=\"choice\"><input type=\"radio\" name=\"${name}\" value=\"${op}\"><span>(${letter}) <span class=\"math\">${op}</span></span></label>`;
+              }).join('');
+              return `<div style=\"margin-top:8px\"><div class=\"math\"><strong>(${idx+1})</strong> ${it.stem}</div><div class=\"mc-choices\">${opts}</div></div>`;
+            }).join('');
+            const keyList = item.items.map((it,i)=>`(${i+1}) ${it.answer}`).join('; ');
+            card.innerHTML += `<div class=\"kicker\">Classification</div><div>${item.kicker||''}</div>${itemsHTML}`;
+            keyContent.innerHTML += `<div>Classification: <span class=\"correct math\">${keyList}</span></div>`;
+          }
+        });
+
+        quizEl.appendChild(card);
       });
 
-      keyContent.innerHTML += '<div class="divider"></div><div class="muted">Answer key is for instructors; hide before sharing.</div>'
-
-      if(window.renderMathInElement){
-        renderMathInElement(document.body, {
-          delimiters: [
-            {left: '$$', right: '$$', display: true},
-            {left: '\(', right: '\)', display: false},
-            {left: '$', right: '$', display: false}
-          ],
-          throwOnError: false
-        });
-      }
+      typeset(quizEl);
+      typeset(keyContent);
     }
 
-    // -------- Controls --------
+    // ---------- Controls ----------
     document.getElementById('generate').addEventListener('click', renderQuiz);
-    document.getElementById('toggleKey').addEventListener('click', ()=>{
-      keyEl.classList.toggle('show');
-      if(window.renderMathInElement){
-        renderMathInElement(keyEl, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\(',right:'\)',display:false}], throwOnError:false});
-      }
+    document.getElementById('toggleKey').addEventListener('click', (e)=>{
+      const pressed = e.currentTarget.getAttribute('aria-pressed') === 'true';
+      e.currentTarget.setAttribute('aria-pressed', String(!pressed));
+      e.currentTarget.textContent = pressed ? '🧠 Show Answer Key' : '🙈 Hide Answer Key';
+      keyEl.toggleAttribute('hidden');
+      if(!keyEl.hasAttribute('hidden')) typeset(keyContent);
     });
     document.getElementById('printBtn').addEventListener('click', ()=>window.print());
 
