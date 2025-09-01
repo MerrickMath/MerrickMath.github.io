@@ -5,22 +5,83 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Unit 1 Quick Check </title>
   <style>
-    :root{ --bg:#faf9f6; --panel:#ffffff; --ink:#1b1b1b; --muted:#5b5e6a; --border:#e6e3dc; --brand:#2563eb; --good:#16a34a; }
-    body{ margin:0; background:var(--bg); color:var(--ink); font:17px/1.55 "KaTeX_Main","Latin Modern Roman","Computer Modern","STIX Two Text","Times New Roman",serif; }
-    .container{ max-width:1100px; margin:0 auto; padding:28px }
-    header{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-bottom:16px }
-    header h1{ margin:0; font-size:clamp(22px,3vw,30px); font-weight:700 }
-    header .sub{ color:var(--muted); font-size:14px }
-    .toolbar{ display:flex; gap:10px; flex-wrap:wrap }
-    button{ border:1px solid var(--border); background:#fff; padding:10px 14px; border-radius:12px; cursor:pointer }
-    button.brand{ background:#ebf2ff; border-color:#c8d6ff; color:#0f2b7f; font-weight:700 }
-    .card{ background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:18px; box-shadow:0 2px 8px rgba(0,0,0,.05); margin-bottom:16px }
-    .mc-choices{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:8px; margin-top:8px }
-    .choice{ display:flex; gap:8px; align-items:flex-start; border:1px solid var(--border); border-radius:10px; padding:8px; background:#fff }
-    .divider{ height:1px; background:var(--border); margin:12px 0 }
-    .ans{ color:var(--good); font-weight:600; margin-top:8px }
-    .ans[hidden]{ display:none !important }
+    :root{
+      --bg:#fbfaf8; --panel:#ffffff; --ink:#161616;
+      --muted:#5f616d; --border:#ece7df;
+      --brand:#2563eb; --good:#15803d;
+    }
+  
+    /* Base */
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font:15px/1.45 "KaTeX_Main","Latin Modern Roman","Computer Modern",
+                       "STIX Two Text","Times New Roman",serif;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+  
+    /* Frame */
+    .container{max-width:880px; margin:0 auto; padding:16px}
+    header{
+      display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between;
+      gap:8px; margin-bottom:12px
+    }
+    header h1{margin:0; font-size:clamp(18px,2.4vw,22px); letter-spacing:.2px}
+    header .sub{color:var(--muted); font-size:12px}
+    .toolbar{display:flex; gap:8px; flex-wrap:wrap}
+    button{
+      border:1px solid var(--border); background:#fff;
+      padding:7px 10px; border-radius:10px; cursor:pointer; font-size:13px
+    }
+    button.brand{background:#eef3ff; border-color:#d8e2ff; color:#0c2a7a; font-weight:600}
+  
+    /* Cards / sections */
+    .card{
+      background:var(--panel); border:1px solid var(--border);
+      border-radius:12px; padding:14px 16px;
+      box-shadow:0 1px 6px rgba(0,0,0,.04); margin-bottom:12px
+    }
+    .card h2{margin:0 0 6px 0; font-size:16px}
+    .kicker{
+      color:var(--muted); font-size:11px; text-transform:uppercase;
+      letter-spacing:.35px; margin-bottom:6px
+    }
+    .divider{
+      height:1px; margin:8px 0;
+      background:linear-gradient(90deg, transparent, var(--border), transparent)
+    }
+  
+    /* Question rows */
+    .card > div{margin:6px 0}       /* gentle vertical rhythm */
+    .mc-choices{
+      display:grid; gap:6px; margin-top:6px;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    }
+    /* Fixed columns at larger widths (LaTeX-style multicols) */
+    @media (min-width:700px){ .mc-choices{grid-template-columns:repeat(2,1fr)} }
+    @media (min-width:1000px){ .mc-choices{grid-template-columns:repeat(4,1fr)} }
+  
+    .choice{
+      display:flex; gap:6px; align-items:flex-start;
+      border:1px dashed var(--border); border-radius:8px;
+      padding:6px 8px; background:#fff; font-size:14px
+    }
+  
+    /* Answers */
+    .ans{color:var(--good); font-weight:600; margin-top:6px; font-size:14px}
+    .ans[hidden]{display:none!important}
+  
+    /* Print */
+    @media print{
+      .toolbar{display:none}
+      body{background:#fff}
+      .card{box-shadow:none}
+    }
   </style>
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
 </head>
 <body>
@@ -79,36 +140,92 @@
         {type:'written', q:'Let $N=2\\cdot 3\\cdot 5^{2}\\cdot 7$. Decide whether $N$ is a perfect square and/or a perfect cube. If not a cube, find the least positive integer $m$ so that $Nm$ is a perfect cube.', answer:'$m=2^{2}\\cdot 3^{2}\\cdot 5^{1}\\cdot 7^{2}$'},
         {type:'written', q:'Simplify and write with radicals (no negative exponents): $\\dfrac{\\sqrt{102x^{3}y^{2}}\\;\\cdot\\; \\sqrt{12xy}}{\\sqrt{3x}}$ ($x,y\\ge0$).', answer:'$2xy\\sqrt{102xy}$'},
         {type:'written', q:'Find the sum of all integers between $151$ and $1118$ inclusive that are multiples of $2$ or $3$.', answer:'$S=409253$'},
-        {type:'written', q:'Use two iterations to approximate $\\sqrt{94}$ correct to four decimal places.', answer:'$9.6954$'}
+        {type:'written', q:'Use two iterations to approximate $\\sqrt{94}$ correct to four decimal places.', answer:'$9.6954$'},
+        {type:'gen', gen: randomDivisorQuestion},
+        {type:'gen', gen: randomMultiplesQuestion}
       ]}
     ];
 
     const quizEl = document.getElementById('quiz');
 
     function renderQuiz(){
-      quizEl.innerHTML='';
-      let qCounter=1;
-      BANK.forEach(section=>{
-        const card=document.createElement('div');
-        card.className='card';
-        card.innerHTML=`<h2>${section.title}</h2>${section.note?`<div class=\"kicker\">${section.note}</div>`:''}<div class=\"divider\"></div>`;
-
-        section.items.forEach(item=>{
-          if(item.type==='mc'){
-            const shuffled=shuffle(item.choices.slice());
-            const opts=shuffled.map((c,i)=>{ const letter=String.fromCharCode(65+i); return `<div class=\"choice\"><span>(${letter})</span> <span class=\"math\">${c}</span></div>`; }).join('');
-            card.innerHTML+=`<div><strong>${qCounter}. </strong><span class=\"math\">${item.q}</span></div><div class=\"mc-choices\">${opts}</div><div class=\"ans math\" hidden>Answer: ${item.answer}</div>`;
+      quizEl.innerHTML = '';
+      let qCounter = 1;
+    
+      BANK.forEach(section => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML =
+          `<h2>${section.title}</h2>` +
+          (section.note ? `<div class="kicker">${section.note}</div>` : '') +
+          `<div class="divider"></div>`;
+    
+        section.items.forEach(item => {
+          if (item.type === 'mc') {
+            const shuffled = shuffle(item.choices.slice());
+            const opts = shuffled.map((c, i) => {
+              const letter = String.fromCharCode(65 + i);
+              return `<div class="choice"><span>(${letter})</span> <span class="math">${c}</span></div>`;
+            }).join('');
+    
+            card.innerHTML +=
+              `<div><strong>${qCounter}. </strong><span class="math">${item.q}</span></div>` +
+              `<div class="mc-choices">${opts}</div>` +
+              `<div class="ans math" hidden>Answer: ${item.answer}</div>`;
             qCounter++;
-          } else if(item.type==='numeric' || item.type==='written'){
-            card.innerHTML+=`<div><strong>${qCounter}. </strong><span class=\"math\">${item.q}</span></div><div class=\"ans math\" hidden>Answer: ${item.answer}</div>`;
+          }
+          else if (item.type === 'numeric' || item.type === 'written') {
+            card.innerHTML +=
+              `<div><strong>${qCounter}. </strong><span class="math">${item.q}</span></div>` +
+              `<div class="ans math" hidden>Answer: ${item.answer}</div>`;
+            qCounter++;
+          }
+          else if (item.type === 'gen') {
+            // Generated question: call the generator to get fresh Q/A each render
+            const { q, answer } = item.gen();
+            card.innerHTML +=
+              `<div><strong>${qCounter}. </strong><span class="math">${q}</span></div>` +
+              `<div class="ans math" hidden>Answer: ${answer}</div>`;
             qCounter++;
           }
         });
-
+    
         quizEl.appendChild(card);
       });
+    
+      // Re-typeset math (including generated content)
       typeset(quizEl);
     }
+
+
+    function randomDivisorQuestion(){
+      const n = Math.floor(Math.random()*900+100); // random 100–999
+      // compute divisor count
+      let count=1, num=n, d=2;
+      while(num>1){
+        let exp=0;
+        while(num%d===0){ num/=d; exp++; }
+        if(exp>0) count*=(exp+1);
+        d++;
+        if(d*d>num){ if(num>1){count*=2; break;} }
+      }
+      return {
+        q: `Find the number of positive divisors of $${n}$.`,
+        answer: `${count}`
+      };
+    }
+
+    function randomMultiplesQuestion(){
+      const N = Math.floor(Math.random()*1000+500); // between 500 and 1500
+      const count = Array.from({length:N},(_,i)=>i+1)
+        .filter(k=>(k%3===0||k%4===0)&&k%5!==0).length;
+      return {
+        q: `How many positive integers $<${N}$ are multiples of $3$ or $4$ but not $5$?`,
+        answer: `${count}`
+      };
+    }
+
+
 
     document.getElementById('generate').addEventListener('click', renderQuiz);
     document.getElementById('toggleKey').addEventListener('click', (e)=>{
