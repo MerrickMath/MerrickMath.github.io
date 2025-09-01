@@ -171,7 +171,7 @@
           { type:'gen', gen: randomDivisorQuestion },
           { type:'gen', gen: randomMultiplesQuestion },
           { type:'gen', gen: randomSetQuestion },
-          { type:'gen', gen: randomDivisors360Question }
+          { type:'gen', gen: randomDivisorsTrailingZeroQuestion }
         ]},
 
       {
@@ -1067,6 +1067,36 @@
       };
     }
 
+    function randomDivisorsTrailingZeroQuestion(){
+      // pick random number with at least one trailing zero (multiple of 10)
+      const base = ri(10,100);  // 10–100
+      const n = base * 10;      // ensures trailing zero
+    
+      // compute all divisors
+      const divisors = [];
+      for (let d=1; d<=n; d++){
+        if(n % d === 0) divisors.push(d);
+      }
+      const total = divisors.length;
+    
+      const even = divisors.filter(x => x % 2 === 0).length;
+      const mult4 = divisors.filter(x => x % 4 === 0).length;
+      const mult9 = divisors.filter(x => x % 9 === 0).length;
+    
+      const ans1 = `${even}/${total}`;
+      const ans2 = `(${mult4}/${total})^2`;
+      const ans3 = `(${mult9}/${total})*(${mult9-1}/${total-1})`;
+      const ans4 = `1-(${total-even}/${total})^2`;
+    
+      return {
+        q:`List all positive divisors of $${n}$. Then compute:<br>
+    (i) $P(\\text{even})$<br>
+    (ii) With replacement, both multiples of $4$<br>
+    (iii) Without replacement, both multiples of $9$<br>
+    (iv) With replacement, at least one multiple of $2$`,
+        answer:`(i) ${ans1}, (ii) ${ans2}, (iii) ${ans3}, (iv) ${ans4}`
+      };
+    }
 
 
     
