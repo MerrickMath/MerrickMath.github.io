@@ -55,12 +55,11 @@
     }
   
     /* Question rows */
-    .card > div{margin:6px 0}       /* gentle vertical rhythm */
+    .card > div{margin:6px 0}
     .mc-choices{
       display:grid; gap:6px; margin-top:6px;
       grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
     }
-    /* Fixed columns at larger widths (LaTeX-style multicols) */
     @media (min-width:700px){ .mc-choices{grid-template-columns:repeat(2,1fr)} }
     @media (min-width:1000px){ .mc-choices{grid-template-columns:repeat(4,1fr)} }
   
@@ -74,32 +73,33 @@
     .ans{color:var(--good); font-weight:600; margin-top:6px; font-size:14px}
     .ans[hidden]{display:none!important}
   
+    /* Answer key: hidden on screen, shown only when printing */
+    #answerKey{display:none}
+  
     /* Print */
     @media print {
       .toolbar { display: none }
-      body { background: #fff }
-      .card { box-shadow: none }
-    
-      /* Hide answers in the main quiz when printing */
-      .ans { display: none !important }
-    
-      /* After the quiz, generate an answer key on its own page */
+      body { background:#fff }
+      .card { box-shadow:none }
+  
+      /* hide inline answers in quiz */
+      .ans { display:none !important }
+  
+      /* show compiled answer key on new page */
       #answerKey {
-        display: block;
-        page-break-before: always;
-        font-size: 14px;
+        display:block;
+        page-break-before:always;
+        font-size:14px;
+        padding:0 8px;
       }
       #answerKey h2 {
-        margin-top: 0;
-        font-size: 16px;
+        margin:0 0 8px 0;
+        font-size:16px;
       }
-      #answerKey .ansItem {
-        margin: 4px 0;
-      }
+      #answerKey .ansItem{margin:4px 0}
     }
-    /* Keep the printed key neat; hide it on screen */
-    #answerKey { display: none; }
   </style>
+
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
 </head>
@@ -753,94 +753,47 @@
       if (keyEl) keyEl.innerHTML = '';
     
       let qCounter = 1;
-      const ansItems = []; // collects answer lines for the printed key
+      const ansItems = []; // lines for the printed Answer Key
     
-      BANK.forEach(section => {
+      BANK.forEach(sec=>{
         const card = document.createElement('div');
         card.className = 'card';
-        card.innerHTML =
-          `<h2>${section.title}</h2>` +
-          (section.note ? `<div class="kicker">${section.note}</div>` : '') +
-          `<div class="divider"></div>`;
+        card.innerHTML = `<h2>${sec.section}</h2><div class="divider"></div>`;
     
-        section.items.forEach(item => {
-          // --- Legacy fixed MC (if any remain) ---
-          if (item.type === 'mc') {
+        sec.items.forEach(item=>{
+          if(item.type==='mc'){
             const shuffled = shuffle(item.choices.slice());
-            const opts = shuffled.map((c, i) => {
-              const letter = String.fromCharCode(65 + i);
-              return `<div class="choice"><span>(${letter})</span> <span class="math">${c}</span></div>`;
+            const opts = shuffled.map((c,i)=>{
+              const letter = String.fromCharCode(65+i);
+              return `<div class="choice">(${letter}) <span class="math">${c}</span></div>`;
             }).join('');
     
             card.innerHTML +=
-              `<div><strong>${qCounter}. </strong><span class="math">${item.q}</span></div>` +
-              `<div class="mc-choices">${opts}</div>` +
+              `<div><strong>${qCounter}. </strong><span class="math">${item.q}</span></div>`+
+              `<div class="mc-choices">${opts}</div>`+
               `<div class="ans math" hidden>Answer: ${item.answer}</div>`;
     
-            // Key entry (shows the provided answer text)
-            ansItems.push(`<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${item.answer}</span></div>`);
-            qCounter++;
-          }
-    
-          // --- Generator-based MC ---
-          else if (item.type === 'mcgen') {
-            let q, choices, answerIndex;
-            try {
-              ({ q, choices, answerIndex } = item.gen());
-            } catch {
-              q = 'Problem unavailable.'; choices = ['$A$','$B$','$C$','$D$']; answerIndex = 0;
-            }
-    
-            const opts = choices.map((c, i) => {
-              const letter = String.fromCharCode(65 + i);
-              return `<div class="choice"><span>(${letter})</span> <span class="math">${c}</span></div>`;
-            }).join('');
-    
-            const correct = choices[answerIndex];
-    
+            // For the printed key, show the actual correct text (not letter)
+            ansItems.push(
+              `<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${item.answer}</span></div>`
+            );
+          } else {
+            // numeric / written
             card.innerHTML +=
-              `<div><strong>${qCounter}. </strong><span class="math">${q}</span></div>` +
-              `<div class="mc-choices">${opts}</div>` +
-              `<div class="ans math" hidden>Answer: ${correct}</div>`;
-    
-            // Key entry
-            ansItems.push(`<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${correct}</span></div>`);
-            qCounter++;
-          }
-    
-          // --- Fixed numeric/written items ---
-          else if (item.type === 'numeric' || item.type === 'written') {
-            card.innerHTML +=
-              `<div><strong>${qCounter}. </strong><span class="math">${item.q}</span></div>` +
+              `<div><strong>${qCounter}. </strong><span class="math">${item.q}</span></div>`+
               `<div class="ans math" hidden>Answer: ${item.answer}</div>`;
     
-            ansItems.push(`<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${item.answer}</span></div>`);
-            qCounter++;
+            ansItems.push(
+              `<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${item.answer}</span></div>`
+            );
           }
-    
-          // --- Generator-based written/numeric items ---
-          else if (item.type === 'gen') {
-            let generated;
-            try {
-              generated = item.gen();
-            } catch {
-              generated = { q: 'Problem unavailable.', answer: '' };
-            }
-            const { q, answer } = generated;
-    
-            card.innerHTML +=
-              `<div><strong>${qCounter}. </strong><span class="math">${q}</span></div>` +
-              `<div class="ans math" hidden>Answer: ${answer}</div>`;
-    
-            ansItems.push(`<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${answer}</span></div>`);
-            qCounter++;
-          }
+          qCounter++;
         });
     
         quizEl.appendChild(card);
       });
     
-      // Build the printed Answer Key
+      // Build the printed Answer Key content
       if (keyEl) {
         keyEl.innerHTML = `<h2>Answer Key</h2>${ansItems.join('')}`;
       }
@@ -849,6 +802,7 @@
       typeset(quizEl);
       if (keyEl) typeset(keyEl);
     }
+
 
 
 
