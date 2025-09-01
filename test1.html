@@ -75,11 +75,30 @@
     .ans[hidden]{display:none!important}
   
     /* Print */
-    @media print{
-      .toolbar{display:none}
-      body{background:#fff}
-      .card{box-shadow:none}
+    @media print {
+      .toolbar { display: none }
+      body { background: #fff }
+      .card { box-shadow: none }
+    
+      /* Hide answers in the main quiz when printing */
+      .ans { display: none !important }
+    
+      /* After the quiz, generate an answer key on its own page */
+      #answerKey {
+        display: block;
+        page-break-before: always;
+        font-size: 14px;
+      }
+      #answerKey h2 {
+        margin-top: 0;
+        font-size: 16px;
+      }
+      #answerKey .ansItem {
+        margin: 4px 0;
+      }
     }
+    /* Keep the printed key neat; hide it on screen */
+    #answerKey { display: none; }
   </style>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
@@ -99,6 +118,7 @@
     </header>
 
     <div id="quiz"></div>
+    <div id="answerKey"></div>
   </div>
 
   <script>
@@ -727,8 +747,13 @@
 
 
     function renderQuiz(){
+      // reset quiz and answer key
       quizEl.innerHTML = '';
+      const keyEl = document.getElementById('answerKey');
+      if (keyEl) keyEl.innerHTML = '';
+    
       let qCounter = 1;
+      const ansItems = []; // collects answer lines for the printed key
     
       BANK.forEach(section => {
         const card = document.createElement('div');
@@ -739,7 +764,7 @@
           `<div class="divider"></div>`;
     
         section.items.forEach(item => {
-          // --- Fixed multiple choice (legacy) ---
+          // --- Legacy fixed MC (if any remain) ---
           if (item.type === 'mc') {
             const shuffled = shuffle(item.choices.slice());
             const opts = shuffled.map((c, i) => {
@@ -751,20 +776,19 @@
               `<div><strong>${qCounter}. </strong><span class="math">${item.q}</span></div>` +
               `<div class="mc-choices">${opts}</div>` +
               `<div class="ans math" hidden>Answer: ${item.answer}</div>`;
+    
+            // Key entry (shows the provided answer text)
+            ansItems.push(`<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${item.answer}</span></div>`);
             qCounter++;
           }
     
-          // --- New generator-based multiple choice ---
+          // --- Generator-based MC ---
           else if (item.type === 'mcgen') {
             let q, choices, answerIndex;
             try {
               ({ q, choices, answerIndex } = item.gen());
-            } catch (e) {
-              // fallback if generator throws
-              q = 'Problem unavailable.';
-              choices = ['$A$','$B$','$C$','$D$'];
-              answerIndex = 0;
-              // optional: console.warn(e);
+            } catch {
+              q = 'Problem unavailable.'; choices = ['$A$','$B$','$C$','$D$']; answerIndex = 0;
             }
     
             const opts = choices.map((c, i) => {
@@ -778,31 +802,37 @@
               `<div><strong>${qCounter}. </strong><span class="math">${q}</span></div>` +
               `<div class="mc-choices">${opts}</div>` +
               `<div class="ans math" hidden>Answer: ${correct}</div>`;
+    
+            // Key entry
+            ansItems.push(`<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${correct}</span></div>`);
             qCounter++;
           }
     
-          // --- Fixed text/numeric items ---
+          // --- Fixed numeric/written items ---
           else if (item.type === 'numeric' || item.type === 'written') {
             card.innerHTML +=
               `<div><strong>${qCounter}. </strong><span class="math">${item.q}</span></div>` +
               `<div class="ans math" hidden>Answer: ${item.answer}</div>`;
+    
+            ansItems.push(`<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${item.answer}</span></div>`);
             qCounter++;
           }
     
-          // --- Generator-based written items ---
+          // --- Generator-based written/numeric items ---
           else if (item.type === 'gen') {
             let generated;
             try {
               generated = item.gen();
-            } catch (e) {
+            } catch {
               generated = { q: 'Problem unavailable.', answer: '' };
-              // optional: console.warn(e);
             }
             const { q, answer } = generated;
     
             card.innerHTML +=
               `<div><strong>${qCounter}. </strong><span class="math">${q}</span></div>` +
               `<div class="ans math" hidden>Answer: ${answer}</div>`;
+    
+            ansItems.push(`<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${answer}</span></div>`);
             qCounter++;
           }
         });
@@ -810,9 +840,16 @@
         quizEl.appendChild(card);
       });
     
-      // Re-typeset math (including generated content)
+      // Build the printed Answer Key
+      if (keyEl) {
+        keyEl.innerHTML = `<h2>Answer Key</h2>${ansItems.join('')}`;
+      }
+    
+      // Typeset math in both quiz and key
       typeset(quizEl);
+      if (keyEl) typeset(keyEl);
     }
+
 
 
 
