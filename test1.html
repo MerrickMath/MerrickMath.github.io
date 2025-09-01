@@ -758,10 +758,13 @@
       BANK.forEach(sec=>{
         const card = document.createElement('div');
         card.className = 'card';
-        card.innerHTML = `<h2>${sec.section}</h2><div class="divider"></div>`;
+        // NOTE: BANK uses "title", not "section"
+        card.innerHTML = `<h2>${sec.title || sec.section || ''}</h2>` +
+                         `<div class="divider"></div>`;
     
         sec.items.forEach(item=>{
-          if(item.type==='mc'){
+          // --- Legacy fixed MC (if any remain) ---
+          if (item.type === 'mc') {
             const shuffled = shuffle(item.choices.slice());
             const opts = shuffled.map((c,i)=>{
               const letter = String.fromCharCode(65+i);
@@ -773,21 +776,57 @@
               `<div class="mc-choices">${opts}</div>`+
               `<div class="ans math" hidden>Answer: ${item.answer}</div>`;
     
-            // For the printed key, show the actual correct text (not letter)
-            ansItems.push(
-              `<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${item.answer}</span></div>`
-            );
-          } else {
-            // numeric / written
-            card.innerHTML +=
-              `<div><strong>${qCounter}. </strong><span class="math">${item.q}</span></div>`+
-              `<div class="ans math" hidden>Answer: ${item.answer}</div>`;
-    
-            ansItems.push(
-              `<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${item.answer}</span></div>`
-            );
+            ansItems.push(`<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${item.answer}</span></div>`);
+            qCounter++;
           }
-          qCounter++;
+    
+          // --- Generator-based Multiple Choice ---
+          else if (item.type === 'mcgen') {
+            let q, choices, answerIndex;
+            try {
+              ({ q, choices, answerIndex } = item.gen());
+            } catch {
+              q = 'Problem unavailable.'; choices = ['$A$','$B$','$C$','$D$']; answerIndex = 0;
+            }
+    
+            const opts = choices.map((c,i)=>{
+              const letter = String.fromCharCode(65+i);
+              return `<div class="choice">(${letter}) <span class="math">${c}</span></div>`;
+            }).join('');
+    
+            const correct = choices[answerIndex];
+    
+            card.innerHTML +=
+              `<div><strong>${qCounter}. </strong><span class="math">${q}</span></div>`+
+              `<div class="mc-choices">${opts}</div>`+
+              `<div class="ans math" hidden>Answer: ${correct}</div>`;
+    
+            ansItems.push(`<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${correct}</span></div>`);
+            qCounter++;
+          }
+    
+          // --- Generator-based numeric/written (returns {q, answer}) ---
+          else if (item.type === 'gen') {
+            let generated = { q:'Problem unavailable.', answer:'' };
+            try { generated = item.gen(); } catch {}
+            const { q, answer } = generated;
+    
+            card.innerHTML +=
+              `<div><strong>${qCounter}. </strong><span class="math">${q}</span></div>`+
+              `<div class="ans math" hidden>Answer: ${answer}</div>`;
+    
+            ansItems.push(`<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${answer}</span></div>`);
+            qCounter++;
+          }
+    
+          // --- Fallback for fixed text items (numeric/written) if any remain ---
+          else {
+            card.innerHTML +=
+              `<div><strong>${qCounter}. </strong><span class="math">${item.q || ''}</span></div>`+
+              `<div class="ans math" hidden>Answer: ${item.answer || ''}</div>`;
+            ansItems.push(`<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${item.answer || ''}</span></div>`);
+            qCounter++;
+          }
         });
     
         quizEl.appendChild(card);
@@ -802,6 +841,7 @@
       typeset(quizEl);
       if (keyEl) typeset(keyEl);
     }
+
 
 
 
