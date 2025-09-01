@@ -152,7 +152,19 @@
           { type:'gen', gen: randomMultiplesQuestion },
           { type:'gen', gen: randomSetQuestion },
           { type:'gen', gen: randomDivisors360Question }
+        ]},
+
+      {
+        title:'D. True / False',
+        note:'Decide if each statement is true or false (use formal set notation).',
+        items:[
+          { type:'gen', gen: genTF_SetInclusion },
+          { type:'gen', gen: genTF_SetInclusion },
+          { type:'gen', gen: genTF_SetInclusion },
+          { type:'gen', gen: genTF_SetInclusion },
+          { type:'gen', gen: genTF_SetInclusion }
         ]}
+
     ];
 
     const quizEl = document.getElementById('quiz');
@@ -305,42 +317,61 @@
 
 
     function genWR_SimplifyRadicalFraction(){
-      // choose exponents; ensure numerator exponents exceed denominator to avoid negatives
-      const A=ri(6,30), B=ri(6,30), C=ri(2,12);
-      const p=ri(2,5), q=ri(2,5), r=ri(1,4), s=ri(1,4), t=ri(1,3);
+      // random but safe exponents (no negatives after division)
+      const A = ri(20, 40), B = ri(20, 40), C = ri(2, 12);
+      let p = ri(1, 3), q = ri(2, 4), r = ri(1, 3), s = ri(1, 3), t = ri(1, 2);
     
-      // combine under one root: factors and exponents
-      const K = (A*B)/C;
-      const xExp = p + r - t;
-      const yExp = q + s;
+      // ensure x exponent stays ≥ 0 after p+r−t
+      if (p + r - t < 0) { r += (t - (p + r)); }
     
-      // extract squares from coefficient
-      const { s:coefOut, m:coefIn } = extractSquare(Math.round(K));
+      // combine numeric coefficients as a reduced fraction
+      let num = A * B, den = C;
+      const g1 = gcd(num, den); num /= g1; den /= g1;
     
-      // split exponents: outside powers + inside leftovers
-      const xOut = Math.floor(xExp/2), yOut = Math.floor(yExp/2);
-      const xIn  = xExp%2, yIn = yExp%2;
+      // pull out perfect squares from numerator/denominator separately
+      const { s: sNum, m: mNum } = extractSquare(num);
+      const { s: sDen, m: mDen } = extractSquare(den);
     
-      const outside = [
-        coefOut>1? String(coefOut):'',
-        xOut? `x^{${xOut}}`:'',
-        yOut? `y^{${yOut}}`:''
+      // variable exponents
+      const xExp = p + r - t, yExp = q + s;
+      const xOut = Math.floor(xExp / 2), yOut = Math.floor(yExp / 2);
+      const xIn  = xExp % 2,           yIn  = yExp % 2;
+    
+      // outside factor (numeric fraction * outside vars)
+      const outsideNum = (sDen > 1)
+        ? `\\dfrac{${sNum}}{${sDen}}`
+        : (sNum > 1 ? String(sNum) : '');
+      const outsideVars = [
+        xOut ? `x^{${xOut}}` : '',
+        yOut ? `y^{${yOut}}` : ''
       ].filter(Boolean).join('');
+      const outside = [outsideNum, outsideVars].filter(Boolean).join('');
     
-      const insideParts = [];
-      if (coefIn>1) insideParts.push(String(coefIn));
-      if (xIn) insideParts.push('x');
-      if (yIn) insideParts.push('y');
-      const inside = insideParts.length? `\\sqrt{${insideParts.join('\\,')}}` : '';
+      // inside radicand (reduced numeric * leftover vars)
+      const insideNum = (mDen > 1)
+        ? `\\dfrac{${mNum}}{${mDen}}`
+        : (mNum > 1 ? String(mNum) : '');
+      const insideParts = [
+        insideNum,
+        xIn ? 'x' : '',
+        yIn ? 'y' : ''
+      ].filter(Boolean).join('\\,');
     
-      const ans = outside && inside ? `${outside}${inside}` : (inside || outside || '1');
+      const sqrtPart = insideParts ? `\\sqrt{${insideParts}}` : '';
+      let ansCore = `${outside}${sqrtPart}`;
+      if (!ansCore) ansCore = '1';
+    
+      // QUESTION: inline math only ($...$) — no \[...\]
+      const qTex =
+        `Simplify and write with radicals (no negative exponents): ` +
+        `$\\dfrac{\\sqrt{${A}x^{${p}}y^{${q}}}\\,\\cdot\\,\\sqrt{${B}x^{${r}}y^{${s}}}}{\\sqrt{${C}x^{${t}}}}\\; (x,y\\ge 0).$`;
     
       return {
-        q: `Simplify and write with radicals (no negative exponents):\\
-     \\[ \\frac{\\sqrt{${A}x^{${p}}y^{${q}}}\\;\\cdot\\; \\sqrt{${B}x^{${r}}y^{${s}}}}{\\sqrt{${C}x^{${t}}}} \\quad (x,y\\ge0). \\]`,
-        answer: `$${ans}$`
+        q: qTex,
+        answer: `$${ansCore}$`
       };
     }
+
 
     function genWR_SumMultiples2or3(){
       let L = ri(100,300), U = ri(700,1200);
@@ -927,6 +958,79 @@
     
       return { q: qText, answer: ansText };
     }
+
+    function genTF_SetInclusion(){
+      // Uses helpers ri() and sample() you already have.
+      const N='\\mathbb{N}', W='\\mathbb{W}', Z='\\mathbb{Z}', Q='\\mathbb{Q}', R='\\mathbb{R}';
+    
+      const roll = ri(1,10);
+      let expr, ans;
+    
+      switch (roll){
+        case 1: { // natural number
+          const n = ri(1,20);
+          expr = `${n}\\in${N}`;
+          ans  = 'True';
+          break;
+        }
+        case 2: { // negative not whole
+          const n = -ri(1,20);
+          expr = `${n}\\in${W}`;
+          ans  = 'False';
+          break;
+        }
+        case 3: { // rational fraction
+          const a = ri(1,9), b = ri(2,12);
+          expr = `\\frac{${a}}{${b}}\\in${Q}`;
+          ans  = 'True';
+          break;
+        }
+        case 4: { // repeating decimal is rational
+          const d = ri(1,9);
+          expr = `0.\\overline{${d}}\\in${Q}`;
+          ans  = 'True';
+          break;
+        }
+        case 5: { // irrational square root
+          const m = sample([2,3,5,6,7,10,11,13,14,15,17,19,21,22]);
+          expr = `\\sqrt{${m}}\\in${Q}`;
+          ans  = 'False';
+          break;
+        }
+        case 6: { // convention: 0 ∉ N, 1 ∈ N
+          const n = sample(['0','1']);
+          expr = `${n}\\in${N}`;
+          ans  = (n === '1') ? 'True' : 'False';
+          break;
+        }
+        case 7: { // subset truths
+          expr = `${N}\\subseteq${Z}`;
+          ans  = 'True';
+          break;
+        }
+        case 8: {
+          expr = `${Q}\\subseteq${Z}`;
+          ans  = 'False';
+          break;
+        }
+        case 9: {
+          expr = `${Z}\\subseteq${Q}`;
+          ans  = 'True';
+          break;
+        }
+        default: {
+          expr = `${Q}\\subseteq${R}`;
+          ans  = 'True';
+        }
+      }
+    
+      return {
+        q: `$${expr}$ \\;\\; (True/False)`,  // wrap in $...$ so KaTeX renders
+        answer: ans
+      };
+    }
+
+
 
     
 
