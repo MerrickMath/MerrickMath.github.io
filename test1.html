@@ -244,20 +244,23 @@
     
       // (iv) count (B∩C)\A: multiples of 6 not multiples of 5
       const countBC = Math.floor(N/6);
-      const countBCnotA = Array.from({length:countBC},(_,i)=>(i+1)*6)
-        .filter(x=>x%5!==0).length;
+      const countBCnotA = Array.from({length:countBC},(_,i) => (i+1)*6)
+        .filter(x => x%5 !== 0).length;
     
       // (v) sum of B not (A∪C): multiples of 2, exclude 5 or 3
-      const sumBnot = Array.from({length:nB},(_,i)=>(i+1)*2)
-        .filter(x=>x%3!==0 && x%5!==0)
-        .reduce((a,b)=>a+b,0);
+      const sumBnot = Array.from({length:nB},(_,i) => (i+1)*2)
+        .filter(x => x%3 !== 0 && x%5 !== 0)
+        .reduce((a,b) => a+b, 0);
     
       return {
-        q:`Let $A=\\{\\text{multiples of 5}\\le ${N}\\}$, \
-    $B=\\{\\text{multiples of 2}\\le ${N}\\}$, \
-    $C=\\{\\text{multiples of 3}\\le ${N}\\}$.<br>\
-    (i) $\\sum A$ (ii) $\\sum(A\\cap B)$ (iii) $\\sum(A\\cup B)$ \
-    (iv) $|(B\\cap C)\\setminus A|$ (v) $\\sum(B\\setminus(A\\cup C))$`,
+        q: `Let $A=\\{\\text{multiples of 5} \\le ${N}\\}$, \
+    $B=\\{\\text{multiples of 2} \\le ${N}\\}$, \
+    $C=\\{\\text{multiples of 3} \\le ${N}\\}$.<br>\
+    (i) $\\sum A$<br>\
+    (ii) $\\sum(A\\cap B)$<br>\
+    (iii) $\\sum(A\\cup B)$<br>\
+    (iv) $|(B\\cap C)\\setminus A|$<br>\
+    (v) $\\sum(B\\setminus(A\\cup C))$`,
         answer:`(i) ${sumA}, (ii) ${sumAB}, (iii) ${sumAorB}, (iv) ${countBCnotA}, (v) ${sumBnot}`
       };
     }
