@@ -220,7 +220,7 @@
       const count = Array.from({length:N},(_,i)=>i+1)
         .filter(k=>(k%3===0||k%4===0)&&k%5!==0).length;
       return {
-        q: `How many positive integers $<${N}$ are multiples of $3$ or $4$ but not $5$?`,
+        q: `How many positive integers less than $${N}$ are multiples of $3$ or $4$ but not $5$?`,
         answer: `${count}`
       };
     }
