@@ -87,16 +87,19 @@
     /* Hide the current n so students must remember it */
     .n{ display:none; }
     
-    /* Big central “Next jump” text */
     .nextjump-big{
       font-family:"STIX Two Text", serif;
       font-weight:700;
-      letter-spacing:.3px;
-      line-height:1.1;
-      font-size: clamp(24px, 5vw, 56px);
+      letter-spacing:.2px;
+      line-height:1.05;
+      font-size: clamp(16px, 3vw, 32px); /* was clamp(24px, 5vw, 56px) */
     }
-    /* (optional) make the emoji symbol a touch smaller than the text */
-    .nextjump-big span[aria-hidden="true"]{ font-size:.9em; }
+    /* make the emoji symbol slightly smaller than the text */
+    .nextjump-big span[aria-hidden="true"]{ font-size:.8em; }
+
+    @media (max-width: 640px){
+      .nextjump-big{ font-size: clamp(14px, 4.2vw, 24px); }
+    }
 
     
     /* Make the card a positioning context for the skull overlay */
@@ -186,12 +189,6 @@
 
       <div class="feedback" id="feedback">Press Enter to submit · Esc to pause · X characters (×, x) are ignored</div>
 
-      <div class="history">
-        <h3>Recent</h3>
-        <div class="items" id="history"></div>
-      </div>
-
-      <p style="margin:12px 0 0; color:var(--muted)">Rule: for each successive integer, if it’s <strong>prime</strong>, enter the number. If it’s <strong>composite</strong>, enter its prime factors concatenated in ascending order. The sequence never drops below 2 and always moves forward. Examples: 11 → <span style="font-family:'JetBrains Mono'">11</span>, 12 → 2×2×3 → <span style="font-family:'JetBrains Mono'">223</span>.</p>
     </section>
 
     <aside class="card">
@@ -203,6 +200,26 @@
       </div>
 
       <div style="margin-top:16px">
+        <div style="margin-top:16px">
+          <!-- MOVED instructions -->
+          <p style="margin:0 0 12px 0; color:var(--muted)">
+            Rule: for each successive integer, if it’s <strong>prime</strong>, enter the number.
+            If it’s <strong>composite</strong>, enter its prime factors concatenated in ascending order.
+            The sequence never drops below 2 and always moves forward.
+            Examples: 11 → <span style="font-family:'JetBrains Mono'">11</span>,
+            12 → 2×2×3 → <span style="font-family:'JetBrains Mono'">223</span>.
+          </p>
+        
+          <h3 style="margin:0 0 8px 0; color:var(--muted)">Jump legend</h3>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <div class="jump"><span class="badge">⚡</span>Plus 3</div>
+            <div class="jump"><span class="badge">⏩</span>Plus 2</div>
+            <div class="jump"><span class="badge">➕</span>Plus 1</div>
+            <div class="jump"><span class="badge">↩️</span>Back 1</div>
+            <div class="jump"><span class="badge">🌀</span>Back 3</div>
+          </div>
+        </div>
+
         <h3 style="margin:0 0 8px 0; color:var(--muted)">Jump legend</h3>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
           <div class="jump"><span class="badge">⚡</span>Plus 3</div>
@@ -335,7 +352,7 @@
   function resetGame(){
     state.running=false; state.paused=false; clearInterval(state.timerId);
     state.lives=3; state.score=0; state.streak=0;
-    state.n = Number(ddStartAt.value);
+    state.n = Math.max(2, Number(ddStartAt.value) || 2);
     document.getElementById('startPoint').textContent = `Starting point: ${state.n}`;
     document.getElementById('skull')?.classList.remove('show');
     state.target = state.n;                // will be set in nextRound()
@@ -349,135 +366,3 @@
     showJump(state.nextJump);
     state.timeLeft = state.timePer; setTimerUI();
   }
-
-  function startGame(){
-    resetGame();
-    state.running=true; state.paused=false;
-    nextRound();
-  }
-
-  function pauseToggle(){
-    if(!state.running) return;
-    state.paused = !state.paused;
-    btnPause.textContent = state.paused ? 'Resume ▶' : 'Pause ⏸';
-    feedback.textContent = state.paused ? 'Paused' : 'Go!';
-  }
-
-  // Display the CURRENT term, but compute the NEXT term as target
-  function nextRound(){
-    const j = state.nextJump;
-    let candidate = j ? (state.n + j.delta) : (state.n + 1);
-  
-    if (candidate < 2) candidate = 2;
-  
-    // Soft floor: allow going back, but not more than 5 below the farthest reached
-    const softFloor = Math.max(2, state.lastMax - 5);
-    if (candidate < softFloor) candidate = softFloor;
-  
-    state.target = candidate;
-  
-    qNumber.textContent = `n = ${state.n}`;
-    showJump(state.nextJump);
-  
-    answer.value=''; answer.focus();
-    state.timeLeft = state.timePer; setTimerUI(); startTicking();
-  }
-
-
-
-  function addHistory(n, e, good){
-    const chip = document.createElement('div');
-    chip.className = 'chip';
-    chip.textContent = `${n} → ${e}`;
-    if(!good) chip.style.borderColor = 'rgba(239,68,68,.5)';
-    history.prepend(chip);
-    const kids = Array.from(history.children); for(let i=18;i<kids.length;i++) kids[i].remove();
-  }
-
-  function updateHUD(){
-    kScore.textContent = String(state.score);
-    kStreak.textContent = String(state.streak);
-    kLives.textContent = '❤'.repeat(state.lives) + '♡'.repeat(3 - state.lives);
-    kBest.textContent = String(state.best);
-  }
-
-  function proceed(){
-    // Accept the next term and prepare the following round
-    state.lastMax = Math.max(state.lastMax, state.target);
-    state.n = state.target;                      // ✅ move to the term the student just produced
-    state.nextJump = pickNextJump();             // next jump affects the NEXT target
-    nextRound();
-  }
-
-  function endGame(reason){
-    document.getElementById('skull')?.classList.add('show');
-    state.running=false; clearInterval(state.timerId);
-    feedback.textContent = `Game over — ${reason}`; feedback.className='feedback bad';
-    qNumber.textContent = 'n = —';
-    showJump(null);
-    updateHUD();
-  }
-
-  function miss(reason){
-    state.lives -= 1; state.streak = 0; updateHUD();
-    if(state.lives <= 0) { endGame(reason); return; }
-    feedback.textContent = reason + ' Next!'; feedback.className='feedback bad';
-    // Log what they were standing on (current) for clarity
-    addHistory(state.n, expr(state.n), false);
-    proceed();
-  }
-
-  function timesUp(){ if(!state.running) return; miss("Time's up!"); }
-
-  function submit(){
-    if(!state.running || state.paused) return;
-    const raw = answer.value.trim();
-    if(!raw){ answer.classList.add('shake'); setTimeout(()=>answer.classList.remove('shake'), 300); return; }
-    const cleaned = raw.replace(/[xX×\s]/g, '');
-    if(!/^\d+$/.test(cleaned)){
-      feedback.textContent = 'Digits only please (×, x allowed but ignored).';
-      feedback.className = 'feedback bad';
-      answer.classList.add('shake'); setTimeout(()=>answer.classList.remove('shake'), 300);
-      return;
-    }
-    const want = expectedInput(state.target);   // ✅ expect input for the NEXT term
-    if(cleaned === want){
-      state.score += 1; state.streak += 1;
-      if(state.score > state.best){
-        state.best = state.score; localStorage.setItem('pfs_best', String(state.best));
-      }
-      feedback.textContent = 'Correct!'; feedback.className='feedback ok'; updateHUD();
-      // Log the current term they stood on (optional; keeps chips consistent)
-      addHistory(state.n, expr(state.n), true);
-      proceed();
-    } else {
-      feedback.textContent = `Not quite. Expected: “${want}” (i.e., ${expr(state.target)}).`;
-      feedback.className='feedback bad';
-      answer.classList.add('shake'); setTimeout(()=>answer.classList.remove('shake'), 300);
-      miss('Wrong answer.');
-    }
-  }
-
-  // ——— Events ———
-  btnStart.addEventListener('click', startGame);
-  btnReset.addEventListener('click', resetGame);
-  btnSubmit.addEventListener('click', submit);
-  btnSkip.addEventListener('click', ()=>{ if(state.running) proceed(); });
-  btnPause.addEventListener('click', pauseToggle);
-  ddDiff.addEventListener('change', ()=> setDifficulty(ddDiff.value));
-
-  // Keyboard shortcuts
-  answer.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); submit(); }});
-  document.addEventListener('keydown', (e)=>{
-    if(e.key==='Enter' && document.activeElement!==answer){ submit(); }
-    if(e.key==='Escape') pauseToggle();
-    if((e.key==='s' || e.key==='S') && !state.paused) { if(state.running) proceed(); }
-  });
-
-  // Boot
-  resetGame();
-</script>
-
-
-</body>
-</html>
