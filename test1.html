@@ -254,13 +254,14 @@
     
       return {
         q: `Let $A=\\{\\text{multiples of 5} \\le ${N}\\}$, \
-    $B=\\{\\text{multiples of 2} \\le ${N}\\}$, \
-    $C=\\{\\text{multiples of 3} \\le ${N}\\}$.<br>\
-    (i) $\\sum A$<br>\
-    (ii) $\\sum(A\\cap B)$<br>\
-    (iii) $\\sum(A\\cup B)$<br>\
-    (iv) $|(B\\cap C)\\setminus A|$<br>\
-    (v) $\\sum(B\\setminus(A\\cup C))$`,
+      $B=\\{\\text{multiples of 2} \\le ${N}\\}$, \
+      $C=\\{\\text{multiples of 3} \\le ${N}\\}$.<br>\
+      Determine each of the following:<br>\
+      (i) $\\sum A$<br>\
+      (ii) $\\sum(A\\cap B)$<br>\
+      (iii) $\\sum(A\\cup B)$<br>\
+      (iv) $|(B\\cap C)\\setminus A|$<br>\
+      (v) $\\sum(B\\setminus(A\\cup C))$`,
         answer:`(i) ${sumA}, (ii) ${sumAB}, (iii) ${sumAorB}, (iv) ${countBCnotA}, (v) ${sumBnot}`
       };
     }
