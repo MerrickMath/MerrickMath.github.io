@@ -1,750 +1,483 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Math 10 — Unit 1 Quiz Generator</title>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- KaTeX -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-
+  <title>Prime‑Factor Sprint</title>
+  <meta name="description" content="Race the clock to speak the prime/composite sequence. Bright, clean, and classroom-ready."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=JetBrains+Mono:wght@400;600;800&family=STIX+Two+Text:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --fg: #0f172a;
+    :root{
+      --bg: #f6fbff;
+      --ink: #0f172a;
       --muted: #475569;
-      --bg: #ffffff;
-      --card: #f8fafc;
-      --acc: #0ea5e9;
+      --card: #ffffff;
+      --accent: #2563eb;
+      --accent-2: #f97316;
+      --ok: #10b981;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --shadow: 0 10px 25px rgba(2, 6, 23, 0.12);
+      --r: 22px;
     }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color: var(--fg);
-      background: var(--bg);
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:
+        radial-gradient(1200px 600px at 10% -10%, #e0f2fe 0%, transparent 60%),
+        radial-gradient(1200px 600px at 110% 10%, #ffe4e6 0%, transparent 60%),
+        var(--bg);
+      color:var(--ink); font-family: "Outfit", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "STIX Two Text", serif;
+      display:flex; align-items:center; justify-content:center;
     }
-    header {
-      padding: 20px 16px;
-      border-bottom: 1px solid #e5e7eb;
-      display: grid;
-      grid-template-columns: 1fr auto auto;
-      gap: 12px;
-      align-items: center;
+    .app{ width:min(1080px, 96vw); }
+    header{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px; }
+    .logo{ display:flex; align-items:center; gap:12px; }
+    .logo .mark{ font-size:28px; }
+    .logo h1{ margin:0; font-weight:800; letter-spacing:.2px; font-size:clamp(22px,3.2vw,30px); }
+
+    .card{ background:var(--card); border-radius:var(--r); box-shadow:var(--shadow); padding:clamp(16px,2.6vw,24px); }
+    .controls{ display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:10px; }
+    @media (max-width:900px){ .controls{ grid-template-columns:1fr; } }
+    label{ font-weight:600; color:var(--muted); }
+    select, button, input[type="text"]{ border:1px solid rgba(15,23,42,.1); border-radius:14px; padding:10px 12px; font-size:16px; background:#fff; }
+    button{ cursor:pointer; font-weight:800; letter-spacing:.2px; }
+    .primary{ background:var(--accent); color:#fff; border:none; }
+    .muted{ background:#f8fafc; color:var(--muted); }
+    .danger{ background:var(--bad); color:#fff; border:none; }
+
+    .columns{ display:grid; grid-template-columns: 1.2fr .8fr; gap:16px; }
+    @media (max-width:900px){ .columns{ grid-template-columns:1fr; } }
+
+    .timer{ height:10px; background:#e2e8f0; border-radius:999px; overflow:hidden; margin-bottom:12px; }
+    .timer > .bar{ height:100%; width:100%; background:linear-gradient(90deg, var(--ok), var(--warn), var(--bad)); transition: width .15s linear; }
+    .timer.unlimited{ background:transparent; }
+
+    .question{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    .n{ font-family:"STIX Two Text", serif; font-weight:800; font-size: clamp(34px, 7vw, 58px); letter-spacing:.4px; }
+
+    .jump{ display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:12px; background:#f1f5f9; border:1px dashed rgba(2,6,23,.12); color:var(--muted); font-weight:700; }
+    .jump .badge{ font-size:22px; line-height:1; padding:6px 10px; border-radius:12px; background:#fff; border:1px solid rgba(2,6,23,.08); box-shadow:0 2px 6px rgba(2,6,23,.08); }
+
+    .answer{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:10px; }
+    input[type="text"]{ font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:clamp(18px,3vw,22px); min-width:220px; padding:12px 14px; }
+
+    .feedback{ min-height:28px; font-weight:700; }
+    .ok{ color:var(--ok) }
+    .bad{ color:var(--bad) }
+
+    .history h3{ margin:12px 0 6px; color:var(--muted); font-size:14px; }
+    .items{ display:flex; flex-wrap:wrap; gap:8px; }
+    .chip{ background:#f8fafc; border:1px solid rgba(2,6,23,.08); border-radius:999px; padding:8px 12px; font-family:"JetBrains Mono"; font-size:14px; }
+
+    .status{ display:grid; grid-template-columns: repeat(4,1fr); gap:10px; }
+    .tile{ background:#f8fafc; border:1px solid rgba(2,6,23,.06); border-radius:16px; padding:12px 14px; text-align:center; }
+    .tile .k{ font-weight:800; font-size:22px; }
+    .tile .v{ color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.3px; }
+
+    .shake{ animation:shake .25s linear 2; }
+    @keyframes shake{ 0%{transform:translateX(0)}25%{transform:translateX(4px)}50%{transform:translateX(-4px)}75%{transform:translateX(3px)}100%{transform:translateX(0)} }
+
+    .hidden{ display:none !important; }
+    /* Center the question row and hide the small jump widget */
+    .question{ display:flex; align-items:center; justify-content:center; text-align:center; gap:12px; }
+    
+    /* Hide the current n so students must remember it */
+    .n{ display:none; }
+    
+    /* Big central “Next jump” text */
+    .nextjump-big{
+      font-family:"STIX Two Text", serif;
+      font-weight:700;
+      letter-spacing:.3px;
+      line-height:1.1;
+      font-size: clamp(24px, 5vw, 56px);
     }
-    h1 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: 0.2px;
+    /* (optional) make the emoji symbol a touch smaller than the text */
+    .nextjump-big span[aria-hidden="true"]{ font-size:.9em; }
+
+    
+    /* Make the card a positioning context for the skull overlay */
+    .card{ position: relative; }
+    
+    /* Skull overlay */
+    .skull{
+      position:absolute; inset:0;
+      display:none;            /* shown by adding .show */
+      align-items:center; justify-content:center;
+      font-size: clamp(80px, 12vw, 160px);
+      pointer-events:none;     /* overlay is visual only */
     }
-    .controls {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    button, .toggle {
-      border: 1px solid #cbd5e1;
-      background: var(--card);
-      padding: 8px 12px;
-      border-radius: 10px;
-      cursor: pointer;
+    .skull.show{ display:flex; }
+
+    /* Starting point label under the big Next jump */
+    .startpoint{
+      margin-top: 6px;
       font-weight: 600;
-    }
-    button.primary {
-      background: var(--acc);
-      color: white;
-      border-color: var(--acc);
-    }
-    main {
-      max-width: 900px;
-      margin: 24px auto 60px;
-      padding: 0 16px;
-    }
-    section {
-      background: var(--card);
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 16px 18px;
-      margin-bottom: 18px;
-    }
-    section h2 {
-      margin: 6px 0 12px;
-      font-size: 18px;
-    }
-    .meta { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
-    ol.mc > li, ol.nr > li, ol.er > li {
-      margin: 10px 0;
-      padding-left: 4px;
+      color: var(--muted);
+      font-size: clamp(14px, 2.2vw, 18px);
     }
 
-    /* four-column choices */
-    .choices {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 6px 14px;
-      margin: 8px 0 4px;
-      padding-left: 18px; /* to align <li> markers if any */
-      list-style: none;
-    }
-    .choices li::before {
-      content: attr(data-label) ") ";
-      font-weight: 700;
-      margin-right: 4px;
-    }
 
-    .answer {
-      display: none;         /* hidden by default, toggled via .show-answers */
-      margin: 4px 0 0 2px;
-      font-size: 0.95rem;
-      color: #065f46;
-      background: #ecfdf5;
-      border: 1px solid #d1fae5;
-      border-radius: 8px;
-      padding: 6px 8px;
-    }
-    .show-answers .answer { display: inline-block; }
-    .muted { color: var(--muted); }
-
-    /* small print + code */
-    .foot {
-      text-align: center; color: var(--muted); font-size: 13px; margin-top: 18px;
-    }
-    code { background: #f1f5f9; padding: 1px 4px; border-radius: 6px; }
   </style>
 </head>
 <body>
+<div class="app">
   <header>
-    <h1>Math 10 — Unit 1 Quiz Generator</h1>
-    <div class="controls">
-      <label class="toggle">
-        <input id="answersToggle" type="checkbox" /> Show answers
-      </label>
-      <button id="regen" class="primary">Generate Quiz</button>
+    <div class="logo"><div class="mark">🧮</div><h1>Prime‑Factor Sprint</h1></div>
+    <div class="controls card">
+      <div>
+        <label for="difficulty">Difficulty</label><br>
+        <select id="difficulty">
+          <option value="unlimited">Easy — unlimited</option>
+          <option value="10">Medium — 10s</option>
+          <option value="5">Hard — 5s</option>
+          <option value="2">Super Hard — 2s</option>
+        </select>
+      </div>
+      <div>
+        <label for="jumps">Jumps</label><br>
+        <select id="jumps">
+          <option value="off">Off</option>
+          <option value="light">Light</option>
+          <option value="normal" selected>Normal</option>
+          <option value="chaos">Chaotic</option>
+        </select>
+      </div>
+      <div>
+        <label for="startAt">Start at</label><br>
+        <select id="startAt">
+          <option value="2" selected>2</option>
+          <option value="3">3</option>
+          <option value="5">5</option>
+          <option value="7">7</option>
+          <option value="11">11</option>
+        </select>
+      </div>
+      <div style="display:flex; align-items:end; gap:8px;">
+        <button id="btnReset" class="muted">Reset</button>
+        <button id="btnStart" class="primary">Start ▶</button>
+      </div>
     </div>
   </header>
 
-  <main id="quizRoot" class="answers-hidden">
-    <!-- quiz will be injected here -->
-  </main>
+  <div class="columns">
+    <section class="card" aria-live="polite">
+      <div id="timer" class="timer"><div class="bar" style="width:100%"></div></div>
 
-  <script>
-    // ---------- Math helpers ----------
-    const randInt = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
-    const sample = arr => arr[Math.floor(Math.random()*arr.length)];
-    const shuffle = arr => { for (let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; };
-    const unique = arr => Array.from(new Set(arr));
+      <div class="question">
+        <div class="n" id="qNumber">n = —</div>  <!-- stays in DOM but is hidden by CSS -->
+        <div class="nextjump-big" id="nextJumpBig">Next jump: +1</div>
+        <div id="startPoint" class="startpoint">Starting point: 2</div>
+      </div>
+      
+      <!-- skull overlay (stays inside the same <section class="card">) -->
+      <div id="skull" class="skull" aria-hidden="true">☠️</div>
 
-    const isPrime = n => {
-      if (n<2) return false;
-      if (n%2===0) return n===2;
-      for (let f=3; f*f<=n; f+=2) if (n%f===0) return false;
-      return true;
-    };
-    const randPrime = (a=50,b=300) => {
-      while (true) { const n=randInt(a,b); if (isPrime(n)) return n; }
-    };
-    const gcd = (a,b) => { a=Math.abs(a); b=Math.abs(b); while (b){[a,b]=[b,a%b];} return a; };
-    const lcm = (a,b) => Math.abs(a*b)/gcd(a,b);
+      
 
-    const primeFactors = (n) => {
-      const d = new Map();
-      let m=n, f=2;
-      while (f*f<=m){
-        while (m%f===0){ d.set(f,(d.get(f)||0)+1); m=Math.floor(m/f); }
-        f = (f===2) ? 3 : f+2;
-      }
-      if (m>1) d.set(m,(d.get(m)||0)+1);
-      return d;
-    };
-    const fmtFactorization = (map) => {
-      const parts = [...map.entries()].sort((a,b)=>a[0]-b[0]).map(([p,e]) => e===1? `${p}` : `${p}^{${e}}`);
-      return parts.join("\\cdot ");
-    };
+      <div class="answer">
+        <input id="answer" type="text" inputmode="numeric" autocomplete="off" placeholder="Enter digits only: 8 → 2×2×2 → 222" />
+        <button id="btnSubmit" class="muted">Submit ⏎</button>
+        <button id="btnSkip" class="muted">Skip ↷</button>
+      </div>
 
-    const isPerfectSquare = n => Number.isInteger(Math.sqrt(n));
-    const randomNonSquare = (lo=2,hi=120) => {
-      while(true){ const n=randInt(lo,hi); if(!isPerfectSquare(n)) return n; }
-    };
-    const squarefreeSplit = n => {
-      let out=1, m=n;
-      for (let f=2; f*f<=m; f++){
-        while ((m%(f*f))===0){ out*=f; m=Math.floor(m/(f*f)); }
-      }
-      return [out,m]; // sqrt(n) = out * sqrt(m)
-    };
-    const mixedFromEntire = n => squarefreeSplit(n);
+      <div class="feedback" id="feedback">Press Enter to submit · Esc to pause · X characters (×, x) are ignored</div>
 
-    // ensure 4 options including 'correct', with a generator for extras
-    const ensureFour = (options, correct, gen) => {
-      const set = new Set(options); set.add(correct);
-      while (set.size<4){ const w=gen(); if(w!==correct) set.add(w); }
-      const out = Array.from(set);
-      if (out.length>4){
-        const others = out.filter(x=>x!==correct);
-        shuffle(others);
-        return [correct, ...others.slice(0,3)];
-      }
-      return out;
-    };
+      <div class="history">
+        <h3>Recent</h3>
+        <div class="items" id="history"></div>
+      </div>
 
-    // HTML helpers
-    const el = (tag, cls, html) => {
-      const e = document.createElement(tag);
-      if (cls) e.className = cls;
-      if (html !== undefined) e.innerHTML = html;
-      return e;
-    };
+      <p style="margin:12px 0 0; color:var(--muted)">Rule: for each successive integer, if it’s <strong>prime</strong>, enter the number. If it’s <strong>composite</strong>, enter its prime factors concatenated in ascending order. The sequence never drops below 2 and always moves forward. Examples: 11 → <span style="font-family:'JetBrains Mono'">11</span>, 12 → 2×2×3 → <span style="font-family:'JetBrains Mono'">223</span>.</p>
+    </section>
 
-    // ----- Multiple-choice block -----
-    function mcBlock(questionHTML, options, correctValue) {
-      // options are TeX strings WITHOUT $...$
-      const letters = ["A","B","C","D"];
-      const idx = shuffle([0,1,2,3]);
-      const shuffled = idx.map(i => options[i]);
-      const letter = letters[shuffled.indexOf(correctValue)];
-      const li = el("li");
-      li.appendChild(el("div", "", questionHTML));
-      const ul = el("ul", "choices");
-      shuffled.forEach((opt,i)=>{
-        const liOpt = el("li");
-        liOpt.dataset.label = letters[i];
-        liOpt.innerHTML = `$${opt}$`;
-        ul.appendChild(liOpt);
-      });
-      li.appendChild(ul);
-      li.appendChild(el("div","answer", `<strong>Answer:</strong> ${letter}`));
-      return li;
-    }
+    <aside class="card">
+      <div class="status">
+        <div class="tile"><div class="k" id="kScore">0</div><div class="v">Score</div></div>
+        <div class="tile"><div class="k" id="kStreak">0</div><div class="v">Streak</div></div>
+        <div class="tile"><div class="k" id="kLives">❤❤❤</div><div class="v">Lives</div></div>
+        <div class="tile"><div class="k" id="kBest">0</div><div class="v">Best</div></div>
+      </div>
 
-    // ---------- Section A: Multiple Choice (16) ----------
-    function buildMC() {
-      const ol = el("ol","mc");
-
-      // 1) Which is prime?
-      {
-        const correct = randPrime(80,300).toString();
-        const pool = new Set();
-        while (pool.size<6) { const c = randInt(80,300); if (!isPrime(c)) pool.add(c.toString()); }
-        const base = [correct, ...Array.from(pool).slice(0,3)];
-        const gen = () => {
-          while(true){ const x=randInt(80,300); if(!isPrime(x)) return x.toString(); }
-        };
-        const opts = ensureFour(base, correct, gen);
-        ol.appendChild(mcBlock("Which of the following is a prime number?", opts, correct));
-      }
-
-      // 2) Factorization of N
-      {
-        const exps = new Map([[2,randInt(1,3)],[3,randInt(1,3)],[5,randInt(0,2)],[7,randInt(0,1)]]);
-        if (exps.get(5)===0 && exps.get(7)===0) exps.set(sample([5,7]),1);
-        let N=1; exps.forEach((e,p)=>{ N *= p**e; });
-        const correct = fmtFactorization(new Map([...exps].filter(([p,e])=>e>0)));
-        const distr = new Set();
-        while (distr.size<6){
-          const d = new Map(exps);
-          const k = sample([...d.keys()]);
-          d.set(k, Math.max(0, (d.get(k)>0)? d.get(k)+sample([-1,1]) : 1));
-          if ([...d.values()].every(v=>v===0)) d.set(k,1);
-          const s = fmtFactorization(new Map([...d].filter(([p,e])=>e>0)));
-          if (s!==correct) distr.add(s);
-        }
-        const base = [correct, ...Array.from(distr).slice(0,3)];
-        const gen = () => {
-          const p = sample([2,3,5,7]), e = randInt(1,4);
-          return fmtFactorization(new Map([[p,e]]));
-        };
-        const opts = ensureFour(base, correct, gen);
-        ol.appendChild(mcBlock(`The prime factorization of $${N}$ is`, opts, correct));
-      }
-
-      // 3) gcd
-      {
-        const a = randInt(90,220);
-        const b = Math.floor(a*randInt(2,4)/Math.max(1,randInt(2,4))) + randInt(1,30);
-        const g = gcd(a,b);
-        const cands = unique([g, Math.max(1,g-1), g*2, g+randInt(2,7)]);
-        while (cands.length<4) cands.push(g+randInt(1,10));
-        const base = cands.slice(0,4).map(String);
-        const gen = () => String(Math.max(1, g + sample([-7,-5,-3,-2,2,3,5,7])));
-        const opts = ensureFour(base, String(g), gen);
-        ol.appendChild(mcBlock(`$\\gcd(${a},\\,${b})$ equals`, opts, String(g)));
-      }
-
-      // 4) lcm
-      {
-        const a = randInt(10,30), b = randInt(10,30);
-        const L = lcm(a,b);
-        const base = [String(L), String(a*b), String(gcd(a,b)), String(a+b)];
-        const gen = () => String(L + sample([a, b, a+b]));
-        const opts = ensureFour(base, String(L), gen);
-        ol.appendChild(mcBlock(`$\\mathrm{lcm}(${a},\\,${b})$ equals`, opts, String(L)));
-      }
-
-      // 5) perfect square (all exponents even)
-      const fmtExp = (obj) => Object.entries(obj).map(([p,e])=>`${p}^{${e}}`).join("\\cdot ");
-      const makeExpSq = (even) => {
-        const ex = {2:randInt(1,4),3:randInt(1,4),5:randInt(1,4)};
-        if (even) { for (const k in ex) if (ex[k]%2!==0) ex[k]++; }
-        return ex;
-      };
-      {
-        const corr = makeExpSq(true);
-        const correct = fmtExp(corr);
-        const wrongs = Array.from({length:6}, ()=>fmtExp(makeExpSq(false)));
-        const base = [correct, ...wrongs.slice(0,3)];
-        const gen = () => fmtExp(makeExpSq(false));
-        const opts = ensureFour(base, correct, gen);
-        ol.appendChild(mcBlock("Which is a perfect square?", opts, correct));
-      }
-
-      // 6) perfect cube (exponents multiples of 3)
-      const makeExpCube = (m3) => {
-        const ex = {2:randInt(1,5), 3:randInt(1,5), 5:randInt(1,5)};
-        if (m3){ for (const k in ex){ ex[k] = ex[k] + ((3 - (ex[k]%3))%3); } }
-        return ex;
-      };
-      {
-        const corr = makeExpCube(true);
-        const correct = fmtExp(corr);
-        const wrongs = Array.from({length:6}, ()=>fmtExp(makeExpCube(false)));
-        const base = [correct, ...wrongs.slice(0,3)];
-        const gen = () => fmtExp(makeExpCube(false));
-        const opts = ensureFour(base, correct, gen);
-        ol.appendChild(mcBlock("Which is a perfect cube?", opts, correct));
-      }
-
-      // 7) write a*sqrt(b) as entire radical
-      {
-        const a = randInt(2,9), b = randomNonSquare(2,25);
-        const correct = `\\sqrt{${a*a}\\cdot ${b}}`;
-        const base = [
-          `\\sqrt{${a*b}}`,
-          correct,
-          `\\sqrt{${a**3}\\cdot ${b}}`,
-          `\\sqrt{${b}}`
-        ];
-        const gen = () => {
-          const A = randInt(2,12), B = randomNonSquare(2,25);
-          return `\\sqrt{${A*A}\\cdot ${B}}`;
-        };
-        const opts = ensureFour(base, correct, gen);
-        ol.appendChild(mcBlock(`Write $${a}\\sqrt{${b}}$ as an entire radical.`, opts, correct));
-      }
-
-      // 8) sqrt(n) -> mixed radical
-      {
-        const k = sample([2,3,5,6,7,10,12,15]);
-        const s = randInt(2,7);
-        const n = s*s*k;
-        const [A,B] = mixedFromEntire(n);
-        const correct = `${A}\\sqrt{${B}}`;
-        const base = [
-          `${(A%2===0)?A/2:A}\\sqrt{${B*4}}`,
-          correct,
-          `${s}\\sqrt{${k*2}}`,
-          `${2*s}\\sqrt{${(k%2===0)?k/2:k}}`
-        ].map(x=>x.replace(".0",""));
-        const gen = () => {
-          const kk=sample([2,3,5,6,7,10,12,15]), ss=randInt(2,7);
-          const [AA,BB]=mixedFromEntire(ss*ss*kk);
-          return `${AA}\\sqrt{${BB}}`;
-        };
-        const opts = ensureFour(base, correct, gen);
-        ol.appendChild(mcBlock(`Convert to mixed radical: $\\sqrt{${n}}$`, opts, correct));
-      }
-
-      // 9) Simplify sqrt(m x^a y^b), x,y>=0
-      {
-        const m=randInt(60,160), ax=randInt(2,7), by=randInt(2,7);
-        const [om,im]=squarefreeSplit(m);
-        const ox=Math.floor(ax/2), ix=ax%2, oy=Math.floor(by/2), iy=by%2;
-        const outside = (om>1?`${om}`:"") + (ox?`x^{${ox}}`:"") + (oy?`y^{${oy}}`:"") || "1";
-        let correct;
-        const inside = (im>1?`${im}`:"") + (ix?"x":"") + (iy?"y":"");
-        correct = inside ? (outside==="1" ? `\\sqrt{${inside}}` : `${outside}\\sqrt{${inside}}`) : outside;
-        const w1 = `${outside}\\sqrt{${m}}`;
-        const w2 = `${outside}\\sqrt{${im>1?im:1}}`;
-        const w3 = `\\sqrt{${m}}${ox?`x^{${ox}}`:""}${oy?`y^{${oy}}`:""}`;
-        const base = [correct,w1,w2,w3];
-        const gen = () => {
-          const mm=randInt(50,180); const [oo,ii]=squarefreeSplit(mm);
-          return ((oo>1?`${oo}`:"") + `\\sqrt{${ii}}`).replace(/^\\sqrt{1}$/, "1");
-        };
-        const opts = ensureFour(base, correct, gen);
-        ol.appendChild(mcBlock(`Simplify $\\sqrt{${m}\\,x^{${ax}}y^{${by}}}$ for $x,y\\ge 0$.`, opts, correct));
-      }
-
-      // 10) cube root of negative
-      {
-        const a = randInt(2,15);
-        const N = -(a**3);
-        const correct = String(-a);
-        const base = [correct, String(a), String(-(a-1)), String(-(a+1))];
-        const gen = () => String(-randInt(2,15));
-        const opts = ensureFour(base, correct, gen);
-        ol.appendChild(mcBlock(`$\\sqrt[3]{${N}}$ equals`, opts, correct));
-      }
-
-      // 11) irrational selection
-      {
-        const ns = randomNonSquare(2,120);
-        const a = randInt(1,20), b = sample([2,4,5,8,10,20,25,40]);
-        const g = gcd(a,b);
-        const A = a/g, B = b/g;
-        const rep = `${randInt(1,9)}${randInt(1,9)}`;
-        const correct = `\\sqrt{${ns}}`;
-        const base = [`0.${randInt(10,99)}`, `\\dfrac{${A}}{${B}}`, correct, `0.\\overline{${rep}}`];
-        const gen = () => `0.\\overline{${randInt(1,9)}${randInt(1,9)}}`;
-        const opts = ensureFour(base, correct, gen);
-        ol.appendChild(mcBlock("Which number is \\emph{irrational}?", opts, correct));
-      }
-
-      // 12) sqrt(m)*sqrt(n)
-      {
-        const m=randInt(6,25), n=randInt(6,25);
-        const prod=m*n;
-        const [A,B]=mixedFromEntire(prod);
-        const correct = (B===1)? `${A}` : `${A}\\sqrt{${B}}`;
-        const base = [correct, `\\sqrt{${prod}}`, `${A}\\sqrt{${m}}`, `${A}\\sqrt{${n}}`];
-        const gen = () => {
-          const mm=randInt(6,25), nn=randInt(6,25);
-          const [o,i]=mixedFromEntire(mm*nn);
-          return (i===1)? `${o}` : `${o}\\sqrt{${i}}`;
-        };
-        const opts = ensureFour(base, correct, gen);
-        ol.appendChild(mcBlock(`Simplify $\\sqrt{${m}}\\cdot \\sqrt{${n}}$.`, opts, correct));
-      }
-
-      // 13) rationalize 3/(sqrt(p)-sqrt(q))
-      {
-        let q=randInt(2,20), p=q+3;
-        if (isPerfectSquare(p)) p++;
-        if (isPerfectSquare(q)) q++;
-        const correct = `\\sqrt{${p}}+\\sqrt{${q}}`;
-        const base = [
-          correct,
-          `\\sqrt{${p}}-\\sqrt{${q}}`,
-          `\\dfrac{3(\\sqrt{${p}}+\\sqrt{${q}})}{${p-q}}`,
-          `\\dfrac{3(\\sqrt{${p}}-\\sqrt{${q}})}{${p-q}}`
-        ];
-        const gen = () => `\\sqrt{${randomNonSquare(2,25)}}+\\sqrt{${randomNonSquare(2,25)}}`;
-        const opts = ensureFour(base, correct, gen);
-        ol.appendChild(mcBlock(`Rationalize $\\dfrac{3}{\\sqrt{${p}}-\\sqrt{${q}}}$.`, opts, correct));
-      }
-
-      // 14) smallest set containing 0 (N={1,2,...})
-      {
-        const base = ["\\mathbb{N}","\\mathbb{W}","\\mathbb{Z}","\\mathbb{Q}"];
-        const correct = "\\mathbb{W}";
-        const gen = () => sample(["\\mathbb{N}","\\mathbb{W}","\\mathbb{Z}","\\mathbb{Q}"]);
-        const opts = ensureFour(base, correct, gen);
-        ol.appendChild(mcBlock("\\emph{Smallest} set containing $0$ is", opts, correct));
-      }
-
-      // 15) smallest set containing a/b
-      {
-        let a=randInt(2,30), b=randInt(2,30); const g=gcd(a,b); a/=g; b/=g;
-        const base = ["\\mathbb{N}","\\mathbb{W}","\\mathbb{Z}","\\mathbb{Q}"];
-        const correct = "\\mathbb{Q}";
-        const gen = () => sample(["\\mathbb{N}","\\mathbb{W}","\\mathbb{Z}","\\mathbb{Q}"]);
-        const opts = ensureFour(base, correct, gen);
-        ol.appendChild(mcBlock(`\\emph{Smallest} set containing $\\dfrac{${a}}{${b}}$ is`, opts, correct));
-      }
-
-      // 16) perfect fourth power
-      {
-        const s=randInt(3,9), c=s**4;
-        const correct = String(c);
-        const base = [String(c), String(c-1), String(c+1), String(s**3)];
-        const gen = () => String(randInt(2,9)**3);
-        const opts = ensureFour(base, correct, gen);
-        ol.appendChild(mcBlock("Which of the following is a perfect fourth power?", opts, correct));
-      }
-
-      return ol;
-    }
-
-    // ---------- Section B: Numeric Response (7) ----------
-    function buildNR() {
-      const ol = el("ol","nr");
-
-      // Helper to add a line with answer span
-      const add = (htmlProblem, answerMath) => {
-        const li = el("li");
-        li.innerHTML = htmlProblem;
-        li.appendChild(el("div","answer", `<strong>Answer:</strong> $${answerMath}$`));
-        ol.appendChild(li);
-      };
-
-      // NR1 gcd
-      {
-        const a=randInt(200,1000), b=randInt(200,1000);
-        add(`$\\gcd(${a},\\,${b})=$ <span class="muted">[answer here]</span>`, String(gcd(a,b)));
-      }
-
-      // NR2 lcm triple
-      {
-        const a=randInt(6,40), b=randInt(6,40), c=randInt(6,40);
-        const L = lcm(lcm(a,b),c);
-        add(`$\\mathrm{lcm}(${a},\\,${b},\\,${c})=$ <span class="muted">[answer here]</span>`, String(L));
-      }
-
-      // NR3 sum of exponents in factorization over 2,3,5,7
-      {
-        const ex = [randInt(1,3),randInt(1,3),randInt(1,3),randInt(1,3)];
-        const N = (2**ex[0])*(3**ex[1])*(5**ex[2])*(7**ex[3]);
-        add(`Let the prime factorization of $${N}$ be $2^{a}\\cdot 3^{b}\\cdot 5^{c}\\cdot 7^{d}$. Compute $a+b+c+d=$ <span class="muted">[answer here]</span>`, String(ex.reduce((s,x)=>s+x,0)));
-      }
-
-      // NR4 simplify sqrt(A x^m y^n)
-      {
-        const A=randInt(50,200), mx=randInt(2,8), ny=randInt(2,8);
-        const [oA,iA] = squarefreeSplit(A);
-        const ox=Math.floor(mx/2), oy=Math.floor(ny/2);
-        const ix=mx%2, iy=ny%2;
-        const outside = (oA>1?`${oA}`:"") + (ox?`x^{${ox}}`:"") + (oy?`y^{${oy}}`:"") || "1";
-        const inside = (iA>1?`${iA}`:"") + (ix?"x":"") + (iy?"y":"");
-        const ans = inside ? (outside==="1" ? `\\sqrt{${inside}}` : `${outside}\\sqrt{${inside}}`) : outside;
-        add(`Simplify completely: $\\sqrt{${A}x^{${mx}}y^{${ny}}}$ \\,(assume $x,y\\ge0$).`, ans);
-      }
-
-      // NR5 rationalize num/sqrt(den)
-      {
-        const num = sample([3,5,7,9]);
-        const den = sample([8,12,18,20,24,32,50]);
-        const [oD,iD]=squarefreeSplit(den);
-        // num/√den = (num * √den)/den = (num*oD/den)*√iD
-        const reduce = (a,b) => { const g=gcd(a,b); return [a/g, b/g]; };
-        let [p,q] = reduce(num*oD, den);
-        let ans;
-        if (iD===1){
-          ans = q===1 ? `${p}` : `\\dfrac{${p}}{${q}}`;
-        } else {
-          ans = q===1 ? `${p}\\sqrt{${iD}}` : `\\dfrac{${p}\\sqrt{${iD}}}{${q}}`;
-        }
-        add(`Rationalize and simplify: $\\dfrac{${num}}{\\sqrt{${den}}}$.`, ans);
-      }
-
-      // NR6 repeating decimal to fraction (randomized)
-      {
-        let display, num, den;
-        if (Math.random()<0.5){
-          const A=randInt(0,9), BC=randInt(0,99), DE=randInt(10,99);
-          const sA=`${A}`, sBC=`${BC}`.padStart(2,"0"), sDE=`${DE}`.padStart(2,"0");
-          display = `$${A}.${sBC}\\overline{${sDE}}$`;
-          const p = 10**(2+2), q = 10**2;
-          num = parseInt(`${A}${sBC}${sDE}`) - parseInt(`${A}${sBC}`);
-          den = p - q;
-        } else {
-          const X=randInt(0,29), YZ=randInt(10,99);
-          display = `$${X}.\\overline{${`${YZ}`.padStart(2,"0")}}$`;
-          num = X*99 + YZ;
-          den = 99;
-        }
-        const reduce = (a,b) => { const g=gcd(a,b); return [a/g, b/g]; };
-        const [p,q]=reduce(num,den);
-        const ans = q===1 ? `${p}` : `\\dfrac{${p}}{${q}}`;
-        add(`Convert ${display} to a fraction in simplest form.`, ans);
-      }
-
-      // NR7 cube root negative (random)
-      {
-        const a = randInt(2,19);
-        add(`Evaluate $\\sqrt[3]{-${a**3}}$.`, String(-a));
-      }
-
-      return ol;
-    }
-
-    // ---------- Section C: Extended Response ----------
-    function buildER() {
-      const ol = el("ol","er");
-
-      const addER = (htmlProblem, answerHTML) => {
-        const li = el("li");
-        li.innerHTML = htmlProblem;
-        li.appendChild(el("div","answer", `<strong>Answer (sketch):</strong> ${answerHTML}`));
-        ol.appendChild(li);
-      };
-
-      // ER1: bundle parts (a)-(e)
-      const wrapParts = partsHTML => {
-        const li = el("li");
-        li.innerHTML = `<div><strong>Prime Factors, GCD/LCM, Perfect Powers, Radicals, Series, Approximation</strong> <span class="muted">[14 marks]</span></div>
-        <ol type="a" style="margin-top:8px;">${partsHTML}</ol>`;
-        return li;
-      };
-
-      // (a) PF + gcd/lcm
-      const ERa = randInt(200,800), ERb = randInt(200,800);
-      const g = gcd(ERa,ERb), L = lcm(ERa,ERb);
-      const fa = fmtFactorization(primeFactors(ERa)), fb = fmtFactorization(primeFactors(ERb));
-      const partA = `
-        <li>Prime factorize $${ERa}$ and $${ERb}$. Hence determine $\\gcd(${ERa},${ERb})$ and $\\mathrm{lcm}(${ERa},${ERb})$. Explain how prime exponents determine each.
-          <div class="answer"><strong>Answer:</strong> $${ERa}=${fa}$, $${ERb}=${fb}$; $\\gcd=${g}$, $\\mathrm{lcm}=${L}$. GCD takes min exponents, LCM takes max.</div>
-        </li>`;
-
-      // (b) minimal m for cube
-      const Nexp = {2:randInt(1,3),3:randInt(1,3),5:randInt(1,3),7:randInt(1,3)};
-      const Ntex = fmtFactorization(new Map(Object.entries(Nexp).map(([p,e])=>[+p,e])));
-      const add = Object.fromEntries(Object.entries(Nexp).map(([p,e])=>[p, (3-(e%3))%3 ]));
-      const mtex = Object.entries(add).filter(([,k])=>k>0).map(([p,k])=>`${p}^{${k}}`).join("\\cdot ") || "1";
-      const partB = `
-        <li>Let $N=${Ntex}$. Decide whether $N$ is a perfect square and/or a perfect cube. If not a cube, find the least positive integer $m$ so that $Nm$ is a perfect cube.
-          <div class="answer"><strong>Answer:</strong> $m=${mtex}$ (raise each prime’s exponent to a multiple of 3).</div>
-        </li>`;
-
-      // (c) radicals simplification
-      const partC = `
-        <li>Simplify and write with radicals (no negative exponents):
-          <div>\\[ \\frac{\\sqrt{48x^{3}y^{2}}\\cdot \\sqrt{12xy}}{\\sqrt{3x}} \\quad (x,y\\ge0). \\]</div>
-          <div class="answer"><strong>Answer:</strong> $8x^{3/2}y\\sqrt{3y}$.</div>
-        </li>`;
-
-      // (d) Sum multiples of 2 or 3 in [L,U]
-      const Lb = randInt(80,150), Ub = randInt(900,1200);
-      const apSum = (L,U,s) => {
-        const first = Math.ceil(L/s)*s, last = Math.floor(U/s)*s;
-        if (first>last) return {n:0, S:0};
-        const n = Math.floor((last-first)/s)+1;
-        return {n, S: n*(first+last)/2};
-      };
-      const S2 = apSum(Lb,Ub,2), S3 = apSum(Lb,Ub,3), S6 = apSum(Lb,Ub,6);
-      const total = S2.S + S3.S - S6.S;
-      const partD = `
-        <li><strong>Series (Inclusion–Exclusion).</strong> Find the sum of all integers between $${Lb}$ and $${Ub}$ inclusive that are multiples of $2$ or $3$.
-          <div class="answer"><strong>Answer:</strong> $S=${total}$ with counts $n_2=${S2.n}, n_3=${S3.n}, n_6=${S6.n}$.</div>
-        </li>`;
-
-      // (e) Babylonian sqrt
-      const nB = randomNonSquare(50,120);
-      const x0 = Math.floor(Math.sqrt(nB));
-      const x1 = (x0 + nB/x0)/2;
-      const x2 = (x1 + nB/x1)/2;
-      const partE = `
-        <li><strong>Approximation (Babylonian/Newton).</strong> Use two iterations to approximate $\\sqrt{${nB}}$ to four decimal places.
-          <div class="answer"><strong>Answer:</strong> $x_0=${x0.toFixed(1)}$, $x_1=${x1.toFixed(9)}$, $x_2=${x2.toFixed(9)}$, so $\\sqrt{${nB}}\\approx ${x2.toFixed(4)}$.</div>
-        </li>`;
-
-      const li = wrapParts(partA + partB + partC + partD + partE);
-      ol.appendChild(li);
-      return ol;
-    }
-
-    // ---------- Section D: Number Systems ----------
-    function buildNumberSystems() {
-      const sec = el("section");
-      sec.appendChild(el("h2","", "D. Number Systems Matching & Classification"));
-
-      // Matching
-      const matchWrap = el("div");
-      matchWrap.innerHTML = `
-        <div><strong>Match each set symbol to its description.</strong> Use each letter once.</div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; margin-top:8px;">
-          <ol>
-            <li>$\\mathbb{N}$</li>
-            <li>$\\mathbb{W}$</li>
-            <li>$\\mathbb{Z}$</li>
-            <li>$\\mathbb{Q}$</li>
-            <li>$\\mathbb{I}$</li>
-            <li>$\\mathbb{R}$</li>
-          </ol>
-          <ol type="A">
-            <li>All real numbers that \\emph{cannot} be written as a fraction of integers (e.g., $\\sqrt{2},\\ \\pi$).</li>
-            <li>$\\{0,1,2,3,\\dots\\}$</li>
-            <li>All rational and irrational numbers on the number line.</li>
-            <li>$\\{1,2,3,\\dots\\}$</li>
-            <li>$\\{\\dots,-2,-1,0,1,2,\\dots\\}$</li>
-            <li>Numbers expressible as $\\dfrac{a}{b}$ with $a,b\\in\\mathbb{Z},\\,b\\ne 0$ (including terminating or repeating decimals).</li>
-          </ol>
+      <div style="margin-top:16px">
+        <h3 style="margin:0 0 8px 0; color:var(--muted)">Jump legend</h3>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div class="jump"><span class="badge">⚡</span>Plus 3</div>
+          <div class="jump"><span class="badge">⏩</span>Plus 2</div>
+          <div class="jump"><span class="badge">➕</span>Plus 1</div>
+          <div class="jump"><span class="badge">↩️</span>Back 1</div>
+          <div class="jump"><span class="badge">🌀</span>Back 3</div>
         </div>
-        <div class="answer"><strong>Answer:</strong> $1\\to D,\\;2\\to B,\\;3\\to E,\\;4\\to F,\\;5\\to A,\\;6\\to C$.</div>
-      `;
-      sec.appendChild(matchWrap);
+      </div>
 
-      // Classification
-      const classify = el("div");
-      classify.innerHTML = `
-        <div style="margin-top:12px;"><strong>Classify each number by the smallest set it belongs to:</strong></div>
-        <ol style="columns:2; -webkit-columns:2; -moz-columns:2; margin-top:6px;">
-          <li>$17$</li>
-          <li>$23$</li>
-          <li>$0.\\overline{33}$</li>
-          <li>$39$</li>
-          <li>$0.49$</li>
-          <li>$0.\\overline{55}$</li>
-        </ol>
-        <div class="answer"><strong>Answer:</strong> (i) $\\mathbb{N}$, (ii) $\\mathbb{N}$, (iii) $\\mathbb{Q}$, (iv) $\\mathbb{N}$, (v) $\\mathbb{Q}$, (vi) $\\mathbb{Q}$.</div>
-      `;
-      sec.appendChild(classify);
-      return sec;
+      <div style="margin-top:16px">
+        <button id="btnPause" class="muted" style="width:100%">Pause ⏸</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+  // ——— Primes & factorization ———
+  function isPrime(n){
+    if(n < 2) return false;
+    if(n % 2 === 0) return n === 2;
+    if(n % 3 === 0) return n === 3;
+    let i = 5, w = 2;
+    while(i * i <= n){ if(n % i === 0) return false; i += w; w = 6 - w; }
+    return true;
+  }
+  function primeFactors(n){
+    const f = [];
+    while(n % 2 === 0){ f.push(2); n/=2; }
+    let d = 3;
+    while(d * d <= n){ while(n % d === 0){ f.push(d); n/=d; } d += 2; }
+    if(n > 1) f.push(n);
+    return f;
+  }
+  function expectedInput(n){
+    return isPrime(n) ? String(n) : primeFactors(n).map(String).join('');
+  }
+  function expr(n){
+    return isPrime(n) ? String(n) : primeFactors(n).join('×');
+  }
+
+  // ——— Elements ———
+  const el = (id)=>document.getElementById(id);
+  const qNumber = el('qNumber');
+  const answer = el('answer');
+  const feedback = el('feedback');
+  const history = el('history');
+  const timerWrap = el('timer');
+  const bar = timerWrap.querySelector('.bar');
+  const kScore = el('kScore');
+  const kStreak = el('kStreak');
+  const kLives = el('kLives');
+  const kBest = el('kBest');
+
+  const btnStart = el('btnStart');
+  const btnReset = el('btnReset');
+  const btnSubmit = el('btnSubmit');
+  const btnSkip = el('btnSkip');
+  const btnPause = el('btnPause');
+
+  const ddDiff = el('difficulty');
+  const ddJumps = el('jumps');
+  const ddStartAt = el('startAt');
+
+  const jumpInfo = el('jumpInfo');
+  const jumpSymbol = el('jumpSymbol');
+  const jumpText = el('jumpText');
+
+  // ——— Jumps ———
+  const JUMPS = {
+    '+3': { delta: 3, symbol:'⚡', label:'Plus 3' },
+    '+2': { delta: 2, symbol:'⏩', label:'Plus 2' },
+    '+1': { delta: 1, symbol:'➕', label:'Plus 1' },
+    '-1': { delta:-1, symbol:'↩️', label:'Back 1' },
+    '-3': { delta:-3, symbol:'🌀', label:'Back 3' },
+  };
+  function pickNextJump(){
+    const mode = ddJumps.value; if(mode === 'off') return null;
+    const bag = []; const push=(k,w)=>{for(let i=0;i<w;i++) bag.push(k)};
+    if(mode==='light'){ push('+1',5); push('+2',2); push('+3',1); push('-1',2); }
+    else if(mode==='normal'){ push('+1',5); push('+2',3); push('+3',1); push('-1',3); }
+    else { push('+1',3); push('+2',3); push('+3',2); push('-1',3); push('-3',2); }
+    const key = bag[Math.floor(Math.random()*bag.length)];
+    return JUMPS[key];
+  }
+  
+  function showJump(next){
+    const big = document.getElementById('nextJumpBig');
+    if(!big) return;
+    if(!next){ big.textContent = ''; return; }
+    // include the symbol + label, big and centered
+    big.innerHTML = `<span aria-hidden="true">${next.symbol}</span> Next jump: ${next.label}`;
+  }
+
+
+
+  // ——— State ———
+  let state = {
+    running:false, paused:false,
+    score:0, streak:0, lives:3, best:Number(localStorage.getItem('pfs_best')||0),
+    n: Number((el('startAt')?.value)||2),        // current term (displayed)
+    target: Number((el('startAt')?.value)||2),   // next term to answer for (after jump)
+    lastMax: Number((el('startAt')?.value)||2) - 1,
+    nextJump:null,
+    timePer:Infinity, timeLeft:Infinity, timerId:null,
+  };
+  kBest.textContent = String(state.best);
+
+  // ——— Timing ———
+  function setDifficulty(val){ state.timePer = (val==='unlimited') ? Infinity : Number(val); }
+  function setTimerUI(){
+    if(!isFinite(state.timePer)) { timerWrap.classList.add('unlimited'); bar.style.width = '100%'; return; }
+    timerWrap.classList.remove('unlimited');
+    const pct = Math.max(0, Math.min(1, state.timeLeft / state.timePer));
+    bar.style.width = (pct*100).toFixed(1)+'%';
+  }
+  function startTicking(){
+    clearInterval(state.timerId);
+    if(!isFinite(state.timePer)) { setTimerUI(); return; }
+    state.timerId = setInterval(()=>{
+      if(!state.running || state.paused) return;
+      state.timeLeft -= 0.1;
+      if(state.timeLeft <= 0){ state.timeLeft = 0; setTimerUI(); timesUp(); }
+      else setTimerUI();
+    }, 100);
+  }
+
+  // ——— Game flow ———
+  function resetGame(){
+    state.running=false; state.paused=false; clearInterval(state.timerId);
+    state.lives=3; state.score=0; state.streak=0;
+    state.n = Number(ddStartAt.value);
+    document.getElementById('startPoint').textContent = `Starting point: ${state.n}`;
+    document.getElementById('skull')?.classList.remove('show');
+    state.target = state.n;                // will be set in nextRound()
+    state.lastMax = state.n - 1;           // ensures strict forward motion
+    state.nextJump = pickNextJump();
+    setDifficulty(ddDiff.value);
+    updateHUD();
+    qNumber.textContent = `n = —`;
+    feedback.textContent = 'Ready! Press Start.'; feedback.className = 'feedback';
+    answer.value='';
+    showJump(state.nextJump);
+    state.timeLeft = state.timePer; setTimerUI();
+  }
+
+  function startGame(){
+    resetGame();
+    state.running=true; state.paused=false;
+    nextRound();
+  }
+
+  function pauseToggle(){
+    if(!state.running) return;
+    state.paused = !state.paused;
+    btnPause.textContent = state.paused ? 'Resume ▶' : 'Pause ⏸';
+    feedback.textContent = state.paused ? 'Paused' : 'Go!';
+  }
+
+  // Display the CURRENT term, but compute the NEXT term as target
+  function nextRound(){
+    const j = state.nextJump;
+    let candidate = j ? (state.n + j.delta) : (state.n + 1);
+  
+    if (candidate < 2) candidate = 2;
+  
+    // Soft floor: allow going back, but not more than 5 below the farthest reached
+    const softFloor = Math.max(2, state.lastMax - 5);
+    if (candidate < softFloor) candidate = softFloor;
+  
+    state.target = candidate;
+  
+    qNumber.textContent = `n = ${state.n}`;
+    showJump(state.nextJump);
+  
+    answer.value=''; answer.focus();
+    state.timeLeft = state.timePer; setTimerUI(); startTicking();
+  }
+
+
+
+  function addHistory(n, e, good){
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = `${n} → ${e}`;
+    if(!good) chip.style.borderColor = 'rgba(239,68,68,.5)';
+    history.prepend(chip);
+    const kids = Array.from(history.children); for(let i=18;i<kids.length;i++) kids[i].remove();
+  }
+
+  function updateHUD(){
+    kScore.textContent = String(state.score);
+    kStreak.textContent = String(state.streak);
+    kLives.textContent = '❤'.repeat(state.lives) + '♡'.repeat(3 - state.lives);
+    kBest.textContent = String(state.best);
+  }
+
+  function proceed(){
+    // Accept the next term and prepare the following round
+    state.lastMax = Math.max(state.lastMax, state.target);
+    state.n = state.target;                      // ✅ move to the term the student just produced
+    state.nextJump = pickNextJump();             // next jump affects the NEXT target
+    nextRound();
+  }
+
+  function endGame(reason){
+    document.getElementById('skull')?.classList.add('show');
+    state.running=false; clearInterval(state.timerId);
+    feedback.textContent = `Game over — ${reason}`; feedback.className='feedback bad';
+    qNumber.textContent = 'n = —';
+    showJump(null);
+    updateHUD();
+  }
+
+  function miss(reason){
+    state.lives -= 1; state.streak = 0; updateHUD();
+    if(state.lives <= 0) { endGame(reason); return; }
+    feedback.textContent = reason + ' Next!'; feedback.className='feedback bad';
+    // Log what they were standing on (current) for clarity
+    addHistory(state.n, expr(state.n), false);
+    proceed();
+  }
+
+  function timesUp(){ if(!state.running) return; miss("Time's up!"); }
+
+  function submit(){
+    if(!state.running || state.paused) return;
+    const raw = answer.value.trim();
+    if(!raw){ answer.classList.add('shake'); setTimeout(()=>answer.classList.remove('shake'), 300); return; }
+    const cleaned = raw.replace(/[xX×\s]/g, '');
+    if(!/^\d+$/.test(cleaned)){
+      feedback.textContent = 'Digits only please (×, x allowed but ignored).';
+      feedback.className = 'feedback bad';
+      answer.classList.add('shake'); setTimeout(()=>answer.classList.remove('shake'), 300);
+      return;
     }
-
-    // ---------- Assemble full quiz ----------
-    function buildQuiz() {
-      const root = el("div");
-      // Section A
-      const secA = el("section");
-      secA.appendChild(el("h2","","A. Multiple Choice (16 questions, 1 mark each)"));
-      secA.appendChild(el("div","meta","Circle the best answer."));
-      secA.appendChild(buildMC());
-      root.appendChild(secA);
-
-      // Section B
-      const secB = el("section");
-      secB.appendChild(el("h2","","B. Numeric Response (7 questions, 2 marks each)"));
-      secB.appendChild(el("div","meta","Write your final answer clearly."));
-      secB.appendChild(buildNR());
-      root.appendChild(secB);
-
-      // Section C
-      const secC = el("section");
-      secC.appendChild(el("h2","","C. Extended Response (1 question, 14 marks)"));
-      secC.appendChild(el("div","meta","Show full reasoning and use positive exponents in final answers."));
-      secC.appendChild(buildER());
-      root.appendChild(secC);
-
-      // Section D
-      root.appendChild(buildNumberSystems());
-
-      root.appendChild(el("div","foot","Refresh with the button above to regenerate a brand-new randomized quiz."));
-      return root;
+    const want = expectedInput(state.target);   // ✅ expect input for the NEXT term
+    if(cleaned === want){
+      state.score += 1; state.streak += 1;
+      if(state.score > state.best){
+        state.best = state.score; localStorage.setItem('pfs_best', String(state.best));
+      }
+      feedback.textContent = 'Correct!'; feedback.className='feedback ok'; updateHUD();
+      // Log the current term they stood on (optional; keeps chips consistent)
+      addHistory(state.n, expr(state.n), true);
+      proceed();
+    } else {
+      feedback.textContent = `Not quite. Expected: “${want}” (i.e., ${expr(state.target)}).`;
+      feedback.className='feedback bad';
+      answer.classList.add('shake'); setTimeout(()=>answer.classList.remove('shake'), 300);
+      miss('Wrong answer.');
     }
+  }
 
-    // ---------- Wiring ----------
-    const quizRoot = document.getElementById("quizRoot");
-    const regenBtn = document.getElementById("regen");
-    const ansToggle = document.getElementById("answersToggle");
+  // ——— Events ———
+  btnStart.addEventListener('click', startGame);
+  btnReset.addEventListener('click', resetGame);
+  btnSubmit.addEventListener('click', submit);
+  btnSkip.addEventListener('click', ()=>{ if(state.running) proceed(); });
+  btnPause.addEventListener('click', pauseToggle);
+  ddDiff.addEventListener('change', ()=> setDifficulty(ddDiff.value));
 
-    function renderQuiz() {
-      quizRoot.innerHTML = "";
-      const quiz = buildQuiz();
-      // answers toggle class
-      quizRoot.classList.toggle("show-answers", ansToggle.checked);
-      quizRoot.appendChild(quiz);
-      // KaTeX render
-      renderMathInElement(quizRoot, {
-        delimiters: [
-          {left: "$$", right: "$$", display: true},
-          {left: "\\[", right: "\\]", display: true},
-          {left: "$", right: "$", display: false},
-          {left: "\\(", right: "\\)", display: false}
-        ],
-        throwOnError: false
-      });
-    }
+  // Keyboard shortcuts
+  answer.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); submit(); }});
+  document.addEventListener('keydown', (e)=>{
+    if(e.key==='Enter' && document.activeElement!==answer){ submit(); }
+    if(e.key==='Escape') pauseToggle();
+    if((e.key==='s' || e.key==='S') && !state.paused) { if(state.running) proceed(); }
+  });
 
-    regenBtn.addEventListener("click", renderQuiz);
-    ansToggle.addEventListener("change", ()=> quizRoot.classList.toggle("show-answers", ansToggle.checked));
-    
-    // first load (after KaTeX auto-render is ready)
-    window.addEventListener("load", renderQuiz);
-    // (or: document.addEventListener("DOMContentLoaded", renderQuiz);  // also fine)
+  // Boot
+  resetGame();
+</script>
 
-    // first load
-    renderQuiz();
-  </script>
+
 </body>
 </html>
