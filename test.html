@@ -411,23 +411,49 @@
     '-3': { delta:-3, symbol:'🌀', label:'Back 3' },
   };
   function pickNextJump(){
-    const mode = ddJumps.value; if(mode === 'off') return null;
-    const bag = []; const push=(k,w)=>{for(let i=0;i<w;i++) bag.push(k)};
-    if(mode==='light'){ push('+1',5); push('+2',2); push('+3',1); push('-1',2); }
-    else if(mode==='normal'){ push('+1',5); push('+2',3); push('+3',1); push('-1',3); }
+    const mode = ddJumps.value; 
+    if (mode === 'off') return null;
+  
+    const bag = [];
+    const push = (k,w)=>{ for(let i=0;i<w;i++) bag.push(k); };
+  
+    if (mode==='light'){ push('+1',5); push('+2',2); push('+3',1); push('-1',2); }
+    else if (mode==='normal'){ push('+1',5); push('+2',3); push('+3',1); push('-1',3); }
     else { push('+1',3); push('+2',3); push('+3',2); push('-1',3); push('-3',2); }
-    const key = bag[Math.floor(Math.random()*bag.length)];
+  
+    const base = Number(state?.n ?? 2);
+  
+    // keep only jumps that won't drop below 2 from the current n
+    const filtered = bag.filter(k => base + JUMPS[k].delta >= 2);
+  
+    // if everything got filtered (edge case), fall back to non-negative jumps
+    const pool = filtered.length ? filtered : bag.filter(k => JUMPS[k].delta >= 0);
+  
+    const key = pool[Math.floor(Math.random() * pool.length)];
     return JUMPS[key];
   }
+
   
   function showJump(next){
     const big = document.getElementById('nextJumpBig');
     if(!big) return;
     if(!next){ big.textContent = ''; return; }
-    const mag = Math.abs(next.delta);
-    const dir = next.delta >= 0 ? 'Up' : 'Down';
+  
+    // Use the *effective* target (after floor rules) to decide Up/Down label.
+    // If state.target is already computed this round, use it; otherwise estimate it.
+    let cand = Number.isFinite(state.target) ? state.target : (state.n + next.delta);
+  
+    // Apply the same floors you use in nextRound()
+    if (cand < 2) cand = 2;
+    if (state.n === 2 && cand <= 2) cand = 3;
+  
+    const eff = cand - state.n;
+    const mag = Math.abs(eff);
+    const dir = eff >= 0 ? 'Up' : 'Down';
+  
     big.textContent = `Jump ${mag} ${dir}`;
   }
+
 
 
   // ——— State ———
@@ -617,11 +643,29 @@
   // Keyboard shortcuts
   answer.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); submit(); }});
   document.addEventListener('keydown', (e)=>{
-    if(e.key === 'Enter' && document.activeElement !== answer){
+    const targetIsInput = document.activeElement === answer;
+  
+    // S → Start (don’t trigger while typing in the input)
+    if (e.key === 's' || e.key === 'S') {
+      if (!targetIsInput) {
+        e.preventDefault();
+        startGame();    // same as clicking Start ▶
+      }
+      return;
+    }
+  
+    // Esc → Reset (always allowed)
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      resetGame();      // same as clicking Reset
+      return;
+    }
+  
+    // Enter → Submit (only when focus isn’t in the input)
+    if (e.key === 'Enter' && !targetIsInput) {
       submit();
     }
   });
-
 
 
   // Boot
