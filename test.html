@@ -213,6 +213,16 @@
     .rules-legend ul.ins{ margin:0; padding-left:18px; }
     .rules-legend ul.ins li{ margin:4px 0; }
     .rules-legend code{ font-family:"JetBrains Mono", monospace; }
+    .rules-legend kbd{
+      display:inline-block;
+      padding:0 .4em;
+      border:1px solid #cbd5e1;
+      border-bottom-width:2px;
+      border-radius:6px;
+      background:#f8fafc;
+      font-family:"JetBrains Mono", monospace;
+      font-size:.95em;
+    }
 
     /* Centered header + frog title */
     header.hero{
@@ -348,6 +358,7 @@
           <li><strong>Red flash:</strong> briefly shows the correct next number you should have entered; the sequence continues from that value.</li>
           <li><strong>Never below 2:</strong> the sequence cannot drop below 2 (from 2 it moves to at least 3).</li>
           <li><strong>Game over:</strong> when lives reach 0, a ☠️ covers the screen.</li>
+          <li><strong>Hotkeys:</strong> <kbd>S</kbd> Start, <kbd>Esc</kbd> Reset, <kbd>Enter</kbd> Submit.</li>
         </ul>
       </div>
 
