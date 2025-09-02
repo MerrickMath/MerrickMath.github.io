@@ -48,7 +48,8 @@
     .muted{ background:#f8fafc; color:var(--muted); }
     .danger{ background:var(--bad); color:#fff; border:none; }
 
-    .columns{ display:grid; grid-template-columns: 1.2fr .8fr; gap:16px; }
+    .columns{ display:grid; grid-template-columns: 1fr; gap:16px; }
+
     @media (max-width:900px){ .columns{ grid-template-columns:1fr; } }
 
     .timer{ height:10px; background:#e2e8f0; border-radius:999px; overflow:hidden; margin-bottom:12px; }
@@ -58,24 +59,12 @@
     .question{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
     .n{ font-family:"STIX Two Text", serif; font-weight:800; font-size: clamp(34px, 7vw, 58px); letter-spacing:.4px; }
 
-    .jump{ display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:12px; background:#f1f5f9; border:1px dashed rgba(2,6,23,.12); color:var(--muted); font-weight:700; }
-    .jump .badge{ font-size:22px; line-height:1; padding:6px 10px; border-radius:12px; background:#fff; border:1px solid rgba(2,6,23,.08); box-shadow:0 2px 6px rgba(2,6,23,.08); }
-
     .answer{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:10px; }
     input[type="text"]{ font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:clamp(18px,3vw,22px); min-width:220px; padding:12px 14px; }
 
     .feedback{ min-height:28px; font-weight:700; }
     .ok{ color:var(--ok) }
     .bad{ color:var(--bad) }
-
-    .history h3{ margin:12px 0 6px; color:var(--muted); font-size:14px; }
-    .items{ display:flex; flex-wrap:wrap; gap:8px; }
-    .chip{ background:#f8fafc; border:1px solid rgba(2,6,23,.08); border-radius:999px; padding:8px 12px; font-family:"JetBrains Mono"; font-size:14px; }
-
-    .status{ display:grid; grid-template-columns: repeat(4,1fr); gap:10px; }
-    .tile{ background:#f8fafc; border:1px solid rgba(2,6,23,.06); border-radius:16px; padding:12px 14px; text-align:center; }
-    .tile .k{ font-weight:800; font-size:22px; }
-    .tile .v{ color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.3px; }
 
     .shake{ animation:shake .25s linear 2; }
     @keyframes shake{ 0%{transform:translateX(0)}25%{transform:translateX(4px)}50%{transform:translateX(-4px)}75%{transform:translateX(3px)}100%{transform:translateX(0)} }
@@ -86,22 +75,7 @@
     
     /* Hide the current n so students must remember it */
     .n{ display:none; }
-    
-    .nextjump-big{
-      font-family:"STIX Two Text", serif;
-      font-weight:700;
-      letter-spacing:.2px;
-      line-height:1.05;
-      font-size: clamp(16px, 3vw, 32px); /* was clamp(24px, 5vw, 56px) */
-    }
-    /* make the emoji symbol slightly smaller than the text */
-    .nextjump-big span[aria-hidden="true"]{ font-size:.8em; }
-
-    @media (max-width: 640px){
-      .nextjump-big{ font-size: clamp(14px, 4.2vw, 24px); }
-    }
-
-    
+  
     /* Make the card a positioning context for the skull overlay */
     .card{ position: relative; }
     
@@ -115,14 +89,130 @@
     }
     .skull.show{ display:flex; }
 
-    /* Starting point label under the big Next jump */
-    .startpoint{
-      margin-top: 6px;
-      font-weight: 600;
-      color: var(--muted);
-      font-size: clamp(14px, 2.2vw, 18px);
+    /* Compact HUD above the timer */
+    .hud{
+      display:grid;
+      grid-template-columns: repeat(4, auto);
+      gap:12px;
+      align-items:end;
+      justify-content:space-between;
+      margin-bottom:8px; /* space before the time bar */
+    }
+    .hud-item{ text-align:center; }
+    .hud-k{ font-weight:800; font-size: clamp(16px, 2.2vw, 22px); }
+    .hud-v{ color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.3px; }
+    
+    /* Stack on small screens */
+    @media (max-width: 560px){
+      .hud{
+        grid-template-columns: repeat(2, auto);
+        row-gap:6px;
+      }
     }
 
+    /* Tighter spacing for the block under the timer */
+    .question { margin: 6px 0 4px; }
+    
+    /* Make the big jump clear but compact */
+    .nextjump-big{
+      font-weight:700;
+      letter-spacing:.2px;
+      line-height:1.08;
+      font-size: clamp(18px, 3.4vw, 28px);
+      margin: 0;             /* remove extra space */
+    }
+    
+    /* Starting point: smaller and lighter */
+    .startpoint{
+      margin-top: 2px;
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    
+    /* Stack input and buttons vertically; center them */
+    .answer{
+      display:flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    
+    /* Wider input, centered text */
+    #answer{
+      width: min(460px, 92%);
+      text-align: center;
+    }
+    
+    /* Put buttons on a single compact row */
+    .answer .actions{
+      display:flex;
+      gap: 8px;
+    }
+    
+    /* Make Submit prominent, Skip quiet */
+    #btnSubmit{ font-weight:800; }
+    
+    /* Feedback: subtle and small to reduce noise */
+    #feedback{
+      margin-top: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    #feedback.ok{ color: var(--ok); }
+    #feedback.bad{ color: var(--bad); }
+    .startpoint{ display:none; }
+
+    /* separator before rules/legend */
+    .sep{
+      border:0; height:1px; background:#e5e7eb; margin:12px 0;
+    }
+    
+    /* container for rules + legend inside the main card */
+    .rules-legend{ margin-top:4px; color:var(--muted); }
+    .rules-legend .subtle{ margin:8px 0 6px; font-size:14px; color:var(--muted); }
+    .rules-legend p{ margin:0 0 8px 0; }
+    
+
+    /* Let us position an overlay inside the answer area */
+    .answer{ position: relative; }
+    
+    /* Green overlay button that covers the input area until Start is pressed */
+    #overlayStart{
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 14px;
+      background: var(--accent); /* same color as .primary Start button */
+      color: #fff;
+      font-weight: 800;
+      font-size: clamp(14px, 2.6vw, 18px);
+      border: none;
+      box-shadow: var(--shadow);
+      z-index: 2;                 /* sit above the input/buttons */
+      cursor: default;            /* visual button; tells user to press Start */
+    }
+
+    /* Red flash for lost life (reuses .skull positioning) */
+    .skull.is-flash{
+      color: var(--bad);
+      animation: flashOut .65s ease;
+    }
+    @keyframes flashOut{
+      0%{ opacity:0; transform:scale(.92) }
+      15%{ opacity:1; transform:scale(1) }
+      85%{ opacity:1 }
+      100%{ opacity:0 }
+    }
+
+    /* Make the overlays sit above all UI */
+    .skull{ z-index: 10000; }     /* applies to both skull and red flash */
+    #flash{ z-index: 10001; }     /* ensure the red flash is above the skull if both showed */
+
+    .rules-legend ul.ins{ margin:0; padding-left:18px; }
+    .rules-legend ul.ins li{ margin:4px 0; }
+    .rules-legend code{ font-family:"JetBrains Mono", monospace; }
 
   </style>
 </head>
@@ -168,72 +258,61 @@
 
   <div class="columns">
     <section class="card" aria-live="polite">
+      <div class="hud">
+        <div class="hud-item"><div class="hud-k" id="kScore">0</div><div class="hud-v">Score</div></div>
+        <div class="hud-item"><div class="hud-k" id="kStreak">0</div><div class="hud-v">Streak</div></div>
+        <div class="hud-item"><div class="hud-k" id="kLives">❤❤❤</div><div class="hud-v">Lives</div></div>
+        <div class="hud-item"><div class="hud-k" id="kBest">0</div><div class="hud-v">Best</div></div>
+      </div>
+
       <div id="timer" class="timer"><div class="bar" style="width:100%"></div></div>
 
       <div class="question">
         <div class="n" id="qNumber">n = —</div>  <!-- stays in DOM but is hidden by CSS -->
-        <div class="nextjump-big" id="nextJumpBig">Next jump: +1</div>
+        <div class="nextjump-big" id="nextJumpBig"></div>
         <div id="startPoint" class="startpoint">Starting point: 2</div>
       </div>
       
       <!-- skull overlay (stays inside the same <section class="card">) -->
       <div id="skull" class="skull" aria-hidden="true">☠️</div>
+      <div id="flash" class="skull" aria-hidden="true"></div>
+
 
       
 
       <div class="answer">
-        <input id="answer" type="text" inputmode="numeric" autocomplete="off" placeholder="Enter digits only: 8 → 2×2×2 → 222" />
-        <button id="btnSubmit" class="muted">Submit ⏎</button>
-        <button id="btnSkip" class="muted">Skip ↷</button>
+        <input id="answer" type="text" inputmode="numeric" autocomplete="off"
+               placeholder="Type answer (e.g., 222 for 8)" />
+        <div class="actions">
+          <button id="btnSubmit" class="primary">Submit ⏎</button>
+        </div>
+      
+        <!-- Overlay that covers the input until Start is pressed -->
+        <button id="overlayStart">Press Start To Begin</button>
       </div>
 
-      <div class="feedback" id="feedback">Press Enter to submit · Esc to pause · X characters (×, x) are ignored</div>
+
+
+      <div class="feedback" id="feedback">Press Enter to submit · “×/x” are ignored</div>
+      <hr class="sep">
+
+      <div class="rules-legend">
+        <h3 class="subtle">Instructions</h3>
+        <ul class="ins">
+          <li>From the current number, apply the “Jump” shown (e.g., <em>Jump 1 Up</em> → +1) to get the <strong>next</strong> integer.</li>
+          <li>If the next integer is <strong>prime</strong>, type the number (e.g., 11 → <code>11</code>).</li>
+          <li>If it’s <strong>composite</strong>, type its prime factors concatenated in ascending order (e.g., 12 → 2×2×3 → <code>223</code>).</li>
+          <li>Digits only. You can type <code>x</code> or <code>×</code> — they’re ignored.</li>
+          <li><strong>Lives:</strong> You have 3 ❤. A wrong answer or timeout loses one.</li>
+          <li><strong>Red flash:</strong> briefly shows the correct next number you should have entered; the sequence continues from that value.</li>
+          <li><strong>Never below 2:</strong> the sequence cannot drop below 2 (from 2 it moves to at least 3).</li>
+          <li><strong>Game over:</strong> when lives reach 0, a ☠️ covers the screen.</li>
+        </ul>
+      </div>
+
 
     </section>
-
-    <aside class="card">
-      <div class="status">
-        <div class="tile"><div class="k" id="kScore">0</div><div class="v">Score</div></div>
-        <div class="tile"><div class="k" id="kStreak">0</div><div class="v">Streak</div></div>
-        <div class="tile"><div class="k" id="kLives">❤❤❤</div><div class="v">Lives</div></div>
-        <div class="tile"><div class="k" id="kBest">0</div><div class="v">Best</div></div>
-      </div>
-
-      <div style="margin-top:16px">
-        <div style="margin-top:16px">
-          <!-- MOVED instructions -->
-          <p style="margin:0 0 12px 0; color:var(--muted)">
-            Rule: for each successive integer, if it’s <strong>prime</strong>, enter the number.
-            If it’s <strong>composite</strong>, enter its prime factors concatenated in ascending order.
-            The sequence never drops below 2 and always moves forward.
-            Examples: 11 → <span style="font-family:'JetBrains Mono'">11</span>,
-            12 → 2×2×3 → <span style="font-family:'JetBrains Mono'">223</span>.
-          </p>
-        
-          <h3 style="margin:0 0 8px 0; color:var(--muted)">Jump legend</h3>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-            <div class="jump"><span class="badge">⚡</span>Plus 3</div>
-            <div class="jump"><span class="badge">⏩</span>Plus 2</div>
-            <div class="jump"><span class="badge">➕</span>Plus 1</div>
-            <div class="jump"><span class="badge">↩️</span>Back 1</div>
-            <div class="jump"><span class="badge">🌀</span>Back 3</div>
-          </div>
-        </div>
-
-        <h3 style="margin:0 0 8px 0; color:var(--muted)">Jump legend</h3>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-          <div class="jump"><span class="badge">⚡</span>Plus 3</div>
-          <div class="jump"><span class="badge">⏩</span>Plus 2</div>
-          <div class="jump"><span class="badge">➕</span>Plus 1</div>
-          <div class="jump"><span class="badge">↩️</span>Back 1</div>
-          <div class="jump"><span class="badge">🌀</span>Back 3</div>
-        </div>
-      </div>
-
-      <div style="margin-top:16px">
-        <button id="btnPause" class="muted" style="width:100%">Pause ⏸</button>
-      </div>
-    </aside>
+    
   </div>
 </div>
 
@@ -267,7 +346,6 @@
   const qNumber = el('qNumber');
   const answer = el('answer');
   const feedback = el('feedback');
-  const history = el('history');
   const timerWrap = el('timer');
   const bar = timerWrap.querySelector('.bar');
   const kScore = el('kScore');
@@ -278,16 +356,10 @@
   const btnStart = el('btnStart');
   const btnReset = el('btnReset');
   const btnSubmit = el('btnSubmit');
-  const btnSkip = el('btnSkip');
-  const btnPause = el('btnPause');
 
   const ddDiff = el('difficulty');
   const ddJumps = el('jumps');
   const ddStartAt = el('startAt');
-
-  const jumpInfo = el('jumpInfo');
-  const jumpSymbol = el('jumpSymbol');
-  const jumpText = el('jumpText');
 
   // ——— Jumps ———
   const JUMPS = {
@@ -311,10 +383,10 @@
     const big = document.getElementById('nextJumpBig');
     if(!big) return;
     if(!next){ big.textContent = ''; return; }
-    // include the symbol + label, big and centered
-    big.innerHTML = `<span aria-hidden="true">${next.symbol}</span> Next jump: ${next.label}`;
+    const mag = Math.abs(next.delta);
+    const dir = next.delta >= 0 ? 'Up' : 'Down';
+    big.textContent = `Jump ${mag} ${dir}`;
   }
-
 
 
   // ——— State ———
@@ -365,4 +437,145 @@
     answer.value='';
     showJump(state.nextJump);
     state.timeLeft = state.timePer; setTimerUI();
+    document.getElementById('overlayStart')?.classList.remove('hidden');
   }
+
+  function startGame(){
+    resetGame(); // this shows the overlay
+    document.getElementById('overlayStart')?.classList.add('hidden'); // now hide it
+    state.running = true;
+    state.paused = false;
+    nextRound();
+  }
+
+
+
+  // Display the CURRENT term, but compute the NEXT term as target
+  function nextRound(){
+    const j = state.nextJump;
+    let candidate = j ? (state.n + j.delta) : (state.n + 1);
+    
+    // Hard floor: never below 2
+    if (candidate < 2) candidate = 2;
+    
+    // If we're already at the floor (n = 2), always move forward at least to 3
+    if (state.n === 2 && candidate <= 2) candidate = 3;
+    
+    // Soft floor (optional): allow some backtracking but not more than 5 below the farthest reached
+    const softFloor = Math.max(2, state.lastMax - 5);
+    if (candidate < softFloor) candidate = softFloor;
+
+  
+    state.target = candidate;
+  
+    qNumber.textContent = `n = ${state.n}`;
+    showJump(state.nextJump);
+  
+    answer.value=''; answer.focus();
+    state.timeLeft = state.timePer; setTimerUI(); startTicking();
+  }
+
+
+
+  // Recent UI removed — make this a no-op to avoid errors
+  function addHistory(){ /* no-op */ }
+
+
+  function updateHUD(){
+    kScore.textContent = String(state.score);
+    kStreak.textContent = String(state.streak);
+    kLives.textContent = '❤'.repeat(state.lives) + '♡'.repeat(3 - state.lives);
+    kBest.textContent = String(state.best);
+  }
+
+  function proceed(){
+    // Accept the next term and prepare the following round
+    state.lastMax = Math.max(state.lastMax, state.target);
+    state.n = Math.max(2, state.target);         // hard floor at 2, always
+                     // ✅ move to the term the student just produced
+    state.nextJump = pickNextJump();             // next jump affects the NEXT target
+    nextRound();
+  }
+
+  function endGame(reason){
+    document.getElementById('skull')?.classList.add('show');
+    state.running=false; clearInterval(state.timerId);
+    feedback.textContent = `Game over — ${reason}`; feedback.className='feedback bad';
+    qNumber.textContent = 'n = —';
+    showJump(null);
+    updateHUD();
+  }
+
+  function flashPrev(){
+    const flash = document.getElementById('flash');
+    if(!flash) return;
+    // Show the NEXT number in the sequence (what the user should have entered)
+    flash.textContent = String(state.target);
+    flash.classList.add('show','is-flash');
+    setTimeout(()=> flash.classList.remove('show','is-flash'), 650);
+  }
+
+  function miss(reason){
+    state.lives -= 1; state.streak = 0; updateHUD();
+    if(state.lives <= 0) { endGame(reason); return; }
+  
+    flashPrev(); // shows the expected next number (e.g., 4 when n=3 & Jump 1 Up)
+  
+    feedback.textContent = reason + ' Next!'; feedback.className='feedback bad';
+    proceed(); // sets state.n = state.target and continues the sequence
+  }
+
+  function timesUp(){ if(!state.running) return; miss("Time's up!"); }
+
+  function submit(){
+    if(!state.running || state.paused) return;
+    const raw = answer.value.trim();
+    if(!raw){ answer.classList.add('shake'); setTimeout(()=>answer.classList.remove('shake'), 300); return; }
+    const cleaned = raw.replace(/[xX×\s]/g, '');
+    if(!/^\d+$/.test(cleaned)){
+      feedback.textContent = 'Digits only please (×, x allowed but ignored).';
+      feedback.className = 'feedback bad';
+      answer.classList.add('shake'); setTimeout(()=>answer.classList.remove('shake'), 300);
+      return;
+    }
+    const want = expectedInput(state.target);   // ✅ expect input for the NEXT term
+    if(cleaned === want){
+      state.score += 1; state.streak += 1;
+      if(state.score > state.best){
+        state.best = state.score; localStorage.setItem('pfs_best', String(state.best));
+      }
+      feedback.textContent = 'Correct!'; feedback.className='feedback ok'; updateHUD();
+      // Log the current term they stood on (optional; keeps chips consistent)
+      addHistory(state.n, expr(state.n), true);
+      proceed();
+    } else {
+      feedback.textContent = `Not quite. Expected: “${want}” (i.e., ${expr(state.target)}).`;
+      feedback.className='feedback bad';
+      answer.classList.add('shake'); setTimeout(()=>answer.classList.remove('shake'), 300);
+      miss('Wrong answer.');
+    }
+  }
+
+  // ——— Events ———
+  btnStart.addEventListener('click', startGame);
+  btnReset.addEventListener('click', resetGame);
+  btnSubmit.addEventListener('click', submit);
+  ddDiff.addEventListener('change', ()=> setDifficulty(ddDiff.value));
+
+  // Keyboard shortcuts
+  answer.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); submit(); }});
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter' && document.activeElement !== answer){
+      submit();
+    }
+  });
+
+
+
+  // Boot
+  resetGame();
+</script>
+
+
+</body>
+</html>
