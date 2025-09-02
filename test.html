@@ -597,11 +597,22 @@
     }
   }
 
+  function resetBest(){
+    state.best = 0;
+    localStorage.removeItem('pfs_best'); // clear persisted best
+    updateHUD();                         // refresh the HUD (kBest -> 0)
+  }
+
   // ——— Events ———
   btnStart.addEventListener('click', startGame);
   btnReset.addEventListener('click', resetGame);
   btnSubmit.addEventListener('click', submit);
-  ddDiff.addEventListener('change', ()=> setDifficulty(ddDiff.value));
+  ddDiff.addEventListener('change', ()=>{
+    setDifficulty(ddDiff.value);
+    resetBest();
+  });
+  ddJumps.addEventListener('change', resetBest);
+  ddStartAt.addEventListener('change', resetBest);
 
   // Keyboard shortcuts
   answer.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); submit(); }});
