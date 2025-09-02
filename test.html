@@ -235,12 +235,10 @@
     .controls.controls-row{
       width:min(900px, 96vw);
       display:grid;
-      grid-template-columns: 1fr 1fr auto auto; /* four visible columns */
+      grid-template-columns: 1fr 1fr 1fr auto auto; /* add a third 1fr for Start-at */
       gap:10px;
     }
-    
-    /* Hide the Start-at selector visually but keep it for JS */
-    .controls .startAt-block{ display:none; }
+
     
     /* Ensure the button cells don’t stretch weirdly */
     .controls .only-buttons{
