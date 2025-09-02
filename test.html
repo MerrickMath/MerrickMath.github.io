@@ -243,11 +243,13 @@
     
     /* Controls row: Difficulty | Jumps | Start | Reset (Start-at hidden) */
     .controls.controls-row{
-      width:min(900px, 96vw);
+      width:min(700px, 96vw);   /* narrower container => buttons closer */
       display:grid;
-      grid-template-columns: 1fr 1fr 1fr auto auto; /* add a third 1fr for Start-at */
-      gap:10px;
+      grid-template-columns: 1fr 1fr 1fr auto auto;
+      gap:6px;                  /* tighten spacing between controls */
+      margin-inline:auto;       /* keep it centered */
     }
+
 
     
     /* Ensure the button cells don’t stretch weirdly */
@@ -256,6 +258,8 @@
       align-items:end;
       justify-content:center;
     }
+
+
 
   </style>
 </head>
