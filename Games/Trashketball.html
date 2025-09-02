@@ -281,16 +281,28 @@
 
     function genAlgebra() {
       const out = [];
-      // ax + b = c with nice integer x
-      for (let i=0;i<3;i++) {
-        let a = choice([ -6,-5,-4,-3,3,4,5,6 ]);
-        let x = randInt(-9,9);
-        let b = randInt(-9,9);
-        const c = a*x + b;
-        out.push({ q: `${a}x + ${b} = ${c}`, a: `x = ${x}` });
+    
+      for (let i = 0; i < 3; i++) {
+        let a = choice([-6,-5,-4,-3,3,4,5,6]);
+        let x = randInt(-9, 9);
+        let b = randInt(-9, 9);
+        const c = a * x + b;
+    
+        // Format pieces
+        const aStr = a === 1 ? '' : (a === -1 ? '-' : String(a));
+        const bStr = b > 0 ? `+ ${b}` : (b < 0 ? `- ${Math.abs(b)}` : '');
+        const qStr = `${aStr}x ${bStr} = ${c}`;
+    
+        out.push({
+          q: qStr,
+          a: `x = ${x}`
+        });
       }
+    
       return out;
     }
+
+
 
     function generate(type) {
       switch (type) {
