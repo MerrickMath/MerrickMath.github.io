@@ -472,41 +472,49 @@
     '+1': { delta: 1, symbol:'➕', label:'Plus 1' },
     '-1': { delta:-1, symbol:'↩️', label:'Back 1' },
     '-3': { delta:-3, symbol:'🌀', label:'Back 3' },
+    'x2': { mult: 2, symbol:'×2', label:'Double Jump' },   // NEW
   };
+
   function pickNextJump(){
     const mode = ddJumps.value;
     if (mode === 'off') return null;
   
     const base = Number(state?.n ?? 2);
   
-    // Separate bags for up vs. down; weight ups much more heavily
+    // helper: what number would this key produce from 'base'?
+    const candidateFromKey = (k) => {
+      const j = JUMPS[k];
+      return j.mult ? base * j.mult : base + j.delta;
+    };
+  
+    // Separate bags for up vs. down; weight ups more
     const up = [], down = [];
     const push = (arr, k, w)=>{ for (let i=0;i<w;i++) arr.push(k); };
   
     if (mode === 'light'){
-      // mostly small positive moves
       push(up,'+1',8); push(up,'+2',3); push(up,'+3',1);
-      push(down,'-1',1);                                     // very rare
+      push(down,'-1',1);
     } else if (mode === 'normal'){
       push(up,'+1',7); push(up,'+2',4); push(up,'+3',2);
-      push(down,'-1',1);                                     // very rare
-    } else { // 'chaos' — still biased up, but can include -3 occasionally
+      push(down,'-1',1);
+    } else { // 'chaos' — add Double Jump, still bias up
       push(up,'+1',6); push(up,'+2',5); push(up,'+3',3);
-      push(down,'-1',1); push(down,'-3',1);                  // both rare
+      push(up,'x2',2);                       // NEW: Double Jump (rare)
+      push(down,'-1',1); push(down,'-3',1);
     }
   
-    // Never allow a jump that would drop below 2 from the current n
-    const upSafe   = up.filter(k   => base + JUMPS[k].delta >= 2);
-    const downSafe = down.filter(k => base + JUMPS[k].delta >= 2);
+    // Never allow a choice that would drop below 2
+    const upSafe   = up.filter(k   => candidateFromKey(k) >= 2);
+    const downSafe = down.filter(k => candidateFromKey(k) >= 2);
   
-    // Make down jumps quite infrequent
-    const P_DOWN = 0.12; // ≈12% of jumps (tune smaller for even fewer downs)
+    // Make downs infrequent
+    const P_DOWN = 0.12;
   
     let pool;
     if (downSafe.length && Math.random() < P_DOWN){
       pool = downSafe;
     } else {
-      pool = upSafe.length ? upSafe : (downSafe.length ? downSafe : up); // fallback safety
+      pool = upSafe.length ? upSafe : (downSafe.length ? downSafe : up);
     }
   
     const key = pool[Math.floor(Math.random() * pool.length)];
@@ -517,23 +525,26 @@
   
   function showJump(next){
     const big = document.getElementById('nextJumpBig');
-    if(!big) return;
+    if(!big){ return; }
     if(!next){ big.textContent = ''; return; }
   
-    // Use the *effective* target (after floor rules) to decide Up/Down label.
-    // If state.target is already computed this round, use it; otherwise estimate it.
-    let cand = Number.isFinite(state.target) ? state.target : (state.n + next.delta);
+    // If it's Double Jump, say so explicitly
+    if (next.mult === 2){
+      big.textContent = 'Double Jump (Time 2)';
+      return;
+    }
   
-    // Apply the same floors you use in nextRound()
+    // Otherwise compute effective up/down label using your floor rules
+    let cand = Number.isFinite(state.target) ? state.target : (state.n + next.delta);
     if (cand < 2) cand = 2;
     if (state.n === 2 && cand <= 2) cand = 3;
   
     const eff = cand - state.n;
     const mag = Math.abs(eff);
     const dir = eff >= 0 ? 'Up' : 'Down';
-  
     big.textContent = `Jump ${mag} ${dir}`;
   }
+
 
 
 
@@ -601,7 +612,14 @@
   // Display the CURRENT term, but compute the NEXT term as target
   function nextRound(){
     const j = state.nextJump;
-    let candidate = j ? (state.n + j.delta) : (state.n + 1);
+      let candidate;
+      if (!j) {
+        candidate = state.n + 1;
+      } else if (j.mult) {
+        candidate = state.n * j.mult;   // Double Jump
+      } else {
+        candidate = state.n + j.delta;
+      }
     
     // Hard floor: never below 2
     if (candidate < 2) candidate = 2;
