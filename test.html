@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prime‑Factor Sprint</title>
+  <title>Prime‑Factor Jumper</title>
   <meta name="description" content="Race the clock to speak the prime/composite sequence. Bright, clean, and classroom-ready."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -214,47 +214,90 @@
     .rules-legend ul.ins li{ margin:4px 0; }
     .rules-legend code{ font-family:"JetBrains Mono", monospace; }
 
+    /* Centered header + frog title */
+    header.hero{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      gap:12px;
+      margin-bottom:16px;
+    }
+    header.hero .title{
+      margin:0;
+      font-weight:800;
+      letter-spacing:.2px;
+      font-size: clamp(28px, 4.2vw, 40px);
+    }
+    header.hero .title .frog{ font-size: 1.1em; margin-right:.3em; }
+    
+    /* Controls row: Difficulty | Jumps | Start | Reset (Start-at hidden) */
+    .controls.controls-row{
+      width:min(900px, 96vw);
+      display:grid;
+      grid-template-columns: 1fr 1fr auto auto; /* four visible columns */
+      gap:10px;
+    }
+    
+    /* Hide the Start-at selector visually but keep it for JS */
+    .controls .startAt-block{ display:none; }
+    
+    /* Ensure the button cells don’t stretch weirdly */
+    .controls .only-buttons{
+      display:flex;
+      align-items:end;
+      justify-content:center;
+    }
+
   </style>
 </head>
 <body>
 <div class="app">
-  <header>
-    <div class="logo"><div class="mark">🧮</div><h1>Prime‑Factor Sprint</h1></div>
-    <div class="controls card">
-      <div>
-        <label for="difficulty">Difficulty</label><br>
-        <select id="difficulty">
-          <option value="unlimited">Easy — unlimited</option>
-          <option value="10">Medium — 10s</option>
-          <option value="5">Hard — 5s</option>
-          <option value="2">Super Hard — 2s</option>
-        </select>
-      </div>
-      <div>
-        <label for="jumps">Jumps</label><br>
-        <select id="jumps">
-          <option value="off">Off</option>
-          <option value="light">Light</option>
-          <option value="normal" selected>Normal</option>
-          <option value="chaos">Chaotic</option>
-        </select>
-      </div>
-      <div>
-        <label for="startAt">Start at</label><br>
-        <select id="startAt">
-          <option value="2" selected>2</option>
-          <option value="3">3</option>
-          <option value="5">5</option>
-          <option value="7">7</option>
-          <option value="11">11</option>
-        </select>
-      </div>
-      <div style="display:flex; align-items:end; gap:8px;">
-        <button id="btnReset" class="muted">Reset</button>
-        <button id="btnStart" class="primary">Start ▶</button>
-      </div>
+  <header class="hero">
+  <h1 class="title"><span class="frog" aria-hidden="true">🐸</span> Prime Jumper <span class="frog" aria-hidden="true">🐸</span></h1>
+
+  <div class="controls card controls-row">
+    <div>
+      <label for="difficulty">Difficulty</label><br>
+      <select id="difficulty">
+        <option value="unlimited">Easy — unlimited</option>
+        <option value="10">Medium — 10s</option>
+        <option value="5">Hard — 5s</option>
+        <option value="2">Super Hard — 2s</option>
+      </select>
     </div>
-  </header>
+
+    <div>
+      <label for="jumps">Jumps</label><br>
+      <select id="jumps">
+        <option value="off">Off</option>
+        <option value="light">Light</option>
+        <option value="normal" selected>Normal</option>
+        <option value="chaos">Chaotic</option>
+      </select>
+    </div>
+
+    <!-- keep Start-at in DOM for JS, but we'll hide it with CSS -->
+    <div class="startAt-block">
+      <label for="startAt">Start at</label><br>
+      <select id="startAt">
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
+        <option value="5">5</option>
+        <option value="7">7</option>
+        <option value="11">11</option>
+      </select>
+    </div>
+
+    <div class="only-buttons">
+      <button id="btnStart" class="primary">Start ▶</button>
+    </div>
+    <div class="only-buttons">
+      <button id="btnReset" class="muted">Reset</button>
+    </div>
+  </div>
+</header>
+
 
   <div class="columns">
     <section class="card" aria-live="polite">
