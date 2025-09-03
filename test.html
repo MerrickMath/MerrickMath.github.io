@@ -1,776 +1,3162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prime‑Factor Jumper</title>
-  <meta name="description" content="Race the clock to speak the prime/composite sequence. Bright, clean, and classroom-ready."/>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=JetBrains+Mono:wght@400;600;800&family=STIX+Two+Text:wght@400;600&display=swap" rel="stylesheet">
+  <title>Unit 6 Quick Check </title>
   <style>
     :root{
-      --bg: #f6fbff;
-      --ink: #0f172a;
-      --muted: #475569;
-      --card: #ffffff;
-      --accent: #2563eb;
-      --accent-2: #f97316;
-      --ok: #10b981;
-      --warn: #f59e0b;
-      --bad: #ef4444;
-      --shadow: 0 10px 25px rgba(2, 6, 23, 0.12);
-      --r: 22px;
+      --bg:#fbfaf8; --panel:#ffffff; --ink:#161616;
+      --muted:#5f616d; --border:#ece7df;
+      --brand:#2563eb; --good:#15803d;
     }
-    *{box-sizing:border-box}
+  
+    /* Base */
     html,body{height:100%}
     body{
-      margin:0; background:
-        radial-gradient(1200px 600px at 10% -10%, #e0f2fe 0%, transparent 60%),
-        radial-gradient(1200px 600px at 110% 10%, #ffe4e6 0%, transparent 60%),
-        var(--bg);
-      color:var(--ink); font-family: "Outfit", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "STIX Two Text", serif;
-      display:flex; align-items:center; justify-content:center;
-    }
-    .app{ width:min(1080px, 96vw); }
-    header{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px; }
-    .logo{ display:flex; align-items:center; gap:12px; }
-    .logo .mark{ font-size:28px; }
-    .logo h1{ margin:0; font-weight:800; letter-spacing:.2px; font-size:clamp(22px,3.2vw,30px); }
-
-    .card{ background:var(--card); border-radius:var(--r); box-shadow:var(--shadow); padding:clamp(16px,2.6vw,24px); }
-    .controls{ display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:10px; }
-    @media (max-width:900px){ .controls{ grid-template-columns:1fr; } }
-    label{ font-weight:600; color:var(--muted); }
-    select, button, input[type="text"]{ border:1px solid rgba(15,23,42,.1); border-radius:14px; padding:10px 12px; font-size:16px; background:#fff; }
-    button{ cursor:pointer; font-weight:800; letter-spacing:.2px; }
-    .primary{ background:var(--accent); color:#fff; border:none; }
-    .muted{ background:#f8fafc; color:var(--muted); }
-    .danger{ background:var(--bad); color:#fff; border:none; }
-
-    .columns{ display:grid; grid-template-columns: 1fr; gap:16px; }
-
-    @media (max-width:900px){ .columns{ grid-template-columns:1fr; } }
-
-    .timer{ height:10px; background:#e2e8f0; border-radius:999px; overflow:hidden; margin-bottom:12px; }
-    .timer > .bar{ height:100%; width:100%; background:linear-gradient(90deg, var(--ok), var(--warn), var(--bad)); transition: width .15s linear; }
-    .timer.unlimited{ background:transparent; }
-
-    .question{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-    .n{ font-family:"STIX Two Text", serif; font-weight:800; font-size: clamp(34px, 7vw, 58px); letter-spacing:.4px; }
-
-    .answer{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:10px; }
-    input[type="text"]{ font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:clamp(18px,3vw,22px); min-width:220px; padding:12px 14px; }
-
-    .feedback{ min-height:28px; font-weight:700; }
-    .ok{ color:var(--ok) }
-    .bad{ color:var(--bad) }
-
-    .shake{ animation:shake .25s linear 2; }
-    @keyframes shake{ 0%{transform:translateX(0)}25%{transform:translateX(4px)}50%{transform:translateX(-4px)}75%{transform:translateX(3px)}100%{transform:translateX(0)} }
-
-    .hidden{ display:none !important; }
-    /* Center the question row and hide the small jump widget */
-    .question{ display:flex; align-items:center; justify-content:center; text-align:center; gap:12px; }
-    
-    /* Hide the current n so students must remember it */
-    .n{ display:none; }
-  
-    /* Make the card a positioning context for the skull overlay */
-    .card{ position: relative; }
-    
-    /* Skull overlay */
-    .skull{
-      position:absolute; inset:0;
-      display:none;            /* shown by adding .show */
-      align-items:center; justify-content:center;
-      font-size: clamp(80px, 12vw, 160px);
-      pointer-events:none;     /* overlay is visual only */
-    }
-    .skull.show{ display:flex; }
-
-    /* Compact HUD above the timer */
-    .hud{
-      display:grid;
-      grid-template-columns: repeat(4, auto);
-      gap:12px;
-      align-items:end;
-      justify-content:space-between;
-      margin-bottom:8px; /* space before the time bar */
-    }
-    .hud-item{ text-align:center; }
-    .hud-k{ font-weight:800; font-size: clamp(16px, 2.2vw, 22px); }
-    .hud-v{ color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.3px; }
-    
-    /* Stack on small screens */
-    @media (max-width: 560px){
-      .hud{
-        grid-template-columns: repeat(2, auto);
-        row-gap:6px;
-      }
-    }
-
-    /* Tighter spacing for the block under the timer */
-    .question { margin: 6px 0 4px; }
-    
-    /* Make the big jump clear but compact */
-    .nextjump-big{
-      font-weight:700;
-      letter-spacing:.2px;
-      line-height:1.08;
-      font-size: clamp(18px, 3.4vw, 28px);
-      margin: 0;             /* remove extra space */
-    }
-    
-    /* Starting point: smaller and lighter */
-    .startpoint{
-      margin-top: 2px;
-      font-weight: 600;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    
-    /* Stack input and buttons vertically; center them */
-    .answer{
-      display:flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      margin-top: 10px;
-    }
-    
-    /* Wider input, centered text */
-    #answer{
-      width: min(460px, 92%);
-      text-align: center;
-    }
-    
-    /* Put buttons on a single compact row */
-    .answer .actions{
-      display:flex;
-      gap: 8px;
-    }
-    
-    /* Make Submit prominent, Skip quiet */
-    #btnSubmit{ font-weight:800; }
-    
-    /* Feedback: subtle and small to reduce noise */
-    #feedback{
-      margin-top: 6px;
-      font-weight: 600;
-      font-size: 13px;
-      color: var(--muted);
-    }
-    #feedback.ok{ color: var(--ok); }
-    #feedback.bad{ color: var(--bad); }
-    .startpoint{ display:none; }
-
-    /* separator before rules/legend */
-    .sep{
-      border:0; height:1px; background:#e5e7eb; margin:12px 0;
-    }
-    
-    /* container for rules + legend inside the main card */
-    .rules-legend{ margin-top:4px; color:var(--muted); }
-    .rules-legend .subtle{ margin:8px 0 6px; font-size:14px; color:var(--muted); }
-    .rules-legend p{ margin:0 0 8px 0; }
-    
-
-    /* Let us position an overlay inside the answer area */
-    .answer{ position: relative; }
-    
-    /* Green overlay button that covers the input area until Start is pressed */
-    #overlayStart{
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 14px;
-      background: var(--accent); /* same color as .primary Start button */
-      color: #fff;
-      font-weight: 800;
-      font-size: clamp(14px, 2.6vw, 18px);
-      border: none;
-      box-shadow: var(--shadow);
-      z-index: 2;                 /* sit above the input/buttons */
-      cursor: default;            /* visual button; tells user to press Start */
-    }
-
-    /* Red flash for lost life (reuses .skull positioning) */
-    .skull.is-flash{
-      color: var(--bad);
-      animation: flashOut .65s ease;
-    }
-    @keyframes flashOut{
-      0%{ opacity:0; transform:scale(.92) }
-      15%{ opacity:1; transform:scale(1) }
-      85%{ opacity:1 }
-      100%{ opacity:0 }
-    }
-
-    /* Make the overlays sit above all UI */
-    .skull{ z-index: 10000; }     /* applies to both skull and red flash */
-    #flash{ z-index: 10001; }     /* ensure the red flash is above the skull if both showed */
-
-    .rules-legend ul.ins{ margin:0; padding-left:18px; }
-    .rules-legend ul.ins li{ margin:4px 0; }
-    .rules-legend code{ font-family:"JetBrains Mono", monospace; }
-    .rules-legend kbd{
-      display:inline-block;
-      padding:0 .4em;
-      border:1px solid #cbd5e1;
-      border-bottom-width:2px;
-      border-radius:6px;
-      background:#f8fafc;
-      font-family:"JetBrains Mono", monospace;
-      font-size:.95em;
-    }
-
-    /* Centered header + frog title */
-    header.hero{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      text-align:center;
-      gap:12px;
-      margin-bottom:16px;
-    }
-    header.hero .title{
       margin:0;
-      font-weight:800;
-      letter-spacing:.2px;
-      font-size: clamp(28px, 4.2vw, 40px);
+      background:var(--bg);
+      color:var(--ink);
+      font:15px/1.45 "KaTeX_Main","Latin Modern Roman","Computer Modern",
+                       "STIX Two Text","Times New Roman",serif;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
-    header.hero .title .frog{ font-size: 1.1em; margin-right:.3em; }
-    
-    /* Controls row: Difficulty | Jumps | Start | Reset (Start-at hidden) */
-    .controls.controls-row{
-      width:min(700px, 96vw);   /* narrower container => buttons closer */
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr auto auto;
-      gap:6px;                  /* tighten spacing between controls */
-      margin-inline:auto;       /* keep it centered */
+  
+    /* Frame */
+    .container{max-width:880px; margin:0 auto; padding:16px}
+    header{
+      display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between;
+      gap:8px; margin-bottom:12px
     }
+    header h1{margin:0; font-size:clamp(18px,2.4vw,22px); letter-spacing:.2px}
+    header .sub{color:var(--muted); font-size:12px}
+    .toolbar{display:flex; gap:8px; flex-wrap:wrap}
+    button{
+      border:1px solid var(--border); background:#fff;
+      padding:7px 10px; border-radius:10px; cursor:pointer; font-size:13px
+    }
+    button.brand{background:#eef3ff; border-color:#d8e2ff; color:#0c2a7a; font-weight:600}
+  
+    /* Cards / sections */
+    .card{
+      background:var(--panel); border:1px solid var(--border);
+      border-radius:12px; padding:14px 16px;
+      box-shadow:0 1px 6px rgba(0,0,0,.04); margin-bottom:12px
+    }
+    .card h2{margin:0 0 6px 0; font-size:16px}
+    .kicker{
+      color:var(--muted); font-size:11px; text-transform:uppercase;
+      letter-spacing:.35px; margin-bottom:6px
+    }
+    .divider{
+      height:1px; margin:8px 0;
+      background:linear-gradient(90deg, transparent, var(--border), transparent)
+    }
+  
+    /* Question rows */
+    .card > div{margin:6px 0}
+    .mc-choices{
+      display:grid; gap:6px; margin-top:6px;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    }
+    @media (min-width:700px){ .mc-choices{grid-template-columns:repeat(2,1fr)} }
+    @media (min-width:1000px){ .mc-choices{grid-template-columns:repeat(4,1fr)} }
+  
+    .choice{
+      display:flex; gap:6px; align-items:flex-start;
+      border:1px dashed var(--border); border-radius:8px;
+      padding:6px 8px; background:#fff; font-size:14px
+    }
+  
+    /* Answers */
+    .ans{color:var(--good); font-weight:600; margin-top:6px; font-size:14px}
+    .ans[hidden]{display:none!important}
+  
+    /* Answer key: hidden on screen, shown only when printing */
+    #answerKey{display:none}
+  
+    /* hide answer key on screen */
+#answerKey {
+  display: none;
+}
+
+  /* Print */
+  @media print {
+    .toolbar { display: none }
+    body { background:#fff }
+    .card { box-shadow:none }
+  
+    /* hide inline answers in quiz */
+    .ans { display:none !important }
+  
+    /* show compiled answer key on a new page */
+    #answerKey {
+      display:block;
+      page-break-before:always;
+      font-size:14px;
+      padding:0 8px;
+    }
+  
+    #answerKey h2 {
+      margin:0 0 8px 0;
+      font-size:16px;
+    }
+  
+    #answerKey .ansItem {
+      margin:4px 0;
+    }
+  }
 
 
     
-    /* Ensure the button cells don’t stretch weirdly */
-    .controls .only-buttons{
-      display:flex;
-      align-items:end;
-      justify-content:center;
-    }
-
-    /* ===== Mobile polish (phones & small tablets) ===== */
-    @media (max-width: 700px){
-      /* overall spacing */
-      .app{ width:100vw; padding:8px; }
-      .card{ padding:12px; border-radius:16px; }
-    
-      /* header/title & HUD */
-      header.hero{ gap:8px; margin-bottom:12px; }
-      header.hero .title{ font-size: clamp(22px, 6vw, 28px); }
-      .hud{ gap:8px; margin-bottom:6px; }
-      .timer{ height:8px; margin-bottom:8px; }
-    
-      /* controls row: stack into two columns; buttons become full width */
-      .controls.controls-row{
-        width:100%;
-        grid-template-columns: 1fr 1fr;   /* 2 columns on mobile */
-        gap:6px;
-        margin-inline:auto;
-      }
-      .controls.controls-row label{
-        margin:0 0 2px; font-size:12px; line-height:1.1;
-      }
-      .controls.controls-row select,
-      .controls.controls-row button{
-        height:40px; padding:0 10px; font-size:16px; border-radius:10px;
-      }
-      .controls.controls-row .only-buttons{ grid-column: 1 / -1; }   /* span both columns */
-      .controls.controls-row .only-buttons button{ width:100%; }     /* full-width Start/Reset */
-    
-      /* jump & input area */
-      .question{ margin:6px 0 4px; }
-      .nextjump-big{ font-size: clamp(18px, 5.2vw, 24px); line-height:1.1; }
-      #answer{ width:100%; max-width:100%; text-align:center; }
-      .answer .actions{ width:100%; }
-      #btnSubmit{ width:100%; }  /* big target on mobile */
-    
-      /* feedback & instructions */
-      #feedback{ font-size:12px; margin-top:6px; }
-      .rules-legend{ font-size:14px; }
-    }
-    
-    /* ultra-small phones */
-    @media (max-width: 360px){
-      .controls.controls-row{ gap:4px; }
-      .controls.controls-row select,
-      .controls.controls-row button{ height:38px; padding:0 8px; }
-      header.hero .title{ font-size: clamp(20px, 6.5vw, 24px); }
-    }
-
-
   </style>
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
 </head>
 <body>
-<div class="app">
-  <header class="hero">
-  <h1 class="title"><span class="frog" aria-hidden="true">🐸</span> Prime Jumper <span class="frog" aria-hidden="true">🐸</span></h1>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Unit 6 Quick Check</h1>
+        <div class="sub">Math with Mr. Merrick • Math 10</div>
+      </div>
+      <div class="toolbar">
+        <button id="generate" class="brand">🔀 Generate New Version</button>
+        <button id="toggleKey" aria-pressed="false">🧠 Show Answers</button>
+        <button id="printBtn">🖨️ Print</button>
+      </div>
+    </header>
 
-  <div class="controls card controls-row">
-    <div>
-      <label for="difficulty">Difficulty</label><br>
-      <select id="difficulty">
-        <option value="unlimited">Easy — unlimited</option>
-        <option value="10">Medium — 10s</option>
-        <option value="5">Hard — 5s</option>
-        <option value="2">Super Hard — 2s</option>
-      </select>
-    </div>
-
-    <div>
-      <label for="jumps">Jumps</label><br>
-      <select id="jumps">
-        <option value="off">Off</option>
-        <option value="light">Light</option>
-        <option value="normal" selected>Normal</option>
-        <option value="chaos">Chaotic</option>
-      </select>
-    </div>
-
-    <!-- keep Start-at in DOM for JS, but we'll hide it with CSS -->
-    <div class="startAt-block">
-      <label for="startAt">Start at</label><br>
-      <select id="startAt">
-        <option value="2" selected>2</option>
-        <option value="3">3</option>
-        <option value="5">5</option>
-        <option value="7">7</option>
-        <option value="11">11</option>
-      </select>
-    </div>
-
-    <div class="only-buttons">
-      <button id="btnStart" class="primary">Start ▶</button>
-    </div>
-    <div class="only-buttons">
-      <button id="btnReset" class="muted">Reset</button>
-    </div>
+    <div id="quiz"></div>
+    <div id="answerKey"></div>
   </div>
-</header>
 
+  <script>
+    function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+    function typeset(el){ if(window.renderMathInElement){ window.renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false}],throwOnError:false}); } }
 
-  <div class="columns">
-    <section class="card" aria-live="polite">
-      <div class="hud">
-        <div class="hud-item"><div class="hud-k" id="kScore">0</div><div class="hud-v">Score</div></div>
-        <div class="hud-item"><div class="hud-k" id="kStreak">0</div><div class="hud-v">Streak</div></div>
-        <div class="hud-item"><div class="hud-k" id="kLives">❤❤❤</div><div class="hud-v">Lives</div></div>
-        <div class="hud-item"><div class="hud-k" id="kBest">0</div><div class="hud-v">Best</div></div>
-      </div>
-
-      <div id="timer" class="timer"><div class="bar" style="width:100%"></div></div>
-
-      <div class="question">
-        <div class="n" id="qNumber">n = —</div>  <!-- stays in DOM but is hidden by CSS -->
-        <div class="nextjump-big" id="nextJumpBig"></div>
-        <div id="startPoint" class="startpoint">Starting point: 2</div>
-      </div>
-      
-      <!-- skull overlay (stays inside the same <section class="card">) -->
-      <div id="skull" class="skull" aria-hidden="true">☠️</div>
-      <div id="flash" class="skull" aria-hidden="true"></div>
-
-
-      
-
-      <div class="answer">
-        <input id="answer" type="text" inputmode="numeric" autocomplete="off"
-               placeholder="Type answer (e.g., 222 for 8)" />
-        <div class="actions">
-          <button id="btnSubmit" class="primary">Submit ⏎</button>
-        </div>
-      
-        <!-- Overlay that covers the input until Start is pressed -->
-        <button id="overlayStart">Press Start To Begin</button>
-      </div>
-
-
-
-      <div class="feedback" id="feedback">Press Enter to submit · “×/x” are ignored</div>
-      <hr class="sep">
-
-      <div class="rules-legend">
-        <h3 class="subtle">Instructions</h3>
-        <ul class="ins">
-          <li>From the current number, apply the “Jump” shown (e.g., <em>Jump 1 Up</em> → +1) to get the <strong>next</strong> integer.</li>
-          <li>If the next integer is <strong>prime</strong>, type the number (e.g., 11 → <code>11</code>).</li>
-          <li>If it’s <strong>composite</strong>, type its prime factors concatenated in ascending order (e.g., 12 → 2×2×3 → <code>223</code>).</li>
-          <li>Digits only. You can type <code>x</code> or <code>×</code> — they’re ignored.</li>
-          <li><strong>Lives:</strong> You have 3 ❤. A wrong answer or timeout loses one.</li>
-          <li><strong>Red flash:</strong> briefly shows the correct next number you should have entered; the sequence continues from that value.</li>
-          <li><strong>Never below 2:</strong> the sequence cannot drop below 2 (from 2 it moves to at least 3).</li>
-          <li><strong>Game over:</strong> when lives reach 0, a ☠️ covers the screen.</li>
-          <li><strong>Hotkeys:</strong> <kbd>S</kbd> Start, <kbd>Esc</kbd> Reset, <kbd>Enter</kbd> Submit.</li>
-        </ul>
-      </div>
-
-
-    </section>
+    const BANK = [
+      {
+        title: 'A. Multiple Choice',
+        note: 'Select one option.',
+        items: [
+          { type: 'mcgen', gen: genU6_MC_Distance },
+          { type: 'mcgen', gen: genU6_MC_Midpoint },
+          { type: 'mcgen', gen: genU6_MC_SlopeBetween },
+          { type: 'mcgen', gen: genU6_MC_ParallelSlope },
+          { type: 'mcgen', gen: genU6_MC_PerpendicularSlope },
+          { type: 'mcgen', gen: genU6_MC_GeneralFormFromSlopeIntercept },
+          { type: 'mcgen', gen: genU6_MC_WhichHasYIntercept },
+          { type: 'mcgen', gen: genU6_MC_SlopeFromGeneralFormConcept },
+          { type: 'mcgen', gen: genU6_MC_SteepestSlope },
+          { type: 'mcgen', gen: genU6_MC_PerpThroughOrigin }
+        ]},
     
-  </div>
-</div>
+      {
+        title: 'C. Written Response',
+        note: 'Show full reasoning. Use exact values where appropriate.',
+        items: [
+          { type: 'gen', gen: genU6_WR_DeriveDistanceFormula },
+          { type: 'gen', gen: genU6_WR_ParallelPerpProof },
+          { type: 'gen', gen: genU6_WR_PerpendicularBisector },
+          { type: 'gen', gen: genU6_WR_SectionPoint },
+          { type: 'gen', gen: genU6_WR_ConvertToGeneral },
+          { type: 'gen', gen: genU6_WR_PerpendicularThroughPoint },
+          { type: 'gen', gen: genU6_WR_Collinearity },
+          { type: 'gen', gen: genU6_WR_InterceptsSlope },
+          { type: 'gen', gen: genU6_WR_TemperatureModel },
+          { type: 'gen', gen: genU6_WR_ThreeForms },
+          { type: 'gen', gen: genU6_WR_ParallelConditionK },
+          { type: 'gen', gen: genU6_WR_PointSlopeIntercepts }
+        ]}
+    ];
 
-<script>
-  // ——— Primes & factorization ———
-  function isPrime(n){
-    if(n < 2) return false;
-    if(n % 2 === 0) return n === 2;
-    if(n % 3 === 0) return n === 3;
-    let i = 5, w = 2;
-    while(i * i <= n){ if(n % i === 0) return false; i += w; w = 6 - w; }
-    return true;
-  }
-  function primeFactors(n){
-    const f = [];
-    while(n % 2 === 0){ f.push(2); n/=2; }
-    let d = 3;
-    while(d * d <= n){ while(n % d === 0){ f.push(d); n/=d; } d += 2; }
-    if(n > 1) f.push(n);
-    return f;
-  }
-  function expectedInput(n){
-    return isPrime(n) ? String(n) : primeFactors(n).map(String).join('');
-  }
-  function expr(n){
-    return isPrime(n) ? String(n) : primeFactors(n).join('×');
-  }
+    const quizEl = document.getElementById('quiz');
 
-  // ——— Elements ———
-  const el = (id)=>document.getElementById(id);
-  const qNumber = el('qNumber');
-  const answer = el('answer');
-  const feedback = el('feedback');
-  const timerWrap = el('timer');
-  const bar = timerWrap.querySelector('.bar');
-  const kScore = el('kScore');
-  const kStreak = el('kStreak');
-  const kLives = el('kLives');
-  const kBest = el('kBest');
+    // ---------- MC helper utilities ----------
+    const ri = (a,b)=>Math.floor(Math.random()*(b-a+1))+a;     // random int in [a,b]
+    const sample = (arr)=>arr[ri(0,arr.length-1)];
 
-  const btnStart = el('btnStart');
-  const btnReset = el('btnReset');
-  const btnSubmit = el('btnSubmit');
-
-  const ddDiff = el('difficulty');
-  const ddJumps = el('jumps');
-  const ddStartAt = el('startAt');
-
-  // ——— Jumps ———
-  const JUMPS = {
-    '+3': { delta: 3, symbol:'⚡', label:'Plus 3' },
-    '+2': { delta: 2, symbol:'⏩', label:'Plus 2' },
-    '+1': { delta: 1, symbol:'➕', label:'Plus 1' },
-    '-1': { delta:-1, symbol:'↩️', label:'Back 1' },
-    '-3': { delta:-3, symbol:'🌀', label:'Back 3' },
-    'x2': { mult: 2, symbol:'×2', label:'Double Jump' },   // NEW
-  };
-
-  function pickNextJump(){
-    const mode = ddJumps.value;
-    if (mode === 'off') return null;
-  
-    const base = Number(state?.n ?? 2);
-  
-    // helper: what number would this key produce from 'base'?
-    const candidateFromKey = (k) => {
-      const j = JUMPS[k];
-      return j.mult ? base * j.mult : base + j.delta;
-    };
-  
-    // Separate bags for up vs. down; weight ups more
-    const up = [], down = [];
-    const push = (arr, k, w)=>{ for (let i=0;i<w;i++) arr.push(k); };
-  
-    if (mode === 'light'){
-      push(up,'+1',8); push(up,'+2',3); push(up,'+3',1);
-      push(down,'-1',1);
-    } else if (mode === 'normal'){
-      push(up,'+1',7); push(up,'+2',4); push(up,'+3',2);
-      push(down,'-1',1);
-    } else { // 'chaos' — add Double Jump, still bias up
-      push(up,'+1',6); push(up,'+2',5); push(up,'+3',3);
-      push(up,'x2',2);                       // NEW: Double Jump (rare)
-      push(down,'-1',1); push(down,'-3',1);
+    // exact square extraction: n = s^2 * m  (m squarefree)
+    function extractSquare(n){
+      let s = 1, m = n, d = 2;
+      while (d*d <= m){
+        while (m % (d*d) === 0){ s *= d; m /= d*d; }
+        d++;
+      }
+      return { s, m };
     }
-  
-    // Never allow a choice that would drop below 2
-    const upSafe   = up.filter(k   => candidateFromKey(k) >= 2);
-    const downSafe = down.filter(k => candidateFromKey(k) >= 2);
-  
-    // Make downs infrequent
-    const P_DOWN = 0.12;
-  
-    let pool;
-    if (downSafe.length && Math.random() < P_DOWN){
-      pool = downSafe;
-    } else {
-      pool = upSafe.length ? upSafe : (downSafe.length ? downSafe : up);
+    // arithmetic series sum of multiples of k on [L,U]
+    function sumMultiples(k, L, U){
+      const a1 = Math.ceil(L/k)*k, an = Math.floor(U/k)*k;
+      if (a1 > an) return 0;
+      const n = Math.floor((an - a1)/k) + 1;
+      return n * (a1 + an) / 2;
     }
-  
-    const key = pool[Math.floor(Math.random() * pool.length)];
-    return JUMPS[key];
-  }
 
-
-  
-  function showJump(next){
-    const big = document.getElementById('nextJumpBig');
-    if(!big){ return; }
-    if(!next){ big.textContent = ''; return; }
-  
-    // If it's Double Jump, say so explicitly
-    if (next.mult === 2){
-      big.textContent = 'Double Jump (2X)';
-      return;
+    function genWR_SimplifyMonomialRoot(){
+      const K = ri(30,150);
+      const a = ri(2,8), b = ri(2,8);
+      const outX = Math.floor(a/2), outY = Math.floor(b/2);
+      const remX = a%2, remY = b%2;
+      const { s, m } = extractSquare(K);
+      const outsideParts = [];
+      if (s>1) outsideParts.push(String(s));
+      if (outX>0) outsideParts.push(`x^{${outX}}`);
+      if (outY>0) outsideParts.push(`y^{${outY}}`);
+      const insideParts = [];
+      if (m>1) insideParts.push(String(m));
+      if (remX) insideParts.push('x');
+      if (remY) insideParts.push('y');
+      const outside = outsideParts.join('');
+      const inside = insideParts.length ? `\\sqrt{${insideParts.join('\\,')}}` : '';
+      const ans = outside && inside ? `${outside}${inside}` : (inside || outside || '1');
+    
+      return {
+        q: `Simplify $\\sqrt{${K}\\,x^{${a}}y^{${b}}}$ for $x,y\\ge 0$.`,
+        answer: `$${ans}$`
+      };
     }
-  
-    // Otherwise compute effective up/down label using your floor rules
-    let cand = Number.isFinite(state.target) ? state.target : (state.n + next.delta);
-    if (cand < 2) cand = 2;
-    if (state.n === 2 && cand <= 2) cand = 3;
-  
-    const eff = cand - state.n;
-    const mag = Math.abs(eff);
-    const dir = eff >= 0 ? 'Up' : 'Down';
-    big.textContent = `Jump ${mag} ${dir}`;
-  }
+
+    
+
+    function genWR_RationalizeSimple(){
+      // choose N with a square factor and C so it reduces nicely
+      const N = ri(18,80);
+      const C = ri(4,18);
+      const { s, m } = extractSquare(N);  // sqrt(N)=s*sqrt(m)
+      // c/sqrt(N) = c*s*sqrt(m)/N -> reduce rational factor
+      const num = C*s, den = N;
+      const g = gcd(num, den);
+      const num2 = num/g, den2 = den/g;
+      const ans = m===1 ? `\\dfrac{${num2}}{${den2}}` : `\\dfrac{${num2}\\sqrt{${m}}}{${den2}}`;
+    
+      return {
+        q: `Rationalize and simplify: $\\dfrac{${C}}{\\sqrt{${N}}}$.`,
+        answer: `$${ans}$`
+      };
+    }
+
+    function genWR_RepeatingToFraction(){
+      const I = ri(1,12);                // integer part
+      const r = sample([1,2]);           // period length
+      const d1 = ri(1,9), d2 = ri(0,9);
+      const R = r===1 ? d1 : (10*d1 + d2);
+      const pow = r===1 ? 10 : 100;      // 10^r
+      const denom = pow - 1;
+      const num = I*denom + R;           // I + R/(10^r-1) => (I(10^r-1)+R)/(10^r-1)
+      const g = gcd(num, denom);
+      const numS = (num/g), denS = (denom/g);
+    
+      return {
+        q: `Convert $${I}.\\overline{${r===1? d1 : `${d1}${d2}`}}$ to a fraction in simplest form.`,
+        answer: `$\\dfrac{${numS}}{${denS}}$`
+      };
+    }
+
+    function genWR_CuberootNegative(){
+      const a = ri(6,20);
+      return {
+        q: `Evaluate $\\sqrt[3]{-${a}^3}$.`,
+        answer: `$-${a}$`
+      };
+    }
+
+    function genWR_PrimeFactorizePairGcdLcm(){
+      // Build two numbers from small primes; ensure not both share all primes
+      const primes=[2,3,5,7,11,13,17,19];
+      function build(){
+        const ps = shuffle(primes.slice(0,5)).slice(0,ri(1,3));
+        let n=1, f={};
+        ps.forEach(p=>{
+          const e=ri(1,2);
+          f[p]=e; n*=p**e;
+        });
+        return {n,f};
+      }
+      let A=build(), B=build();
+      // avoid identical numbers
+      if (A.n===B.n) B=build();
+    
+      function fmt(f){
+        return Object.keys(f).sort((a,b)=>a-b).map(p=>{
+          const e=f[p]; return e===1? `${p}` : `${p}^{${e}}`;
+        }).join('\\cdot ');
+      }
+      // compute gcd/lcm from factorizations
+      const allP = Array.from(new Set([...Object.keys(A.f),...Object.keys(B.f)])).map(Number).sort((x,y)=>x-y);
+      let g=1, L=1;
+      allP.forEach(p=>{
+        const eA=A.f[p]||0, eB=B.f[p]||0;
+        const eg=Math.min(eA,eB), eL=Math.max(eA,eB);
+        if(eg>0) g*=p**eg;
+        if(eL>0) L*=p**eL;
+      });
+    
+      return {
+        q: `Prime factorize ${A.n} and ${B.n}. Hence determine $\\gcd$ and $\\mathrm{lcm}$.`,
+        answer: `$${A.n}=${fmt(A.f)},\\ \\ ${B.n}=${fmt(B.f)};\\ \\ \\gcd=${g},\\ \\mathrm{lcm}=${L}$`
+      };
+    }
+
+    function genWR_PerfectCubeAdjustment(){
+      const a=ri(0,3), b=ri(0,3), c=ri(0,3), d=ri(0,3);
+      const isSquare = (a%2===0)&&(b%2===0)&&(c%2===0)&&(d%2===0);
+      const isCube   = (a%3===0)&&(b%3===0)&&(c%3===0)&&(d%3===0);
+      // minimal exponents to reach multiples of 3
+      const need = e => (3 - (e%3))%3;
+      const ma=need(a), mb=need(b), mc=need(c), md=need(d);
+      const parts=[];
+      if(ma) parts.push(`2^{${ma}}`);
+      if(mb) parts.push(`3^{${mb}}`);
+      if(mc) parts.push(`5^{${mc}}`);
+      if(md) parts.push(`7^{${md}}`);
+      const m = parts.length? parts.join('\\cdot ') : '1';
+    
+      return {
+        q: `Let $N=2^{${a}}\\cdot 3^{${b}}\\cdot 5^{${c}}\\cdot 7^{${d}}$. Decide whether $N$ is a perfect square and/or a perfect cube. If not a cube, find the least positive integer $m$ so that $Nm$ is a perfect cube.`,
+        answer: `${isSquare? 'Square: yes':'Square: no'}, ${isCube? 'Cube: yes':'Cube: no'}, $m=${m}$`
+      };
+    }
+
+
+    function genWR_SimplifyRadicalFraction(){
+      // random but safe exponents (no negatives after division)
+      const A = ri(20, 40), B = ri(20, 40), C = ri(2, 12);
+      let p = ri(1, 3), q = ri(2, 4), r = ri(1, 3), s = ri(1, 3), t = ri(1, 2);
+    
+      // ensure x exponent stays ≥ 0 after p+r−t
+      if (p + r - t < 0) { r += (t - (p + r)); }
+    
+      // combine numeric coefficients as a reduced fraction
+      let num = A * B, den = C;
+      const g1 = gcd(num, den); num /= g1; den /= g1;
+    
+      // pull out perfect squares from numerator/denominator separately
+      const { s: sNum, m: mNum } = extractSquare(num);
+      const { s: sDen, m: mDen } = extractSquare(den);
+    
+      // variable exponents
+      const xExp = p + r - t, yExp = q + s;
+      const xOut = Math.floor(xExp / 2), yOut = Math.floor(yExp / 2);
+      const xIn  = xExp % 2,           yIn  = yExp % 2;
+    
+      // outside factor (numeric fraction * outside vars)
+      const outsideNum = (sDen > 1)
+        ? `\\dfrac{${sNum}}{${sDen}}`
+        : (sNum > 1 ? String(sNum) : '');
+      const outsideVars = [
+        xOut ? `x^{${xOut}}` : '',
+        yOut ? `y^{${yOut}}` : ''
+      ].filter(Boolean).join('');
+      const outside = [outsideNum, outsideVars].filter(Boolean).join('');
+    
+      // inside radicand (reduced numeric * leftover vars)
+      const insideNum = (mDen > 1)
+        ? `\\dfrac{${mNum}}{${mDen}}`
+        : (mNum > 1 ? String(mNum) : '');
+      const insideParts = [
+        insideNum,
+        xIn ? 'x' : '',
+        yIn ? 'y' : ''
+      ].filter(Boolean).join('\\,');
+    
+      const sqrtPart = insideParts ? `\\sqrt{${insideParts}}` : '';
+      let ansCore = `${outside}${sqrtPart}`;
+      if (!ansCore) ansCore = '1';
+    
+      // QUESTION: inline math only ($...$) — no \[...\]
+      const qTex =
+        `Simplify and write with radicals (no negative exponents): ` +
+        `$\\dfrac{\\sqrt{${A}x^{${p}}y^{${q}}}\\,\\cdot\\,\\sqrt{${B}x^{${r}}y^{${s}}}}{\\sqrt{${C}x^{${t}}}}\\; (x,y\\ge 0).$`;
+    
+      return {
+        q: qTex,
+        answer: `$${ansCore}$`
+      };
+    }
+
+
+    function genWR_SumMultiples2or3(){
+      let L = ri(100,300), U = ri(700,1200);
+      if (L>U) [L,U]=[U,L];
+    
+      const S2  = sumMultiples(2,L,U);
+      const S3  = sumMultiples(3,L,U);
+      const S6  = sumMultiples(6,L,U);
+      const total = S2 + S3 - S6;
+    
+      return {
+        q: `Find the sum of all integers between $${L}$ and $${U}$ inclusive that are multiples of $2$ or $3$.`,
+        answer: `$${total}$ \\; with\\; sums\\; S_2=${S2},\\ S_3=${S3},\\ S_6=${S6}.`
+      };
+    }
+
+    function genWR_Babylonian(){
+      const N = ri(50,150);
+      // start at integer guess x0 = floor(sqrt(N)) or a nearby integer
+      const x0 = Math.max(1, Math.floor(Math.sqrt(N)));
+      const x1 = 0.5*(x0 + N/x0);
+      const x2 = 0.5*(x1 + N/x1);
+      const approx = Math.round(x2*10000)/10000;
+      return {
+        q: `Use two iterations to approximate $\\sqrt{${N}}$ correct to four decimal places (start $x_0=${x0}$).`,
+        answer: `$x_1=${x1.toFixed(9)},\\ x_2=${x2.toFixed(9)};\\ \\sqrt{${N}}\\approx ${approx.toFixed(4)}$`
+      };
+    }
+
+
+    
+    
+    function isPrime(n){
+      if(n<2) return false;
+      if(n%2===0) return n===2;
+      for(let d=3; d*d<=n; d+=2) if(n%d===0) return false;
+      return true;
+    }
+    
+    function randPrime(min=50,max=300){
+      let n=ri(min,max);
+      while(!isPrime(n)) n=ri(min,max);
+      return n;
+    }
+    
+    function randComposite(min=50,max=300){
+      let n=ri(min,max);
+      while(isPrime(n)) n=ri(min,max);
+      return n;
+    }
+    
+    function gcd(a,b){ a=Math.abs(a); b=Math.abs(b);
+      while(b){ [a,b]=[b,a%b]; }
+      return a;
+    }
+    function lcm(a,b){ return Math.abs(a*b)/gcd(a,b); }
+    
+    function primeFactorization(n){
+      const f = {};
+      let d=2, x=n;
+      while(d*d<=x){
+        while(x%d===0){ f[d]=(f[d]||0)+1; x/=d; }
+        d+= (d===2?1:2);
+      }
+      if(x>1) f[x]=(f[x]||0)+1;
+      return f; // {prime: exp, ...}
+    }
+    function fmtFactorization(f){
+      const parts = Object.keys(f).sort((a,b)=>a-b).map(p=>{
+        const e=f[p];
+        return e===1? `${p}` : `${p}^{${e}}`;
+      });
+      return parts.join('\\cdot ');
+    }
+    
+    function squarefree(n){
+      const f=primeFactorization(n);
+      return Object.values(f).every(e=>e===1);
+    }
+
+    function genMC_Prime(){
+      const correct = randPrime(100,300);
+      const wrongs = new Set();
+      while(wrongs.size<3){ wrongs.add(randComposite(90,320)); }
+      const choices = [correct, ...wrongs].map(x=>`$${x}$`);
+      // shuffle while tracking correct index
+      const order = choices.map((_,i)=>i);
+      order.sort(()=>Math.random()-0.5);
+      const shuffled = order.map(i=>choices[i]);
+      const answerIndex = order.indexOf(0);
+      return { q:'Which of the following is a prime number?', choices:shuffled, answerIndex };
+    }
+
+    function genMC_PrimeFactorization(){
+      // build n with small primes
+      const primes=[2,3,5,7];
+      const exps = primes.map(p=>ri(0,2));
+      if(exps.every(e=>e===0)) exps[ri(0,3)]=1; // ensure >1
+      let n=1; exps.forEach((e,i)=>{ n*=Math.pow(primes[i],e); });
+      const f={}; primes.forEach((p,i)=>{ if(exps[i]>0) f[p]=exps[i]; });
+      const correct = `$${fmtFactorization(f)}$`;
+    
+      // plausible wrongs: tweak one exponent
+      const wrongs=[];
+      for(let k=0;k<3;k++){
+        const g={...f};
+        const keys=Object.keys(g);
+        if(keys.length===0){ g[2]=1; }
+        const pick = sample(keys.length?keys:['2']);
+        g[pick] = Math.max(1,(g[pick]||0) + (Math.random()<0.5?-1:1));
+        wrongs.push(`$${fmtFactorization(g)}$`);
+      }
+    
+      const choices=[correct,...wrongs];
+      const order = choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return {
+        q:'The prime factorization of $n$ (given) is',  // you can customize "n" text if desired
+        choices: order.map(i=>choices[i]),
+        answerIndex: order.indexOf(0)
+      };
+    }
+
+    function genMC_GCD(){
+      const g = sample([1,2,3,4,5,6]);
+      const a = g*ri(10,40);
+      const b = g*ri(10,40);
+      const correct = `$${g}$`;
+      const pool=[1,2,3,4,5,6,7,8,9].filter(x=>x!==g);
+      const wrongs = shuffle(pool).slice(0,3).map(x=>`$${x}$`);
+      const choices=[correct,...wrongs];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:`$\\gcd(${a},\\,${b})$ equals`, choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+    function genMC_LCM(){
+      let a=ri(6,20), b=ri(6,20);
+      const L = lcm(a,b);
+      const correct = `$${L}$`;
+      const wrongs = [
+        `$${a+b}$`, `$${a*b}$`, '$1$'
+      ];
+      const choices=[correct,...wrongs];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:`$\\mathrm{lcm}(${a},\\,${b})$ equals`, choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+    function genMC_PerfectSquare(){
+      const primes=[2,3,5];
+      const evenExp = ()=>2*ri(1,3);
+      const oddExp  = ()=>2*ri(1,3)-1;
+    
+      const correctParts = primes.map(p=>`${p}^{${evenExp()}}`);
+      const correct = `$${correctParts.join('\\cdot ')}$`;
+    
+      function wrong(){
+        const parts = primes.map(p=>`${p}^{${(Math.random()<0.5?oddExp():evenExp())}}`);
+        // force at least one odd
+        if(parts.every(s=>/^\d+\^\{[02468]\}$/.test(s.replace(/\\cdot/g,'')))){
+          const idx=ri(0,2);
+          const base=primes[idx];
+          parts[idx]=`${base}^{${oddExp()}}`;
+        }
+        return `$${parts.join('\\cdot ')}$`;
+      }
+      const choices=[correct, wrong(), wrong(), wrong()];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:'Which is a perfect square?', choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+    function genMC_PerfectCube(){
+      const primes=[2,3,5];
+      const mult3 = ()=>3*ri(1,3);
+      const not3  = ()=>3*ri(1,3)+(Math.random()<0.5?1:2);
+    
+      const correct = `$${primes.map(p=>`${p}^{${mult3()}}`).join('\\cdot ')}$`;
+      const wrong = ()=>`$${primes.map(p=>`${p}^{${not3()}}`).join('\\cdot ')}$`;
+    
+      const choices=[correct, wrong(), wrong(), wrong()];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:'Which is a perfect cube?', choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+    
+    function genMC_EntireRadical(){
+      const a = ri(2,9);
+      // choose b squarefree to mirror your style
+      let b = ri(10,30);
+      while(!squarefree(b)) b=ri(10,30);
+      const correct = `$\\sqrt{${a*a}\\cdot ${b}}$`;
+      const wrongs = [
+        `$\\sqrt{${a}\\cdot ${b}}$`,
+        `$\\sqrt{${Math.pow(a,3)}\\cdot ${b}}$`,
+        `$\\sqrt{${a*b}}$`
+      ];
+      const q = `Write $${a}\\sqrt{${b}}$ as an entire radical.`;
+      const choices=[correct,...wrongs];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q, choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+
+    // --- Which is a perfect fourth power? ---
+    function genMC_FourthPower(){
+      const a = ri(2,8);
+      const correct = `$${a**4}$`;
+      const wrongs = [`$${a**3}$`, `$${a**4 - 1}$`, `$${a**4 + ri(1,5)}$`];
+      const choices = [correct, ...wrongs];
+      const order = choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return {
+        q: 'Which of the following is a perfect fourth power?',
+        choices: order.map(i=>choices[i]),
+        answerIndex: order.indexOf(0)
+      };
+    }
+
+    
+    function genMC_MixedRadical(){
+      // pick n having a square factor
+      const k=ri(2,10), r=ri(2,10);
+      const n = (k*k)*r;
+      const correct = `$${k}\\sqrt{${r}}$`;
+      const wrongs = [
+        `$${k*r}\\sqrt{1}$`,
+        `$${k}\\sqrt{${k*k}}$`,
+        `$\\sqrt{${n}}$`
+      ];
+      const q = `Convert to mixed radical: $\\sqrt{${n}}$`;
+      const choices=[correct,...wrongs];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q, choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+
+    function genMC_SimplifyRootXY(){
+      let k = ri(50,120);
+      const a = ri(2,8), b = ri(2,8);
+      const outX = Math.floor(a/2), outY = Math.floor(b/2);
+      const remX = a%2, remY = b%2;
+      const insideParts = [String(k)];
+      if(remX) insideParts.push('x');
+      if(remY) insideParts.push('y');
+      const inside = insideParts.join('\\,');
+      const outside = [outX?`x^{${outX}}`:null, outY?`y^{${outY}}`:null].filter(Boolean).join('');
+      const correct = `$${outside?outside:''}\\sqrt{${inside}}$`.replace('^1','');
+    
+      const wrongs = [
+        `$${outside?outside:''}\\sqrt{${k}}$`,
+        `$${outside?outside:''}\\sqrt{${k}\\,y}$`,
+        `$\\sqrt{${k}}${outside?outside:''}$`
+      ];
+      const q = `Simplify $\\sqrt{${k}\\,x^{${a}}y^{${b}}}$ for $x,y\\ge 0$.`;
+      const choices=[correct,...wrongs];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q, choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+    function genMC_CuberootNeg(){
+      const a = ri(5,15);
+      const correct = `$-${a}$`;
+      const wrongs = [`$${a}$`, `$-${a+1}$`, `$-${a-1}$`];
+      const q = `$\\sqrt[3]{-${a**3}}$ equals`;
+      const choices=[correct,...wrongs];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q, choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+    function genMC_Irrational(){
+      const mns=[2,3,5,6,7,8,10,11,12,13,14,15,17,18,19];
+      const irr = `$\\sqrt{${sample(mns)}}$`;
+      const rat1 = `$0.\\overline{${ri(1,9)}${ri(1,9)}}$`;
+      const rat2 = `$\\dfrac{${ri(2,9)}}{${ri(10,20)}}$`;
+      const rat3 = `$${ri(1,9)}.${ri(10,99)}$`;
+      const choices = [irr, rat1, rat2, rat3];
+      const order = choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:'Which number is \\emph{irrational}?', choices: order.map(i=>choices[i]), answerIndex: order.indexOf(0) };
+    }
+
+
+    function genMC_SimplifyProductRoots(){
+      // choose a,b so ab has a square factor
+      const s = [4,9,16,25][ri(0,3)];
+      const t = ri(2,12);
+      const a = s; const b = t;
+      const ab = a*b;
+      // fully simplify √ab
+      let x=ab, out=1, d=2;
+      while(d*d<=x){
+        while(x%(d*d)===0){ out*=d; x/=d*d; }
+        d++;
+      }
+      const correct = `$${out>1?out:''}\\sqrt{${x}}$`.replace('^1','');
+      const wrongs = [`$\\sqrt{${ab}}$`, `$${out}\\sqrt{${ab}}$`, `$${out>1?out:''}\\sqrt{${a+b}}$`];
+      const q = `Simplify $\\sqrt{${a}}\\cdot \\sqrt{${b}}$.`;
+      const choices=[correct,...wrongs];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q, choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+    // ---------- Numeric Response generators ----------
+
+    // NR1: gcd(a,b) where gcd is guaranteed and non-trivial
+    function genNR_GCD(){
+      // pick target gcd g and coprime multipliers u,v so gcd(gu, gv) = g
+      const g = ri(2, 12);
+      let u = ri(10, 60), v = ri(10, 60);
+      // force coprime u,v
+      while (gcd(u, v) !== 1) { u = ri(10, 60); v = ri(10, 60); }
+      const a = g * u, b = g * v;
+    
+      return {
+        q: `Calculate $\\gcd(${a},\\,${b})$.`,
+        answer: `$${g}$`
+      };
+    }
+    
+    // NR2: lcm of three integers where each is a divisor of a constructed L, so lcm(a,b,c)=L
+    function genNR_LCM3(){
+      // Build an L from small prime exponents
+      const e2 = ri(1,3), e3 = ri(0,2), e5 = ri(0,2), e7 = ri(0,2);
+      const L = (2**e2) * (3**e3) * (5**e5) * (7**e7);
+    
+      // Helper to pick a divisor by lowering exponents randomly
+      function pickDiv(){
+        const f2 = ri(0, e2), f3 = ri(0, e3), f5 = ri(0, e5), f7 = ri(0, e7);
+        return (2**f2) * (3**f3) * (5**f5) * (7**f7);
+      }
+      // Ensure not all equal tiny numbers; regenerate if too small/duplicate
+      let a = pickDiv(), b = pickDiv(), c = pickDiv();
+      for(let tries=0; tries<10 && new Set([a,b,c]).size<3; tries++){ a = pickDiv(); b = pickDiv(); c = pickDiv(); }
+    
+      return {
+        q: `Calculate $\\mathrm{lcm}(${a},\\,${b},\\,${c})$.`,
+        answer: `$${L}$`
+      };
+    }
+    
+    // NR3: Sum of exponents a+b+c+d when N is given as a numeric value with known prime exponents
+    function genNR_SumPrimeExponents(){
+      // choose exponents (allow 0 for variety, but not all zero)
+      let a = ri(0,3), b = ri(0,3), c = ri(0,3), d = ri(0,3);
+      if (a+b+c+d === 0) { // ensure not all zero
+        const slot = ri(0,3);
+        if (slot===0) a = 1; else if (slot===1) b = 1; else if (slot===2) c = 1; else d = 1;
+      }
+      const N = (2**a) * (3**b) * (5**c) * (7**d);
+      const sum = a + b + c + d;
+    
+      return {
+        q: `Let the prime factorization of $${N}$ be $2^{a}\\cdot 3^{b}\\cdot 5^{c}\\cdot 7^{d}$. Compute $a+b+c+d$.`,
+        answer: `$${sum}$`
+      };
+    }
+
+
+    function renderQuiz(){
+      // reset quiz and answer key
+      quizEl.innerHTML = '';
+      const keyEl = document.getElementById('answerKey');
+      if (keyEl) keyEl.innerHTML = '';
+    
+      let qCounter = 1;
+      const ansItems = []; // lines for the printed Answer Key
+    
+      BANK.forEach(sec=>{
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML =
+          `<h2>${cleanSigns(sec.title || sec.section || '')}</h2>` +
+          `<div class="divider"></div>`;
+    
+        (sec.items || []).forEach(item=>{
+          // --- Legacy fixed MC (if any remain) ---
+          if (item.type === 'mc') {
+            const q   = cleanSigns(item.q || '');                // sanitize
+            const ans = cleanSigns(item.answer || '');           // sanitize
+            const choicesRaw = Array.isArray(item.choices) ? item.choices.slice() : ['$A$','$B$','$C$','$D$'];
+            const shuffled = shuffle(choicesRaw.map(cleanSigns)); // sanitize each choice then shuffle
+    
+            const opts = shuffled.map((c,i)=>{
+              const letter = String.fromCharCode(65+i);
+              return `<div class="choice">(${letter}) <span class="math">${c}</span></div>`;
+            }).join('');
+    
+            card.innerHTML +=
+              `<div><strong>${qCounter}. </strong><span class="math">${q}</span></div>`+
+              `<div class="mc-choices">${opts}</div>`+
+              `<div class="ans math" hidden>Answer: ${ans}</div>`;
+    
+            ansItems.push(
+              `<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${ans}</span></div>`
+            );
+            qCounter++;
+          }
+    
+          // --- Generator-based Multiple Choice ---
+          else if (item.type === 'mcgen') {
+            let generated = { q:'Problem unavailable.', choices: ['$A$','$B$','$C$','$D$'], answerIndex: 0 };
+            try { generated = item.gen(); } catch {}
+            generated = sanitizeGenerated(generated); // <<< ensure no double signs etc.
+    
+            const { q, choices, answerIndex } = generated;
+            const opts = choices.map((c,i)=>{
+              const letter = String.fromCharCode(65+i);
+              return `<div class="choice">(${letter}) <span class="math">${c}</span></div>`;
+            }).join('');
+    
+            const correct = choices[Math.max(0, Math.min(answerIndex ?? 0, choices.length-1))];
+    
+            card.innerHTML +=
+              `<div><strong>${qCounter}. </strong><span class="math">${q}</span></div>`+
+              `<div class="mc-choices">${opts}</div>`+
+              `<div class="ans math" hidden>Answer: ${correct}</div>`;
+    
+            ansItems.push(
+              `<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${correct}</span></div>`
+            );
+            qCounter++;
+          }
+    
+          // --- Generator-based numeric/written (returns {q, answer}) ---
+          else if (item.type === 'gen') {
+            let generated = { q:'Problem unavailable.', answer:'' };
+            try { generated = item.gen(); } catch {}
+            generated = sanitizeGenerated(generated); // <<< ensure clean signs
+    
+            const { q, answer } = generated;
+    
+            card.innerHTML +=
+              `<div><strong>${qCounter}. </strong><span class="math">${q}</span></div>`+
+              `<div class="ans math" hidden>Answer: ${answer}</div>`;
+    
+            ansItems.push(
+              `<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${answer}</span></div>`
+            );
+            qCounter++;
+          }
+    
+          // --- Fallback for fixed text items (numeric/written) if any remain ---
+          else {
+            const q   = cleanSigns(item.q || '');
+            const ans = cleanSigns(item.answer || '');
+    
+            card.innerHTML +=
+              `<div><strong>${qCounter}. </strong><span class="math">${q}</span></div>`+
+              `<div class="ans math" hidden>Answer: ${ans}</div>`;
+    
+            ansItems.push(
+              `<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${ans}</span></div>`
+            );
+            qCounter++;
+          }
+        });
+    
+        quizEl.appendChild(card);
+      });
+    
+      // Build the printed Answer Key content
+      if (keyEl) {
+        keyEl.innerHTML = `<h2>Answer Key</h2>${ansItems.join('')}`;
+      }
+    
+      // Typeset math in both quiz and key
+      typeset(quizEl);
+      if (keyEl) typeset(keyEl);
+    }
 
 
 
 
-  // ——— State ———
-  let state = {
-    running:false, paused:false,
-    score:0, streak:0, lives:3, best:Number(localStorage.getItem('pfs_best')||0),
-    n: Number((el('startAt')?.value)||2),        // current term (displayed)
-    target: Number((el('startAt')?.value)||2),   // next term to answer for (after jump)
-    lastMax: Number((el('startAt')?.value)||2) - 1,
-    nextJump:null,
-    timePer:Infinity, timeLeft:Infinity, timerId:null,
-  };
-  kBest.textContent = String(state.best);
-
-  // ——— Timing ———
-  function setDifficulty(val){ state.timePer = (val==='unlimited') ? Infinity : Number(val); }
-  function setTimerUI(){
-    if(!isFinite(state.timePer)) { timerWrap.classList.add('unlimited'); bar.style.width = '100%'; return; }
-    timerWrap.classList.remove('unlimited');
-    const pct = Math.max(0, Math.min(1, state.timeLeft / state.timePer));
-    bar.style.width = (pct*100).toFixed(1)+'%';
-  }
-  function startTicking(){
-    clearInterval(state.timerId);
-    if(!isFinite(state.timePer)) { setTimerUI(); return; }
-    state.timerId = setInterval(()=>{
-      if(!state.running || state.paused) return;
-      state.timeLeft -= 0.1;
-      if(state.timeLeft <= 0){ state.timeLeft = 0; setTimerUI(); timesUp(); }
-      else setTimerUI();
-    }, 100);
-  }
-
-  // ——— Game flow ———
-  function resetGame(){
-    state.running=false; state.paused=false; clearInterval(state.timerId);
-    state.lives=3; state.score=0; state.streak=0;
-    state.n = Math.max(2, Number(ddStartAt.value) || 2);
-    document.getElementById('startPoint').textContent = `Starting point: ${state.n}`;
-    document.getElementById('skull')?.classList.remove('show');
-    state.target = state.n;                // will be set in nextRound()
-    state.lastMax = state.n - 1;           // ensures strict forward motion
-    state.nextJump = pickNextJump();
-    setDifficulty(ddDiff.value);
-    updateHUD();
-    qNumber.textContent = `n = —`;
-    feedback.textContent = 'Ready! Press Start.'; feedback.className = 'feedback';
-    answer.value='';
-    showJump(state.nextJump);
-    state.timeLeft = state.timePer; setTimerUI();
-    document.getElementById('overlayStart')?.classList.remove('hidden');
-  }
-
-  function startGame(){
-    resetGame(); // this shows the overlay
-    document.getElementById('overlayStart')?.classList.add('hidden'); // now hide it
-    state.running = true;
-    state.paused = false;
-    nextRound();
-  }
 
 
 
-  // Display the CURRENT term, but compute the NEXT term as target
-  function nextRound(){
-    const j = state.nextJump;
-      let candidate;
-      if (!j) {
-        candidate = state.n + 1;
-      } else if (j.mult) {
-        candidate = state.n * j.mult;   // Double Jump
+    function randomDivisorQuestion(){
+      const n = Math.floor(Math.random()*900+100); // random 100–999
+      // compute divisor count
+      let count=1, num=n, d=2;
+      while(num>1){
+        let exp=0;
+        while(num%d===0){ num/=d; exp++; }
+        if(exp>0) count*=(exp+1);
+        d++;
+        if(d*d>num){ if(num>1){count*=2; break;} }
+      }
+      return {
+        q: `Find the number of positive divisors of $${n}$.`,
+        answer: `${count}`
+      };
+    }
+
+    function randomMultiplesQuestion(){
+      const N = Math.floor(Math.random()*1000+500); // between 500 and 1500
+      const count = Array.from({length:N},(_,i)=>i+1)
+        .filter(k=>(k%3===0||k%4===0)&&k%5!==0).length;
+      return {
+        q: `How many positive integers $<${N}$ are multiples of $3$ or $4$ but not $5$?`,
+        answer: `${count}`
+      };
+    }
+
+    function randomSetQuestion(){
+      // choose an upper bound multiple of 5 between 500–2500
+      const N = Math.floor(Math.random()*1000+1500);  
+      // sums with formulas
+      const nA = Math.floor(N/5);
+      const sumA = 5*nA*(nA+1)/2;
+    
+      const nAB = Math.floor(N/10);
+      const sumAB = 10*nAB*(nAB+1)/2;
+    
+      const nB = Math.floor(N/2);
+      const sumB = 2*nB*(nB+1)/2;
+    
+      const sumAorB = sumA + sumB - sumAB;
+    
+      // (iv) count (B∩C)\A: multiples of 6 not multiples of 5
+      const countBC = Math.floor(N/6);
+      const countBCnotA = Array.from({length:countBC},(_,i) => (i+1)*6)
+        .filter(x => x%5 !== 0).length;
+    
+      // (v) sum of B not (A∪C): multiples of 2, exclude 5 or 3
+      const sumBnot = Array.from({length:nB},(_,i) => (i+1)*2)
+        .filter(x => x%3 !== 0 && x%5 !== 0)
+        .reduce((a,b) => a+b, 0);
+    
+      return {
+        q: `Let $A=\\{\\text{multiples of 5} \\le ${N}\\}$, \
+    $B=\\{\\text{multiples of 2} \\le ${N}\\}$, \
+    $C=\\{\\text{multiples of 3} \\le ${N}\\}$.<br>\
+    (i) $\\sum A$<br>\
+    (ii) $\\sum(A\\cap B)$<br>\
+    (iii) $\\sum(A\\cup B)$<br>\
+    (iv) $|(B\\cap C)\\setminus A|$<br>\
+    (v) $\\sum(B\\setminus(A\\cup C))$`,
+        answer:`(i) ${sumA}, (ii) ${sumAB}, (iii) ${sumAorB}, (iv) ${countBCnotA}, (v) ${sumBnot}`
+      };
+    }
+    
+    function randomDivisors360Question(){
+      // keep base number fixed at 360 but randomize asked properties
+      const divisors=[1,2,3,4,5,6,8,9,10,12,15,18,20,24,30,36,40,45,60,72,90,120,180,360];
+      const total=divisors.length;
+    
+      const even=divisors.filter(x=>x%2===0).length;
+      const mult4=divisors.filter(x=>x%4===0).length;
+      const mult9=divisors.filter(x=>x%9===0).length;
+    
+      const ans1=`${even}/${total}`;
+      const ans2=`(${mult4}/${total})^2`;
+      const ans3=`(${mult9}/${total})*(${mult9-1}/${total-1})`;
+      const ans4=`1-(${total-even}/${total})^2`;
+    
+      return {
+        q:`List all positive divisors of $360$. Then compute:<br>\
+    (i) $P(\\text{even})$<br>\
+    (ii) With replacement, both multiples of $4$<br>\
+    (iii) Without replacement, both multiples of $9$<br>\
+    (iv) With replacement, at least one multiple of $2$`,
+        answer:`(i) ${ans1}, (ii) ${ans2}, (iii) ${ans3}, (iv) ${ans4}`
+      };
+    }
+
+
+    function randomNumberSystemsInclusions(){
+      // helpers
+      const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+      const nonsquares=[2,3,5,6,7,8,10,11,12,13,14,15,17,18,19,21,22,23,26,27];
+    
+      // a) proper fraction p/q (reduced), 0<p<q  -> in Q, R
+      let p = Math.floor(Math.random()*8)+1;       // 1..9
+      let q = Math.floor(Math.random()*9)+2;       // 2..10
+      if(p>=q){ [p,q]=[1,3]; }                     // ensure proper
+      const g1=gcd(p,q); p/=g1; q/=g1;
+    
+      // b) terminating decimal with 1–3 places but not an integer -> in Q, R
+      const places = Math.floor(Math.random()*3)+1; // 1..3
+      const intPart = Math.floor(Math.random()*9);  // 0..8
+      const fracPart = Math.floor(Math.random()*(10**places-1))+1; // not all zeros
+      const bStr = `${intPart}.${String(fracPart).padStart(places,'0')}`;
+    
+      // c) negative integer -> in Z, Q, R (not N or W)
+      const cVal = -(Math.floor(Math.random()*9)+2); // -2..-10
+    
+      // d) natural number (by your convention N={1,2,3,...}) -> in N, W, Z, Q, R
+      const dVal = Math.floor(Math.random()*20)+1;   // 1..20
+    
+      // e) irrational: sqrt of non-square -> in R only
+      const m = nonsquares[Math.floor(Math.random()*nonsquares.length)];
+    
+      // Build prompt (i)–(v) on separate lines
+      const qText =
+        `For each value, state all sets it belongs to among $\\mathbb{N},\\mathbb{W},\\mathbb{Z},\\mathbb{Q},\\mathbb{R}$.<br>`+
+        `(i) $a=\\dfrac{${p}}{${q}}$<br>`+
+        `(ii) $b=${bStr}$<br>`+
+        `(iii) $c=${cVal}$<br>`+
+        `(iv) $d=${dVal}$<br>`+
+        `(v) $e=\\sqrt{${m}}$`;
+    
+      // Membership strings
+      const N='\\mathbb{N}', W='\\mathbb{W}', Z='\\mathbb{Z}', Q='\\mathbb{Q}', R='\\mathbb{R}';
+      const A = `${Q}, ${R}`;                         // proper fraction
+      const B = `${Q}, ${R}`;                         // terminating decimal
+      const C = `${Z}, ${Q}, ${R}`;                   // negative integer
+      const D = `${N}, ${W}, ${Z}, ${Q}, ${R}`;       // natural number
+      const E = `${R}`;                               // irrational sqrt
+    
+      const ansText =
+        `(i) $a\\in${A}$; `+
+        `(ii) $b\\in${B}$; `+
+        `(iii) $c\\in${C}$; `+
+        `(iv) $d\\in${D}$; `+
+        `(v) $e\\in${E}$`;
+    
+      return { q: qText, answer: ansText };
+    }
+
+    function genTF_SetInclusion(){
+      // Uses helpers ri() and sample() you already have.
+      const N='\\mathbb{N}', W='\\mathbb{W}', Z='\\mathbb{Z}', Q='\\mathbb{Q}', R='\\mathbb{R}';
+    
+      const roll = ri(1,10);
+      let expr, ans;
+    
+      switch (roll){
+        case 1: { // natural number
+          const n = ri(1,20);
+          expr = `${n}\\in${N}`;
+          ans  = 'True';
+          break;
+        }
+        case 2: { // negative not whole
+          const n = -ri(1,20);
+          expr = `${n}\\in${W}`;
+          ans  = 'False';
+          break;
+        }
+        case 3: { // rational fraction
+          const a = ri(1,9), b = ri(2,12);
+          expr = `\\frac{${a}}{${b}}\\in${Q}`;
+          ans  = 'True';
+          break;
+        }
+        case 4: { // repeating decimal is rational
+          const d = ri(1,9);
+          expr = `0.\\overline{${d}}\\in${Q}`;
+          ans  = 'True';
+          break;
+        }
+        case 5: { // irrational square root
+          const m = sample([2,3,5,6,7,10,11,13,14,15,17,19,21,22]);
+          expr = `\\sqrt{${m}}\\in${Q}`;
+          ans  = 'False';
+          break;
+        }
+        case 6: { // convention: 0 ∉ N, 1 ∈ N
+          const n = sample(['0','1']);
+          expr = `${n}\\in${N}`;
+          ans  = (n === '1') ? 'True' : 'False';
+          break;
+        }
+        case 7: { // subset truths
+          expr = `${N}\\subseteq${Z}`;
+          ans  = 'True';
+          break;
+        }
+        case 8: {
+          expr = `${Q}\\subseteq${Z}`;
+          ans  = 'False';
+          break;
+        }
+        case 9: {
+          expr = `${Z}\\subseteq${Q}`;
+          ans  = 'True';
+          break;
+        }
+        default: {
+          expr = `${Q}\\subseteq${R}`;
+          ans  = 'True';
+        }
+      }
+    
+      return {
+        q: `$${expr}$ (True/False)`,  // wrap in $...$ so KaTeX renders
+        answer: ans
+      };
+    }
+
+    function randomDivisorsTrailingZeroQuestion(){
+      // pick random number with at least one trailing zero (multiple of 10)
+      const base = ri(10,100);  // 10–100
+      const n = base * 10;      // ensures trailing zero
+    
+      // compute all divisors
+      const divisors = [];
+      for (let d=1; d<=n; d++){
+        if(n % d === 0) divisors.push(d);
+      }
+      const total = divisors.length;
+    
+      const even = divisors.filter(x => x % 2 === 0).length;
+      const mult4 = divisors.filter(x => x % 4 === 0).length;
+      const mult9 = divisors.filter(x => x % 9 === 0).length;
+    
+      const ans1 = `${even}/${total}`;
+      const ans2 = `(${mult4}/${total})^2`;
+      const ans3 = `(${mult9}/${total})*(${mult9-1}/${total-1})`;
+      const ans4 = `1-(${total-even}/${total})^2`;
+    
+      return {
+        q:`List all positive divisors of $${n}$. Then compute:<br>
+    (i) $P(\\text{even})$<br>
+    (ii) With replacement, both multiples of $4$<br>
+    (iii) Without replacement, both multiples of $9$<br>
+    (iv) With replacement, at least one multiple of $2$`,
+        answer:`(i) ${ans1}, (ii) ${ans2}, (iii) ${ans3}, (iv) ${ans4}`
+      };
+    }
+
+        // ---------- Unit 2: Multiple Choice Generators ----------
+    // Assumes you already have ri(a,b) and sample(arr). If not, uncomment below.
+    // const ri = (a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+    // const sample = (arr)=>arr[ri(0,arr.length-1)];
+    
+    // 1) Simplify quotient with powers & negatives, then express with positive exponents
+    function genU2_SimplifyQuotientPowers(){
+      const a = ri(2,5);
+      const ex1 = ri(1,4), ey1 = -ri(1,3);
+      const ex2 = -ri(1,3), ey2 = ri(2,4);
+      const k1 = ri(2,3), k2 = ri(2,3);
+      const num = `( ${a}\\,x^{${ex1}}y^{${ey1}} )^{${k1}}`, den = `( x^{${ex2}}y^{${ey2}} )^{${k2}}`;
+    
+      const coef = a**k1;
+      const xExp = ex1*k1 - ex2*k2;
+      const yExp = ey1*k1 - ey2*k2;
+    
+      const numParts = [`${coef}`, xExp>0?`x^{${xExp}}`:'' , yExp>0?`y^{${yExp}}`:''].filter(Boolean);
+      const denParts = [xExp<0?`x^{${-xExp}}`:'' , yExp<0?`y^{${-yExp}}`:''].filter(Boolean);
+    
+      const correct = denParts.length ? `$\\dfrac{${numParts.join('')}}{${denParts.join('')}}$` : `$${numParts.join('')}$`;
+      const wrong1 = `$\\dfrac{${coef}}{x^{${Math.abs(xExp)}}y^{${Math.abs(yExp)}}}$`; // drops positive vars
+      const wrong2 = `$${coef}x^{${Math.abs(xExp)}}y^{${Math.abs(yExp)}}$`; // forces all positive
+      const wrong3 = (()=>{ // adds exponents instead of subtracting on division
+        const xx = ex1*k1 + ex2*k2, yy = ey1*k1 + ey2*k2;
+        const np = [`${coef}`, xx>0?`x^{${xx}}`:'', yy>0?`y^{${yy}}`:''].filter(Boolean);
+        const dp = [xx<0?`x^{${-xx}}`:'', yy<0?`y^{${-yy}}`:''].filter(Boolean);
+        return dp.length? `$\\dfrac{${np.join('')}}{${dp.join('')}}$` : `$${np.join('')}$`;
+      })();
+    
+      const q = `Simplify $\\displaystyle \\frac{${num}}{${den}}$ (write with positive exponents).`;
+      const choices=[correct, wrong1, wrong2, wrong3].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 2) Inverse from negative exponents
+    function genU2_NegExpInverse(){
+      const a = ri(1,3), b = ri(1,3), c = ri(1,3);
+      const q = `Which equals $\\dfrac{1}{(a^{- ${ri(2,3)}}b^{${ri(1,3)}})^{-1}c^{-2}}$ for $a,b,c\\ne 0$?`;
+      // Fix one deterministic variant to match Unit 2 vibe:
+      const correct = `$\\dfrac{b^{2}c^{2}}{a^{3}}$`;
+      const wrongs  = [`$\\dfrac{a^{3}}{b^{2}c^{2}}$`, `$a^{-3}b^{2}c^{-2}$`, `$\\dfrac{b^{-2}}{a^{3}c^{2}}$`];
+      const choices=[correct,...wrongs].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 3) Scientific notation — multiplication (normalized)
+    function genU2_SciMultiply(){
+      const A = (ri(12,95)/10), B = (ri(12,95)/10);
+      const m = ri(-6,6), n = ri(-6,6);
+      let M = A*B, E = m+n;
+      while(M>=10){ M/=10; E++; }
+      while(M<1){ M*=10; E--; }
+      const correct = `$${M.toFixed(2)}\\times 10^{${E}}$`;
+      const wrong1  = `$${(A*B).toFixed(2)}\\times 10^{${m+n}}$`; // unnormalized
+      const wrong2  = `$${(M*10).toFixed(2)}\\times 10^{${E-1}}$`; // place shift error
+      const wrong3  = `$${(M/10).toFixed(2)}\\times 10^{${E+1}}$`;
+      const q = `Compute $(${A.toFixed(2)}\\times 10^{${m}})(${B.toFixed(2)}\\times 10^{${n}})$ in scientific notation.`;
+      const choices=[correct,wrong1,wrong2,wrong3].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 4) Scientific notation — division (normalized)
+    function genU2_SciDivide(){
+      const A = (ri(11,99)/100), B = (ri(12,95)/10);
+      const m = ri(-8,-3), n = ri(-2,6);
+      let M = A/B, E = m-n;
+      while(M>=10){ M/=10; E++; }
+      while(M<1){ M*=10; E--; }
+      const correct = `$${M.toFixed(2)}\\times 10^{${E}}$`;
+      const wrong1  = `$${(A/B).toFixed(2)}\\times 10^{${m-n}}$`; // unnormalized
+      const wrong2  = `$${(M*10).toFixed(2)}\\times 10^{${E-1}}$`;
+      const wrong3  = `$${(M/10).toFixed(2)}\\times 10^{${E+1}}$`;
+      const q = `Compute $\\dfrac{${A.toFixed(2)}\\times 10^{${m}}}{${B.toFixed(1)}\\times 10^{${n}}}$ in scientific notation.`;
+      const choices=[correct,wrong1,wrong2,wrong3].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 5) Evaluate rational exponent like (32)^{3/5}
+    function genU2_RationalExpEvaluate(){
+      const b = sample([8,27,32,64,125,216]); // nice perfect powers
+      const k = sample([1,2,3]); // numerator
+      // choose root r so b is a perfect r-th power
+      const baseMap = {8:3,27:3,32:5,64:6,125:3,216:3}; // minimal prime-power info
+      let r = baseMap[b]; if (b===64) r = sample([3,6]); // 64 can be 2^6 or 4^3
+      const q = `$(${b})^{${k}/${r}}$ equals`;
+      const trueVal = Math.round((b**(k/r)));
+      const correct = `$${trueVal}$`;
+      const wrong1  = `$${b}^{${r}/${k}}$`;
+      const wrong2  = `$${Math.pow(Math.round(b**(1/r)), k-1)}$`;
+      const wrong3  = `$${Math.round((b**(1/r))*k)}$`;
+      const choices=[correct,wrong1,wrong2,wrong3].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 6) Simplify radical with variables (positive exponents; x,y >= 0)
+    function genU2_SimplifyRadicalXY(){
+      const K = ri(20,120);
+      const ax = ri(2,8), ay = ri(2,8);
+      const outX = Math.floor(ax/2), outY = Math.floor(ay/2);
+      const remX = ax%2, remY = ay%2;
+    
+      // pull perfect square from K
+      let s=1, m=K, d=2;
+      while(d*d<=m){ while(m%(d*d)===0){ s*=d; m/=d*d; } d++; }
+    
+      const outside = [s>1?`${s}`:'', outX?`x^{${outX}}`:'', outY?`y^{${outY}}`:''].filter(Boolean).join('');
+      const insideParts = []; if(m>1) insideParts.push(`${m}`); if(remX) insideParts.push('x'); if(remY) insideParts.push('y');
+      const rad = insideParts.length? `\\sqrt{${insideParts.join('\\,')}}` : '';
+      const correct = `$${outside}${rad || ''}$`.replace('^1','');
+    
+      const wrong1 = `$${outside}\\sqrt{${K}}$`;
+      const wrong2 = `$\\sqrt{${K}\\,x^{${ax}}y^{${ay}}}$`;
+      const wrong3 = `$${outside}\\sqrt{${m}${remY?'\\,y':''}}$`;
+    
+      const q = `Simplify $\\sqrt{${K}\\,x^{${ax}}y^{${ay}}}$ for $x,y\\ge 0$.`;
+      const choices=[correct,wrong1,wrong2,wrong3].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 7) Write a product of fractional powers as a single radical
+    function genU2_SingleRadicalCombine(){
+      const a = ri(2,7), b = ri(2,7);
+      const numA = ri(2,5), numB = ri(1,4), den = ri(2,5);
+      const q = `Write $a^{${numA}/${den}}\\,b^{${numB}/${den}}$ as a single radical ($a,b\\ge 0$).`;
+      const correct = `$\\sqrt[${den}]{a^{${numA}}b^{${numB}}}$`;
+      const wrong1  = `$\\sqrt{a^{${numA}}b^{${numB}}}$`;
+      const wrong2  = `$\\sqrt[${numA}]{a^{${den}}}\\,\\sqrt[${numB}]{b^{${den}}}$`;
+      const wrong3  = `$\\sqrt[${den}]{ab}$`;
+      const choices=[correct,wrong1,wrong2,wrong3].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 8) Identify improper scientific notation
+    function genU2_ImproperSci(){
+      const n1=`$9.99\\times 10^{0}$`;
+      const n2=`$1.01\\times 10^{9}$`;
+      const n3=`$12.0\\times 10^{-4}$`; // improper
+      const n4=`$6.2\\times 10^{-3}$`;
+      const choices=[n1,n2,n3,n4].sort(()=>Math.random()-0.5);
+      return { q:'Which is NOT in proper scientific notation?', choices, answerIndex: choices.indexOf(n3) };
+    }
+    
+    // 9) Simplify expression with mixed signed fractional exponents
+    function genU2_NegExpSimplify(){
+      const q = `Simplify $\\dfrac{x^{1/2}y^{-1}z^{3}}{x^{-3/2}y^{2}z^{-1}}$.`;
+      const correct = `$\\dfrac{x^{2}z^{4}}{y^{3}}$`;
+      const wrongs = [
+        `$\\dfrac{xz^{2}}{y^{3}}$`,
+        `$\\dfrac{x^{2}}{yz^{4}}$`,
+        `$\\dfrac{x^{2}y^{3}}{z^{4}}$`
+      ];
+      const choices=[correct,...wrongs].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 10) Power of a power with radicals (e.g., (27 a^9 b^6)^{2/3})
+    // MC: Power of a power with fractional exponent (assume a,b>0)
+    function genU2_PowerOfPower(){
+      // Choose a clean q-th power coefficient so no numeric leftovers inside
+      const q = sample([3,4,5]);
+      const p = sample([1,2,3].filter(t => t < 2*q)); // reasonable numerators
+      const k = sample([2,3]);              // small base
+      const coef = k ** q;                   // perfect q-th power → (coef)^{p/q} = k^p
+    
+      // Variable exponents: q*n + r (so some leftovers may remain inside)
+      const nA = ri(2,5), rA = ri(0,q-1);
+      const nB = ri(2,4), rB = ri(0,q-1);
+      const aTot = q*nA + rA;
+      const bTot = q*nB + rB;
+    
+      // Outside exponents after ( )^{p/q}
+      const outCoef = k ** p;
+      const aOut = Math.floor((p * aTot) / q);
+      const bOut = Math.floor((p * bTot) / q);
+    
+      // Inside remainders
+      const aRem = (p * aTot) % q;
+      const bRem = (p * bTot) % q;
+    
+      // Build LaTeX pieces
+      const qText = `$(${coef}\\,a^{${aTot}}b^{${bTot}})^{${p}/${q}}$`;
+    
+      const outsideParts = [
+        outCoef > 1 ? `${outCoef}` : '',
+        aOut ? `a^{${aOut}}` : '',
+        bOut ? `b^{${bOut}}` : ''
+      ].filter(Boolean).join('');
+    
+      const insideParts = [];
+      if (aRem) insideParts.push(`a^{${aRem}}`);
+      if (bRem) insideParts.push(`b^{${bRem}}`);
+    
+      const radical = insideParts.length ? `\\sqrt[${q}]{${insideParts.join('\\,')}}` : '';
+    
+      const correct = `$${outsideParts}${radical}$`.replace('^1','');
+    
+      // Plausible distractors:
+      // 1) Forgot to divide exponents by q (applied only ^p)
+      const wrong1 = `$${(k**p)}\\,a^{${p*aTot}}b^{${p*bTot}}$`;
+    
+      // 2) Kept everything under a q-th root (no extracting)
+      const wrong2 = `$\\sqrt[${q}]{${(coef**p)}\\,a^{${p*aTot}}b^{${p*bTot}}}$`;
+    
+      // 3) Dropped the inside remainders entirely
+      const wrong3 = `$${(k**p)}${aOut?`a^{${aOut}}`:''}${bOut?`b^{${bOut}}`:''}$`;
+    
+      const choices = [correct, wrong1, wrong2, wrong3].sort(()=>Math.random()-0.5);
+      return {
+        q: `Simplify ${qText} (assume $a,b>0$).`,
+        choices,
+        answerIndex: choices.indexOf(correct)
+      };
+    }
+
+
+        // ---------- Unit 2: Numeric Response Generators ----------
+    // Uses your existing ri(a,b). If missing, uncomment:
+    // const ri = (a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+    
+    // helper: normalize mantissa/exponent to [1,10)
+    function normSci(m, e){
+      let M = m, E = e;
+      while (M >= 10) { M /= 10; E++; }
+      while (M < 1)   { M *= 10; E--; }
+      return { M, E };
+    }
+    
+    // NR1: Evaluate (perfect-power)^{p/q}
+    function genNR_U2_RationalExp(){
+      const c = ri(2, 6);
+      const q = sample([2,3,4,5]);
+      const p = sample([1,2,3]);
+      const base = c ** q;
+      const val = c ** p;
+      return {
+        q: `Evaluate $(${base})^{${p}/${q}}$.`,
+        answer: `$${val}$`
+      };
+    }
+    
+    // NR2: Evaluate (perfect-power)^{-p/q}
+    function genNR_U2_RationalExpNegative(){
+      const c = ri(2, 6);
+      const q = sample([2,3,4,5]);
+      const p = sample([1,2,3]);
+      const base = c ** q;
+      const valN = c ** p;
+      return {
+        q: `Evaluate $(${base})^{-\\,${p}/${q}}$.`,
+        answer: `$\\dfrac{1}{${valN}}$`
+      };
+    }
+    
+    // NR3: (a×10^m) + (b×10^n)  → scientific notation
+    function genNR_U2_SciAdd(){
+      const a = (ri(12,95)/10);       // 1.2–9.5
+      const b = (ri(12,95)/10);       // 1.2–9.5
+      const m = ri(4,7), n = m + sample([-2,-1,0,1]); // keep close for nice sums
+      const sum = a * (10**m) + b * (10**n);
+      // convert to mantissa×10^E
+      const E0 = Math.floor(Math.log10(sum));
+      const M0 = sum / (10**E0);
+      const { M, E } = normSci(M0, E0);
+      return {
+        q: `Compute $(${a.toFixed(2)}\\times 10^{${m}})+(${b.toFixed(2)}\\times 10^{${n}})$ in scientific notation.`,
+        answer: `$${M.toFixed(2)}\\times 10^{${E}}$`
+      };
+    }
+    
+    // NR4: (a×10^m) / (b×10^n)  → scientific notation
+    function genNR_U2_SciDivide(){
+      const a = (ri(11,99)/10);   // 1.1–9.9
+      const b = (ri(12,95)/10);   // 1.2–9.5
+      const m = ri(-6,6);
+      const n = ri(-6,6);
+      const mant = a / b;
+      const exp = m - n;
+      const { M, E } = normSci(mant, exp);
+      return {
+        q: `Compute $\\dfrac{${a.toFixed(1)}\\times 10^{${m}}}{${b.toFixed(1)}\\times 10^{${n}}}$ in scientific notation.`,
+        answer: `$${M.toFixed(2)}\\times 10^{${E}}$`
+      };
+    }
+    
+    // NR5: Exponent equation in base 2 → solve for x
+    function genNR_U2_SolveExponentEquation(){
+      const x = ri(2,10);
+      const K = 3*x + 4; // from (2^{x-1})(2^{2x+5})=2^{3x+4}
+      return {
+        q: `If $(2^{x-1})(2^{2x+5})=2^{${K}}$, find $x$.`,
+        answer: `$${x}$`
+      };
+    }
+    
+    // NR6: Compound sci-notation with powers, then division
+    function genNR_U2_SciCompound(){
+      // ((p×10^r)^2) / (q×10^s), choose so mantissa is clean
+      const p = sample([3,4,5,6,7,8,9]);
+      const q = sample([3,6,12]); // choose a divisor of p^2 to keep tidy
+      const r = ri(-3,2), s = ri(-5,3);
+      const mant = (p**2)/q;
+      const exp  = 2*r - s;
+      const { M, E } = normSci(mant, exp);
+      return {
+        q: `Evaluate $\\dfrac{(${p}\\times 10^{${r}})^{2}}{${q}\\times 10^{${s}}}$ in scientific notation.`,
+        answer: `$${M.toFixed(2)}\\times 10^{${E}}$`
+      };
+    }
+
+
+    // ---------- Unit 2: Written Response Generators ----------
+
+    // WR1: Simplify a monomial quotient (positive exponents in final)
+    function genWR_U2_SimplifyMonomialQuotient(){
+      // choose coefficients with clean reduction
+      const c1 = 3 * ri(2,6), c2 = 3 * ri(1,4);  // multiples of 3
+      const ax = ri(1,5), ay = -ri(0,4);
+      const bx = -ri(0,3), by = ri(2,6);
+      const q = `
+    Simplify completely:
+    $\\displaystyle \\frac{${c1}x^{${ax}}y^{${ay}}}{${c2}x^{${bx}}y^{${by}}}.$`;
+      const coeff = c1 / c2;
+      const xE = ax - bx, yE = ay - by;
+      const numParts = [coeff!==1?`${coeff}`:'', xE>0?`x^{${xE}}`:'', yE>0?`y^{${yE}}`:''].filter(Boolean).join('');
+      const denParts = [xE<0?`x^{${-xE}}`:'', yE<0?`y^{${-yE}}`:''].filter(Boolean).join('');
+      const simplified = denParts ? `\\dfrac{${numParts||'1'}}{${denParts}}` : (numParts||'1');
+      return {
+        q: q.trim(),
+        answer: `$${simplified}$`
+      };
+    }
+    
+    // WR2: Scientific notation product with rule explanation
+    function genWR_U2_SciProductExplain(){
+      const A = (ri(12,95)/10), B = (ri(12,95)/10);
+      const m = ri(3,7), n = ri(2,6);
+      let M = A*B, E = m+n;
+      const pre = `${(A*B).toFixed(2)}\\times 10^{${E}}`;
+      while(M>=10){ M/=10; E++; }
+      const final = `${M.toFixed(2)}\\times 10^{${E}}`;
+      return {
+        q: `Write the product in scientific notation and name the exponent rule used:
+    $(${A.toFixed(2)}\\times 10^{${m}})(${B.toFixed(2)}\\times 10^{${n}})$.`,
+        answer: `$${pre}= ${final}\\,$ using $(a\\cdot10^{m})(b\\cdot10^{n})=(ab)\\cdot10^{m+n}$ and normalization to $[1,10)$.`
+      };
+    }
+    
+    // WR3: Rewrite fractional powers using radicals (x,y >= 0)
+    function genWR_U2_FracPowersToRadicals(){
+      const ax = ri(5,8), bx = ri(4,6);
+      const ay = ri(4,6), by = ri(3,5);
+      const q = `Rewrite using radicals and simplify (assume $x,y\\ge 0$):
+    $\\;x^{${ax}/${bx}}\\;y^{${ay}/${by}}.$`;
+      function split(n,d){
+        const out = Math.floor(n/d), rem = n%d;
+        const outStr = out? `x^{${out}}` : '';
+        const inStr  = rem? `\\sqrt[${d}]{x^{${rem}}}` : '';
+        return {outStr,inStr};
+      }
+      const Xo = Math.floor(ax/bx), Xr = ax%bx;
+      const Yo = Math.floor(ay/by), Yr = ay%by;
+      const outParts = [Xo?`x^{${Xo}}`:'' , Yo?`y^{${Yo}}`:''].filter(Boolean).join('');
+      const inPieces = [];
+      if (Xr) inPieces.push(`x^{${Xr}}`);
+      if (Yr) inPieces.push(`y^{${Yr}}`);
+      const rad =
+        Xr && Yr && bx===by
+          ? `\\sqrt[${bx}]{${inPieces.join('\\,')}}`
+          : [Xr?`\\sqrt[${bx}]{x^{${Xr}}}`:'', Yr?`\\sqrt[${by}]{y^{${Yr}}}`:''].filter(Boolean).join('\\,');
+      const ans = `${outParts}${rad}`;
+      return {
+        q,
+        answer: `$${ans || '1'}$`
+      };
+    }
+    
+    // WR4: Simplify (perfects)^(1/k), variables nonnegative
+    function genWR_U2_RootOfPerfects(){
+      const coef = [16,36,81,144][ri(0,3)];
+      const ax= ri(6,12), ay= ri(4,10), k = sample([2,3,4]);
+      const q = `Simplify $(${coef}\\,x^{${ax}}y^{${ay}})^{1/${k}}$ for $x,y\\ge 0$.`;
+      const outC = Math.round(coef ** (1/k));
+      const xo = Math.floor(ax/k), xr = ax%k;
+      const yo = Math.floor(ay/k), yr = ay%k;
+      const outside = [outC>1?`${outC}`:'', xo?`x^{${xo}}`:'', yo?`y^{${yo}}`:''].filter(Boolean).join('');
+      const inside = [xr?`x^{${xr}}`:'', yr?`y^{${yr}}`:''].filter(Boolean).join('\\,');
+      const radical = inside? `\\sqrt[${k}]{${inside}}` : '';
+      return {
+        q,
+        answer: `$${outside}${radical}$`
+      };
+    }
+    
+    // WR5: Order three numbers given as decimals/sci-notation mix
+    function genWR_U2_OrderNumbers(){
+      // Make two equal forms and one distinct larger/smaller
+      const a = (ri(31,45))/100000;       // e.g., 0.00031 … 0.00045
+      const b = a;                         // equal value in different form
+      const c = a * ri(8,12);              // a scaled comparator
+      const aTex = `${a}`;                 // decimal
+      const bTex = `${(a*1e5).toFixed(2)}\\times 10^{-5}`; // sci notation equivalent
+      const cTex = `${(c/Math.pow(10, Math.floor(Math.log10(c)))) .toFixed(2)}\\times 10^{${Math.floor(Math.log10(c))}}`;
+      const q = `Order from least to greatest: $${aTex}$, $${bTex}$, $${cTex}$.`;
+      const vals = [a, a, c].slice().sort((x,y)=>x-y);
+      const leastToGreatest =
+        a<=c ? `${aTex},\\ ${bTex},\\ ${cTex}` : `${cTex},\\ ${aTex},\\ ${bTex}`;
+      return {
+        q,
+        answer: `Convert to decimals: $${aTex}= ${a},\\ ${bTex}= ${a},\\ ${cTex}= ${c.toExponential()}$.\\\\ Least to greatest: ${leastToGreatest}.`
+      };
+    }
+    
+    // WR6: Solve t^{3/2} = N sqrt(t)
+    function genWR_U2_SolveRationalExponentEq(){
+      const N = sample([9,16,25,27,36,49]);
+      return {
+        q: `Solve for $t>0$: $t^{3/2}=${N}\\sqrt{t}$.`,
+        answer: `Divide by $t^{1/2}$ (since $t>0$): $t=${N}$.`
+      };
+    }
+    
+    // WR7: Area from diameter in scientific notation
+    function genWR_U2_MicroArea(){
+      const d = (ri(18,30)/10).toFixed(1); // e.g., 2.4 -> 2.4×10^{-6} m
+      const q = `A bacterium has diameter $${d}\\times 10^{-6}\\text{ m}$. Using $\\pi\\approx 3.14$, express the area of its circular cross-section in scientific notation.`;
+      const r = (parseFloat(d)/2);
+      const areaMant = 3.14 * (r*r);
+      // normalize
+      let M = areaMant, E = -12; // (10^{-6})^2
+      while(M>=10){ M/=10; E++; }
+      while(M<1){ M*=10; E--; }
+      return {
+        q,
+        answer: `$A=\\pi r^2\\approx 3.14\\,( ${(r).toFixed(2)}\\times 10^{-6})^{2} \\Rightarrow ${M.toFixed(2)}\\times 10^{${E}}\\text{ m}^2$.`
+      };
+    }
+    
+    // WR8: Fraction of powers like (27 a^{-3} b^6)^{1/3} / (3 a^{-1} b^2)^2
+    function genWR_U2_SimplifyFracPowers(){
+      const q = `Simplify
+    $\\displaystyle \\frac{(27a^{-3}b^{6})^{1/3}}{(3a^{-1}b^{2})^{2}}\\quad (a,b\\ne 0).$`;
+      return {
+        q,
+        answer: `Numerator $=3a^{-1}b^{2}$; denominator $=9a^{-2}b^{4}$. Thus $\\dfrac{3a^{-1}b^{2}}{9a^{-2}b^{4}}=\\dfrac{1}{3}\\,a^{1}b^{-2}=\\dfrac{a}{3b^{2}}$.`
+      };
+    }
+    
+    // WR9: Solve split-base exponential equation (randomized)
+    // WR9 replacement: split-base exponential equation with clean signs & integer solution
+    function genWR_U2_SolveSplitBases(){
+      // Build: (2^a2 * 3^a3)^(αx + β) = 2^(γx + δ) * 3^(ηx + θ)
+      const a2 = ri(1,3);          // exponent of 2 inside composite base
+      const a3 = ri(1,3);          // exponent of 3 inside composite base
+      const alpha = ri(1,3);       // coeff of x on LHS
+      const beta  = ri(-3,3);      // constant on LHS (can be negative)
+      const xStar = ri(1,6);       // force an integer solution
+    
+      // Choose γ, η distinct from a2*alpha, a3*alpha so it's non-trivial
+      let gamma = ri(a2*alpha-3, a2*alpha+3);
+      while (gamma === a2*alpha) gamma = ri(a2*alpha-3, a2*alpha+3);
+    
+      let eta = ri(a3*alpha-3, a3*alpha+3);
+      while (eta === a3*alpha) eta = ri(a3*alpha-3, a3*alpha+3);
+    
+      // Pick δ, θ to make x = xStar the exact solution:
+      const delta = a2*(alpha*xStar + beta) - gamma*xStar;
+      const theta = a3*(alpha*xStar + beta) - eta*xStar;
+    
+      // helper to format ± nicely in KaTeX: ax + b  (with proper minus sign)
+      const lin = (coef, constant) => {
+        const sign = constant >= 0 ? `+${constant}` : `${constant}`; // e.g., +5 or -7
+        return `${coef}x${sign}`;
+      };
+    
+      const baseCoef = `(2^{${a2}}\\cdot 3^{${a3}})`;
+      const lhs = `${baseCoef}^{\\,${lin(alpha, beta)}}`;
+      const rhs = `2^{${lin(gamma, delta)}}\\cdot 3^{${lin(eta, theta)}}`;
+    
+      const q = `$${lhs} = ${rhs}$. Solve for $x$.`;
+    
+      const ans =
+    `Write ${baseCoef} as $2^{${a2}}3^{${a3}}$:
+    \\[
+    2^{${a2}(${lin(alpha,beta)})}3^{${a3}(${lin(alpha,beta)})}
+    =2^{${lin(gamma,delta)}}3^{${lin(eta,theta)}}.
+    \\]
+    Equate exponents by base:
+    \\( ${a2}(${lin(alpha,beta)}) = ${lin(gamma,delta)} \\) and
+    \\( ${a3}(${lin(alpha,beta)}) = ${lin(eta,theta)} \\),
+    both yielding $x=${xStar}$.`;
+    
+      return { q, answer: ans };
+    }
+
+    
+    // WR10: Prime-power system for x,y (randomized but consistent)
+    function genWR_U2_PrimePowerSystem(){
+      // Choose prime-power exponents for x=2^a 3^b and y=2^c 3^d
+      const a = ri(0,2), b = ri(0,2), c = ri(0,2), d = ri(0,2);
+      // Avoid trivial x=y=1
+      if (a+b+c+d === 0) return genWR_U2_PrimePowerSystem();
+    
+      const P = ri(2,4), Q = ri(2,4);   // exponents in first relation
+      const R = ri(1,3);                // power of y in the second relation
+    
+      // Build target exponents for 2 and 3
+      const A2 = P*a + Q*c, A3 = P*b + Q*d;     // x^P y^Q = 2^{A2} 3^{A3}
+      const U2 = a - R*c,   U3 = b - R*d;       // x / y^R = 2^{U2} 3^{U3}
+    
+      const xVal = 2**a * 3**b;
+      const yVal = 2**c * 3**d;
+    
+      const q =
+    `If $x^{${P}}y^{${Q}}=2^{${A2}}3^{${A3}}$ and $\\dfrac{x}{y^{${R}}}=2^{${U2}}3^{${U3}}$, find $x$ and $y$ in prime-power form.`;
+      const ans =
+    `Let $x=2^{a}3^{b}$ and $y=2^{c}3^{d}$. Then
+    $${P}a+${Q}c=${A2},\\ \\ ${P}b+${Q}d=${A3}$ and $a-${R}c=${U2},\\ \\ b-${R}d=${U3}$.
+    Solving gives $a=${a},\\ b=${b},\\ c=${c},\\ d=${d}$.
+    Thus $x=2^{${a}}3^{${b}}=${xVal}$ and $y=2^{${c}}3^{${d}}=${yVal}$.`;
+      return { q, answer: ans };
+    }
+    
+    // WR11: Power model y = a x^r via two points (randomized nice r)
+    function genWR_U2_PowerModel(){
+      // pick an integer exponent r between 1 and 3
+      const r = ri(1,3);
+      // choose integer base points for x
+      const x1 = ri(2,4), x2 = ri(5,9);
+      // pick a nice integer coefficient a
+      const a = ri(1,4);
+      // compute y values exactly
+      const y1 = a * x1**r;
+      const y2 = a * x2**r;
+    
+      const q = `The power model $y=ax^{r}$ passes through $(${x1},${y1})$ and $(${x2},${y2})$. Find $r$.`;
+      const answer = `$r=${r}$ (since $\\dfrac{y_2/y_1}{(x_2/x_1)^r}=1$ confirms it)`;
+    
+      return { q, answer };
+    }
+
+    
+    // WR12: Solve 2^{x+a}+2^{x} = 3^{y+b}-3^{y} (randomized pairs with integer solution)
+    function genWR_U2_Diophantine1(){
+      // Valid pairs so that 2^a+1 is a power of 3 and 3^b-1 is a power of 2:
+      // (a,b) in {(1,1), (3,2)}
+      const pair = sample([{a:1,b:1},{a:3,b:2}]);
+      const a = pair.a, b = pair.b;
+    
+      // Then 2^x(2^a+1) = 3^y(3^b-1) => 3^{(log_3(2^a+1) - y)} = 2^{(log_2(3^b-1) - x)}
+      // Integer solution occurs at x = log2(3^b - 1), y = log3(2^a + 1).
+      const xSol = (b===1?1:3); // 3^1-1=2 -> x=1; 3^2-1=8 -> x=3
+      const ySol = (a===1?1:2); // 2^1+1=3 -> y=1; 2^3+1=9 -> y=2
+    
+      const q = `Solve for integers $x,y$: $2^{x+${a}}+2^{x}=3^{y+${b}}-3^{y}$.`;
+      const ans =
+    `Factor: $2^{x}(2^{${a}}+1)$ and $3^{y}(3^{${b}}-1)$. Since $2^{${a}}+1=3^{${ySol}}$ and $3^{${b}}-1=2^{${xSol}}$,
+    we have $3^{${ySol}}\\cdot 2^{x}=2^{${xSol}}\\cdot 3^{y}$, so $3^{${ySol}-y}=2^{${xSol}-x}$.
+    Thus both exponents must be $0$: $x=${xSol}, $y=${ySol}.`;
+      return { q, answer: ans };
+    }
+    
+    // WR13: Composition identity f(x)=2^{kx+c} so f(x)f(m-x) is constant (randomized)
+    function genWR_U2_CompositionIdentity(){
+      const k = 2 * ri(2,5);           // even so c integer
+      const m = ri(1,4);
+      const c = -(k*m)/2;              // ensures kx+c + k(m-x)+c = 0
+      const q = `If $f(x)=2^{${k}x${c>=0?'+':''}${c}}$, find $f(x)\\cdot f(${m}-x)$ in simplest form.`;
+      const ans = `$2^{${k}x${c>=0?'+':''}${c}}\\cdot 2^{${k}(${m}-x)${c>=0?'+':''}${c}}=2^{${k}x+${c}+${k}m-${k}x+${c}}=2^{0}=1$.`;
+      return { q, answer: ans };
+    }
+    
+    // WR14: Mixed-base equation 3^{x+α}+2^{x+β}+2^{x}=2^{x+γ}+3^{x} with solution x=t (randomized)
+    function genWR_U2_MixedBaseSolve(){
+      // Two valid randomized families:
+      // (t, α, β, γ) = (1,1,2,3)  -> A=3^α-1=2^1, B=2^β+1-2^γ = -3^1
+      // (t, α, β, γ) = (3,2,2,5)  -> A=3^α-1=2^3, B=2^β+1-2^γ = -3^3
+      const opt = sample([{t:1, alpha:1, beta:2, gamma:3}, {t:3, alpha:2, beta:2, gamma:5}]);
+      const { t, alpha, beta, gamma } = opt;
+    
+      const q = `Solve: $3^{x+${alpha}}+2^{x+${beta}}+2^{x}=2^{x+${gamma}}+3^{x}$.`;
+      const A = 3**alpha - 1;         // = 2^t
+      const B = (2**beta) + 1 - (2**gamma); // = -3^t
+      const check = `\\Rightarrow 3^{x}(${A}) + 2^{x}(${B})=0 \\Rightarrow \\left(\\tfrac{3}{2}\\right)^{x}=\\tfrac{-B}{A}=\\left(\\tfrac{3}{2}\\right)^{${t}}`;
+    
+      const ans = `${check} \\Rightarrow x=${t}.`;
+      return { q, answer: ans };
+    }
+
+
+    // --- tiny helpers (add once) ---
+    function stripZeros(s){
+      return String(s).replace(/(\.\d*?[1-9])0+$/,'$1').replace(/\.0+$/,'');
+    }
+    function fixedClean(x, dp=2){
+      return stripZeros(Number(x).toFixed(dp));
+    }
+    function choose(arr){
+      return arr[Math.floor(Math.random()*arr.length)];
+    }
+    // format number as "mantissa × 10^{exp}" for KaTeX
+    function sciStr(val, sig=3){
+      if (!isFinite(val) || val === 0) return `0`;
+      const exp = Math.floor(Math.log10(Math.abs(val)));
+      const mant = Number((val / 10**exp).toPrecision(sig));
+      // keep mantissa tidy (no trailing zeros)
+      return `${stripZeros(mant.toString())}\\times 10^{${exp}}`;
+    }
+
+
+    // ========== Unit 3: Multiple Choice Generators ==========
+    // Assumes ri(a,b) and sample(arr) exist; if not, uncomment:
+    // const ri = (a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+    // const sample = (arr)=>arr[ri(0,arr.length-1)];
+    
+    // ========== Unit 3: Multiple Choice Generators (randomized) ==========
+    // Uses ri(a,b), fixedClean(x,dp), sciStr(val,sig). Make sure those helpers exist.
+    
+    /** 1) Credit card thickness (randomized distractors/units; correct ≈ 0.76 mm) */
+    function genU3_MC_CreditCardThickness(){
+      // correct industry spec is ~0.76 mm (ISO/IEC 7810 ID-1)
+      const correct = `$0.76\\ \\text{mm}$`;
+      // randomized distractors: nearby-but-wrong scale errors
+      const microns = 76 + ri(-8,8);   // ~76 µm (off by ×10)
+      const mm_big  = (7.6 + ri(-10,10)/10).toFixed(1);  // ~7.6 mm (off by ×10)
+      const mm_tiny = (0.076 + ri(-15,15)/1000).toFixed(3); // ~0.076 mm (off by ×0.1)
+      const wrongs = [
+        `$${mm_big}\\ \\text{mm}$`,
+        `$${mm_tiny}\\ \\text{mm}$`,
+        `$${microns}\\ \\mu\\text{m}$`
+      ];
+      const choices = [correct, ...wrongs].sort(()=>Math.random()-0.5);
+      return { q:'Which is closest to the thickness of a standard credit card?', choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    /** 2) km → inches (1 in = 2.54 cm) */
+    function genU3_MC_KmToInches(){
+      // random km with 2 d.p. between 0.50 and 5.00
+      const km = Math.round((0.5 + Math.random()*4.5)*100)/100;
+      const inches = km * 100000 / 2.54;
+    
+      const correct = `$${sciStr(inches,3)}\\ \\text{in}$`;
+      const wrong1  = `$${sciStr(km*100000/2.5,3)}\\ \\text{in}$`; // used 2.5 instead of 2.54
+      const wrong2  = `$${sciStr(km*1000/2.54,3)}\\ \\text{in}$`;  // missed ×100
+      const wrong3  = `$${sciStr(km*1000,3)}\\ \\text{in}$`;       // forgot cm→in
+      const choices = [correct, wrong1, wrong2, wrong3].sort(()=>Math.random()-0.5);
+    
+      return {
+        q: `Convert $${km.toFixed(2)}\\ \\text{km}$ to inches ($1\\ \\text{in}=2.54\\ \\text{cm}$).`,
+        choices,
+        answerIndex: choices.indexOf(correct)
+      };
+    }
+    
+    /** 3) Circle area (diameter in inches → cm^2) */
+    function genU3_MC_CircleAreaInCm2(){
+      // diameter 1.20–3.50 in (2 d.p.)
+      const d_in = Math.round((1.2 + Math.random()*2.3)*100)/100;
+      const r_cm = (d_in * 2.54) / 2;
+      const area = Math.PI * r_cm * r_cm;
+      const correct = `$${fixedClean(area,1)}\\ \\text{cm}^2$`;
+    
+      const wrong1 = `$${fixedClean(area*0.64,1)}\\ \\text{cm}^2$`;                        // spurious factor
+      const wrong2 = `$${fixedClean(area*1.36,1)}\\ \\text{cm}^2$`;                        // spurious factor
+      const wrong3 = `$${fixedClean(Math.PI * (d_in/2)**2,2)}\\ \\text{cm}^2$`;            // forgot inch→cm
+    
+      const choices = [correct, wrong1, wrong2, wrong3].sort(()=>Math.random()-0.5);
+      return {
+        q: `The area of a circle with diameter $${d_in.toFixed(2)}\\ \\text{in}$ expressed in $\\text{cm}^2$ is closest to`,
+        choices,
+        answerIndex: choices.indexOf(correct)
+      };
+    }
+    
+    /** 4) m^2 → cm^2 (×10^4) */
+    function genU3_MC_m2_to_cm2(){
+      // random m^2 0.10–5.00 (2 d.p.)
+      const m2 = Math.round((0.1 + Math.random()*4.9)*100)/100;
+      const cm2 = m2 * 10000;
+      const correct = `$${Number(cm2.toFixed(0)).toLocaleString('en-US')}\\ \\text{cm}^2$`;
+      const wrong1 = `$${Number((m2*100).toFixed(0)).toLocaleString('en-US')}\\ \\text{cm}^2$`;
+      const wrong2 = `$${Number((m2*1000).toFixed(0)).toLocaleString('en-US')}\\ \\text{cm}^2$`;
+      const wrong3 = `$${Number((m2*1e6).toFixed(0)).toLocaleString('en-US')}\\ \\text{cm}^2$`;
+    
+      const choices = [correct, wrong1, wrong2, wrong3].sort(()=>Math.random()-0.5);
+      return { q: `Convert $${m2.toFixed(2)}\\ \\text{m}^2$ into $\\text{cm}^2$.`, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    /** 5) Box volume (in → L) */
+    function genU3_MC_BoxVolumeLitres(){
+      // random integer inches: L 8–18, W 6–14, H 4–12
+      const L = ri(8,18), W = ri(6,14), H = ri(4,12);
+      const vol_cm3 = (L*W*H) * (2.54**3);
+      const litres = vol_cm3 / 1000;
+      const correct = `$${fixedClean(litres,1)}\\ \\text{L}$`;
+    
+      const wrong1 = `$${fixedClean(L*W*H/1000,1)}\\ \\text{L}$`; // forgot 2.54^3
+      const wrong2 = `$${fixedClean(litres*(0.7 + Math.random()*0.2),1)}\\ \\text{L}$`;
+      const wrong3 = `$${fixedClean(litres*(1.1 + Math.random()*0.2),1)}\\ \\text{L}$`;
+    
+      const choices = [correct, wrong1, wrong2, wrong3].sort(()=>Math.random()-0.5);
+      return { q: `A rectangular box measures ${L}in $\\times$ ${W}in $\\times$ ${H}in. Its volume in litres is closest to`, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    /** 6) Hair unit (randomized order only) */
+    function genU3_MC_HairUnit(){
+      const correct = `Micrometre`;
+      const choices = [correct, 'Millimetre', 'Nanometre', 'Centimetre'].sort(()=>Math.random()-0.5);
+      return { q: 'Which metric unit is most reasonable to measure the thickness of a human hair?', choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    /** 7) mi^2 → km^2 (1 mi = 1.609 km) */
+    function genU3_MC_SqMiToSqKm(){
+      // random square miles 1–9 (integer)
+      const mi2 = ri(1,9);
+      const factor = (1609/1000)**2; // 1.609^2
+      const km2 = mi2 * factor;
+      const correct = `$${fixedClean(km2,2)}\\ \\text{km}^2$`;
+      const wrong1  = `$${fixedClean(mi2*1.609,2)}\\ \\text{km}^2$`;  // linear only
+      const wrong2  = `$${fixedClean(mi2*1.61,2)}\\ \\text{km}^2$`;   // rounded, still linear
+      const wrong3  = `$${fixedClean(mi2,2)}\\ \\text{km}^2$`;        // unchanged
+      const choices = [correct, wrong1, wrong2, wrong3].sort(()=>Math.random()-0.5);
+      return { q: `Convert $${mi2}\\ \\text{mile}^2$ into $\\text{km}^2$ ($1\\ \\text{mi}=1.609\\ \\text{km}$).`, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    /** 8) Cylinder lateral area (2πrh) */
+    function genU3_MC_CylLateralSA(){
+      // r 2–9, h 6–16
+      const r = ri(2,9), h = ri(6,16);
+      const correct = `$${2*r*h}\\pi$`;
+      const wrong1 = `$${r*h}\\pi$`;
+      const wrong2 = `$${2*r*r}\\pi$`;
+      const wrong3 = `$${2*(r+h)}\\pi$`;
+      const choices = [correct, wrong1, wrong2, wrong3].sort(()=>Math.random()-0.5);
+      return { q: `The lateral surface area of a cylinder of radius $r=${r}$ and height $h=${h}$ is`, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    /** 9) Cone volume with h = k r */
+    function genU3_MC_ConeVolume_k(){
+      // random integer k = 1–6
+      const k = ri(1,6);
+    
+      // helper to render simplified fraction k/3
+      function fracKover3(n){
+        if (n % 3 === 0) return `${n/3}`;
+        if (n === 1) return `\\tfrac{1}{3}`;
+        if (n === 2) return `\\tfrac{2}{3}`;
+        return `\\tfrac{${n}}{3}`;
+      }
+    
+      const correct = `$${fracKover3(k)}\\pi r^{3}$`;
+      const wrong1  = `$\\pi r^{3}$`;
+      const wrong2  = `$${k}\\pi r^{3}$`;
+      const wrong3  = `$\\tfrac{1}{3}\\pi r^{2}$`;
+      const choices = [correct, wrong1, wrong2, wrong3].sort(()=>Math.random()-0.5);
+      return { q: `The volume of a cone of radius $r$ and height $${k}r$ is`, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    /** 10) Sphere SA from volume (given as coef·π) */
+    function genU3_MC_SphereSAfromV(){
+      // choose integer radius 2–8
+      const r = ri(2,8);
+      const Vcoef = (4/3)*r**3;
+      const SAcoef = 4*r**2;
+      const correct = `$${SAcoef}\\pi$`;
+      const wrongs = [
+        `$${fixedClean(Vcoef,0)}\\pi$`,
+        `$${3*r**2}\\pi$`,
+        `$${2*SAcoef}\\pi$`
+      ];
+      const choices = [correct, ...wrongs].sort(()=>Math.random()-0.5);
+      return { q: `A sphere has volume $${fixedClean(Vcoef,0)}\\pi$. Its surface area is`, choices, answerIndex: choices.indexOf(correct) };
+    }
+
+    
+    // ========== Unit 3: Numeric Response Generators ==========
+    // Assumes ri(a,b) and sample(arr) (or choose) exist; add light helpers if missing:
+    if (typeof stripZeros !== 'function') {
+      var stripZeros = s => s.replace(/(\.\d*?[1-9])0+$/,'$1').replace(/\.0+$/,'');
+    }
+    if (typeof fixedClean !== 'function') {
+      var fixedClean = (x, dp=2) => stripZeros(Number(x).toFixed(dp));
+    }
+    if (typeof choose !== 'function') {
+      var choose = arr => arr[Math.floor(Math.random()*arr.length)];
+    }
+    
+    // NR1: Convert km/h → m/s (pick values that divide cleanly by 3.6)
+    function genU3_NR_KmhToMs(){
+      // choose from set that makes exact 1-decimal or integer results
+      const kmh = choose([18, 27, 36, 45, 54, 72, 90, 108]); // → 5,7.5,10,12.5,15,20,25,30
+      const ms = kmh / 3.6;
+      return {
+        q: `Convert $${kmh}\\ \\text{km/h}$ to $\\text{m/s}$.`,
+        answer: `$${fixedClean(ms, 1)}\\ \\text{m/s}$`
+      };
+    }
+    
+    // NR2: Cylinder total surface area (2πr^2 + 2πrh) with tidy r,h
+    function genU3_NR_CylinderTSA(){
+      const r = choose([5, 6, 7.5, 8, 9, 10]); // cm
+      const h = choose([15, 18, 20, 24, 25, 30]); // cm
+      const tsa = 2*Math.PI*r*r + 2*Math.PI*r*h; // cm^2
+      const approx = Math.round(tsa); // nearest cm^2
+      return {
+        q: `A cylinder has radius $${stripZeros(String(r))}\\ \\text{cm}$ and height $${h}\\ \\text{cm}$. Find its total surface area.`,
+        answer: `$2\\pi r^{2}+2\\pi rh=\\ ${approx}\\ \\text{cm}^2$`
+      };
+    }
+    
+    // NR3: Radius from sphere volume V = (4/3)π r^3 (choose integer r)
+    function genU3_NR_SphereRadiusFromV(){
+      const r = choose([4,5,6,7,8,9]); // cm
+      const Vcoef = (4/3)*r**3;        // so volume = Vcoef·π
+      return {
+        q: `The volume of a sphere is $${stripZeros(fixedClean(Vcoef,0))}\\pi\\ \\text{cm}^3$. Find its radius.`,
+        answer: `$r=${r}\\ \\text{cm}$`
+      };
+    }
+    
+    // NR4: Convert ft^3 → litres (1 ft = 0.3048 m, 1 m^3=1000 L)
+    function genU3_NR_Ft3ToLitres(){
+      const ft3 = choose([5, 8, 10, 12, 15, 18, 20]);
+      const litres = ft3 * (0.3048**3) * 1000;      // exact formula
+      const ans = Math.round(litres);               // nearest litre
+      return {
+        q: `Convert $${ft3}\\ \\text{ft}^3$ into litres. ($1\\ \\text{ft}=0.3048\\ \\text{m}$, $1\\ \\text{m}^3=1000\\ \\text{L}$)`,
+        answer: `$${ans}\\ \\text{L}$`
+      };
+    }
+    
+    // NR5: Volume of a square pyramid (V = 1/3 s^2 h) with tidy integers
+    function genU3_NR_PyramidVolume(){
+      const s = choose([8, 10, 12, 14, 15]);  // m
+      const h = choose([12, 15, 18, 20]);     // m
+      const V = (s*s*h)/3;
+      return {
+        q: `A pyramid has square base $${s}\\ \\text{m}$ and height $${h}\\ \\text{m}$. Find its volume.`,
+        answer: `$\\dfrac{1}{3}\\cdot ${s}^{2}\\cdot ${h}=\\ ${stripZeros(fixedClean(V,0))}\\ \\text{m}^3$`
+      };
+    }
+
+    // ========== Unit 3: Written Response Generators ==========
+    
+    // WR1: Cylindrical water tank, % filled → litres
+    function genU3_WR_WaterTank80(){
+      const D = ri(28, 42) / 10;   // diameter in m (2.8–4.2)
+      const H = ri(30, 60) / 10;   // height in m (3.0–6.0)
+      const pct = choose([60, 70, 75, 80, 85, 90]); // percent full
+      const r = D/2;
+      const Vfull_m3 = Math.PI * r * r * H;
+      const Vlitres = Math.round(Vfull_m3 * (pct/100) * 1000);
+      const q = `A cylindrical water tank of diameter $${D.toFixed(1)}\\,\\text{m}$ and height $${H.toFixed(1)}\\,\\text{m}$ is filled to $${pct}\\%$ of capacity. Find the volume of water in litres.`;
+      const answer = `$V=\\pi r^2h=\\pi(${(r).toFixed(2)})^{2}(${H.toFixed(1)})\\approx ${(Vfull_m3).toFixed(2)}\\,\\text{m}^3.\\\\
+    \\text{Water}=\\frac{${pct}}{100}\\cdot V\\approx ${(Vfull_m3*pct/100).toFixed(2)}\\,\\text{m}^3=${Vlitres}\\,\\text{L}.$`;
+      return { q, answer };
+    }
+    
+    // WR2: Square prism volume from diagonal of square cross-section
+    function genU3_WR_SquarePrismFromDiagonal(){
+      const L = ri(15, 30);                // length in cm
+      const diag = ri(8, 14) * 1.0;        // diagonal in cm
+      const side = diag/Math.SQRT2;
+      const V = Math.round(L * side * side); // cm^3 (nearest)
+      const q = `A wooden beam is cut into a square prism $${L}\\,\\text{cm}$ long with diagonal cross-section $${diag}\\,\\text{cm}$. Find its volume.`;
+      const answer = `For a square, $s=\\dfrac{d}{\\sqrt2}=\\dfrac{${diag}}{\\sqrt2}\\approx ${fixedClean(side,2)}\\,\\text{cm}$.\\\\
+    $V=Ls^{2}=${L}\\cdot (${fixedClean(side,2)})^{2}\\approx ${V}\\,\\text{cm}^3.$`;
+      return { q, answer };
+    }
+    
+    // WR3: Great pyramid volume → km^3 (scientific notation)
+    function genU3_WR_GreatPyramidVolume(){
+      const B = ri(200, 260);  // base length (m)
+      const H = ri(120, 160);  // height (m)
+      const V_m3 = (1/3) * B*B * H;
+      const V_km3 = V_m3 / 1e9;
+      const q = `A pyramid has base length $${B}\\,\\text{m}$ and height $${H}\\,\\text{m}$. Approximate its volume in cubic kilometres.`;
+      const answer = `$V=\\tfrac13B^{2}H=\\tfrac13(${B}^{2})(${H})=${fixedClean(V_m3,0)}\\,\\text{m}^3=\\ ${sciStr(V_km3,3)}\\ \\text{km}^3.$`;
+      return { q, answer };
+    }
+    
+    // WR4: Steel sphere melted into cylinders (how many rods)
+    function genU3_WR_SteelSphereToRods(){
+      const R = ri(4, 7);                      // sphere radius cm
+      const rRod = choose([0.5, 0.6, 0.75, 1]); // rod radius cm
+      const L = choose([15, 18, 20, 24, 25, 30]); // rod length cm
+      const Vsphere = (4/3)*Math.PI*R**3;
+      const Vrod = Math.PI*(rRod**2)*L;
+      const n = Math.floor(Vsphere / Vrod);
+      const q = `A steel sphere of radius $${R}\\,\\text{cm}$ is melted and recast into cylindrical rods of radius $${rRod}\\,\\text{cm}$ and length $${L}\\,\\text{cm}$. How many rods can be made?`;
+      const answer = `$V_{\\text{sphere}}=\\tfrac{4}{3}\\pi(${R})^{3}= ${fixedClean(Vsphere,1)}\\,\\text{cm}^3.\\quad
+    V_{\\text{rod}}=\\pi(${rRod})^{2}(${L})= ${fixedClean(Vrod,1)}\\,\\text{cm}^3.\\\\
+    \\text{Number}=\\left\\lfloor\\dfrac{${fixedClean(Vsphere,1)}}{${fixedClean(Vrod,1)}}\\right\\rfloor=\\boxed{${n}}.$`;
+      return { q, answer };
+    }
+    
+    // WR5: Cube surface area equals sphere surface area (solve x)
+    function genU3_WR_CubeEqualsSphereArea(){
+      const r = ri(4, 9);
+      const x = Math.sqrt((2/3)*Math.PI*r*r);
+      const q = `A cube of edge $x\\,\\text{cm}$ has the same surface area as a sphere of radius $r=${r}\\,\\text{cm}$. Find $x$.`;
+      const answer = `Set $6x^{2}=4\\pi r^{2}\\Rightarrow x=\\sqrt{\\dfrac{2\\pi}{3}}\\,r=\\sqrt{\\dfrac{2\\pi}{3}}\\,(${r})\\approx ${fixedClean(x,2)}\\,\\text{cm}.$`;
+      return { q, answer };
+    }
+    
+    // WR6: Cone vs hemisphere equal volumes (find h:r)
+    function genU3_WR_ConeHemisphereEqualVol(){
+      const r = ri(3, 10);
+      const q = `A cone and a hemisphere share the same base radius $r$ and have equal volumes. Find the ratio of the cone’s height $h$ to $r$. (Assume $r=${r}$ for concreteness.)`;
+      const answer = `Set $\\tfrac13\\pi r^{2}h=\\tfrac23\\pi r^{3}\\Rightarrow h=2r$. Hence $\\dfrac{h}{r}=\\boxed{2:1}.$`;
+      return { q, answer };
+    }
+    
+    // WR7: Horizontal cylinder half-filled — formula + numeric
+    function genU3_WR_HorizontalCylinderHalf(){
+      const r = ri(30, 60);             // radius in cm
+      const Lm = ri(10, 20) / 10;       // length in m (1.0–2.0)
+      const Lcm = Lm * 100;             // convert to cm
+      // Half depth ⇒ circular segment with central angle θ = π
+      const areaSeg = 0.5 * r * r * Math.PI;   // (r^2/2)(π - sinπ) = (π r^2)/2
+      const Vcm3 = areaSeg * Lcm;              // volume in cm^3
+      const litres = Math.round(Vcm3 / 1000);  // to L, nearest litre
+      const q = `A fuel tank is a right circular cylinder of radius $${r}\\,\\text{cm}$ and length $${Lm.toFixed(1)}\\,\\text{m}$. It lies on its side and is filled to half its depth. 
+    (i) Derive a formula (in terms of $r,L,\\theta$) for the liquid volume as a function of the central angle $\\theta$ (in radians) of the circular segment.
+    (ii) Then evaluate numerically for this tank at half depth.`;
+      const answer = `(i) For a circular segment with central angle $\\theta$ (radians), area $A=\\dfrac{r^{2}}{2}(\\theta-\\sin\\theta)$. Thus volume $V=L\\cdot A=\\dfrac{Lr^{2}}{2}(\\theta-\\sin\\theta)$.\\\\
+    (ii) Half depth corresponds to a half-circle cross-section: $\\theta=\\pi\\Rightarrow A=\\dfrac{r^{2}}{2}(\\pi-0)=\\dfrac{\\pi r^{2}}{2}$.\\\\
+    $V= L\\cdot \\dfrac{\\pi r^{2}}{2} = (${Lm.toFixed(1)}\\text{ m})\\cdot\\dfrac{\\pi(${r}\\text{ cm})^{2}}{2} 
+    = (${Lcm}\\text{ cm})\\cdot\\dfrac{\\pi(${r})^{2}}{2}\\ \\text{cm}^3
+    \\approx ${fixedClean(Vcm3,0)}\\ \\text{cm}^3
+    = \\boxed{${litres}\\ \\text{L}}.$`;
+      return { q, answer };
+    }
+
+    // ========== Unit 4: Multiple Choice Generators (Trig & Right Triangles) ==========
+
+    // 1) Special-angle sine (random 30°, 45°, 60°)
+    function genU4_MC_SinSpecial(){
+      const angle = sample([30,45,60]);
+      const ansMap = {30:'\\tfrac{1}{2}', 45:'\\tfrac{\\sqrt{2}}{2}', 60:'\\tfrac{\\sqrt{3}}{2}'};
+      const correct = `$${ansMap[angle]}$`;
+      const pool = [
+        '$\\tfrac{1}{2}$','$\\tfrac{\\sqrt{3}}{2}$','$\\tfrac{\\sqrt{2}}{2}$','$1$'
+      ];
+      const choices = [correct, ...pool.filter(s=>s!==correct)].sort(()=>Math.random()-0.5);
+      return { q: `$\\sin ${angle}^{\\circ}$ equals`, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 2) Special-angle tangent (random 30°, 45°, 60°)
+    function genU4_MC_TanSpecial(){
+      const angle = sample([30,45,60]);
+      const ansMap = {30:'\\tfrac{1}{\\sqrt{3}}', 45:'1', 60:'\\sqrt{3}'};
+      const correct = `$${ansMap[angle]}$`;
+      const pool = ['$1$','$\\sqrt{3}$','$\\tfrac{1}{\\sqrt{3}}$','$\\tfrac{\\sqrt{2}}{2}$'];
+      const choices = [correct, ...pool.filter(s=>s!==correct)].sort(()=>Math.random()-0.5);
+      return { q: `$\\tan ${angle}^{\\circ}$ equals`, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 3) Given cos A = p/q and adjacent length, find hypotenuse
+    function genU4_MC_CosRatioFindHyp(){
+      // Use Pythagorean triples so p/q is nice
+      const triples = [{p:3,q:5},{p:4,q:5},{p:5,q:13},{p:12,q:13},{p:8,q:17},{p:15,q:17}];
+      const {p,q} = sample(triples);
+      const k = ri(2,4)*3; // scale factor for lengths
+      const adj = k*p, hyp = k*q;
+      const correct = `$${hyp}$`;
+      const wrongs  = [`$${adj}$`, `$${k*(q-p)}$`, `$${k*(p+q)}$`];
+      const choices = [correct, ...wrongs].sort(()=>Math.random()-0.5);
+      return {
+        q: `In a right triangle, $\\cos A=\\tfrac{${p}}{${q}}$. The length of the adjacent side to $A$ is ${adj}. What is the hypotenuse?`,
+        choices, answerIndex: choices.indexOf(correct)
+      };
+    }
+    
+    // 4) Given tan θ = a/b, find sin θ
+    function genU4_MC_SinFromTan(){
+      const triples = [{a:3,b:4,c:5},{a:5,b:12,c:13},{a:7,b:24,c:25},{a:8,b:15,c:17}];
+      const {a,b,c} = sample(triples);
+      const correct = `$\\tfrac{${a}}{${c}}$`;
+      const wrongs = [`$\\tfrac{${b}}{${c}}$`, `$\\tfrac{${a}}{${b}}$`, `$\\tfrac{${c}}{${a}}$`];
+      const choices = [correct, ...wrongs].sort(()=>Math.random()-0.5);
+      return { q: `If $\\tan\\theta=\\dfrac{${a}}{${b}}$, then $\\sin\\theta=$`, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 5) Height from angle of elevation (nearest tenth)
+    function genU4_MC_BuildingHeight(){
+      const d = ri(30,80);                // metres
+      const ang = ri(25, 55);             // degrees
+      const h = d * Math.tan(ang*Math.PI/180);
+      const correct = `$${(h).toFixed(1)}\\ \\text{m}$`;
+      const wrongs = [
+        `$${(d*Math.sin(ang*Math.PI/180)).toFixed(1)}\\ \\text{m}$`,
+        `$${(d/Math.tan(ang*Math.PI/180)).toFixed(1)}\\ \\text{m}$`,
+        `$${(d*Math.cos(ang*Math.PI/180)).toFixed(1)}\\ \\text{m}$`
+      ];
+      const choices = [correct, ...wrongs].sort(()=>Math.random()-0.5);
+      return {
+        q: `The angle of elevation to the top of a building is $${ang}^{\\circ}$ at $${d}\\ \\text{m}$ away. The building’s height is approximately`,
+        choices, answerIndex: choices.indexOf(correct)
+      };
+    }
+    
+    // 6) cos θ for angle opposite the shorter leg (random Pythagorean triple)
+    function genU4_MC_CosOppShortLeg(){
+      const T = sample([{a:5,b:12,c:13},{a:7,b:24,c:25},{a:8,b:15,c:17},{a:9,b:40,c:41}]); // a<b<c
+      const short = T.a, long = T.b, hyp = T.c;
+      const correct = `$\\tfrac{${long}}{${hyp}}$`;
+      const wrongs = [
+        `$\\tfrac{${short}}{${hyp}}$`, `$\\tfrac{${hyp}}{${long}}$`, `$\\tfrac{${long}}{${short}}$`
+      ];
+      const choices = [correct, ...wrongs].sort(()=>Math.random()-0.5);
+      return {
+        q: `A right triangle has legs ${T.a} and ${T.b}. What is $\\cos\\theta$ for the angle opposite the shorter leg?`,
+        choices, answerIndex: choices.indexOf(correct)
+      };
+    }
+    
+    // 7) Ladder height reached (L·sinθ)
+    function genU4_MC_LadderHeight(){
+      const L = ri(8,14);              // metres
+      const ang = ri(55,80);           // degrees
+      const h = L * Math.sin(ang*Math.PI/180);
+      const correct = `$${h.toFixed(1)}\\ \\text{m}$`;
+      const wrongs = [
+        `$${(L*Math.cos(ang*Math.PI/180)).toFixed(1)}\\ \\text{m}$`,
+        `$${(L*Math.tan(ang*Math.PI/180)).toFixed(1)}\\ \\text{m}$`,
+        `$${(L/Math.cos(ang*Math.PI/180)).toFixed(1)}\\ \\text{m}$`
+      ];
+      const choices = [correct, ...wrongs].sort(()=>Math.random()-0.5);
+      return {
+        q: `A ladder $${L}\\ \\text{m}$ long leans against a wall at angle $${ang}^{\\circ}$. The vertical height reached is`,
+        choices, answerIndex: choices.indexOf(correct)
+      };
+    }
+    
+    // 8) Identity that always holds
+    function genU4_MC_PythagoreanIdentity(){
+      const correct = '$\\sin^{2}\\theta+\\cos^{2}\\theta=1$';
+      const wrongs = [
+        '$\\tan\\theta=\\cos\\theta/\\sin\\theta$',
+        '$\\cos\\theta=1/\\sin\\theta$',
+        '$\\sin\\theta+\\cos\\theta=1$'
+      ];
+      const choices = [`$${correct}$`, ...wrongs.map(s=>`$${s}$`)].sort(()=>Math.random()-0.5);
+      return { q: 'Which identity always holds?', choices, answerIndex: choices.indexOf(`$${correct}$`) };
+    }
+    
+    // 9) Given sinθ decimal, find cosθ (acute)
+    function genU4_MC_CosFromSin(){
+      // Use nice ratios so cos is clean (3-4-5, 5-12-13, 7-24-25, 8-15-17)
+      const triples = [{s:3,c:4,h:5},{s:5,c:12,h:13},{s:7,c:24,h:25},{s:8,c:15,h:17}];
+      const {s,c,h} = sample(triples);
+      const sinDec = (s/h).toFixed(1);     // e.g., 0.6
+      const cosDec = (c/h).toFixed(1);     // e.g., 0.8
+      const correct = `$${cosDec}$`;
+      const wrongs = [`$${(1-(s/h)).toFixed(1)}$`, `$${(s/h).toFixed(1)}$`, `$${(c/h).toFixed(2)}$`];
+      const choices = [correct, ...wrongs].sort(()=>Math.random()-0.5);
+      return { q: `If $\\sin\\theta=${sinDec}$, then $\\cos\\theta=$`, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 10) Solve tanθ = k (degrees, nearest tenth)
+    function genU4_MC_SolveTan(){
+      const k = sample([0.5, 1, 2, 3]);
+      const theta = (Math.atan(k)*180/Math.PI);
+      const correct = `$${theta.toFixed(1)}^{\\circ}$`;
+      // common distractors: 90-θ, arctan(1/k), and swapped rounding
+      const wrongs = [
+        `$${(90 - theta).toFixed(1)}^{\\circ}$`,
+        `$${(Math.atan(1/k)*180/Math.PI).toFixed(1)}^{\\circ}$`,
+        `$${(theta+ri(-3,3)*0.5).toFixed(1)}^{\\circ}$`
+      ];
+      const choices = [correct, ...wrongs].sort(()=>Math.random()-0.5);
+      return { q: `Solve for $\\theta$: $\\tan\\theta=${k}$. (Degrees, nearest tenth.)`, choices, answerIndex: choices.indexOf(correct) };
+    }
+
+    // ========== Unit 4: Numeric Response Generators ==========
+
+    // NR1) Opposite from hypotenuse & angle: opp = H*sin(A)
+    function genU4_NR_OppFromHypAngle(){
+      const H = ri(12, 30);                // hypotenuse (m)
+      const A = ri(20, 70);                // angle in degrees
+      const opp = H * Math.sin(A * Math.PI/180);
+      return {
+        q: `A right triangle has hypotenuse $${H}$ and angle $${A}^{\\circ}$. Find the length of the side opposite $${A}^{\\circ}$.`,
+        answer: `$${H}\\sin(${A}^{\\circ})\\approx ${opp.toFixed(1)}$`
+      };
+    }
+    
+    // NR2) Missing acute angle from two legs (label which leg it’s opposite)
+    function genU4_NR_MissingAngleFromLegs(){
+      // random integer legs (ensure not equal & moderate size)
+      let a = ri(6, 20), b = ri(7, 24);
+      if (a === b) b += 1;
+      // choose which leg the angle is opposite (smaller leg more typical)
+      const opposite = (a < b ? a : b);
+      const adjacent = (a < b ? b : a);
+      const theta = Math.atan(opposite/adjacent) * 180/Math.PI;
+      return {
+        q: `A right triangle has legs ${a} and ${b}. Find the measure of the acute angle opposite the side of length ${opposite}. (Degrees, nearest tenth.)`,
+        answer: `$\\theta=\\tan^{-1}\\!\\left(\\dfrac{${opposite}}{${adjacent}}\\right)\\approx ${theta.toFixed(1)}^{\\circ}$`
+      };
+    }
+    
+    // NR3) Evaluate sin α + cos α for a special angle (exact)
+    function genU4_NR_SinPlusCosSpecial(){
+      const ang = sample([30,45,60]);
+      let exact;
+      if (ang === 30) exact = `\\tfrac{1}{2}+\\tfrac{\\sqrt{3}}{2}=\\tfrac{1+\\sqrt{3}}{2}`;
+      if (ang === 45) exact = `\\tfrac{\\sqrt{2}}{2}+\\tfrac{\\sqrt{2}}{2}=\\sqrt{2}`;
+      if (ang === 60) exact = `\\tfrac{\\sqrt{3}}{2}+\\tfrac{1}{2}=\\tfrac{\\sqrt{3}+1}{2}`;
+      return {
+        q: `Evaluate $\\sin(${ang}^{\\circ})+\\cos(${ang}^{\\circ})$.`,
+        answer: `$${exact}$`
+      };
+    }
+    
+    // NR4) Angle from cos θ = k (acute, to nearest tenth)
+    function genU4_NR_AngleFromCos(){
+      // choose a clean decimal k in (0,1)
+      const numerators = [2,3,4,5,6,7,8,9];
+      const denominators = [10, 12, 13, 15, 16, 17, 20];
+      const n = sample(numerators), d = sample(denominators);
+      let k = n/d;
+      if (k >= 0.98) k = 0.98; // keep safely < 1
+      const theta = Math.acos(k) * 180/Math.PI;
+      return {
+        q: `A triangle has an acute angle $\\theta$ with $\\cos\\theta=${k.toFixed(2)}$. Find $\\theta$ in degrees (nearest tenth).`,
+        answer: `$\\theta\\approx ${theta.toFixed(1)}^{\\circ}$`
+      };
+    }
+    
+    // NR5) Ramp inclination from rise/run: θ = arctan(rise/run)
+    function genU4_NR_RampInclination(){
+      // pick rise & run so ratio is tame
+      const rise = ri(8, 30) / 10;  // 0.8–3.0 m
+      const run  = ri(30, 90) / 10; // 3.0–9.0 m
+      const theta = Math.atan(rise/run) * 180/Math.PI;
+      return {
+        q: `A ramp rises $${rise.toFixed(1)}\\ \\text{m}$ over a horizontal distance of $${run.toFixed(1)}\\ \\text{m}$. Find the angle of inclination (degrees, nearest tenth).`,
+        answer: `$\\theta=\\tan^{-1}\\!\\left(\\dfrac{${rise.toFixed(1)}}{${run.toFixed(1)}}\\right)\\approx ${theta.toFixed(1)}^{\\circ}$`
+      };
+    }
+
+    // ========== Unit 4: Written Response Generators ==========
+
+    // WR1) Kite problem (Pythagoras)
+    function genU4_WR_Kite(){
+      const base = ri(30,60);
+      const string = base + ri(5,20); // string > base
+      const h = Math.sqrt(string**2 - base**2);
+      return {
+        q: `A kite string is staked $${base}\\ \\text{m}$ away from the flyer. The string is taut and $${string}\\ \\text{m}$ long. Find the kite’s height above the ground.`,
+        answer: `Right triangle with hypotenuse ${string} and base ${base}. $h=\\sqrt{${string}^2-${base}^2}\\approx ${h.toFixed(1)}\\ \\text{m}$.`
+      };
+    }
+    
+    // WR2) Surveyor two observations (classic angle of elevation)
+    function genU4_WR_Surveyor(){
+      const dmove = ri(500,1200);
+      const ang1 = ri(15,25);
+      const ang2 = ang1 + ri(5,10);
+      // system solve: tan a1 = h/d, tan a2 = h/(d - dmove)
+      const tan1 = Math.tan(ang1*Math.PI/180);
+      const tan2 = Math.tan(ang2*Math.PI/180);
+      const d = (dmove * tan2)/(tan2 - tan1);
+      const h = d * tan1;
+      return {
+        q: `A surveyor measures angle of elevation to a mountain top as $${ang1}^{\\circ}$. After moving $${dmove}\\ \\text{m}$ closer, the angle is $${ang2}^{\\circ}$. Find the mountain’s height (to nearest metre).`,
+        answer: `Let initial distance be $d$. $\\tan ${ang1}^{\\circ}=h/d$, $\\tan ${ang2}^{\\circ}=h/(d-${dmove})$. Solving gives $h\\approx ${h.toFixed(0)}\\ \\text{m}$.`
+      };
+    }
+    
+    // WR3) Airplane climb (constant angle)
+    function genU4_WR_Airplane(){
+      const climb = ri(5,12);   // degrees
+      const alt = ri(1000,4000);
+      const dist = alt/Math.sin(climb*Math.PI/180);
+      const horiz = dist*Math.cos(climb*Math.PI/180);
+      return {
+        q: `An airplane climbs at a constant angle $${climb}^{\\circ}$. How far horizontally has it traveled when it gains $${alt}\\ \\text{m}$ altitude?`,
+        answer: `Altitude $=d\\sin${climb}^{\\circ}=${alt}\\Rightarrow d=${alt}/\\sin${climb}^{\\circ}\\approx ${dist.toFixed(0)}\\ \\text{m}$. Horizontal $\\approx ${horiz.toFixed(0)}\\ \\text{m}$.`
+      };
+    }
+    
+    // WR4) Tower with cable
+    function genU4_WR_CableTower(){
+      const dist = ri(30,80);
+      const ang = ri(55,75);
+      const height = dist * Math.tan(ang*Math.PI/180);
+      const cable = dist/Math.cos(ang*Math.PI/180);
+      return {
+        q: `A cell tower is supported by a cable anchored $${dist}\\ \\text{m}$ from its base. If the cable makes a $${ang}^{\\circ}$ angle with the ground, find tower height and cable length.`,
+        answer: `Height $=${dist}\\tan${ang}^{\\circ}\\approx ${height.toFixed(1)}\\ \\text{m}$, cable $=${dist}/\\cos${ang}^{\\circ}\\approx ${cable.toFixed(1)}\\ \\text{m}$.`
+      };
+    }
+    
+    // WR5) Two-bank tree problem
+    function genU4_WR_TreeAcrossRiver(){
+      const river = ri(40,80);
+      const ang1 = ri(20,30);
+      const ang2 = ang1 + ri(5,12);
+      const tan1 = Math.tan(ang1*Math.PI/180), tan2 = Math.tan(ang2*Math.PI/180);
+      const h = river / (1/tan1 + 1/tan2);
+      return {
+        q: `A river is $${river}\\ \\text{m}$ wide. From one bank, the angle of elevation to the top of a tree on the opposite bank is $${ang1}^{\\circ}$. From the other bank, the angle is $${ang2}^{\\circ}$. Find the tree’s height.`,
+        answer: `$h = \\dfrac{${river}}{\\cot${ang1}^{\\circ}+\\cot${ang2}^{\\circ}}\\approx ${h.toFixed(1)}\\ \\text{m}$.`
+      };
+    }
+    
+    // WR6) Ladder problem
+    function genU4_WR_Ladder(){
+      const L = ri(10,15);
+      const base = ri(3,6);
+      const h = Math.sqrt(L**2 - base**2);
+      const ang = Math.acos(base/L)*180/Math.PI;
+      return {
+        q: `A ${L}-m ladder leans against a wall, base $${base}\\ \\text{m}$ from wall. Find the height on the wall, and the angle with the ground.`,
+        answer: `Height $=\\sqrt{${L}^2-${base}^2}\\approx ${h.toFixed(1)}\\ \\text{m}$, angle $=\\cos^{-1}(${base}/${L})\\approx ${ang.toFixed(1)}^{\\circ}$.`
+      };
+    }
+    
+    // --- Enriched extensions ---
+    
+    // WR7) Angle of depression across canyon
+    function genU4_WR_Canyon(){
+      const width = ri(200,400);
+      const ang = ri(10,25);
+      const depth = width * Math.tan(ang*Math.PI/180);
+      return {
+        q: `Standing on a cliff edge, the angle of depression to the bottom of a canyon across is $${ang}^{\\circ}$. The canyon is $${width}\\ \\text{m}$ wide. Estimate its depth.`,
+        answer: `Depth $= ${width}\\tan${ang}^{\\circ}\\approx ${depth.toFixed(0)}\\ \\text{m}$.`
+      };
+    }
+    
+    // WR8) Navigation bearing (cosine rule)
+    function genU4_WR_Navigation(){
+      const d1 = ri(10,30);
+      const d2 = ri(10,30);
+      const angle = ri(30,120); // angle between
+      const side = Math.sqrt(d1**2 + d2**2 - 2*d1*d2*Math.cos(angle*Math.PI/180));
+      return {
+        q: `A ship sails ${d1} km east, then turns ${angle}° north of east and sails ${d2} km. How far is it from its starting point?`,
+        answer: `By the cosine rule: d = √(${d1}² + ${d2}² − 2·${d1}·${d2}·cos ${angle}°) ≈ ${side.toFixed(1)} km.`
+      };
+    }
+    
+    // WR9) Observatory problem (balloon height)
+    function genU4_WR_Observatory(){
+      const h = ri(20,60);            // actual height
+      const ang1 = ri(30,60);
+      const ang2 = ang1 + ri(15,30);
+      const d1 = h/Math.tan(ang1*Math.PI/180);
+      const d2 = h/Math.tan(ang2*Math.PI/180);
+      const move = (d1-d2).toFixed(1);
+      return {
+        q: `An observer measures the angle of elevation to a balloon as ${ang1}°. After walking ${move} m closer, the angle is ${ang2}°. Estimate the balloon’s height.`,
+        answer: `Let the initial distance be d₁ = h / tan(${ang1}°), and the final distance d₂ = h / tan(${ang2}°). Since d₁ − d₂ ≈ ${move}, solving gives h ≈ ${h} m.`
+      };
+    }
+
+    /* ===================== Unit 5/6 (Polynomials, Factoring, Quadratics) ===================== */
+    /* All generators return the same shapes you already use:
+       - MC:    { q, choices:[...], answerIndex }
+       - Gen:   { q, answer }
+    */
+    
+    /* ---------- U56 Multiple Choice ---------- */
+    
+    // 1) Expand (ax+b)(cx+d)
+    function genU56_MC_ExpandBinomialPair(){
+      const a=ri(2,5), b=ri(-6,6)||1, c=ri(2,5), d=ri(-6,6)||-1;
+      const A=a*c, B=a*d+b*c, C=b*d;
+      const correct = `$${A}x^{2}+${B}x+${C}$`.replace(/\+\-/g,'-');
+      const wrong1  = `$${A}x^{2}+${(a*d-b*c)}x+${C}$`.replace(/\+\-/g,'-');   // sign error FOIL middle
+      const wrong2  = `$${A}x^{2}+${(a+b+c+d)}x+${(b+d)}$`.replace(/\+\-/g,'-'); // term-collect error
+      const wrong3  = `$${A}x^{2}+${(B+ri(1,3))}x+${(C-ri(1,3))}$`.replace(/\+\-/g,'-'); // nudged
+      const q=`Expand and simplify $(${a}x${b>=0?'+':''}${b})(${c}x${d>=0?'+':''}${d})$.`;
+      const choices=[correct, wrong1, wrong2, wrong3].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 2) Factor difference of squares
+    function genU56_MC_FactorDiffSquares(){
+      const m=ri(2,9), n=ri(2,9);
+      const A=m*m, B=n*n;
+      const correct = `$( ${m}x-${n} ) ( ${m}x+${n} )$`;
+      const wrong1  = `$( x-${n} ) ( x+${n} )$`;
+      const wrong2  = `$( ${m}x-${n} )^{2}$`;
+      const wrong3  = `$( ${m+n}x-${n} )( ${m}x+${m+n} )$`;
+      const q = `Factor completely: $${A}x^{2}-${B}$.`;
+      const choices=[correct,wrong1,wrong2,wrong3].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 3) Choose the trinomial that IS a perfect square
+    function genU56_MC_PerfectSquareTrinomial(){
+      const u=ri(2,6), s=sample([1,-1]);
+      const correct = `$x^{2}${s>0?'+':'-'}${2*u}x+${u*u}$`;
+      const wrong1  = `$x^{2}+${(u+ri(1,4))}x+${u*u}$`;
+      const wrong2  = `$x^{2}${s>0?'+':'-'}${2*u}x+${(u*u+ri(1,5))}$`;
+      const wrong3  = `$x^{2}${s>0?'+':'-'}${(2*u+2)}x+${u*u}$`;
+      const q='Which polynomial is a perfect square trinomial?';
+      const choices=[correct,wrong1,wrong2,wrong3].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 4) Which quadratic is NOT factorable over Z?
+    function genU56_MC_NotFactorable(){
+      // Make one with discriminant not a perfect square
+      const a=ri(1,3), m=ri(2,6);
+      const b=ri(1,2*a*m-1);  // guarantee b^2-4ac non-square typically
+      const c=a*m*m;
+      const polys = [
+        '$x^{2}+5x+6$',
+        '$x^{2}+7x+10$',
+        '$x^{2}+4x+3$',
+        `$${a}x^{2}+${b}x+${c}$`
+      ];
+      const correct=polys[3];
+      const choices=[correct,polys[0],polys[1],polys[2]].sort(()=>Math.random()-0.5);
+      return { q:'Which of the following is \\emph{not} factorable over the integers?', choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 5) GCF factoring with xy
+    function genU56_MC_GCFxy(){
+      const a=ri(8,24), b=ri(8,24);
+      const g=[12,6,4,3,2].find(d=>a%d===0&&b%d===0) || 2;
+      const A=a/g, B=b/g;
+      const correct = `$${g}xy(${A}x-${B}y)$`;
+      const wrong1  = `$${g}xy(${A}x+${B}y)$`;
+      const wrong2  = `$${g}x(${A}x-${B}y)$`;
+      const wrong3  = `$${a}x^{2}y-${b}xy^{2}$`;
+      const q = `Factor completely: $${a}x^{2}y-${b}xy^{2}$.`;
+      const choices=[correct,wrong1,wrong2,wrong3].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 6) Multiply (linear)×(quadratic)
+    function genU56_MC_ExpandLinearTimesQuadratic(){
+      const a=ri(2,4), b=ri(-6,6)||2, c=ri(-4,5), d=ri(1,6);
+      const A3=a, A2=a*c+b, A1=a*d+b*c, A0=b*d;
+      const correct = `$${A3}x^{3}+${A2}x^{2}+${A1}x+${A0}$`.replace(/\+\-/g,'-');
+      const wrong1  = `$${A3}x^{3}+${(a*c)}x^{2}+${(a*d)}x+${A0}$`.replace(/\+\-/g,'-'); // dropped product rule
+      const wrong2  = `$${A3}x^{3}+${(A2+ri(1,3))}x^{2}+${(A1-ri(1,3))}x+${A0}$`.replace(/\+\-/g,'-');
+      const wrong3  = `$${A3}x^{3}+${A2}x^{2}+${(A1+a)}x+${(A0+b)}$`.replace(/\+\-/g,'-');
+      const q = `Expand $( ${a}x${b>=0?'+':''}${b} )( x^{2}${c>=0?'+':''}${c}x${d>=0?'+':''}${d} )$.`;
+      const choices=[correct,wrong1,wrong2,wrong3].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 7) Product (x^2 - a^2)(x^2 + a^2)
+    function genU56_MC_DiffSumSquares(){
+      const a=ri(3,8);
+      const correct = `$x^{4}-${a**4}$`;
+      const wrong1  = `$x^{4}+${a**4}$`;
+      const wrong2  = `$x^{4}-${2*a*a}x^{2}+${a**4}$`;
+      const wrong3  = `$x^{4}-${a*a}x^{2}+${a**4}$`;
+      const q=`Which is equivalent to $(x^{2}-${a*a})(x^{2}+${a*a})$?`;
+      const choices=[correct,wrong1,wrong2,wrong3].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 8) Factor quadratic ax^2+bx+c (ac method friendly)
+    function genU56_MC_QuadraticFactorable(){
+      const r1=sample([-6,-5,-4,-3,-2,2,3,4,5,6]);
+      const r2=sample([-6,-5,-4,-3,-2,2,3,4,5,6]);
+      const a=ri(1,3);
+      const b=-a*(r1+r2), c=a*r1*r2;
+      const f1 = `(${a===1?'' : a}x${-a*r1>=0?'+':''}${-a*r1})`;
+      const f2 = `(x${-r2>=0?'+':''}${-r2})`;
+      const correct = `$${f1}${f2}$`.replace(/\(\)/g,'(1)').replace('1x','x');
+      const wrong1  = `$(${a===1?'':a}x${-a*r2>=0?'+':''}${-a*r2})(x${-r1>=0?'+':''}${-r1})$`.replace('1x','x');
+      const wrong2  = `$(${a===1?'':a}x${r1>=0?'+':''}${r1})(x${r2>=0?'+':''}${r2})$`;
+      const wrong3  = `$(${a===1?'':a}x${-a*(r1+r2)>=0?'+':''}${-a*(r1+r2)})(x${r1*r2>=0?'+':''}${r1*r2})$`;
+      const q = `Factor: $${a}x^{2}+${b}x+${c}$.`;
+      const choices=[correct,wrong1,wrong2,wrong3].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 9) Factor a cubic with common x
+    function genU56_MC_FactorCubicCommon(){
+      const u=ri(-5,5)||1, v=ri(-5,5)||-2;
+      const x2=u+v, x1=u*v;
+      const poly = `$x^{3}+${x2}x^{2}+${x1}x$`.replace(/\+\-/g,'-');
+      const correct = `$x(x+${u})(x+${v})$`.replace(/\+\-/g,'-');
+      const wrong1  = `$x(x+${u})(x-${v})$`.replace(/\+\-/g,'-');
+      const wrong2  = `$x(x+${u+1})(x+${v-1})$`.replace(/\+\-/g,'-');
+      const wrong3  = `$x(x+${u+v})(x+1)$`.replace(/\+\-/g,'-');
+      const q = `Factor completely: ${poly}.`;
+      const choices=[correct,wrong1,wrong2,wrong3].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    // 10) Zero product reasoning
+    function genU56_MC_ZeroProduct(){
+      const a=ri(2,6), b=ri(-6,6)||3, c=ri(-5,5)||-2;
+      const r1=-b/a, r2=-c;
+      const correct = `$x=${r1}$ or $x=${r2}$`;
+      const wrong1  = `$x=${-r1}$ or $x=${-r2}$`;
+      const wrong2  = `$x=${r1+r2}$ only`;
+      const wrong3  = `$x=${r1*r2}$ only`;
+      const q = `If $(${a}x${b>=0?'+':''}${b})(x${c>=0?'+':''}${c})=0$, then`;
+      const choices=[correct,wrong1,wrong2,wrong3].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    /* ---------- U56 Numeric Response ---------- */
+    
+    // NR1) Factor x^2 - Sx + P and state zeros (clean integers)
+    function genU56_NR_FactorQuadraticZeros(){
+      let r1=ri(2,9), r2=ri(2,9); while(r2===r1) r2=ri(2,9);
+      const S=r1+r2, P=r1*r2;
+      const q=`Factor $x^{2}-${S}x+${P}$ and state its zeros.`;
+      const answer=`Zeros: ${Math.min(r1,r2)}, ${Math.max(r1,r2)}`;
+      return { q, answer };
+    }
+    
+    // NR2) Evaluate product at x=k
+    function genU56_NR_MultiplyEvaluate(){
+      const a=ri(-8,8)||2; let b=ri(-8,8)||-5; while(b===-a) b=ri(-8,8)||3;
+      const k=ri(-4,9); const B=a+b, C=a*b; const val=k*k + B*k + C;
+      const q=`Evaluate $(x${a>=0?'+':''}${a})(x${b>=0?'+':''}${b})$ at $x=${k}$.`;
+      return { q, answer: `${val}` };
+    }
+    
+    // NR3) (px+q)^2 − (px−q)^2 at x = t
+    function genU56_NR_DiffSquaresEvaluate(){
+      const p=ri(2,6), q=ri(2,8), t=ri(1,6);
+      const val=(p*t+q)**2 - (p*t-q)**2; // = 4pq(pt)?? actually 4pq * t
+      return { q:`Compute $( ${p}x+${q} )^{2}-( ${p}x-${q} )^{2}$ at $x=${t}$.`, answer: `${val}` };
+    }
+    
+    // NR4) Integer zeros via AC method friendly build
+    function genU56_NR_FactorByAC_Zeros(){
+      const u=ri(1,3), w=ri(1,3); let v=ri(-6,6), t=ri(-6,6); if(v===0)v=2; if(t===0)t=-3;
+      const a=u*w, b=u*t+v*w, c=v*t; const r1=-v/u, r2=-t/w;
+      const q=`Find the integer zeros of $${a}x^{2}+${b}x+${c}$.`;
+      return { q, answer: `${r1}, ${r2}` };
+    }
+    
+    // NR5) Evaluate (x+a)(x−a)(x+b) at x=k
+    function genU56_NR_ExpandTripleEvaluate(){
+      const a=ri(2,7), b=ri(-5,6), k=ri(1,6);
+      const val=(k+a)*(k-a)*(k+b);
+      return { q:`Evaluate $(x+${a})(x-${a})(x${b>=0?'+':''}${b})$ at $x=${k}$.`, answer: `${val}` };
+    }
+    
+    /* ---------- U56 Written Response ---------- */
+    
+    // WR1) Expand (binomial)(trinomial)
+    function genU56_WR_ExpandBinomialTrinomial(){
+      const a=ri(2,5), b=ri(-6,6)||3, p=ri(-5,5), q=ri(-6,8);
+      const A=a, B=a*p+b, C=a*q+b*p, D=b*q;
+      const s=n=>n>=0?`+${n}`:`${n}`;
+      const qText=`Expand and simplify: $(${a}x${s(b)})(x^{2}${s(p)}x${s(q)})$.`;
+      const ans=`$${A}x^{3}${s(B)}x^{2}${s(C)}x${s(D)}$`;
+      return { q:qText, answer:ans };
+    }
+    
+    // WR2) Factor out GCF then DoS
+    function genU56_WR_FactorGCF_DoS(){
+      const k=ri(2,7), m=ri(2,6), n=ri(2,6);
+      const qText=`Factor completely: $${k*m*m}x^{2}-${k*n*n}$.`;
+      const ans=`$${k}\\big(${m}^{2}x^{2}-${n}^{2}\\big)=${k}(${m}x-${n})(${m}x+${n})$.`;
+      return { q:qText, answer:ans };
+    }
+    
+    // WR3) Factor by grouping (constructed)
+    function genU56_WR_FactorByGrouping(){
+      const u=ri(2,5), v=ri(-5,5)||1, a=ri(1,3), b=ri(-4,4), c=ri(-5,5);
+      const A=u*a, B=u*b+v*a, C=u*c+v*b, D=v*c;
+      const qText=`Factor by grouping: $${A}x^{3}${B>=0?'+':''}${B}x^{2}${C>=0?'+':''}${C}x${D>=0?'+':''}${D}$.`;
+      const ans=`Group: $x^{2}(${A}x${B>=0?'+':''}${B})+(${C}x${D>=0?'+':''}${D})$. 
+    Common binomial $(${a}x^{2}${b>=0?'+':''}${b}x${c>=0?'+':''}${c})$ with factor $(${u}x${v>=0?'+':''}${v})$.`;
+      return { q:qText, answer:ans };
+    }
+    
+    // WR4) Rectangle from expressions → solve x then dims
+    function genU56_WR_RectangleDims(){
+      const s=ri(1,5), t=s+ri(1,4), x=ri(2,8);
+      const w=x+s, L=x+t; const P=2*(w+L), A=w*L;
+      const qText=`A rectangle has width $x+${s}$ and length $x+${t}$. Its perimeter is $${P}$ and area is $${A}$. Solve for $x$, then state the dimensions.`;
+      const ans=`$P=2((x+${s})+(x+${t}))=4x+2(${s+t})\\Rightarrow x=${x}$. Then width $=${w}$, length $=${L}$.`;
+      return { q:qText, answer:ans };
+    }
+    
+    // WR5) Complete the square (random a=1 or a=2)
+    function genU56_WR_CompleteSquare(){
+      const a=sample([1,1,2]), p=ri(-6,6), q=ri(-9,9);
+      if(a===1){
+        const h=-p/2, k=q-(p*p)/4;
+        return {
+          q:`Rewrite $y=x^{2}${p>=0?'+':''}${p}x${q>=0?'+':''}${q}$ in vertex form and state the vertex.`,
+          answer:`$y=(x+${(p/2).toFixed(2)})^{2}${k>=0?'+':''}${k.toFixed(2)}$, vertex $(${h.toFixed(2)},\\ ${k.toFixed(2)})$.`
+        };
       } else {
-        candidate = state.n + j.delta;
+        const h=-p/(2*a), k=q-(p*p)/(4*a);
+        return {
+          q:`Rewrite $y=${a}x^{2}${p>=0?'+':''}${p}x${q>=0?'+':''}${q}$ in vertex form and state the vertex.`,
+          answer:`$y=${a}\\Big(x+${(p/(2*a)).toFixed(2)}\\Big)^{2}${k>=0?'+':''}${k.toFixed(2)}$, vertex $(${h.toFixed(2)},\\ ${k.toFixed(2)})$.`
+        };
+      }
+    }
+    
+    // WR6) Known root of a cubic → factor fully
+    function genU56_WR_FactorCubicKnownRoot(){
+      const r=sample([-3,-2,-1,1,2,3]);
+      const s=ri(-5,5)||2, t=ri(-5,5)||-3;
+      const b=s+t, c=s*t;
+      const B=b-r, C=c-b*r, D=-c*r;
+      const qText=`Given $x=${r}$ is a root of $P(x)=x^{3}${B>=0?'+':''}${B}x^{2}${C>=0?'+':''}${C}x${D>=0?'+':''}${D}$, factor $P(x)$ completely.`;
+      const ans=`$P(x)=(x-${r})(x^{2}${b>=0?'+':''}${b}x${c>=0?'+':''}${c})=(x-${r})(x${s>=0?'+':''}${s})(x${t>=0?'+':''}${t})$.`;
+      return { q:qText, answer:ans };
+    }
+    
+    // WR7) Revenue parabola vertex
+    function genU56_WR_RevenueMax(){
+      const B=ri(2,6), A=2*B*ri(5,12);
+      const pStar=A/(2*B); const Rmax= -B*pStar*pStar + A*pStar;
+      const qText=`Demand $D(p)=${A}-${B}p$. Revenue $R(p)=pD(p)$. Find the price maximizing revenue and the maximum revenue.`;
+      const ans=`$R(p)=-${B}p^{2}+${A}p$ has vertex at $p=\\dfrac{${A}}{2\\cdot ${B}}=${pStar}$. Max $R=${Rmax}$.`;
+      return { q:qText, answer:ans };
+    }
+    
+    // WR8) Identity proof using binomial expansion
+    function genU56_WR_IdentityProof(){
+      const a=ri(2,7), b=ri(1,8);
+      const qText=`Show that $( ${a}x+${b} )^{2}-( ${a}x-${b} )^{2}=4\\cdot ${a}\\cdot ${b}\\cdot x$.`;
+      const ans=`Expand and subtract:
+    $( ${a}x+${b} )^{2}=${a*a}x^{2}+${2*a*b}x+${b*b}$ and
+    $( ${a}x-${b} )^{2}=${a*a}x^{2}-${2*a*b}x+${b*b}$.
+    Difference $=${4*a*b}x=4\\cdot ${a}\\cdot ${b}\\cdot x$.`;
+      return { q:qText, answer:ans };
+    }
+    /* ===================== SIGN-SAFE FORMATTING & SANITIZER ===================== */
+
+    /** Safe sign for inline coefficients (no spaces). First-term option omits '+' */
+    function fmtSigned(n, { first=false } = {}){
+      if (n === 0) return first ? '0' : '+0';
+      const s = n > 0 ? '+' : '';
+      return first ? (n >= 0 ? String(n) : String(n)) : (s + String(n));
+    }
+    
+    /** Formats a linear expression a x + b compactly with correct signs (e.g., "3x-5") */
+    function fmtLin(a, b, x='x'){
+      // coef 1/−1 gets suppressed to just +/- in front of the variable
+      const aAbs = Math.abs(a);
+      const aStr = (a === 1) ? '' : (a === -1 ? '-' : String(a));
+      const first = `${aStr}${x}`;
+      if (b === 0) return first;
+      const bStr = (b > 0 ? `+${b}` : `${b}`);  // b already carries sign
+      return `${first}${bStr}`;
+    }
+    
+    /** Formats ax^2 + bx + c with clean signs (e.g., "x^{2}-5x+6") */
+    function fmtQuad(a, b, c, x='x'){
+      // a term
+      const aTerm =
+        (a === 1) ? `${x}^{2}` :
+        (a === -1) ? `-${x}^{2}` :
+        `${a}${x}^{2}`;
+    
+      // b term
+      let bTerm = '';
+      if (b !== 0){
+        const bAbs = Math.abs(b);
+        const bCoef = (bAbs === 1) ? '' : String(bAbs);
+        bTerm = (b > 0 ? `+${bCoef}${x}` : `-${bCoef}${x}`);
       }
     
-    // Hard floor: never below 2
-    if (candidate < 2) candidate = 2;
+      // c term
+      const cTerm = (c === 0) ? '' : (c > 0 ? `+${c}` : `${c}`);
     
-    // If we're already at the floor (n = 2), always move forward at least to 3
-    if (state.n === 2 && candidate <= 2) candidate = 3;
+      return `${aTerm}${bTerm}${cTerm}`;
+    }
     
-    // Soft floor (optional): allow some backtracking but not more than 5 below the farthest reached
-    const softFloor = Math.max(2, state.lastMax - 5);
-    if (candidate < softFloor) candidate = softFloor;
-
-  
-    state.target = candidate;
-  
-    qNumber.textContent = `n = ${state.n}`;
-    showJump(state.nextJump);
-  
-    answer.value=''; answer.focus();
-    state.timeLeft = state.timePer; setTimerUI(); startTicking();
-  }
-
-
-
-  // Recent UI removed — make this a no-op to avoid errors
-  function addHistory(){ /* no-op */ }
-
-
-  function updateHUD(){
-    kScore.textContent = String(state.score);
-    kStreak.textContent = String(state.streak);
-    kLives.textContent = '❤'.repeat(state.lives) + '♡'.repeat(3 - state.lives);
-    kBest.textContent = String(state.best);
-  }
-
-  function proceed(){
-    // Accept the next term and prepare the following round
-    state.lastMax = Math.max(state.lastMax, state.target);
-    state.n = Math.max(2, state.target);         // hard floor at 2, always
-                     // ✅ move to the term the student just produced
-    state.nextJump = pickNextJump();             // next jump affects the NEXT target
-    nextRound();
-  }
-
-  function endGame(reason){
-    document.getElementById('skull')?.classList.add('show');
-    state.running=false; clearInterval(state.timerId);
-    feedback.textContent = `Game over — ${reason}`; feedback.className='feedback bad';
-    qNumber.textContent = 'n = —';
-    showJump(null);
-    updateHUD();
-  }
-
-  function flashPrev(){
-    const flash = document.getElementById('flash');
-    if(!flash) return;
-    // Show the NEXT number in the sequence (what the user should have entered)
-    flash.textContent = String(state.target);
-    flash.classList.add('show','is-flash');
-    setTimeout(()=> flash.classList.remove('show','is-flash'), 650);
-  }
-
-  function miss(reason){
-    state.lives -= 1; state.streak = 0; updateHUD();
-    if(state.lives <= 0) { endGame(reason); return; }
-  
-    flashPrev(); // shows the expected next number (e.g., 4 when n=3 & Jump 1 Up)
-  
-    feedback.textContent = reason + ' Next!'; feedback.className='feedback bad';
-    proceed(); // sets state.n = state.target and continues the sequence
-  }
-
-  function timesUp(){ if(!state.running) return; miss("Time's up!"); }
-
-  function submit(){
-    if(!state.running || state.paused) return;
-    const raw = answer.value.trim();
-    if(!raw){ answer.classList.add('shake'); setTimeout(()=>answer.classList.remove('shake'), 300); return; }
-    const cleaned = raw.replace(/[xX×\s]/g, '');
-    if(!/^\d+$/.test(cleaned)){
-      feedback.textContent = 'Digits only please (×, x allowed but ignored).';
-      feedback.className = 'feedback bad';
-      answer.classList.add('shake'); setTimeout(()=>answer.classList.remove('shake'), 300);
-      return;
+    /** Replace ugly sign pairs globally while protecting \pm */
+    function cleanSigns(tex){
+      if (!tex) return tex;
+    
+      // Protect \pm so we don't mangle it
+      const PM_TOKEN = '__PM__';
+      tex = tex.replace(/\\pm/g, PM_TOKEN);
+    
+      // Normalize common double-sign issues
+      tex = tex
+        // "+ -k" / "- +k" with optional spaces → " -k"
+        .replace(/\+\s*-/g, ' - ')
+        .replace(/-\s*\+/g, ' - ')
+        // "--" → "+" (e.g., x--3 → x+3)
+        .replace(/--/g, '+')
+        // "+-" → "-" (e.g., x+-3 → x-3)
+        .replace(/\+-/g, '-')
+        // tidy "+ +k" → "+k" and "- -k" (already handled by --→+)
+        .replace(/\+\s+\+/g, '+')
+        .replace(/-\s+-/g, '+');
+    
+      // Unprotect \pm
+      tex = tex.replace(new RegExp(PM_TOKEN, 'g'), '\\\\pm');
+    
+      // Compact spaces around binary signs inside math (keeps nice display)
+      tex = tex.replace(/\s+\+/g, '+').replace(/\s+-/g, '-');
+    
+      return tex;
     }
-    const want = expectedInput(state.target);   // ✅ expect input for the NEXT term
-    if(cleaned === want){
-      state.score += 1; state.streak += 1;
-      if(state.score > state.best){
-        state.best = state.score; localStorage.setItem('pfs_best', String(state.best));
-      }
-      feedback.textContent = 'Correct!'; feedback.className='feedback ok'; updateHUD();
-      // Log the current term they stood on (optional; keeps chips consistent)
-      addHistory(state.n, expr(state.n), true);
-      proceed();
-    } else {
-      feedback.textContent = `Not quite. Expected: “${want}” (i.e., ${expr(state.target)}).`;
-      feedback.className='feedback bad';
-      answer.classList.add('shake'); setTimeout(()=>answer.classList.remove('shake'), 300);
-      miss('Wrong answer.');
+    
+    /** Convenience: sanitize all math-bearing strings inside a generated object */
+    function sanitizeGenerated(obj){
+      if (!obj || typeof obj !== 'object') return obj;
+      const out = { ...obj };             // <-- fixed
+      if (typeof out.q === 'string') out.q = cleanSigns(out.q);
+      if (typeof out.answer === 'string') out.answer = cleanSigns(out.answer);
+      if (Array.isArray(out.choices)) out.choices = out.choices.map(cleanSigns);
+      if (typeof out.section === 'string') out.section = cleanSigns(out.section);
+      if (typeof out.title === 'string') out.title = cleanSigns(out.title);
+      return out;
     }
-  }
 
-  function resetBest(){
-    state.best = 0;
-    localStorage.removeItem('pfs_best'); // clear persisted best
-    updateHUD();                         // refresh the HUD (kBest -> 0)
-  }
+    
+    /* ===================== USE THE SANITIZER DURING RENDER ===================== */
+    /* In your renderQuiz() where you call item.gen(), sanitize its outputs before
+       inserting into the DOM. Replace the two spots that call item.gen() like this:
+       (1) for MC generators (type === 'mcgen')
+       (2) for free-response generators (type === 'gen')
+    */
+    function genU56_WR_QuadraticFormulaSolve(){
+      const r1 = sample([-5,-4,-3,-2,-1,1,2,3,4,5]);
+      let   r2 = sample([-5,-4,-3,-2,-1,1,2,3,4,5]);
+      while (r2 === r1) r2 = sample([-5,-4,-3,-2,-1,1,2,3,4,5]);
+      const a  = sample([1,2,3]);
+      const b  = -a*(r1 + r2);
+      const c  =  a*r1*r2;
+    
+      const disc = b*b - 4*a*c;           // perfect square
+      const sqrtDisc = Math.sqrt(disc);
+    
+      const q = `Solve using the quadratic formula: $${fmtQuad(a,b,c)}=0$.`;
+    
+      // Build with absolute values where helpful to avoid "-(-k)"
+      const steps =
+        `Quadratic formula: $x=\\dfrac{-b\\pm\\sqrt{b^{2}-4ac}}{2a}$.\\\\
+         Here $a=${a},\\ b=${b},\\ c=${c}$ so $\\Delta=b^{2}-4ac=${b}^{2}-4(${a})(${c})=${disc}$ and $\\sqrt{\\Delta}=${sqrtDisc}.\\\\
+         $x=\\dfrac{${-b}\\pm ${sqrtDisc}}{${2*a}}=\\boxed{${r1}\\,,\\ ${r2}}$.`;
+    
+      return sanitizeGenerated({ q, answer: steps });
+    }
 
-  // ——— Events ———
-  btnStart.addEventListener('click', startGame);
-  btnReset.addEventListener('click', resetGame);
-  btnSubmit.addEventListener('click', submit);
-  ddDiff.addEventListener('change', ()=>{
-    setDifficulty(ddDiff.value);
-    resetBest();
+
+    // ================== Unit 7–9 (Linear) — Multiple Choice Generators ==================
+    // small helpers
+   /* ======================= Tiny helpers (guarded) ======================= */
+    if (typeof _gcd !== 'function'){
+      var _gcd = function(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a; };
+    }
+    if (typeof reduceFrac !== 'function'){
+      var reduceFrac = function(n,d){
+        if(d===0) return {n:1,d:0};               // protect against 0 denominator
+        let s = (n<0)^(d<0) ? -1 : 1;
+        n=Math.abs(n); d=Math.abs(d);
+        const g=_gcd(n,d); n/=g; d/=g;
+        return { n: s*n, d };
+      };
+    }
+    const rsign = ()=> Math.random()<0.5? -1 : 1;
+    const fmtFrac = (n,d)=> d===1 ? `${n}` : `\\tfrac{${n}}{${d}}`;
+    
+    /* ================== Unit 6 — MC Generators (Linear) ================== */
+    
+    /** 1) Distance between two points (use a Pythagorean triple → exact integer) */
+    function genU6_MC_Distance(){
+      const triples = [[3,4,5],[5,12,13],[8,15,17],[7,24,25]];
+      const [a,b,c] = sample(triples);
+      const x1 = ri(-6,6), y1 = ri(-6,6);
+      const x2 = x1 + (Math.random()<0.5? a : -a);
+      const y2 = y1 + (Math.random()<0.5? b : -b);
+      const correct = `$${c}$`;
+      const wrongs = [
+        `$\\sqrt{${a*a + (b-1)*(b-1)}}$`,
+        `$\\sqrt{${(a+1)*(a+1) + b*b}}$`,
+        `$\\sqrt{${2*(a*a+b*b)}}$`
+      ];
+      const q = `The distance between $(${x1},${y1})$ and $(${x2},${y2})$ is`;
+      const choices = [correct, ...wrongs].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    /** 2) Midpoint of two points (answers may be integers or halves) */
+    function genU6_MC_Midpoint(){
+      const x1=ri(-10,10), y1=ri(-10,10), x2=ri(-10,10), y2=ri(-10,10);
+      const mx=(x1+x2)/2, my=(y1+y2)/2;
+      const fx = Number.isInteger(mx)? `${mx}` : `\\dfrac{${x1+x2}}{2}`;
+      const fy = Number.isInteger(my)? `${my}` : `\\dfrac{${y1+y2}}{2}`;
+      const correct = `$\\big(${fx},\\,${fy}\\big)$`;
+      const wrongs = [
+        `$\\big(${x2-x1},\\,${y2-y1}\\big)$`,
+        `$\\big(${x1+x2},\\,${y1+y2}\\big)$`,
+        `$\\big(${x1},\\,${y2}\\big)$`
+      ];
+      const q = `The midpoint of $(${x1},${y1})$ and $(${x2},${y2})$ is`;
+      const choices=[correct,...wrongs].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    /** 3) Slope through two points (reduced fraction / integer) */
+    function genU6_MC_SlopeBetween(){
+      let x1=ri(-8,8), x2=ri(-8,8);
+      while (x2===x1) x2=ri(-8,8);
+      const y1=ri(-8,8), y2=ri(-8,8);
+      const {n:dy,d:dx} = reduceFrac(y2-y1, x2-x1);
+      const correct = `$${fmtFrac(dy,dx)}$`;
+      const wrongs = [
+        `$${fmtFrac(-dy,dx)}$`,
+        `$${fmtFrac(dx,dy)}$`,        // inverted
+        `$${fmtFrac(Math.abs(dy),Math.abs(dx))}$`  // lost sign
+      ];
+      const q = `The slope of the line through $(${x1},${y1})$ and $(${x2},${y2})$ is`;
+      const choices = [correct, ...wrongs].sort(() => Math.random() - 0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    /** 4) Parallel slope to Ax + By + C = 0 → slope = -A/B */
+    function genU6_MC_ParallelSlope(){
+      let A=rsign()*ri(1,6), B=rsign()*ri(1,6);
+      while (B===0) B=rsign()*ri(1,6);
+      const C=rsign()*ri(0,10);
+      const {n,d} = reduceFrac(-A,B);
+      const correct = `$${fmtFrac(n,d)}$`;
+      const wrongs = [
+        `$${fmtFrac(-n,d)}$`,
+        `$${fmtFrac(B,A)}$`,
+        `$${fmtFrac(A,B)}$`
+      ];
+      const q = `A line parallel to $${A}x${B>=0?'+':''}${B}y${C>=0?'+':''}${C}=0$ has slope`;
+      const choices=[correct,...wrongs].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    /** 5) Perpendicular slope to y = m x + b → slope = -1/m */
+    function genU6_MC_PerpendicularSlope(){
+      const num=rsign()*ri(1,6), den=ri(1,6);    // m = num/den
+      const mLatex = den===1? `${num}` : `\\tfrac{${num}}{${den}}`;
+      const {n:pn,d:pd} = reduceFrac(-den, num); // -1/m = -den/num
+      const correct = `$${fmtFrac(pn,pd)}$`;
+      const wrongs = [
+        `$${fmtFrac(num,den)}$`,
+        `$${fmtFrac(den,num)}$`,
+        `$${fmtFrac(-pn,pd)}$`
+      ];
+      const q = `A line perpendicular to $y=${mLatex}x${rsign()*ri(0,6)>=0?'+':''}${rsign()*ri(0,6)}$ has slope`;
+      const choices=[correct,...wrongs].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    /** 6) General form of y = (p/q)x + b  →  p x - q y + q b = 0 */
+    function genU6_MC_GeneralFormFromSlopeIntercept(){
+      const p=rsign()*ri(1,6), q=ri(1,6), b=rsign()*ri(0,8);
+      const mLatex = q===1 ? `${p}` : `\\tfrac{${p}}{${q}}`;
+      const A=p, B=-q, C=q*b;
+      const correct = `$${A}x${B>=0?'+':''}${B}y${C>=0?'+':''}${C}=0$`;
+      const wrongs = [
+        `$${A}x${(-B)>=0?'+':''}${-B}y${C>=0?'+':''}${C}=0$`,
+        `$${q}x${(-p)>=0?'+':''}${-p}y${C>=0?'+':''}${C}=0$`,
+        `$${A}x${B>=0?'+':''}${B}y${(-C)>=0?'+':''}${-C}=0$`
+      ];
+      const qText = `Which is the general form of $y=${mLatex}x${b>=0?'+':''}${b}$?`;
+      const choices=[correct,...wrongs].sort(()=>Math.random()-0.5);
+      return { q: qText, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    /** 7) Identify line by y-intercept b0 */
+    function genU6_MC_WhichHasYIntercept(){
+      const b0 = rsign()*ri(1,8);
+      const mA = rsign()*ri(1,5), mB = rsign()*ri(1,5);
+      const correct = `$y=${mA>=0?mA:''}${mA<0?mA:''}x${b0>=0?'+':''}${b0}$`.replace('+-','-');
+      const wrong1  = `$2y=${(2*mA)}x${(2*b0+rsign()*ri(1,4))>=0?'+':''}${2*b0+rsign()*ri(1,4)}$`; // intercept off
+      const wrong2  = `$y-${b0}=${mB}x$`;   // point–slope form (still has same intercept only if right side is mx)
+      const wrong3  = `$x=${b0}$`;          // vertical line (no y-intercept at b0)
+      const choices=[correct, wrong1, wrong2, wrong3].sort(()=>Math.random()-0.5);
+      const q = `Which line has $y$-intercept $${b0}$?`;
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+    
+    /** 8) Concept: slope from Ax+By+C=0 is -A/B (fixed concept item) */
+    function genU6_MC_SlopeFromGeneralFormConcept(){
+      const choices = [
+        '$\\tfrac{A}{B}$',
+        '$-\\tfrac{A}{B}$',
+        '$-\\tfrac{B}{A}$',
+        '$\\tfrac{B}{A}$'
+      ].sort(()=>Math.random()-0.5);
+      return {
+        q: 'In $Ax+By+C=0$ with $B\\ne0$, the slope is',
+        choices,
+        answerIndex: choices.indexOf('$-\\tfrac{A}{B}$')
+      };
+    }
+    
+    /** 9) Steepest slope (largest |m|) */
+    function genU6_MC_SteepestSlope(){
+      // Build a diverse set: two integers, one reduced fraction, one more integer
+      const set = [
+        -ri(4,6),
+        ri(1,3),
+        (function(){
+          const r1 = reduceFrac(ri(3,9), ri(2,5));
+          return `\\tfrac{${r1.n}}{${r1.d}}`;
+        })(),
+        -ri(7,10)
+      ];
+      const choices = set.map(v=> typeof v==='string' ? `$${v}$` : `$${v}$`).sort(()=>Math.random()-0.5);
+      // compute who is actually steepest
+      const mags = choices.map(s=>{
+        const raw = s.replace(/\$|\\tfrac{|}/g,'');
+        if (raw.includes('\\tfrac')) return 0; // (won't happen due to replace)
+        if (raw.includes('/')) {
+          const [n,d]=raw.split('/');
+          return Math.abs(Number(n)/Number(d));
+        }
+        return Math.abs(Number(raw));
+      });
+      // To be safe, recompute by parsing LaTeX properly:
+      const val = s=>{
+        const t = s.replace(/\$/g,'');
+        if (t.startsWith('\\tfrac')) {
+          const m = t.match(/\\tfrac\{(-?\d+)\}\{(\d+)\}/);
+          return Math.abs(Number(m[1])/Number(m[2]));
+        }
+        return Math.abs(Number(t));
+      };
+      const idx = choices
+        .map((s,i)=>({i,mag:val(s)}))
+        .reduce((best,cur)=> cur.mag>best.mag? cur : best, {i:0,mag:-1}).i;
+    
+      return { q: 'Which slope represents the steepest line?', choices, answerIndex: idx };
+    }
+    
+    /** 10) Perpendicular to given slope through origin (nice numbers) */
+    function genU6_MC_PerpThroughOrigin(){
+      const mNum = rsign()*ri(1,5), mDen = ri(1,5);     // given slope = mNum/mDen
+      const given = mDen===1 ? `${mNum}` : `\\tfrac{${mNum}}{${mDen}}`;
+      const {n:pn,d:pd} = reduceFrac(-mDen, mNum);      // perpendicular slope
+      const mPerp = pd===1 ? `${pn}` : `\\tfrac{${pn}}{${pd}}`;
+      const correct = `$y=${mPerp}x$`;
+      const wrongs = [
+        `$y=${given}x$`,
+        `$y=-${given}x$`,
+        `$y=\\tfrac{${mDen}}{${mNum}}x$`
+      ];
+      const q = `A line perpendicular to $y=${given}x-4$ and passing through the origin is`;
+      const choices=[correct,...wrongs].sort(()=>Math.random()-0.5);
+      return { q, choices, answerIndex: choices.indexOf(correct) };
+    }
+
+
+    
+    // ================== Unit 7–9 (Linear) — Numeric Response Generators (numeric-only) ==================
+    
+    // NR1: Distance between two points (exact integer via triple)
+    /* ======================= Tiny helpers (guarded) ======================= */
+    if (typeof _gcd !== 'function'){
+      var _gcd = function(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a; };
+    }
+    if (typeof reduceFrac !== 'function'){
+      var reduceFrac = function(n,d){
+        if(d===0) return {n:1,d:0};
+        let s = (n<0)^(d<0) ? -1 : 1;
+        n=Math.abs(n); d=Math.abs(d);
+        const g=_gcd(n,d); n/=g; d/=g;
+        return { n: s*n, d };
+      };
+    }
+    const rsign = ()=> Math.random()<0.5? -1 : 1;
+    const fmtPair = (a,b)=> `\\big(${a},\\,${b}\\big)`;
+    
+    
+        
+    // ================== Unit 7–9 (Linear) — Written Response Generators (LaTeX-safe) ==================
+    /* ================== Unit 7–9 (Linear) — Written Response Generators (All Inline Math, No $ currency) ================== */
+
+    /* ============== Unit 6 — Written Response Generators (Linear) ============== */
+    /* uses ri(a,b), rsign(), reduceFrac(), etc. already in your page */
+    
+    /** WR1) Derive distance formula + apply */
+    function genU6_WR_DeriveDistanceFormula(){
+      const x1=ri(-4,4), y1=ri(-4,4), x2=ri(-4,4), y2=ri(-4,4);
+      const dx=x2-x1, dy=y2-y1;
+      const d2 = dx*dx + dy*dy;
+      return {
+        q: `Explain why the distance between two points $\\big(x_1,y_1\\big)$ and $\\big(x_2,y_2\\big)$ is $\\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}$ using the Pythagorean Theorem. Then find the distance between $(${x1},${y1})$ and $(${x2},${y2})$.`,
+        answer: `Right triangle legs are $\\Delta x=x_2-x_1$ and $\\Delta y=y_2-y_1$, so $d^2=(\\Delta x)^2+(\\Delta y)^2$ and $d=\\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}$. Here $\\Delta x=${dx}, $\\Delta y=${dy}, so $d=\\sqrt{${dx}^{2}+${dy}^{2}}=\\sqrt{${d2}}$.`
+      };
+    }
+    
+    /** WR2) Parallel & perpendicular slope facts + verification */
+    function genU6_WR_ParallelPerpProof(){
+      const m = rsign()*ri(1,4);
+      const mperp = -1/m;
+      return {
+        q: `Prove that parallel non-vertical lines have equal slopes and that perpendicular non-vertical lines satisfy $m_1m_2=-1$. Then give an example using a line with slope $${m}$ and its perpendicular.`,
+        answer: `Parallel lines $y=m_1x+b_1$ and $y=m_2x+b_2$ never meet only when directions match, so $m_1=m_2$. Perpendicular direction vectors $(1,m_1)$ and $(1,m_2)$ have dot product $1\\cdot1+m_1m_2=0$, hence $m_1m_2=-1$. Example: $m_1=${m} \\Rightarrow m_2=-\\tfrac{1}{${m}}=${mperp}$ and indeed ${m}\\cdot(${mperp})=-1$.`
+      };
+    }
+    
+    /** WR3) Perpendicular bisector of a segment */
+    function genU6_WR_PerpendicularBisector(){
+      const x1=ri(-5,3), y1=ri(-5,3), x2=x1+rsign()*ri(2,6), y2=y1+rsign()*ri(2,6);
+      const mx=(x1+x2)/2, my=(y1+y2)/2;
+      const dy=y2-y1, dx=x2-x1;
+      const mPerp = -(dx)/(dy);
+      return {
+        q: `Find the equation of the perpendicular bisector of the segment from $(${x1},${y1})$ to $(${x2},${y2})$. Give it in point-slope form and slope-intercept form.`,
+        answer: `Midpoint $M=\\big(${mx},\\,${my}\\big)$. Original slope is $\\tfrac{${dy}}{${dx}}$, so perpendicular slope is $m_{\\perp}=-\\tfrac{${dx}}{${dy}}=${mPerp}$. Point-slope: $y-${my}=${mPerp}(x-${mx})$. Slope-intercept: $y=${mPerp}x+(${my}-${mPerp}\\cdot${mx})$.`
+      };
+    }
+    
+    /** WR4) Section formula (internal division in ratio p:q) */
+    function genU6_WR_SectionPoint(){
+      const x1=ri(-4,4), y1=ri(-4,4), x2=ri(-4,8), y2=ri(-4,8);
+      const p=ri(1,4), q=ri(1,4);
+      const Px = (p*x2 + q*x1)/(p+q);
+      const Py = (p*y2 + q*y1)/(p+q);
+      return {
+        q: `Point $P$ divides the segment from $A(${x1},${y1})$ to $B(${x2},${y2})$ internally in the ratio $${p}:${q}$. Find the coordinates of $P$.`,
+        answer: `$P\\big(\\tfrac{${p}\\cdot ${x2}+${q}\\cdot ${x1}}{${p+q}},\\,\\tfrac{${p}\\cdot ${y2}+${q}\\cdot ${y1}}{${p+q}}\\big)=\\big(${Px},\\,${Py}\\big)$.`
+      };
+    }
+    
+    /** WR5) Convert slope–intercept to general form with integers */
+    function genU6_WR_ConvertToGeneral(){
+      // y = (a/b)x + c   →   a x - b y + b c = 0, reduce gcd
+      const a=rsign()*ri(1,5), b=ri(1,6), c=rsign()*ri(0,8);
+      const A=a, B=-b, C=b*c;
+      const g=_gcd(_gcd(Math.abs(A),Math.abs(B)),Math.abs(C));
+      return {
+        q: `Convert $y=\\dfrac{${a}}{${b}}x${c>=0?'+':''}${c}$ to general form $Ax+By+C=0$ with integer coefficients and $\\gcd(A,B,C)=1$.`,
+        answer: `$${A/g}x${(B/g)>=0?'+':''}${B/g}y${(C/g)>=0?'+':''}${C/g}=0$.`
+      };
+    }
+    
+    /** WR6) Line through a point perpendicular to a given line */
+    function genU6_WR_PerpendicularThroughPoint(){
+      // Given line y = (u/v)x + b0 ; choose (x0,y0) and write perpendicular through it
+      const u=rsign()*ri(1,4), v=ri(1,5), b0=rsign()*ri(0,8);
+      const m = u/v, mPerp = -v/u;
+      const x0=rsign()*ri(0,8), y0=rsign()*ri(0,8);
+      const bPerp = y0 - mPerp*x0;
+      return {
+        q: `Find the equation of the line through $(${x0},${y0})$ that is perpendicular to $y=\\tfrac{${u}}{${v}}x${b0>=0?'+':''}${b0}$. Give point-slope and slope-intercept forms.`,
+        answer: `Perpendicular slope is $m_{\\perp}=-\\tfrac{${v}}{${u}}=${mPerp}$. Point-slope: $y-${y0}=${mPerp}(x-${x0})$. Slope-intercept: $y=${mPerp}x+${bPerp}$.`
+      };
+    }
+    
+    /** WR7) Test collinearity of three points */
+    function genU6_WR_Collinearity(){
+      // Build C on the line AB for a sure "yes" instance (random step)
+      const x1=ri(-4,2), y1=ri(-4,2), x2=x1+rsign()*ri(2,6), y2=y1+rsign()*ri(2,6);
+      const t=ri(-2,3);
+      const xc = x1 + t*(x2-x1), yc = y1 + t*(y2-y1);
+      return {
+        q: `Are the points $A(${x1},${y1})$, $B(${x2},${y2})$, and $C(${xc},${yc})$ collinear? Justify using equal slopes or area $=0$.`,
+        answer: `Slope $AB=\\tfrac{${y2}-${y1}}{${x2}-${x1}}$, slope $AC=\\tfrac{${yc}-${y1}}{${xc}-${x1}}$. Since $C$ lies on the parametric line through $A$ and $B$, the slopes are equal and the area of triangle $ABC$ is $0$. Therefore the points are collinear.`
+      };
+    }
+    
+    /** WR8) Intercepts and slope from Ax+By=C (graph-ready) */
+    function genU6_WR_InterceptsSlope(){
+      // Build from chosen integer intercepts so answers are nice.
+      const x0=rsign()*ri(1,6), y0=rsign()*ri(1,6);
+      const A=y0, B=x0, C=x0*y0; // from x/x0 + y/y0 = 1
+      const slope = -(A/B);
+      return {
+        q: `For the line $${A}x${B>=0?'+':''}${B}y=${C}$, find the $x$-intercept, the $y$-intercept, and the slope.`,
+        answer: `$x$-intercept $(${x0},0)$, $y$-intercept $(0,${y0})$, slope $m=-\\tfrac{${A}}{${B}}=${slope}$.`
+      };
+    }
+    
+    /** WR9) Build a linear temperature model from two time points */
+    function genU6_WR_TemperatureModel(){
+      const t1=ri(0,3), t2=t1+ri(2,4);     // hours
+      const y1=rsign()*ri(0,6), y2=y1 - ri(8,16); // cooling
+      const m=(y2-y1)/(t2-t1), b=y1 - m*t1;
+      return {
+        q: `A freezer shows $${y1}^{\\circ}\\text{C}$ at $t=${t1}$ h and $${y2}^{\\circ}\\text{C}$ at $t=${t2}$ h. Find a linear model $T(t)=mt+b$ and interpret the slope.`,
+        answer: `$m=\\tfrac{${y2}-${y1}}{${t2}-${t1}}=${m}$ and $b=${b}$, so $T(t)=${m}t+${b}$. The slope $m$ is the temperature change per hour (negative here, indicating cooling).`
+      };
+    }
+    
+    /** WR10) Three equivalent forms from point & slope */
+    function genU6_WR_ThreeForms(){
+      const x0=rsign()*ri(0,8), y0=rsign()*ri(0,8);
+      const num=rsign()*ri(1,6), den=ri(1,6);
+      const m = num/den;
+      const b = y0 - m*x0;
+      // General: bring to Ax+By+C=0 with integers
+      const A=num, B=-den, C=den*b;
+      const g=_gcd(_gcd(Math.abs(A),Math.abs(B)),Math.abs(C));
+      return {
+        q: `Through $(${x0},${y0})$ with slope $\\tfrac{${num}}{${den}}$, write the line in slope-intercept, point-slope, and general forms.`,
+        answer: `Slope-intercept: $y=${m}x+${b}$. Point-slope: $y-${y0}=${m}(x-${x0})$. General: $${(A/g)}x${(B/g)>=0?'+':''}${(B/g)}y${(C/g)>=0?'+':''}${(C/g)}=0$.`
+      };
+    }
+    
+    /** WR11) Parameter k for parallelism */
+    function genU6_WR_ParallelConditionK(){
+      // Want y=(k-1)x+c parallel to Ax+By+C=0 ⇒ k-1 = -A/B.
+      // Ensure integer k: set A=tB.
+      const B=rsign()*ri(1,5), t=rsign()*ri(1,5), A=t*B;
+      const c=rsign()*ri(0,8);
+      const k = 1 - A/B; // = 1 - t
+      return {
+        q: `For which value of $k$ is the line $y=(k-1)x${c>=0?'+':''}${c}$ parallel to $${A}x${B>=0?'+':''}${B}y+${rsign()*ri(0,10)}=0$?`,
+        answer: `Slope of $y=(k-1)x${c>=0?'+':''}${c}$ is $k-1$. Slope of $${A}x+${B}y+C=0$ is $-\\tfrac{A}{B}=-\\tfrac{${A}}{${B}}=-${t}$. Set $k-1=-${t}$ to get $k=${k}$.`
+      };
+    }
+    
+    /** WR12) Intercepts from a point-slope equation */
+    function genU6_WR_PointSlopeIntercepts(){
+      const x0=rsign()*ri(0,6), y0=rsign()*ri(0,6);
+      const a=rsign()*ri(1,6), b=ri(1,6);
+      const {n:dnum,d:dden}=reduceFrac(a,b); // slope = a/b reduced
+      const m = dnum/dden;
+      // intercepts: y=0 → 0 - y0 = m (x - x0) ⇒ x = x0 - y0/m ; x=0 → y - y0 = m(0 - x0) ⇒ y = y0 - m x0
+      const xInt = x0 - (y0/m);
+      const yInt = y0 - m*x0;
+      return {
+        q: `Given the point-slope form $y-${y0}=\\tfrac{${dnum}}{${dden}}(x-${x0})$, find the $x$- and $y$-intercepts.`,
+        answer: `Set $y=0$ to get $x=${xInt}$. Set $x=0$ to get $y=${yInt}$. Thus the intercepts are $(${xInt},0)$ and $(0,${yInt})$.`
+      };
+    }
+
+
+
+  // Buttons
+  document.getElementById('generate').addEventListener('click', renderQuiz);
+
+  document.getElementById('toggleKey').addEventListener('click', (e)=>{
+    const pressed = e.currentTarget.getAttribute('aria-pressed') === 'true';
+    e.currentTarget.setAttribute('aria-pressed', String(!pressed));
+    e.currentTarget.textContent = pressed ? '🧠 Show Answers' : '🙈 Hide Answers';
+
+    // toggle visibility
+    document.querySelectorAll('.ans').forEach(el => el.toggleAttribute('hidden'));
+
+    // if KaTeX is available, (re)typeset any answers that are now visible
+    if (window.renderMathInElement) {
+      document.querySelectorAll('.ans:not([hidden])').forEach(el => typeset(el));
+    }
   });
-  ddJumps.addEventListener('change', resetBest);
-  ddStartAt.addEventListener('change', resetBest);
 
-  // Keyboard shortcuts
-  answer.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); submit(); }});
-  document.addEventListener('keydown', (e)=>{
-    const targetIsInput = document.activeElement === answer;
-  
-    // S → Start (don’t trigger while typing in the input)
-    if (e.key === 's' || e.key === 'S') {
-      if (!targetIsInput) {
-        e.preventDefault();
-        startGame();    // same as clicking Start ▶
-      }
-      return;
-    }
-  
-    // Esc → Reset (always allowed)
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      resetGame();      // same as clicking Reset
-      return;
-    }
-  
-    // Enter → Submit (only when focus isn’t in the input)
-    if (e.key === 'Enter' && !targetIsInput) {
-      submit();
-    }
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+  // Render only after all deferred scripts (KaTeX) have loaded
+  window.addEventListener('load', () => {
+    renderQuiz(); // render + typeset (renderQuiz already calls typeset)
   });
-
-
-  // Boot
-  resetGame();
 </script>
 
+<!-- KaTeX (deferred) -->
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
 
 </body>
 </html>
+
+
