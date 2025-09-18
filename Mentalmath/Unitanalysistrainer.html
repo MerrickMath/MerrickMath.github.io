@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Unit Analysis Trainer 🧠</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Math-y + UI fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters:[{left:'$$', right:'$$', display:true},{left:'\(', right:'\)', display:false}]});"></script>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #0b1220;
+      --muted: #5f6b87;
+      --card: #f8fbff;
+      --accent: #2e90fa;
+      --accent-2: #00b3a4;
+      --danger: #ef4444;
+      --ok: #16a34a;
+      --warn: #eab308;
+      --radius: 18px;
+      --shadow: 0 8px 30px rgba(17, 24, 39, 0.08);
+    }
+    html, body { height: 100%; }
+    body { margin: 0; background: var(--bg); color: var(--fg); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; line-height: 1.45; }
+    header { padding: clamp(16px, 2.5vw, 28px) 20px 8px; text-align: center; }
+    h1 { font-family: "STIX Two Text", Georgia, serif; font-weight: 700; font-size: clamp(28px, 4vw, 40px); letter-spacing: .3px; margin: 0 0 4px 0; }
+    .subtle { color: var(--muted); margin: 0; font-size: 14px; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 40px; }
+
+    .card { background: var(--card); border: 1px solid rgba(46,144,250,.18); border-radius: var(--radius); box-shadow: var(--shadow); padding: clamp(14px, 2.2vw, 22px); }
+
+    /* Top controls */
+    .toolbar { display:flex; gap:10px; justify-content: space-between; align-items:center; flex-wrap: nowrap; margin-bottom: 10px; }
+    .left, .right { display:flex; gap:10px; align-items:center; flex-wrap: wrap; }
+    .pill { border: 1px solid rgba(15,23,42,.10); background:#fff; border-radius: 999px; padding: 8px 12px; font-size: 14px; color: var(--muted); }
+
+    .question { font-family: "STIX Two Text", Georgia, serif; font-size: clamp(18px, 2.5vw, 22px); }
+
+    /* IO area */
+    .io-row { display:flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+    .btn-row { display:flex; gap:12px; flex-wrap: wrap; justify-content: center; }
+    .btn-row button { flex:1; min-width:120px; }
+    @media (max-width: 760px){ .toolbar { flex-wrap: wrap; } .btn-row button { flex: 1 1 48%; } }
+
+    input[type="number"], select, button { width: 100%; border: 1px solid rgba(15,23,42,.16); background: #fff; border-radius: 12px; padding: 12px 14px; font-size: 16px; outline: none; transition: border-color .2s, transform .02s ease-in; }
+    input[type="number"]:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(46,144,250,.18); }
+    button { cursor: pointer; font-weight: 700; letter-spacing:.2px; }
+    button.primary { background: var(--accent); color: #fff; border: none; }
+    button.secondary { background: #fff; color: var(--accent); border-color: var(--accent); }
+    button:active { transform: translateY(1px); }
+
+    .meta { display:flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; color: var(--muted); font-size: 14px; }
+    .timer { font-variant-numeric: tabular-nums; font-weight: 800; color: var(--accent); }
+
+    .result { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background:#fff; border:1px solid rgba(15,23,42,.12); }
+
+    /* Accuracy progress */
+    .progress { height: 9px; border-radius: 999px; background: #e5e7eb; overflow: hidden; margin-top: 8px; }
+    .bar { height: 100%; width:0%; background: linear-gradient(90deg, var(--ok), var(--accent-2), var(--accent)); transition: width .3s ease; }
+
+    /* Timer bar */
+    .timewrap { margin: 8px 0 0; background:#f3f4f6; border-radius: 12px; border:1px solid rgba(0,0,0,.08); padding: 6px; }
+    .timebar { height: 18px; border-radius: 10px; background: linear-gradient(90deg, #22c55e, #facc15, #f97316, #ef4444); }
+
+    /* Tables */
+    .data-table { margin-top: 22px; }
+    .data-table h2 { font-family: "STIX Two Text", Georgia, serif; font-size: 22px; margin: 0 0 10px; }
+    .grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+    @media (max-width: 900px){ .grid { grid-template-columns: 1fr; } }
+    .tiny { font-size: 13px; color: var(--muted); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; border-radius: 12px; overflow:hidden; border:1px solid rgba(15,23,42,.08); }
+    th, td { padding: 8px 10px; border-bottom: 1px solid rgba(15,23,42,.06); }
+    th { text-align: left; background: #f9fafb; font-weight: 700; }
+    tr:last-child td { border-bottom: none; }
+
+    footer { text-align: center; color: var(--muted); font-size: 13px; padding: 28px 0 44px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Unit Analysis Trainer 🧠</h1>
+    <p class="subtle">Math with Mr. Merrick</p>
+  </header>
+  <main class="container">
+
+    <!-- Question Card -->
+    <section id="qcard" class="card">
+      <div class="toolbar">
+        <div class="left">
+          <span class="pill">Difficulty: <span id="diffLabel">Mixed</span></span>
+          <span class="pill">Target: <span id="targetUnit">—</span></span>
+          <span class="pill">Time left: <span class="timer" id="timeLeft">—</span></span>
+        </div>
+        <div class="right">
+          <label class="pill" style="display:flex;gap:8px;align-items:center;">
+            <span>Timer (s)</span>
+            <select id="timerSelect">
+              <option value="20">20</option>
+              <option value="30" selected>30</option>
+              <option value="45">45</option>
+              <option value="60">60</option>
+            </select>
+          </label>
+          <button id="newBtn" class="secondary">New Question</button>
+        </div>
+      </div>
+
+      <div class="timewrap" aria-label="time remaining">
+        <div class="timebar" id="timeBar" style="width:100%"></div>
+      </div>
+
+      <div class="question" id="questionText">Click <b>New Question</b> to start.</div>
+
+      <div class="io-row">
+        <input id="answerInput" type="number" step="any" placeholder="Enter numeric answer"/>
+        <button id="checkBtn" class="primary">Check</button>
+      </div>
+      <div class="btn-row">
+        <button id="revealBtn" class="secondary" title="Show exact answer">Reveal</button>
+        <button id="skipBtn" class="secondary" title="Skip this question">Skip</button>
+      </div>
+
+      <div class="meta">
+        <div>Attempts: <b id="attempts">0</b></div>
+        <div>Avg % error: <b id="avgErr">—</b></div>
+        <div>Within 5%: <b id="within5">0</b></div>
+      </div>
+
+      <div id="result" class="result" style="display:none;"></div>
+      <div class="progress" title="Accuracy (this question)"><div class="bar" id="accBar"></div></div>
+    </section>
+
+    <!-- Big Data Table -->
+    <section class="data-table">
+      <h2>Data Box: Useful Equivalences</h2>
+      <p class="tiny">Everything you need to solve problems on this page. Values align with your packet.</p>
+      <div class="grid">
+        <div>
+          <table>
+            <thead><tr><th colspan="3">SI Prefixes</th></tr></thead>
+            <tbody>
+              <tr><td>pico</td><td>p</td><td>1e-12</td></tr>
+              <tr><td>nano</td><td>n</td><td>1e-9</td></tr>
+              <tr><td>micro</td><td>µ</td><td>1e-6</td></tr>
+              <tr><td>milli</td><td>m</td><td>1e-3</td></tr>
+              <tr><td>centi</td><td>c</td><td>1e-2</td></tr>
+              <tr><td>deci</td><td>d</td><td>1e-1</td></tr>
+              <tr><td>deka</td><td>da</td><td>1e1</td></tr>
+              <tr><td>hecto</td><td>h</td><td>1e2</td></tr>
+              <tr><td>kilo</td><td>k</td><td>1e3</td></tr>
+              <tr><td>mega</td><td>M</td><td>1e6</td></tr>
+              <tr><td>giga</td><td>G</td><td>1e9</td></tr>
+              <tr><td>tera</td><td>T</td><td>1e12</td></tr>
+            </tbody>
+          </table>
+
+          <table>
+            <thead><tr><th colspan="2">Time</th></tr></thead>
+            <tbody>
+              <tr><td>60 s = 1 min</td><td>60 min = 1 h</td></tr>
+              <tr><td>24 h = 1 day</td><td>365 days ≈ 1 yr</td></tr>
+            </tbody>
+          </table>
+
+          <table>
+            <thead><tr><th colspan="2">Length</th></tr></thead>
+            <tbody>
+              <tr><td>1 in = 2.54 cm (exact)</td><td>12 in = 1 ft; 3 ft = 1 yd</td></tr>
+              <tr><td>5280 ft = 1 mi</td><td>1 km = 1000 m</td></tr>
+              <tr><td>1 Å = 1e-10 m</td><td>1 nm = 1e-9 m; 1 µm = 1e-6 m</td></tr>
+              <tr><td>1 AU ≈ 1.496e11 m</td><td>1 ly ≈ 9.46e15 m</td></tr>
+            </tbody>
+          </table>
+
+          <table>
+            <thead><tr><th colspan="2">Area</th></tr></thead>
+            <tbody>
+              <tr><td>1 m² ≈ 10.764 ft²</td><td>1 cm² ≈ 0.1550 in²</td></tr>
+              <tr><td>1 acre = 43,560 ft²</td><td></td></tr>
+            </tbody>
+          </table>
+
+          <table>
+            <thead><tr><th colspan="2">Volume</th></tr></thead>
+            <tbody>
+              <tr><td>1 L = 1000 mL = 1000 cm³</td><td>1 m³ = 1000 L</td></tr>
+              <tr><td>1 in³ = 16.387 cm³</td><td>1 ft³ = 28.3168 L</td></tr>
+              <tr><td>1 US gal = 231 in³ ≈ 3.78541 L</td><td>1 bbl (oil) = 42 US gal</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <table>
+            <thead><tr><th colspan="2">Mass</th></tr></thead>
+            <tbody>
+              <tr><td>1 kg = 1000 g</td><td>1 lb = 453.59237 g (exact)</td></tr>
+              <tr><td>1 oz = 28.3495 g</td><td>1 t (metric) = 1000 kg</td></tr>
+              <tr><td>1 US ton = 2000 lb</td><td>1 u = 1.66054e-27 kg</td></tr>
+            </tbody>
+          </table>
+
+          <table>
+            <thead><tr><th colspan="2">Pressure</th></tr></thead>
+            <tbody>
+              <tr><td>1 atm = 101,325 Pa</td><td>1 atm = 760 mmHg ≈ 760 torr</td></tr>
+              <tr><td>1 atm = 1.01325 bar</td><td>1 psi = 6894.76 Pa</td></tr>
+            </tbody>
+          </table>
+
+          <table>
+            <thead><tr><th colspan="2">Energy</th></tr></thead>
+            <tbody>
+              <tr><td>1 cal = 4.184 J; 1 kcal = 4184 J</td><td>1 eV = 1.602e-19 J</td></tr>
+              <tr><td>1 kWh = 3.6e6 J</td><td>1 BTU ≈ 1055.06 J</td></tr>
+              <tr><td>1 ton TNT = 4.184e9 J</td><td></td></tr>
+            </tbody>
+          </table>
+
+          <table>
+            <thead><tr><th colspan="2">Power & Radiation</th></tr></thead>
+            <tbody>
+              <tr><td>1 W = 1 J/s</td><td>1 hp ≈ 746 W</td></tr>
+              <tr><td>1 Gy = 1 J/kg</td><td>1 rad = 0.01 Gy</td></tr>
+            </tbody>
+          </table>
+
+          <table>
+            <thead><tr><th colspan="2">Chemistry & Light</th></tr></thead>
+            <tbody>
+              <tr><td>Avogadro N<sub>A</sub> = 6.022e23 mol⁻¹</td><td></td></tr>
+              <tr><td>1 light-second = 2.998e8 m</td><td>60 light-sec = 1 light-min</td></tr>
+            </tbody>
+          </table>
+
+          <table>
+            <thead><tr><th colspan="2">Reference Properties</th></tr></thead>
+            <tbody>
+              <tr><td>Gasoline: 34.2 MJ/L</td><td>Ethanol: 30.0 MJ/L</td></tr>
+              <tr><td>Dry wood: 16 MJ/kg</td><td>Coal: 24 MJ/kg</td></tr>
+              <tr><td>Diesel: 35.8 MJ/L</td><td>Water density: 1.00 g/cm³</td></tr>
+              <tr><td>Mercury: 13.6 g/cm³</td><td>Lead: 11.34 g/cm³</td></tr>
+              <tr><td>Sucrose M = 342.30 g/mol</td><td>Glucose M = 180.16 g/mol</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      Built for quick MCAT‑style unit analysis. <span class="tiny">Tip: aim &lt; 5% error.</span>
+    </footer>
+  </main>
+
+  <script>
+    // --- Utilities ---
+    const rnd = (min, max) => Math.random() * (max - min) + min;
+    const choice = arr => arr[Math.floor(Math.random() * arr.length)];
+    const roundTo = (x, n=4) => Number.parseFloat(x).toPrecision(n);
+    const pct = x => (x*100).toFixed(2) + "%";
+
+    // Running stats
+    const stats = { attempts: 0, sumAbsRelErr: 0, within5: 0 };
+
+    // Countdown timer
+    let timerId = null, timeRemaining = 30, timeTotal = 30;
+    const timeLeftEl = document.getElementById('timeLeft');
+    const timerSelect = document.getElementById('timerSelect');
+    const timeBar = document.getElementById('timeBar');
+
+    function startTimer() {
+      clearInterval(timerId);
+      timeRemaining = timeTotal = parseInt(timerSelect.value, 10);
+      updateTimeUI();
+      timerId = setInterval(() => {
+        timeRemaining -= 1;
+        updateTimeUI();
+        if (timeRemaining <= 0) {
+          clearInterval(timerId);
+          revealAnswer(true);
+        }
+      }, 1000);
+    }
+
+    function updateTimeUI(){
+      const pctLeft = Math.max(0, timeRemaining) / timeTotal;
+      timeLeftEl.textContent = Math.max(0, timeRemaining) + 's';
+      timeBar.style.width = (pctLeft*100) + '%';
+    }
+
+    // --- Problem Bank ---
+    // Each generator returns: { prompt, answer, unit, difficulty }
+
+    const G = {
+      L_per_gal: 3.78541,
+      in_per_ft: 12,
+      ft_per_yd: 3,
+      ft_per_mi: 5280,
+      cm_per_in: 2.54,
+      L_per_ft3: 28.3168,
+      in3_per_ft3: 1728,
+      cm3_per_in3: 16.387,
+      Pa_per_psi: 6894.757,
+      Pa_per_atm: 101325,
+      mmHg_per_atm: 760,
+      J_per_BTU: 1055.06,
+      J_per_kWh: 3.6e6,
+      NA: 6.02214076e23,
+      eV_to_J: 1.602176634e-19
+    };
+
+    // Helpers to format units into TeX
+    const tUnit = (s) => `\\mathrm{${s}}`;
+
+    function gen_atm_to_others(){
+      const atm = Number((rnd(1.2, 2.2)).toFixed(2));
+      const target = choice(['kPa','psi','mmHg']);
+      let val;
+      if (target==='kPa') val = atm*G.Pa_per_atm/1000;
+      if (target==='psi') val = atm*G.Pa_per_atm/G.Pa_per_psi;
+      if (target==='mmHg') val = atm*G.mmHg_per_atm;
+      return { prompt: `Convert \(${atm}\,${tUnit('atm')}\) to \(${tUnit(target)}\).`, answer: val, unit: target, difficulty: 'Intermediate' };
+    }
+
+    function gen_mL_to_in3_ft3(){
+      const mL = [250, 500, 750, 1000][Math.floor(Math.random()*4)];
+      const target = choice(['in^3','ft^3']);
+      const cm3 = mL; // 1 mL = 1 cm3
+      const in3 = cm3 / G.cm3_per_in3;
+      const ft3 = in3 / G.in3_per_ft3;
+      const val = target==='in^3' ? in3 : ft3;
+      return { prompt:`Convert \(${mL}\,${tUnit('mL')}\) to \(${tUnit(target)}\).`, answer: val, unit: target, difficulty: 'Intermediate' };
+    }
+
+    function gen_flow_ft3min_to_Ls(){
+      const q = Number(rnd(1.5, 4.0).toFixed(2));
+      const Ls = q * G.L_per_ft3 / 60.0;
+      return { prompt:`Convert \(${q}\,${tUnit('ft^3/min')}\) to \(${tUnit('L/s')}\).`, answer: Ls, unit:'L/s', difficulty: 'Intermediate' };
+    }
+
+    function gen_density_gcm3_to_lbft3(){
+      const rho = [1.2, 1.5, 2.0][Math.floor(Math.random()*3)];
+      const lbft3 = rho * (1/453.59237) * Math.pow(2.54,3) * 1728;
+      return { prompt:`A sample is labelled \(${rho}\,${tUnit('g/cm^3')}\). Convert to ${tUnit('lb/ft^3')}.`, answer: lbft3, unit:'lb/ft^3', difficulty:'Intermediate' };
+    }
+
+    function gen_battery_Wh_to_kJ_BTU(){
+      const Wh = [60, 85, 100, 120][Math.floor(Math.random()*4)];
+      const target = choice(['kJ','BTU']);
+      const J = Wh*3600;
+      const val = (target==='kJ') ? (J/1000) : (J/G.J_per_BTU);
+      return { prompt:`\(${Wh}\,${tUnit('Wh')}\) as \(${tUnit(target)}\).`, answer: val, unit: target, difficulty:'Intermediate' };
+    }
+
+    function gen_eV_to_kJmol(){
+      const eV = [1.5, 2.0, 2.5, 3.0][Math.floor(Math.random()*4)];
+      const J_per_particle = eV*G.eV_to_J;
+      const J_per_mol = J_per_particle*G.NA;
+      const kJmol = J_per_mol/1000;
+      return { prompt:`Convert \(${eV}\,${tUnit('eV')}\) (per particle) to \(${tUnit('kJ/mol')}\).`, answer: kJmol, unit:'kJ/mol', difficulty:'Intermediate' };
+    }
+
+    function gen_bar_to_others(){
+      const bar = Number(rnd(0.6, 1.4).toFixed(3));
+      const target = choice(['atm','psi','torr']);
+      let val;
+      if (target==='atm') val = bar/1.01325;
+      if (target==='psi') val = bar*100000/G.Pa_per_psi;
+      if (target==='torr') val = bar*750.06;
+      return { prompt:`A transducer reads \(${bar}\,${tUnit('bar')}\). Report in \(${tUnit(target)}\).`, answer: val, unit: target, difficulty:'Advanced' };
+    }
+
+    function gen_power_to_energy(){
+      const kW = [0.75, 1.50, 2.00][Math.floor(Math.random()*3)];
+      const min = [15, 25, 40][Math.floor(Math.random()*3)];
+      const J = kW*1000 * min*60;
+      const target = choice(['BTU','kWh']);
+      const val = target==='BTU' ? (J/G.J_per_BTU) : (J/G.J_per_kWh);
+      return { prompt:`A \(${kW}\,${tUnit('kW')}\) heater runs for \(${min}\,${tUnit('min')}\). How many \(${tUnit(target)}\)?`, answer: val, unit: target, difficulty:'Advanced' };
+    }
+
+    function gen_barrels_to_m3(){
+      const bbl = [60, 90, 120, 200][Math.floor(Math.random()*4)];
+      const m3 = bbl * 42 * G.L_per_gal / 1000;
+      return { prompt:`How many \(${tUnit('m^3')}\) is \(${bbl}\,${tUnit('bbl')}\) (US oil)?`, answer: m3, unit:'m^3', difficulty:'Intermediate' };
+    }
+
+    function gen_conc_mg_per_dL_to_gL(){
+      const mgdL = [100, 150, 250, 350][Math.floor(Math.random()*4)];
+      const gL = (mgdL/1000) * 10; // mg/dL -> g/dL -> g/L
+      return { prompt:`\(${mgdL}\,${tUnit('mg/dL')}\) as \(${tUnit('g/L')}\).`, answer: gL, unit:'g/L', difficulty:'Intermediate' };
+    }
+
+    function gen_light_ns_to_m(){
+      const ns = [120, 250, 350, 500][Math.floor(Math.random()*4)];
+      const m = ns*1e-9 * 299_792_458;
+      return { prompt:`A light pulse spans \(${ns}\,${tUnit('ns')}\). Express its length in \(${tUnit('m')}\).`, answer: m, unit:'m', difficulty:'Challenge' };
+    }
+
+    const BANK = [
+      gen_atm_to_others,
+      gen_mL_to_in3_ft3,
+      gen_flow_ft3min_to_Ls,
+      gen_density_gcm3_to_lbft3,
+      gen_battery_Wh_to_kJ_BTU,
+      gen_eV_to_kJmol,
+      gen_bar_to_others,
+      gen_power_to_energy,
+      gen_barrels_to_m3,
+      gen_conc_mg_per_dL_to_gL,
+      gen_light_ns_to_m
+    ];
+
+    // Current state
+    let current = null;
+
+    function renderQuestion(tex){
+      const el = document.getElementById('questionText');
+      el.textContent = '';
+      el.innerHTML = tex; // KaTeX auto-render will process
+      renderMathInElement(el, {delimiters:[{left:'$$', right:'$$', display:true},{left:'\(', right:'\)', display:false}]});
+    }
+
+    function newQuestion(){
+      current = choice(BANK)();
+      renderQuestion(current.prompt);
+      document.getElementById('targetUnit').textContent = current.unit;
+      document.getElementById('diffLabel').textContent = current.difficulty;
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('accBar').style.width = '0%';
+      document.getElementById('answerInput').value = '';
+      startTimer();
+    }
+
+    function classifyAccuracy(relErr){
+      if (!isFinite(relErr)) return { label:'—', color:'var(--muted)', width:'0%'};
+      if (relErr < 0.005) return { label:'Exact (≤0.5%)', color:'var(--ok)', width:'100%'};
+      if (relErr < 0.02)  return { label:'Great (≤2%)', color:'var(--ok)', width:'90%'};
+      if (relErr < 0.05)  return { label:'Good (≤5%)', color:'var(--accent-2)', width:'75%'};
+      if (relErr < 0.10)  return { label:'Close (≤10%)', color:'var(--warn)', width:'55%'};
+      if (relErr < 0.20)  return { label:'Rough (≤20%)', color:'var(--warn)', width:'35%'};
+      return { label:'Off (＞20%)', color:'var(--danger)', width:'18%'};
+    }
+
+    function showResult(userVal, timedOut=false){
+      const res = document.getElementById('result');
+      const accBar = document.getElementById('accBar');
+      const truth = Number(current.answer);
+      const relErr = Math.abs((userVal - truth) / truth);
+      const acc = classifyAccuracy(relErr);
+      res.style.display = 'block';
+      res.innerHTML = `
+        <div><b>${timedOut? 'Time\'s up! ': ''}Your ${current.unit}:</b> ${isNaN(userVal)? '—' : userVal}</div>
+        <div><b>Exact:</b> ${roundTo(truth, 5)} ${current.unit}</div>
+        <div><b>Error:</b> ${pct(relErr)}</div>
+        <div><b>Rating:</b> <span style="color:${acc.color}; font-weight:700;">${acc.label}</span></div>
+      `;
+      accBar.style.width = acc.width;
+
+      // Update running stats
+      stats.attempts += 1;
+      stats.sumAbsRelErr += isFinite(relErr) ? relErr : 0;
+      if (relErr <= 0.05) stats.within5 += 1;
+      document.getElementById('attempts').textContent = stats.attempts;
+      document.getElementById('within5').textContent = stats.within5;
+      document.getElementById('avgErr').textContent = stats.attempts ? pct(stats.sumAbsRelErr / stats.attempts) : '—';
+    }
+
+    function checkAnswer(){
+      if (!current) return;
+      const v = Number(document.getElementById('answerInput').value);
+      if (Number.isNaN(v)) return;
+      clearInterval(timerId);
+      showResult(v);
+    }
+
+    function revealAnswer(timedOut=false){
+      if (!current) return;
+      clearInterval(timerId);
+      showResult(Number.NaN, timedOut);
+    }
+
+    // --- Wiring ---
+    document.getElementById('newBtn').addEventListener('click', newQuestion);
+    document.getElementById('checkBtn').addEventListener('click', checkAnswer);
+    document.getElementById('revealBtn').addEventListener('click', () => revealAnswer(false));
+    document.getElementById('skipBtn').addEventListener('click', newQuestion);
+    document.getElementById('answerInput').addEventListener('keydown', (e)=>{ if (e.key === 'Enter') checkAnswer(); });
+
+    // Initialize timer label
+    timeLeftEl.textContent = timerSelect.value + 's';
+  </script>
+</body>
+</html>
