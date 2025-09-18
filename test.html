@@ -236,11 +236,9 @@
     const pct = x => (x*100).toFixed(2) + '%';
   
     // ========= Unit formatting (HTML, no KaTeX) =========
-    // Turns "cm^2" -> "cm<sup>2</sup>", handles "/" compounds like "oz/m^2"
+    // "cm^2" -> "cm<sup>2</sup>", handles "/" compounds like "oz/m^2"
     function fmtUnitPart(part){
-      // µ -> &micro;
       part = part.replace('µ','&micro;');
-      // Replace ^exponent with <sup>exponent</sup>
       return part.replace(/^([a-zA-Z&;]+)(?:\^(-?\d+))?$/, (_, base, exp) => {
         return exp ? `${base}<sup>${exp}</sup>` : base;
       });
@@ -264,56 +262,70 @@
       const units = Object.keys(LENGTH);
       const [from,to] = pick2(units);
       const v = +rnd(0.2, 5000).toFixed(2);
-      return { prompt:`Convert ${v} ${from} to ${to}.`, answer:conv(LENGTH,v,from,to), unit:to, difficulty:'Hard' };
+      return { prompt:`Convert ${v} ${from} to ${to}.`, answer:conv(LENGTH,v,from,to), unit:to };
     }
     function genArea(){
       const units = Object.keys(AREA);
       const [from,to] = pick2(units);
       const v = +rnd(0.5, 500).toFixed(2);
-      return { prompt:`Convert ${v} ${from} to ${to}.`, answer:conv(AREA,v,from,to), unit:to, difficulty:'Hard' };
+      return { prompt:`Convert ${v} ${from} to ${to}.`, answer:conv(AREA,v,from,to), unit:to };
     }
     function genVolume(){
       const units = Object.keys(VOLUME);
       const [from,to] = pick2(units);
       const v = +rnd(0.2, 20000).toFixed(2);
-      return { prompt:`Convert ${v} ${from} to ${to}.`, answer:conv(VOLUME,v,from,to), unit:to, difficulty:'Hard' };
+      return { prompt:`Convert ${v} ${from} to ${to}.`, answer:conv(VOLUME,v,from,to), unit:to };
     }
     function genMass(){
       const units = Object.keys(MASS);
       const [from,to] = pick2(units);
       const v = +rnd(0.2, 5000).toFixed(2);
-      return { prompt:`Convert ${v} ${from} to ${to}.`, answer:conv(MASS,v,from,to), unit:to, difficulty:'Medium' };
+      return { prompt:`Convert ${v} ${from} to ${to}.`, answer:conv(MASS,v,from,to), unit:to };
     }
     function genTime(){
       const units = Object.keys(TIME);
       const [from,to] = pick2(units);
       const v = +rnd(5, 20000).toFixed(0);
-      return { prompt:`Convert ${v} ${from} to ${to}.`, answer:conv(TIME,v,from,to), unit:to, difficulty:'Medium' };
+      return { prompt:`Convert ${v} ${from} to ${to}.`, answer:conv(TIME,v,from,to), unit:to };
     }
-  
     const BANK = [genLength, genArea, genVolume, genMass, genTime];
   
     // ========= Timer & stats =========
-    let timerId = null, timeRemaining = 30, timeTotal = 30;
     const timeLeftEl  = document.getElementById('timeLeft');
     const timerSelect = document.getElementById('timerSelect');
     const timeBar     = document.getElementById('timeBar');
+  
     const stats = { attempts:0, sumAbsRelErr:0, within5:0 };
   
+    // Smooth timer via rAF
+    let rafId = null;
+    let deadlineMs = 0;
+    let durationMs = 30000;
+  
     function startTimer(){
-      clearInterval(timerId);
-      timeRemaining = timeTotal = parseInt(timerSelect.value, 10);
-      updateTimeUI();
-      timerId = setInterval(()=>{
-        timeRemaining--;
-        updateTimeUI();
-        if (timeRemaining <= 0){ clearInterval(timerId); revealAnswer(true); }
-      }, 1000);
+      if (rafId) cancelAnimationFrame(rafId);
+      const secs = parseInt(timerSelect.value, 10) || 30;
+      durationMs = secs * 1000;
+      deadlineMs = performance.now() + durationMs;
+      tickTimer();
     }
-    function updateTimeUI(){
-      const p = Math.max(0, timeRemaining) / timeTotal;
-      timeLeftEl.textContent = Math.max(0, timeRemaining) + 's';
-      timeBar.style.width = (p*100) + '%';
+  
+    function tickTimer(){
+      const now = performance.now();
+      const remaining = Math.max(0, deadlineMs - now);
+      const p = remaining / durationMs;
+  
+      // seconds label as integer, bar smooth
+      timeLeftEl.textContent = Math.ceil(remaining / 1000) + 's';
+      timeBar.style.width = (p * 100) + '%';
+  
+      if (remaining <= 0){
+        timeLeftEl.textContent = '0s';
+        timeBar.style.width = '0%';
+        revealAnswer(true);
+        return;
+      }
+      rafId = requestAnimationFrame(tickTimer);
     }
   
     // ========= UI actions =========
@@ -322,19 +334,18 @@
     function newQuestion(){
       current = choice(BANK)();
   
-      // Build nicely formatted HTML with superscripts
+      // Superscripts in prompt + target
       const promptHTML = current.prompt
         .replace(/ ([a-zA-Zµ]+(\^-?\d+)?)(?= to )/, (m,u)=> ' ' + formatUnitHTML(u)) // first unit
         .replace(/ to ([a-zA-Zµ]+(\^-?\d+)?)(\.)?$/, (m,u,dot)=> ' to ' + formatUnitHTML(u) + (dot?'.':'') );
   
-      const qEl = document.getElementById('questionText');
-      qEl.innerHTML = promptHTML; // show superscripts
-  
+      document.getElementById('questionText').innerHTML = promptHTML;
       document.getElementById('targetUnit').innerHTML = formatUnitHTML(current.unit);
-      document.getElementById('diffLabel').textContent = current.difficulty;
+  
       document.getElementById('result').style.display = 'none';
       document.getElementById('accBar').style.width = '0%';
       document.getElementById('answerInput').value = '';
+  
       startTimer();
     }
   
@@ -360,42 +371,44 @@
         <div><b>${timedOut ? "Time's up! " : ""}Your ${formatUnitHTML(current.unit)}:</b> ${isNaN(userVal) ? '—' : userVal}</div>
         <div><b>Exact:</b> ${roundTo(truth, 5)} ${formatUnitHTML(current.unit)}</div>
         <div><b>Error:</b> ${pct(relErr)}</div>
-          <div><b>Rating:</b> <span style="color:${acc.color};font-weight:700;">${acc.label}</span></div>
-        `;
-        accBar.style.width = acc.width;
-    
-        stats.attempts += 1;
-        stats.sumAbsRelErr += isFinite(relErr) ? relErr : 0;
-        if (relErr <= 0.05) stats.within5 += 1;
-        document.getElementById('attempts').textContent = stats.attempts;
-        document.getElementById('within5').textContent  = stats.within5;
-        document.getElementById('avgErr').textContent   = stats.attempts ? pct(stats.sumAbsRelErr / stats.attempts) : '—';
-      }
-    
-      function checkAnswer(){
-        if (!current) return;
-        const v = +document.getElementById('answerInput').value;
-        if (Number.isNaN(v)) return;
-        clearInterval(timerId);
-        showResult(v);
-      }
-      function revealAnswer(timedOut=false){
-        if (!current) return;
-        clearInterval(timerId);
-        showResult(Number.NaN, timedOut);
-      }
-    
-      // Wire up
-      document.getElementById('newBtn').addEventListener('click', newQuestion);
-      document.getElementById('checkBtn').addEventListener('click', checkAnswer);
-      document.getElementById('revealBtn').addEventListener('click', ()=>revealAnswer(false));
-      document.getElementById('skipBtn').addEventListener('click', newQuestion);
-      document.getElementById('answerInput').addEventListener('keydown', (e)=>{ if (e.key==='Enter') checkAnswer(); });
-    
-      // Initial timer label
-      const timerSelectEl = document.getElementById('timerSelect');
-      timeLeftEl.textContent = (timerSelectEl ? timerSelectEl.value : 30) + 's';
-    </script>
+        <div><b>Rating:</b> <span style="color:${acc.color};font-weight:700;">${acc.label}</span></div>
+      `;
+      accBar.style.width = acc.width;
+  
+      stats.attempts += 1;
+      stats.sumAbsRelErr += isFinite(relErr) ? relErr : 0;
+      if (relErr <= 0.05) stats.within5 += 1;
+      document.getElementById('attempts').textContent = stats.attempts;
+      document.getElementById('within5').textContent  = stats.within5;
+      document.getElementById('avgErr').textContent   = stats.attempts ? pct(stats.sumAbsRelErr / stats.attempts) : '—';
+    }
+  
+    function checkAnswer(){
+      if (!current) return;
+      const v = +document.getElementById('answerInput').value;
+      if (Number.isNaN(v)) return;
+      if (rafId) cancelAnimationFrame(rafId);   // stop smooth timer
+      showResult(v);
+    }
+  
+    function revealAnswer(timedOut=false){
+      if (!current) return;
+      if (rafId) cancelAnimationFrame(rafId);   // stop smooth timer
+      showResult(Number.NaN, timedOut);
+    }
+  
+    // Wire up
+    document.getElementById('newBtn').addEventListener('click', newQuestion);
+    document.getElementById('checkBtn').addEventListener('click', checkAnswer);
+    document.getElementById('skipBtn').addEventListener('click', newQuestion);
+    document.getElementById('answerInput').addEventListener('keydown', (e)=>{ if (e.key==='Enter') checkAnswer(); });
+  
+    // Initial timer label
+    const timerSelectEl = document.getElementById('timerSelect');
+    timeLeftEl.textContent = (timerSelectEl ? timerSelectEl.value : 30) + 's';
+    timeBar.style.width = '100%';
+  </script>
+
 
 
 </body>
