@@ -3,114 +3,117 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Unit Analysis Trainer 🧠</title>
+  <title>Unit Analysis Trainer</title>
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
-          onload="renderMathInElement(document.body, {delimiters:[{left:'$$', right:'$$', display:true},{left:'\(', right:'\)', display:false}]});"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
   <style>
-    :root {
-      --bg: #ffffff; --fg: #0b1220; --muted: #5f6b87; --card: #f8fbff;
-      --accent: #2e90fa; --accent-2: #00b3a4; --danger:#ef4444; --ok:#16a34a; --warn:#eab308;
-      --radius: 18px; --shadow: 0 8px 30px rgba(17, 24, 39, 0.08);
+    :root{
+      --bg:#fff; --fg:#0b1220; --muted:#5f6b87; --card:#f8fbff;
+      --accent:#2e90fa; --accent-2:#00b3a4; --ok:#16a34a; --warn:#eab308; --danger:#ef4444;
+      --radius:18px; --shadow:0 8px 30px rgba(17,24,39,.08);
     }
-    html, body { height: 100%; }
-    body { margin: 0; background: var(--bg); color: var(--fg); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; line-height: 1.45; }
-    header { padding: clamp(16px, 2.5vw, 28px) 20px 8px; text-align: center; }
-    h1 { font-family: "STIX Two Text", Georgia, serif; font-weight: 700; font-size: clamp(28px, 4vw, 40px); margin: 0 0 4px 0; }
-    .subtle { color: var(--muted); margin: 0; font-size: 14px; }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;}
+    header{padding:20px;text-align:center}
+    h1{font-family:"STIX Two Text",Georgia,serif;margin:0 0 4px}
+    .subtle{color:var(--muted);margin:0;font-size:14px}
+    .container{max-width:1100px;margin:0 auto;padding:0 20px 40px}
+    .card{background:var(--card);border:1px solid rgba(46,144,250,.18);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
 
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 40px; }
-    .card { background: var(--card); border: 1px solid rgba(46,144,250,.18); border-radius: var(--radius); box-shadow: var(--shadow); padding: clamp(14px, 2.2vw, 22px); }
+    /* Controls */
+    .toolbar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-bottom:10px;align-items:center}
+    .pill{border:1px solid rgba(15,23,42,.1);background:#fff;border-radius:999px;padding:6px 12px;font-size:14px;color:var(--muted)}
 
-    .toolbar { display:flex; gap:10px; justify-content: space-between; align-items:center; flex-wrap: nowrap; margin-bottom: 10px; }
-    .left, .right { display:flex; gap:10px; align-items:center; flex-wrap: wrap; }
-    .pill { border: 1px solid rgba(15,23,42,.10); background:#fff; border-radius: 999px; padding: 8px 12px; font-size: 14px; color: var(--muted); }
+    /* Question area */
+    .question{font-family:"STIX Two Text",Georgia,serif;font-size:20px}
+    .timewrap{margin:8px 0;background:#f3f4f6;border-radius:12px;border:1px solid rgba(0,0,0,.08);padding:6px}
+    .timebar{height:18px;border-radius:10px;background:linear-gradient(90deg,#22c55e,#facc15,#f97316,#ef4444);width:100%}
+    .io-row{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+    .btn-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .btn-row button{flex:1;min-width:120px}
 
-    .question { font-family: "STIX Two Text", Georgia, serif; font-size: clamp(18px, 2.5vw, 22px); }
+    input[type="number"],select,button{
+      width:100%;border:1px solid rgba(15,23,42,.16);background:#fff;border-radius:12px;padding:12px 14px;font-size:16px
+    }
+    button.primary{background:var(--accent);color:#fff;border:none}
+    button.secondary{background:#fff;color:var(--accent);border-color:var(--accent)}
+    .timer{font-weight:800;color:var(--accent)}
+    .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;color:var(--muted);font-size:14px}
+    .result{margin-top:12px;padding:10px;border-radius:12px;border:1px solid rgba(15,23,42,.12);background:#fff}
 
-    .io-row { display:flex; flex-direction: column; gap: 10px; margin-top: 14px; }
-    .btn-row { display:flex; gap:12px; flex-wrap: wrap; justify-content: center; }
-    .btn-row button { flex:1; min-width:120px; }
-    @media (max-width: 760px){ .toolbar { flex-wrap: wrap; } .btn-row button { flex: 1 1 48%; } }
+    /* Accuracy bar */
+    .progress{height:9px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-top:8px}
+    .bar{height:100%;width:0%;background:linear-gradient(90deg,var(--ok),var(--accent-2),var(--accent));transition:width .3s}
 
-    input[type="number"], select, button { width: 100%; border: 1px solid rgba(15,23,42,.16); background: #fff; border-radius: 12px; padding: 12px 14px; font-size: 16px; outline: none; transition: border-color .2s, transform .02s ease-in; }
-    input[type="number"]:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(46,144,250,.18); }
-    button { cursor: pointer; font-weight: 700; letter-spacing:.2px; }
-    button.primary { background: var(--accent); color: #fff; border: none; }
-    button.secondary { background: #fff; color: var(--accent); border-color: var(--accent); }
-    button:active { transform: translateY(1px); }
+    /* Data Box at bottom */
+    .data-table{margin-top:22px}
+    .data-table h2{font-family:"STIX Two Text",Georgia,serif;margin:0 0 10px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+    table{width:100%;border-collapse:collapse;font-size:14px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid rgba(15,23,42,.08)}
+    th,td{padding:8px 10px;border-bottom:1px solid rgba(15,23,42,.06)}
+    th{text-align:left;background:#f9fafb;font-weight:700}
+    tr:last-child td{border-bottom:none}
 
-    .meta { display:flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; color: var(--muted); font-size: 14px; }
-    .timer { font-variant-numeric: tabular-nums; font-weight: 800; color: var(--accent); }
-
-    .result { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background:#fff; border:1px solid rgba(15,23,42,.12); }
-
-    .progress { height: 9px; border-radius: 999px; background: #e5e7eb; overflow: hidden; margin-top: 8px; }
-    .bar { height: 100%; width:0%; background: linear-gradient(90deg, var(--ok), var(--accent-2), var(--accent)); transition: width .3s ease; }
-
-    .timewrap { margin: 8px 0 0; background:#f3f4f6; border-radius: 12px; border:1px solid rgba(0,0,0,.08); padding: 6px; }
-    .timebar { height: 18px; border-radius: 10px; background: linear-gradient(90deg, #22c55e, #facc15, #f97316, #ef4444); }
-
-    .data-table { margin-top: 22px; }
-    .data-table h2 { font-family: "STIX Two Text", Georgia, serif; font-size: 22px; margin: 0 0 10px; }
-    .grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
-    @media (max-width: 900px){ .grid { grid-template-columns: 1fr; } }
-    .tiny { font-size: 13px; color: var(--muted); }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; border-radius: 12px; overflow:hidden; border:1px solid rgba(15,23,42,.08); }
-    th, td { padding: 8px 10px; border-bottom: 1px solid rgba(15,23,42,.06); }
-    th { text-align: left; background: #f9fafb; font-weight: 700; }
-    tr:last-child td { border-bottom: none; }
-
-    footer { text-align: center; color: var(--muted); font-size: 13px; padding: 28px 0 44px; }
+    footer{text-align:center;color:var(--muted);font-size:13px;padding:28px 0 44px}
+    @media (max-width:760px){.toolbar{flex-wrap:wrap}.btn-row button{flex:1 1 48%}}
   </style>
+  <!-- KaTeX (load + auto-render) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 </head>
 <body>
   <header>
-    <h1>Unit Analysis Trainer 🧠</h1>
+    <h1>Unit Analysis Trainer</h1>
     <p class="subtle">Math with Mr. Merrick</p>
   </header>
+
   <main class="container">
-
+    <!-- Question Card -->
     <section id="qcard" class="card">
-      <div class="toolbar">
-        <div class="left">
-          <span class="pill">Difficulty: <span id="diffLabel">Mixed</span></span>
-          <span class="pill">Target: <span id="targetUnit">—</span></span>
-          <span class="pill">Time left: <span class="timer" id="timeLeft">—</span></span>
-        </div>
-        <div class="right">
-          <label class="pill" style="display:flex;gap:8px;align-items:center;">
-            <span>Timer (s)</span>
-            <select id="timerSelect">
-              <option value="20">20</option>
-              <option value="30" selected>30</option>
-              <option value="45">45</option>
-              <option value="60">60</option>
-            </select>
-          </label>
-          <button id="newBtn" class="secondary">New Question</button>
-        </div>
+     <div class="toolbar">
+        <span class="pill">Target: <span id="targetUnit">—</span></span>
+        <span class="pill">Timer: <span class="timer" id="timeLeft">—</span></span>
+        <label class="pill" style="display:flex;gap:6px;align-items:center;white-space:nowrap;">
+          Time limit
+          <select id="timerSelect">
+            <option value="20">20</option>
+            <option value="30" selected>30</option>
+            <option value="45">45</option>
+            <option value="60">60</option>
+          </select>
+          s
+        </label>
       </div>
 
-      <div class="timewrap" aria-label="time remaining">
-        <div class="timebar" id="timeBar" style="width:100%"></div>
-      </div>
+
+      <div class="timewrap"><div class="timebar" id="timeBar"></div></div>
 
       <div class="question" id="questionText">Click <b>New Question</b> to start.</div>
 
-      <div class="io-row">
-        <input id="answerInput" type="number" step="any" placeholder="Enter numeric answer"/>
-        <button id="checkBtn" class="primary">Check</button>
-      </div>
-      <div class="btn-row">
-        <button id="revealBtn" class="secondary" title="Show exact answer">Reveal</button>
-        <button id="skipBtn" class="secondary" title="Skip this question">Skip</button>
-      </div>
+     <div class="io-row" style="display:flex; gap:12px; align-items:center;">
+      <input id="answerInput" type="number" step="any" placeholder="Enter numeric answer" style="flex:1;" />
+    </div>
+    
+    <div class="btn-row" style="margin-top:16px; display:flex; gap:12px; justify-content:center;">
+      <button id="newBtn" class="secondary">New Question</button>
+      <button id="skipBtn" class="secondary" title="Skip this question">Skip</button>
+      <button id="checkBtn" class="primary">Check</button>
+    </div>
+
+
+
+
 
       <div class="meta">
         <div>Attempts: <b id="attempts">0</b></div>
@@ -122,255 +125,291 @@
       <div class="progress" title="Accuracy (this question)"><div class="bar" id="accBar"></div></div>
     </section>
 
-    <section class="data-table">
+    <!-- Big Data Table (BOTTOM) -->
+    <section class="data-table card">
       <h2>Data Box: Useful Equivalences</h2>
-      <p class="tiny">Grade 10–12 focus: SI prefixes, Time, Length, Area, Volume, Mass.</p>
+      <p class="subtle" style="margin:0 0 10px">
+        Grade 10–12 focus: SI prefixes, Time, Length, Area, Volume, Mass.
+      </p>
       <div class="grid">
+    
+        <!-- Metric / SI Units -->
         <div>
           <table>
-            <thead><tr><th colspan="3">SI Prefixes</th></tr></thead>
+            <thead><tr><th colspan="3">SI Prefixes (Metric)</th></tr></thead>
             <tbody>
-              <tr><td>pico</td><td>p</td><td>1e-12</td></tr>
-              <tr><td>nano</td><td>n</td><td>1e-9</td></tr>
-              <tr><td>micro</td><td>µ</td><td>1e-6</td></tr>
-              <tr><td>milli</td><td>m</td><td>1e-3</td></tr>
-              <tr><td>centi</td><td>c</td><td>1e-2</td></tr>
-              <tr><td>deci</td><td>d</td><td>1e-1</td></tr>
-              <tr><td>deka</td><td>da</td><td>1e1</td></tr>
-              <tr><td>hecto</td><td>h</td><td>1e2</td></tr>
-              <tr><td>kilo</td><td>k</td><td>1e3</td></tr>
-              <tr><td>mega</td><td>M</td><td>1e6</td></tr>
-              <tr><td>giga</td><td>G</td><td>1e9</td></tr>
-              <tr><td>tera</td><td>T</td><td>1e12</td></tr>
+              <tr><td>milli</td><td>m</td><td>10⁻³</td></tr>
+              <tr><td>centi</td><td>c</td><td>10⁻²</td></tr>
+              <tr><td>deci</td><td>d</td><td>10⁻¹</td></tr>
+              <tr><td>deka</td><td>da</td><td>10¹</td></tr>
+              <tr><td>hecto</td><td>h</td><td>10²</td></tr>
+              <tr><td>kilo</td><td>k</td><td>10³</td></tr>
+              <tr><td>mega</td><td>M</td><td>10⁶</td></tr>
+              <tr><td>giga</td><td>G</td><td>10⁹</td></tr>
             </tbody>
           </table>
-
+    
           <table>
-            <thead><tr><th colspan="2">Time</th></tr></thead>
+            <thead><tr><th colspan="2">Time (Metric & Common)</th></tr></thead>
             <tbody>
               <tr><td>60 s = 1 min</td><td>60 min = 1 h</td></tr>
-              <tr><td>24 h = 1 day</td><td>365 days ≈ 1 yr</td></tr>
+              <tr><td>24 h = 1 day</td><td>7 days = 1 week</td></tr>
             </tbody>
           </table>
-
+    
           <table>
-            <thead><tr><th colspan="2">Length</th></tr></thead>
+            <thead><tr><th colspan="2">Length (Metric)</th></tr></thead>
             <tbody>
-              <tr><td>1 in = 2.54 cm (exact)</td><td>12 in = 1 ft; 3 ft = 1 yd</td></tr>
-              <tr><td>5280 ft = 1 mi</td><td>1 km = 1000 m</td></tr>
-              <tr><td>1 Å = 1e-10 m</td><td>1 nm = 1e-9 m; 1 µm = 1e-6 m</td></tr>
-              <tr><td>1 AU ≈ 1.496e11 m</td><td>1 ly ≈ 9.46e15 m</td></tr>
+              <tr><td>1 km = 1000 m</td><td>1 m = 100 cm</td></tr>
+              <tr><td>1 cm = 10 mm</td><td></td></tr>
             </tbody>
           </table>
-        </div>
-        <div>
+    
           <table>
-            <thead><tr><th colspan="2">Area</th></tr></thead>
+            <thead><tr><th colspan="2">Area (Metric)</th></tr></thead>
             <tbody>
-              <tr><td>1 m² ≈ 10.764 ft²</td><td>1 cm² ≈ 0.1550 in²</td></tr>
-              <tr><td>1 acre = 43,560 ft²</td><td></td></tr>
+              <tr><td>1 m² = 10,000 cm²</td><td>1 cm² = 100 mm²</td></tr>
             </tbody>
           </table>
-
+    
           <table>
-            <thead><tr><th colspan="2">Volume</th></tr></thead>
+            <thead><tr><th colspan="2">Volume (Metric)</th></tr></thead>
             <tbody>
               <tr><td>1 L = 1000 mL = 1000 cm³</td><td>1 m³ = 1000 L</td></tr>
-              <tr><td>1 in³ = 16.387 cm³</td><td>1 ft³ = 28.3168 L</td></tr>
-              <tr><td>1 US gal = 231 in³ ≈ 3.78541 L</td><td></td></tr>
             </tbody>
           </table>
-
+    
           <table>
-            <thead><tr><th colspan="2">Mass</th></tr></thead>
+            <thead><tr><th colspan="2">Mass (Metric)</th></tr></thead>
             <tbody>
-              <tr><td>1 kg = 1000 g</td><td>1 lb = 453.59237 g (exact)</td></tr>
-              <tr><td>1 oz = 28.3495 g</td><td>1 t (US ton) = 2000 lb</td></tr>
+              <tr><td>1 kg = 1000 g</td><td>1 g = 1000 mg</td></tr>
             </tbody>
           </table>
         </div>
-      </div>
-    </section>
+    
+        <!-- Imperial / US Customary Units -->
+        <div>
+          <table>
+            <thead><tr><th colspan="2">Length (Imperial/US)</th></tr></thead>
+            <tbody>
+              <tr><td>12 in = 1 ft</td><td>3 ft = 1 yd</td></tr>
+              <tr><td>5280 ft = 1 mi</td><td>1 in = 2.54 cm (exact)</td></tr>
+            </tbody>
+          </table>
+    
+          <table>
+              <thead><tr><th colspan="2">Area (Imperial/US)</th></tr></thead>
+              <tbody>
+                <tr><td>1 yd² = 9 ft²</td><td>1 acre = 43,560 ft²</td></tr>
+                <tr><td>1 m² ≈ 10.764 ft²</td><td>1 cm² ≈ 0.1550 in²</td></tr>
+              </tbody>
+            </table>
+      
+            <table>
+              <thead><tr><th colspan="2">Volume (Imperial/US)</th></tr></thead>
+              <tbody>
+                <tr><td>1 in³ = 16.387 cm³</td><td>1 ft³ = 28.3168 L</td></tr>
+                <tr><td>1 US gal ≈ 3.78541 L</td><td></td></tr>
+              </tbody>
+            </table>
+      
+            <table>
+              <thead><tr><th colspan="2">Mass (Imperial/US)</th></tr></thead>
+              <tbody>
+                <tr><td>1 lb = 453.59237 g (exact)</td><td>1 oz = 28.3495 g</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
-    <footer>
-      Built for quick unit conversions. <span class="tiny">Tip: aim &lt; 5% error.</span>
-    </footer>
   </main>
 
+  <footer>Built for quick unit conversions. <span class="subtle">Tip: aim &lt; 5% error.</span></footer>
+
+  
   <script>
-    // --- Utilities ---
-    const rnd = (min, max) => Math.random() * (max - min) + min;
-    const choice = arr => arr[Math.floor(Math.random() * arr.length)];
-    const roundTo = (x, n=4) => Number.parseFloat(x).toPrecision(n);
-    const pct = x => (x*100).toFixed(2) + "%";
-
-    // Stats
-    const stats = { attempts: 0, sumAbsRelErr: 0, within5: 0 };
-
-    // Timer
-    let timerId = null, timeRemaining = 30, timeTotal = 30;
-    const timeLeftEl = document.getElementById('timeLeft');
+    // ========= Utilities =========
+    const rnd = (a,b) => Math.random()*(b-a)+a;
+    const choice = a => a[Math.floor(Math.random()*a.length)];
+    const roundTo = (x,n=5) => Number.parseFloat(x).toPrecision(n);
+    const pct = x => (x*100).toFixed(2) + '%';
+  
+    // ========= Unit formatting (HTML, no KaTeX) =========
+    // "cm^2" -> "cm<sup>2</sup>", handles "/" compounds like "oz/m^2"
+    function fmtUnitPart(part){
+      part = part.replace('µ','&micro;');
+      return part.replace(/^([a-zA-Z&;]+)(?:\^(-?\d+))?$/, (_, base, exp) => {
+        return exp ? `${base}<sup>${exp}</sup>` : base;
+      });
+    }
+    function formatUnitHTML(unitStr){
+      return unitStr.split('/').map(fmtUnitPart).join('/');
+    }
+  
+    // ========= Conversion maps (Grade 10–12 scope) =========
+    const LENGTH = { mm:1e-3, cm:1e-2, m:1, km:1e3, in:0.0254, ft:0.3048, yd:0.9144, mi:1609.344 };
+    const TIME   = { s:1, min:60, h:3600, day:86400 };
+    const AREA   = { 'cm^2':1e-4, 'm^2':1, 'in^2':0.0254**2, 'ft^2':0.3048**2, 'yd^2':0.9144**2 };
+    const VOLUME = { 'cm^3':1e-6, 'mL':1e-6, L:1e-3, 'm^3':1, 'in^3':0.0254**3, 'ft^3':0.3048**3, gal:0.00378541 };
+    const MASS   = { mg:1e-6, g:1e-3, kg:1, oz:0.028349523125, lb:0.45359237 };
+  
+    const conv = (map,v,from,to) => v * map[from] / map[to];
+    const pick2 = (arr) => { let a=choice(arr), b=choice(arr); while (b===a) b=choice(arr); return [a,b]; };
+  
+    // ========= Generators (core categories) =========
+    function genLength(){
+      const units = Object.keys(LENGTH);
+      const [from,to] = pick2(units);
+      const v = +rnd(0.2, 5000).toFixed(2);
+      return { prompt:`Convert ${v} ${from} to ${to}.`, answer:conv(LENGTH,v,from,to), unit:to };
+    }
+    function genArea(){
+      const units = Object.keys(AREA);
+      const [from,to] = pick2(units);
+      const v = +rnd(0.5, 500).toFixed(2);
+      return { prompt:`Convert ${v} ${from} to ${to}.`, answer:conv(AREA,v,from,to), unit:to };
+    }
+    function genVolume(){
+      const units = Object.keys(VOLUME);
+      const [from,to] = pick2(units);
+      const v = +rnd(0.2, 20000).toFixed(2);
+      return { prompt:`Convert ${v} ${from} to ${to}.`, answer:conv(VOLUME,v,from,to), unit:to };
+    }
+    function genMass(){
+      const units = Object.keys(MASS);
+      const [from,to] = pick2(units);
+      const v = +rnd(0.2, 5000).toFixed(2);
+      return { prompt:`Convert ${v} ${from} to ${to}.`, answer:conv(MASS,v,from,to), unit:to };
+    }
+    function genTime(){
+      const units = Object.keys(TIME);
+      const [from,to] = pick2(units);
+      const v = +rnd(5, 20000).toFixed(0);
+      return { prompt:`Convert ${v} ${from} to ${to}.`, answer:conv(TIME,v,from,to), unit:to };
+    }
+    const BANK = [genLength, genArea, genVolume, genMass, genTime];
+  
+    // ========= Timer & stats =========
+    const timeLeftEl  = document.getElementById('timeLeft');
     const timerSelect = document.getElementById('timerSelect');
-    const timeBar = document.getElementById('timeBar');
-
-    function startTimer() {
-      clearInterval(timerId);
-      timeRemaining = timeTotal = parseInt(timerSelect.value, 10);
-      updateTimeUI();
-      timerId = setInterval(() => {
-        timeRemaining -= 1;
-        updateTimeUI();
-        if (timeRemaining <= 0) { clearInterval(timerId); revealAnswer(true); }
-      }, 1000);
+    const timeBar     = document.getElementById('timeBar');
+  
+    const stats = { attempts:0, sumAbsRelErr:0, within5:0 };
+  
+    // Smooth timer via rAF
+    let rafId = null;
+    let deadlineMs = 0;
+    let durationMs = 30000;
+  
+    function startTimer(){
+      if (rafId) cancelAnimationFrame(rafId);
+      const secs = parseInt(timerSelect.value, 10) || 30;
+      durationMs = secs * 1000;
+      deadlineMs = performance.now() + durationMs;
+      tickTimer();
     }
-    function updateTimeUI(){
-      const pctLeft = Math.max(0, timeRemaining) / timeTotal;
-      timeLeftEl.textContent = Math.max(0, timeRemaining) + 's'; // plain 's', not KaTeX
-      timeBar.style.width = (pctLeft*100) + '%';
-    }
-
-    // --- Conversions (Grade 10–12) ---
-    // Base units: m (length), s (time), m^2 (area), m^3 (volume), kg (mass)
-    const U = {
-      length: {
-        base: 'm',
-        units: { mm:1e-3, cm:1e-2, m:1, km:1e3, in:0.0254, ft:0.3048, yd:0.9144, mi:1609.344 }
-      },
-      time: {
-        base: 's',
-        units: { s:1, min:60, h:3600, day:86400 }
-      },
-      area: {
-        base: 'm^2',
-        units: { 'cm^2':1e-4, 'm^2':1, 'in^2':Math.pow(0.0254,2), 'ft^2':Math.pow(0.3048,2), 'yd^2':Math.pow(0.9144,2) }
-      },
-      volume: {
-        base: 'm^3',
-        units: { 'mL':1e-6, 'cm^3':1e-6, 'L':1e-3, 'm^3':1, 'in^3':Math.pow(0.0254,3), 'ft^3':Math.pow(0.3048,3), 'gal':0.00378541 }
-      },
-      mass: {
-        base: 'kg',
-        units: { mg:1e-6, g:1e-3, kg:1, oz:0.028349523125, lb:0.45359237, ton:907.18474 }
+  
+    function tickTimer(){
+      const now = performance.now();
+      const remaining = Math.max(0, deadlineMs - now);
+      const p = remaining / durationMs;
+  
+      // seconds label as integer, bar smooth
+      timeLeftEl.textContent = Math.ceil(remaining / 1000) + 's';
+      timeBar.style.width = (p * 100) + '%';
+  
+      if (remaining <= 0){
+        timeLeftEl.textContent = '0s';
+        timeBar.style.width = '0%';
+        revealAnswer(true);
+        return;
       }
-    };
-
-    const DISPLAY = {
-      length: ['mm','cm','m','km','in','ft','yd','mi'],
-      time: ['s','min','h','day'],
-      area: ['cm^2','m^2','in^2','ft^2','yd^2'],
-      volume: ['mL','cm^3','L','m^3','in^3','ft^3','gal'],
-      mass: ['mg','g','kg','oz','lb','ton']
-    };
-
-    const tUnit = s => `\mathrm{${s}}`;
-
-    function convert(category, value, from, to){
-      const map = U[category].units;
-      // Convert to base (SI) then to target
-      const toBase = value * map[from];
-      const out = toBase / map[to];
-      return out;
+      rafId = requestAnimationFrame(tickTimer);
     }
-
-    function randValueFor(cat){
-      switch(cat){
-        case 'length': return Number(rnd(0.5, 500).toFixed(2));
-        case 'time': return Number(rnd(5, 2000).toFixed(0));
-        case 'area': return Number(rnd(0.5, 200).toFixed(2));
-        case 'volume': return Number(rnd(0.5, 5000).toFixed(2));
-        case 'mass': return Number(rnd(0.5, 200).toFixed(2));
-      }
-    }
-
-    function gen_simple(category){
-      const units = DISPLAY[category];
-      let from = choice(units), to = choice(units);
-      while (to === from) to = choice(units);
-      const val = randValueFor(category);
-      const answer = convert(category, val, from, to);
-      const prompt = `Convert \(${val}\,${tUnit(from)}\) to \(${tUnit(to)}\).`;
-      return { prompt, answer, unit: to, difficulty: 'Core' };
-    }
-
-    const BANK = [
-      () => gen_simple('length'),
-      () => gen_simple('time'),
-      () => gen_simple('area'),
-      () => gen_simple('volume'),
-      () => gen_simple('mass')
-    ];
-
-    // State + UI
+  
+    // ========= UI actions =========
     let current = null;
-    function renderQuestion(tex){
-      const el = document.getElementById('questionText');
-      el.textContent = '';
-      el.innerHTML = tex;
-      renderMathInElement(el, {delimiters:[{left:'$$', right:'$$', display:true},{left:'\(', right:'\)', display:false}]});
-    }
-
+  
     function newQuestion(){
       current = choice(BANK)();
-      renderQuestion(current.prompt);
-      document.getElementById('targetUnit').textContent = current.unit;
-      document.getElementById('diffLabel').textContent = current.difficulty;
+  
+      // Superscripts in prompt + target
+      const promptHTML = current.prompt
+        .replace(/ ([a-zA-Zµ]+(\^-?\d+)?)(?= to )/, (m,u)=> ' ' + formatUnitHTML(u)) // first unit
+        .replace(/ to ([a-zA-Zµ]+(\^-?\d+)?)(\.)?$/, (m,u,dot)=> ' to ' + formatUnitHTML(u) + (dot?'.':'') );
+  
+      document.getElementById('questionText').innerHTML = promptHTML;
+      document.getElementById('targetUnit').innerHTML = formatUnitHTML(current.unit);
+  
       document.getElementById('result').style.display = 'none';
       document.getElementById('accBar').style.width = '0%';
       document.getElementById('answerInput').value = '';
+  
       startTimer();
     }
-
-    function classifyAccuracy(relErr){
-      if (!isFinite(relErr)) return { label:'—', color:'var(--muted)', width:'0%'};
-      if (relErr < 0.005) return { label:'Exact (≤0.5%)', color:'var(--ok)', width:'100%'};
-      if (relErr < 0.02)  return { label:'Great (≤2%)', color:'var(--ok)', width:'90%'};
-      if (relErr < 0.05)  return { label:'Good (≤5%)', color:'var(--accent-2)', width:'75%'};
-      if (relErr < 0.10)  return { label:'Close (≤10%)', color:'var(--warn)', width:'55%'};
-      if (relErr < 0.20)  return { label:'Rough (≤20%)', color:'var(--warn)', width:'35%'};
-      return { label:'Off (＞20%)', color:'var(--danger)', width:'18%'};
+  
+    function classifyAccuracy(err){
+      if(!isFinite(err)) return {label:'—',color:'var(--muted)',width:'0%'};
+      if(err<0.005) return {label:'Exact', color:'var(--ok)',       width:'100%'};
+      if(err<0.02)  return {label:'Great', color:'var(--ok)',       width:'90%'};
+      if(err<0.05)  return {label:'Good',  color:'var(--accent-2)', width:'75%'};
+      if(err<0.10)  return {label:'Close', color:'var(--warn)',     width:'55%'};
+      if(err<0.20)  return {label:'Rough', color:'var(--warn)',     width:'35%'};
+      return         {label:'Off',   color:'var(--danger)',   width:'18%'};
     }
-
+  
     function showResult(userVal, timedOut=false){
-      const res = document.getElementById('result');
-      const accBar = document.getElementById('accBar');
-      const truth = Number(current.answer);
+      const res   = document.getElementById('result');
+      const accBar= document.getElementById('accBar');
+      const truth = +current.answer;
       const relErr = Math.abs((userVal - truth) / truth);
       const acc = classifyAccuracy(relErr);
+  
       res.style.display = 'block';
       res.innerHTML = `
-        <div><b>${timedOut? 'Time\'s up! ': ''}Your ${current.unit}:</b> ${isNaN(userVal)? '—' : userVal}</div>
-        <div><b>Exact:</b> ${roundTo(truth, 5)} ${current.unit}</div>
+        <div><b>${timedOut ? "Time's up! " : ""}Your ${formatUnitHTML(current.unit)}:</b> ${isNaN(userVal) ? '—' : userVal}</div>
+        <div><b>Exact:</b> ${roundTo(truth, 5)} ${formatUnitHTML(current.unit)}</div>
         <div><b>Error:</b> ${pct(relErr)}</div>
-        <div><b>Rating:</b> <span style="color:${acc.color}; font-weight:700;">${acc.label}</span></div>
+        <div><b>Rating:</b> <span style="color:${acc.color};font-weight:700;">${acc.label}</span></div>
       `;
       accBar.style.width = acc.width;
-
+  
       stats.attempts += 1;
       stats.sumAbsRelErr += isFinite(relErr) ? relErr : 0;
       if (relErr <= 0.05) stats.within5 += 1;
       document.getElementById('attempts').textContent = stats.attempts;
-      document.getElementById('within5').textContent = stats.within5;
-      document.getElementById('avgErr').textContent = stats.attempts ? pct(stats.sumAbsRelErr / stats.attempts) : '—';
+      document.getElementById('within5').textContent  = stats.within5;
+      document.getElementById('avgErr').textContent   = stats.attempts ? pct(stats.sumAbsRelErr / stats.attempts) : '—';
     }
-
+  
     function checkAnswer(){
       if (!current) return;
-      const v = Number(document.getElementById('answerInput').value);
+      const v = +document.getElementById('answerInput').value;
       if (Number.isNaN(v)) return;
-      clearInterval(timerId);
+      if (rafId) cancelAnimationFrame(rafId);   // stop smooth timer
       showResult(v);
     }
-    function revealAnswer(timedOut=false){ if (!current) return; clearInterval(timerId); showResult(Number.NaN, timedOut); }
-
-    // Events
+  
+    function revealAnswer(timedOut=false){
+      if (!current) return;
+      if (rafId) cancelAnimationFrame(rafId);   // stop smooth timer
+      showResult(Number.NaN, timedOut);
+    }
+  
+    // Wire up
     document.getElementById('newBtn').addEventListener('click', newQuestion);
     document.getElementById('checkBtn').addEventListener('click', checkAnswer);
-    document.getElementById('revealBtn').addEventListener('click', () => revealAnswer(false));
     document.getElementById('skipBtn').addEventListener('click', newQuestion);
-    document.getElementById('answerInput').addEventListener('keydown', (e)=>{ if (e.key === 'Enter') checkAnswer(); });
-
-    // Initialize timer label
-    timeLeftEl.textContent = timerSelect.value + 's';
+    document.getElementById('answerInput').addEventListener('keydown', (e)=>{ if (e.key==='Enter') checkAnswer(); });
+  
+    // Initial timer label
+    const timerSelectEl = document.getElementById('timerSelect');
+    timeLeftEl.textContent = (timerSelectEl ? timerSelectEl.value : 30) + 's';
+    timeBar.style.width = '100%';
   </script>
+
+
+
 </body>
 </html>
