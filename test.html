@@ -191,194 +191,125 @@
 
   
   <script>
-    /* === KaTeX helpers (render ONLY inside the question text) === */
-    function renderQuestionTeX(){
-      if (!window.renderMathInElement) return;
-      const el = document.getElementById('questionText');
-      window.renderMathInElement(el, {
-        delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '\\(', right: '\\)', display: false }
-        ]
-      });
-    }
-    
-    // Turn "ft^3/min" into "\mathrm{ft}^{3}/\mathrm{min}"
-    function texUnit(unitStr){
-      return unitStr.split('/').map(part=>{
-        const m = part.match(/^([a-zA-Zµ]+)(?:\^(-?\d+))?$/);
-        if(!m) return `\\mathrm{${part}}`;
-        const base = m[1].replace('µ','\\mu');
-        const exp  = m[2] ? `^{${m[2]}}` : '';
-        return `\\mathrm{${base}}${exp}`;
-      }).join('/');
-    }
-    
-    // Quantity like 12.3 cm^2 → "\(12.3\,\mathrm{cm}^{2}\)"
-    const texQty = (v,u) => `\\(${v}\\,${texUnit(u)}\\)`;
-    
-        
-    // ---------- KaTeX rendering ONLY inside the question text ----------
-    function renderQuestionTeX(){
-      if(!window.renderMathInElement) return;
-      const el = document.getElementById('questionText');
-      window.renderMathInElement(el, {
-        delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '\\\\(', right: '\\\\)', display: false }
-        ],
-      });
-    }
-
-    // ---------- TeX formatting helpers ----------
-    // Convert "ft^3/min" -> "\mathrm{ft}^{3}/\mathrm{min}"
-    function texUnit(unitStr){
-      return unitStr.split('/').map(part=>{
-        const m = part.match(/^([a-zA-Zµ]+)(?:\^(-?\d+))?$/);
-        if(!m) return `\\\\mathrm{${part}}`;
-        const base = m[1].replace('µ','\\\\mu');
-        const exp  = m[2] ? `^{${m[2]}}` : '';
-        return `\\\\mathrm{${base}}${exp}`;
-      }).join('/');
-    }
-    const texQty = (v,u) => `\\\\(${v}\\\\,${texUnit(u)}\\\\)`;
-
-    // ---------- Utilities ----------
-    const rnd=(a,b)=>Math.random()*(b-a)+a;
-    const choice=a=>a[Math.floor(Math.random()*a.length)];
-    const roundTo=(x,n=4)=>Number.parseFloat(x).toPrecision(n);
-    const pct=x=>(x*100).toFixed(2)+'%';
-
-    // ---------- Conversion maps ----------
+    // ========= Utilities =========
+    const rnd = (a,b) => Math.random()*(b-a)+a;
+    const choice = a => a[Math.floor(Math.random()*a.length)];
+    const roundTo = (x,n=5) => Number.parseFloat(x).toPrecision(n);
+    const pct = x => (x*100).toFixed(2) + '%';
+  
+    // ========= Conversion maps (Grade 10–12 scope) =========
     const LENGTH = { mm:1e-3, cm:1e-2, m:1, km:1e3, in:0.0254, ft:0.3048, yd:0.9144, mi:1609.344 };
     const TIME   = { s:1, min:60, h:3600, day:86400 };
     const AREA   = { 'cm^2':1e-4, 'm^2':1, 'in^2':0.0254**2, 'ft^2':0.3048**2, 'yd^2':0.9144**2 };
     const VOLUME = { 'cm^3':1e-6, 'mL':1e-6, L:1e-3, 'm^3':1, 'in^3':0.0254**3, 'ft^3':0.3048**3, gal:0.00378541 };
     const MASS   = { mg:1e-6, g:1e-3, kg:1, oz:0.028349523125, lb:0.45359237 };
-
+  
     const conv = (map, v, from, to) => v * map[from] / map[to];
-    const pick2 = (arr)=>{let a=choice(arr),b=choice(arr);while(b===a)b=choice(arr);return [a,b];};
-
-    // ---------- Problem generators ----------
+    const pick2 = (arr) => { let a=choice(arr), b=choice(arr); while (b===a) b=choice(arr); return [a,b]; };
+  
+    // ========= Generators (harder but within scope) =========
     function genLength(){
-      const units=['mm','cm','m','km','in','ft','yd','mi'];
-      const [from,to]=pick2(units);
-      const v=+rnd(0.2,5000).toFixed(2);
-      const ans=conv(LENGTH,v,from,to);
-      return { prompt:`Convert ${texQty(v,from)} to \\(${texUnit(to)}\\).`, answer:ans, unit:to, difficulty:'Hard' };
+      const units = ['mm','cm','m','km','in','ft','yd','mi'];
+      const [from,to] = pick2(units);
+      const v = +rnd(0.2, 5000).toFixed(2);
+      const ans = conv(LENGTH, v, from, to);
+      return { prompt: `Convert ${v} ${from} to ${to}.`, answer: ans, unit: to, difficulty: 'Hard' };
     }
     function genArea(){
-      const units=Object.keys(AREA);
-      const [from,to]=pick2(units);
-      const v=+rnd(0.5,500).toFixed(2);
-      const ans=conv(AREA,v,from,to);
-      return { prompt:`Convert ${texQty(v,from)} to \\(${texUnit(to)}\\).`, answer:ans, unit:to, difficulty:'Hard' };
+      const units = Object.keys(AREA);
+      const [from,to] = pick2(units);
+      const v = +rnd(0.5, 500).toFixed(2);
+      const ans = conv(AREA, v, from, to);
+      return { prompt: `Convert ${v} ${from} to ${to}.`, answer: ans, unit: to, difficulty: 'Hard' };
     }
     function genVolume(){
-      const units=Object.keys(VOLUME);
-      const [from,to]=pick2(units);
-      const v=+rnd(0.2,20000).toFixed(2);
-      const ans=conv(VOLUME,v,from,to);
-      return { prompt:`Convert ${texQty(v,from)} to \\(${texUnit(to)}\\).`, answer:ans, unit:to, difficulty:'Hard' };
+      const units = Object.keys(VOLUME);
+      const [from,to] = pick2(units);
+      const v = +rnd(0.2, 20000).toFixed(2);
+      const ans = conv(VOLUME, v, from, to);
+      return { prompt: `Convert ${v} ${from} to ${to}.`, answer: ans, unit: to, difficulty: 'Hard' };
     }
     function genMass(){
-      const units=Object.keys(MASS);
-      const [from,to]=pick2(units);
-      const v=+rnd(0.2,5000).toFixed(2);
-      const ans=conv(MASS,v,from,to);
-      return { prompt:`Convert ${texQty(v,from)} to \\(${texUnit(to)}\\).`, answer:ans, unit:to, difficulty:'Medium' };
+      const units = Object.keys(MASS);
+      const [from,to] = pick2(units);
+      const v = +rnd(0.2, 5000).toFixed(2);
+      const ans = conv(MASS, v, from, to);
+      return { prompt: `Convert ${v} ${from} to ${to}.`, answer: ans, unit: to, difficulty: 'Medium' };
     }
     function genTime(){
-      const units=Object.keys(TIME);
-      const [from,to]=pick2(units);
-      const v=+rnd(5,20000).toFixed(0);
-      const ans=conv(TIME,v,from,to);
-      return { prompt:`Convert ${texQty(v,from)} to \\(${texUnit(to)}\\).`, answer:ans, unit:to, difficulty:'Medium' };
+      const units = Object.keys(TIME);
+      const [from,to] = pick2(units);
+      const v = +rnd(5, 20000).toFixed(0);
+      const ans = conv(TIME, v, from, to);
+      return { prompt: `Convert ${v} ${from} to ${to}.`, answer: ans, unit: to, difficulty: 'Medium' };
     }
-    // Speed (Length/Time)
+    // Speed (Length/Time), e.g., ft/s -> m/min
     function genSpeed(){
-      const lenFrom=choice(['mm','cm','m','km','in','ft','yd','mi']);
-      const lenTo  =choice(['m','km','ft','mi']);
-      const tFrom  =choice(['s','min','h']);
-      const tTo    =choice(['s','min','h']);
-      if(lenFrom===lenTo && tFrom===tTo) return genSpeed();
-      const v=+rnd(0.5,500).toFixed(2);
+      const lenFrom = choice(['mm','cm','m','km','in','ft','yd','mi']);
+      const lenTo   = choice(['m','km','ft','mi']);
+      const tFrom   = choice(['s','min','h']);
+      const tTo     = choice(['s','min','h']);
+      if (lenFrom===lenTo && tFrom===tTo) return genSpeed();
+      const v = +rnd(0.5, 500).toFixed(2);
       const ans = v * (LENGTH[lenFrom]/LENGTH[lenTo]) * (TIME[tTo]/TIME[tFrom]);
       const fromUnit = `${lenFrom}/${tFrom}`, toUnit = `${lenTo}/${tTo}`;
-      return { prompt:`Convert ${texQty(v,fromUnit)} to \\(${texUnit(toUnit)}\\).`, answer:ans, unit:toUnit, difficulty:'Hard' };
+      return { prompt: `Convert ${v} ${fromUnit} to ${toUnit}.`, answer: ans, unit: toUnit, difficulty: 'Hard' };
     }
-    // Flow (Volume/Time)
+    // Flow (Volume/Time), e.g., ft^3/min -> L/s
     function genFlow(){
-      const volFrom=choice(['ft^3','in^3','L','m^3','gal']);
-      const volTo  =choice(['L','m^3','ft^3']);
-      const tFrom  =choice(['s','min','h']);
-      const tTo    =choice(['s','min','h']);
-      if(volFrom===volTo && tFrom===tTo) return genFlow();
-      const v=+rnd(0.5,500).toFixed(2);
+      const volFrom = choice(['ft^3','in^3','L','m^3','gal']);
+      const volTo   = choice(['L','m^3','ft^3']);
+      const tFrom   = choice(['s','min','h']);
+      const tTo     = choice(['s','min','h']);
+      if (volFrom===volTo && tFrom===tTo) return genFlow();
+      const v = +rnd(0.5, 500).toFixed(2);
       const ans = v * (VOLUME[volFrom]/VOLUME[volTo]) * (TIME[tTo]/TIME[tFrom]);
       const fromUnit = `${volFrom}/${tFrom}`, toUnit = `${volTo}/${tTo}`;
-      return { prompt:`Convert ${texQty(v,fromUnit)} to \\(${texUnit(toUnit)}\\).`, answer:ans, unit:toUnit, difficulty:'Hard' };
+      return { prompt: `Convert ${v} ${fromUnit} to ${toUnit}.`, answer: ans, unit: toUnit, difficulty: 'Hard' };
     }
-    // Surface density (Mass/Area)
+    // Surface density (Mass/Area), e.g., oz/yd^2 -> g/m^2
     function genSurfDen(){
-      const mFrom=choice(['mg','g','kg','oz','lb']);
-      const mTo  =choice(['g','kg','oz']);
-      const aFrom=choice(['cm^2','m^2','in^2','ft^2','yd^2']);
-      const aTo  =choice(['m^2','cm^2','ft^2']);
-      const v=+rnd(1,400).toFixed(2);
+      const mFrom = choice(['mg','g','kg','oz','lb']);
+      const mTo   = choice(['g','kg','oz']);
+      const aFrom = choice(['cm^2','m^2','in^2','ft^2','yd^2']);
+      const aTo   = choice(['m^2','cm^2','ft^2']);
+      const v = +rnd(1, 400).toFixed(2);
       const ans = v * (MASS[mFrom]/MASS[mTo]) * (AREA[aTo]/AREA[aFrom]);
       const fromUnit = `${mFrom}/${aFrom}`, toUnit = `${mTo}/${aTo}`;
-      return { prompt:`Convert ${texQty(v,fromUnit)} to \\(${texUnit(toUnit)}\\).`, answer:ans, unit:toUnit, difficulty:'Hard' };
+      return { prompt: `Convert ${v} ${fromUnit} to ${toUnit}.`, answer: ans, unit: toUnit, difficulty: 'Hard' };
     }
-
-    function gen(cat){
-      const units = DISPLAY[cat];
-      let f = choice(units), t = choice(units);
-      while (t === f) t = choice(units);
-    
-      const val = randVal(cat);
-      const ans = convert(cat, val, f, t);
-    
-      // TeX prompt (so KaTeX renders units nicely)
-      const prompt = `Convert ${texQty(val, f)} to \\(${texUnit(t)}\\).`;
-      return { prompt, answer: ans, unit: t, difficulty: 'Core' };
-    }
-
-
-    const BANK=[genLength,genArea,genVolume,genMass,genTime,genSpeed,genFlow,genSurfDen];
-
-    // ---------- Timer & stats ----------
-    let timerId=null, timeRemaining=30, timeTotal=30;
-    const timeLeftEl=document.getElementById('timeLeft');
-    const timerSelect=document.getElementById('timerSelect');
-    const timeBar=document.getElementById('timeBar');
-    const stats={attempts:0,sumAbsRelErr:0,within5:0};
-
+  
+    const BANK = [genLength, genArea, genVolume, genMass, genTime, genSpeed, genFlow, genSurfDen];
+  
+    // ========= Timer & stats =========
+    let timerId = null, timeRemaining = 30, timeTotal = 30;
+    const timeLeftEl = document.getElementById('timeLeft');
+    const timerSelect = document.getElementById('timerSelect');
+    const timeBar = document.getElementById('timeBar');
+    const stats = { attempts:0, sumAbsRelErr:0, within5:0 };
+  
     function startTimer(){
       clearInterval(timerId);
-      timeRemaining = timeTotal = parseInt(timerSelect.value,10);
+      timeRemaining = timeTotal = parseInt(timerSelect.value, 10);
       updateTimeUI();
       timerId = setInterval(()=>{
         timeRemaining--;
         updateTimeUI();
-        if(timeRemaining<=0){ clearInterval(timerId); revealAnswer(true); }
-      },1000);
+        if (timeRemaining <= 0){ clearInterval(timerId); revealAnswer(true); }
+      }, 1000);
     }
     function updateTimeUI(){
-      const p = Math.max(0,timeRemaining)/timeTotal;
-      timeLeftEl.textContent = Math.max(0,timeRemaining)+'s'; // plain 's'
-      timeBar.style.width = (p*100)+'%';
+      const p = Math.max(0, timeRemaining) / timeTotal;
+      timeLeftEl.textContent = Math.max(0, timeRemaining) + 's'; // plain 's'
+      timeBar.style.width = (p*100) + '%';
     }
-
-    // ---------- UI actions ----------
-    let current=null;
+  
+    // ========= UI actions =========
+    let current = null;
+  
     function newQuestion(){
       current = choice(BANK)();
-    
-      const qEl = document.getElementById('questionText');
-      qEl.innerHTML = current.prompt;   // contains \( ... \)
-      renderQuestionTeX();              // <-- actually render the TeX
-    
+      document.getElementById('questionText').textContent = current.prompt; // plain text, no LaTeX
       document.getElementById('targetUnit').textContent = current.unit;
       document.getElementById('diffLabel').textContent = current.difficulty;
       document.getElementById('result').style.display = 'none';
@@ -386,64 +317,65 @@
       document.getElementById('answerInput').value = '';
       startTimer();
     }
-
-
+  
     function classifyAccuracy(err){
       if(!isFinite(err)) return {label:'—',color:'var(--muted)',width:'0%'};
-      if(err<0.005) return {label:'Exact (≤0.5%)',color:'var(--ok)',width:'100%'};
-      if(err<0.02)  return {label:'Great (≤2%)',color:'var(--ok)',width:'90%'};
-      if(err<0.05)  return {label:'Good (≤5%)',color:'var(--accent-2)',width:'75%'};
-      if(err<0.10)  return {label:'Close (≤10%)',color:'var(--warn)',width:'55%'};
-      if(err<0.20)  return {label:'Rough (≤20%)',color:'var(--warn)',width:'35%'};
-      return {label:'Off (>20%)',color:'var(--danger)',width:'18%'};
+      if(err<0.005) return {label:'Exact (≤0.5%)', color:'var(--ok)',       width:'100%'};
+      if(err<0.02)  return {label:'Great (≤2%)',   color:'var(--ok)',       width:'90%'};
+      if(err<0.05)  return {label:'Good (≤5%)',    color:'var(--accent-2)', width:'75%'};
+      if(err<0.10)  return {label:'Close (≤10%)',  color:'var(--warn)',     width:'55%'};
+      if(err<0.20)  return {label:'Rough (≤20%)',  color:'var(--warn)',     width:'35%'};
+      return         {label:'Off (>20%)',          color:'var(--danger)',   width:'18%'};
     }
-
-    function showResult(userVal,timedOut=false){
-      const res=document.getElementById('result');
-      const accBar=document.getElementById('accBar');
-      const truth=+current.answer;
-      const relErr=Math.abs((userVal-truth)/truth);
-      const acc=classifyAccuracy(relErr);
-
-      res.style.display='block';
+  
+    function showResult(userVal, timedOut=false){
+      const res = document.getElementById('result');
+      const accBar = document.getElementById('accBar');
+      const truth = +current.answer;
+      const relErr = Math.abs((userVal - truth) / truth);
+      const acc = classifyAccuracy(relErr);
+  
+      res.style.display = 'block';
       res.innerHTML = `
-        <div><b>${timedOut?"Time's up! ":''}Your ${current.unit}:</b> ${isNaN(userVal)?'—':userVal}</div>
-        <div><b>Exact:</b> ${roundTo(truth,5)} ${current.unit}</div>
+        <div><b>${timedOut ? "Time's up! " : ""}Your ${current.unit}:</b> ${isNaN(userVal) ? '—' : userVal}</div>
+        <div><b>Exact:</b> ${roundTo(truth, 5)} ${current.unit}</div>
         <div><b>Error:</b> ${pct(relErr)}</div>
         <div><b>Rating:</b> <span style="color:${acc.color};font-weight:700;">${acc.label}</span></div>
       `;
-      accBar.style.width=acc.width;
-
-      stats.attempts++;
-      stats.sumAbsRelErr += isFinite(relErr)? relErr : 0;
-      if(relErr<=0.05) stats.within5++;
+      accBar.style.width = acc.width;
+  
+      stats.attempts += 1;
+      stats.sumAbsRelErr += isFinite(relErr) ? relErr : 0;
+      if (relErr <= 0.05) stats.within5 += 1;
       document.getElementById('attempts').textContent = stats.attempts;
       document.getElementById('within5').textContent  = stats.within5;
-      document.getElementById('avgErr').textContent   = stats.attempts ? pct(stats.sumAbsRelErr/stats.attempts) : '—';
+      document.getElementById('avgErr').textContent   = stats.attempts ? pct(stats.sumAbsRelErr / stats.attempts) : '—';
     }
-
+  
     function checkAnswer(){
-      if(!current) return;
+      if (!current) return;
       const v = +document.getElementById('answerInput').value;
-      if(Number.isNaN(v)) return;
+      if (Number.isNaN(v)) return;
       clearInterval(timerId);
       showResult(v);
     }
+  
     function revealAnswer(timedOut=false){
-      if(!current) return;
+      if (!current) return;
       clearInterval(timerId);
       showResult(Number.NaN, timedOut);
     }
-
+  
     // Wire up
     document.getElementById('newBtn').addEventListener('click', newQuestion);
     document.getElementById('checkBtn').addEventListener('click', checkAnswer);
-    document.getElementById('revealBtn').addEventListener('click', ()=>revealAnswer(false));
+    document.getElementById('revealBtn').addEventListener('click', () => revealAnswer(false));
     document.getElementById('skipBtn').addEventListener('click', newQuestion);
-    document.getElementById('answerInput').addEventListener('keydown', (e)=>{ if(e.key==='Enter') checkAnswer(); });
-
+    document.getElementById('answerInput').addEventListener('keydown', (e)=>{ if (e.key === 'Enter') checkAnswer(); });
+  
     // Initial timer label
     timeLeftEl.textContent = document.getElementById('timerSelect').value + 's';
   </script>
+
 </body>
 </html>
