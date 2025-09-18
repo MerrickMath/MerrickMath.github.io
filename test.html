@@ -81,12 +81,10 @@
   <main class="container">
     <!-- Question Card -->
     <section id="qcard" class="card">
-      <div class="toolbar">
-        <span class="pill">Difficulty: <span id="diffLabel">—</span></span>
+     <div class="toolbar">
         <span class="pill">Target: <span id="targetUnit">—</span></span>
-        <span class="pill">Time left: <span class="timer" id="timeLeft">—</span></span>
         <label class="pill" style="display:flex;gap:8px;align-items:center">
-          Timer
+          Time limit
           <select id="timerSelect">
             <option value="20">20</option>
             <option value="30" selected>30</option>
@@ -95,7 +93,9 @@
           </select>
           s
         </label>
+        <span class="pill">Timer: <span class="timer" id="timeLeft">—</span></span>
       </div>
+
 
       <div class="timewrap"><div class="timebar" id="timeBar"></div></div>
 
