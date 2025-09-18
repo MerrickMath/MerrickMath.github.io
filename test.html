@@ -67,6 +67,10 @@
     footer{text-align:center;color:var(--muted);font-size:13px;padding:28px 0 44px}
     @media (max-width:760px){.toolbar{flex-wrap:wrap}.btn-row button{flex:1 1 48%}}
   </style>
+  <!-- KaTeX (load + auto-render) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 </head>
 <body>
   <header>
@@ -185,7 +189,35 @@
 
   <footer>Built for quick unit conversions. <span class="subtle">Tip: aim &lt; 5% error.</span></footer>
 
+  
   <script>
+    /* === KaTeX helpers (render ONLY inside the question text) === */
+    function renderQuestionTeX(){
+      if (!window.renderMathInElement) return;
+      const el = document.getElementById('questionText');
+      window.renderMathInElement(el, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '\\(', right: '\\)', display: false }
+        ]
+      });
+    }
+    
+    // Turn "ft^3/min" into "\mathrm{ft}^{3}/\mathrm{min}"
+    function texUnit(unitStr){
+      return unitStr.split('/').map(part=>{
+        const m = part.match(/^([a-zA-Zµ]+)(?:\^(-?\d+))?$/);
+        if(!m) return `\\mathrm{${part}}`;
+        const base = m[1].replace('µ','\\mu');
+        const exp  = m[2] ? `^{${m[2]}}` : '';
+        return `\\mathrm{${base}}${exp}`;
+      }).join('/');
+    }
+    
+    // Quantity like 12.3 cm^2 → "\(12.3\,\mathrm{cm}^{2}\)"
+    const texQty = (v,u) => `\\(${v}\\,${texUnit(u)}\\)`;
+    
+        
     // ---------- KaTeX rendering ONLY inside the question text ----------
     function renderQuestionTeX(){
       if(!window.renderMathInElement) return;
@@ -299,6 +331,20 @@
       return { prompt:`Convert ${texQty(v,fromUnit)} to \\(${texUnit(toUnit)}\\).`, answer:ans, unit:toUnit, difficulty:'Hard' };
     }
 
+    function gen(cat){
+      const units = DISPLAY[cat];
+      let f = choice(units), t = choice(units);
+      while (t === f) t = choice(units);
+    
+      const val = randVal(cat);
+      const ans = convert(cat, val, f, t);
+    
+      // TeX prompt (so KaTeX renders units nicely)
+      const prompt = `Convert ${texQty(val, f)} to \\(${texUnit(t)}\\).`;
+      return { prompt, answer: ans, unit: t, difficulty: 'Core' };
+    }
+
+
     const BANK=[genLength,genArea,genVolume,genMass,genTime,genSpeed,genFlow,genSurfDen];
 
     // ---------- Timer & stats ----------
@@ -328,16 +374,19 @@
     let current=null;
     function newQuestion(){
       current = choice(BANK)();
-      const q = document.getElementById('questionText');
-      q.innerHTML = current.prompt;          // contains \( ... \)
-      renderQuestionTeX();                   // render math cleanly
+    
+      const qEl = document.getElementById('questionText');
+      qEl.innerHTML = current.prompt;   // contains \( ... \)
+      renderQuestionTeX();              // <-- actually render the TeX
+    
       document.getElementById('targetUnit').textContent = current.unit;
       document.getElementById('diffLabel').textContent = current.difficulty;
-      document.getElementById('result').style.display='none';
-      document.getElementById('accBar').style.width='0%';
-      document.getElementById('answerInput').value='';
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('accBar').style.width = '0%';
+      document.getElementById('answerInput').value = '';
       startTimer();
     }
+
 
     function classifyAccuracy(err){
       if(!isFinite(err)) return {label:'—',color:'var(--muted)',width:'0%'};
