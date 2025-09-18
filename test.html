@@ -83,7 +83,7 @@
     <section id="qcard" class="card">
      <div class="toolbar">
         <span class="pill">Target: <span id="targetUnit">—</span></span>
-        <label class="pill" style="display:flex;gap:8px;align-items:center">
+        <label class="pill" style="display:flex;gap:6px;align-items:center;white-space:nowrap;">
           Time limit
           <select id="timerSelect">
             <option value="20">20</option>
@@ -101,15 +101,16 @@
 
       <div class="question" id="questionText">Click <b>New Question</b> to start.</div>
 
-      <div class="io-row" style="display:flex; gap:12px; align-items:center;">
-        <input id="answerInput" type="number" step="any" placeholder="Enter numeric answer" style="flex:1;" />
-      </div>
-      
-      <div class="btn-row">
-        <button id="newBtn" class="secondary">New Question</button>
-        <button id="skipBtn" class="secondary" title="Skip this question">Skip</button>
-        <button id="checkBtn" class="primary" style="flex:0 0 auto;">Check</button>
-      </div>
+     <div class="io-row" style="display:flex; gap:12px; align-items:center;">
+      <input id="answerInput" type="number" step="any" placeholder="Enter numeric answer" style="flex:1;" />
+    </div>
+    
+    <div class="btn-row">
+      <button id="newBtn" class="secondary">New Question</button>
+      <button id="skipBtn" class="secondary" title="Skip this question">Skip</button>
+      <button id="checkBtn" class="primary">Check</button>
+    </div>
+
 
 
 
