@@ -101,15 +101,16 @@
 
       <div class="question" id="questionText">Click <b>New Question</b> to start.</div>
 
-      <div class="io-row">
-        <input id="answerInput" type="number" step="any" placeholder="Enter numeric answer"/>
-        <button id="checkBtn" class="primary">Check</button>
+      <div class="io-row" style="display:flex; gap:12px; align-items:center;">
+        <input id="answerInput" type="number" step="any" placeholder="Enter numeric answer" style="flex:1;" />
+        <button id="checkBtn" class="primary" style="flex:0 0 auto;">Check</button>
       </div>
+      
       <div class="btn-row">
-        <button id="revealBtn" class="secondary" title="Show exact answer">Reveal</button>
-        <button id="skipBtn" class="secondary" title="Skip this question">Skip</button>
         <button id="newBtn" class="secondary">New Question</button>
+        <button id="skipBtn" class="secondary" title="Skip this question">Skip</button>
       </div>
+
 
 
       <div class="meta">
