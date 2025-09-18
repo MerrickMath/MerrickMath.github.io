@@ -6,7 +6,6 @@
   <title>Unit Analysis Trainer 🧠</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Math-y + UI fonts -->
   <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
@@ -15,36 +14,25 @@
           onload="renderMathInElement(document.body, {delimiters:[{left:'$$', right:'$$', display:true},{left:'\(', right:'\)', display:false}]});"></script>
   <style>
     :root {
-      --bg: #ffffff;
-      --fg: #0b1220;
-      --muted: #5f6b87;
-      --card: #f8fbff;
-      --accent: #2e90fa;
-      --accent-2: #00b3a4;
-      --danger: #ef4444;
-      --ok: #16a34a;
-      --warn: #eab308;
-      --radius: 18px;
-      --shadow: 0 8px 30px rgba(17, 24, 39, 0.08);
+      --bg: #ffffff; --fg: #0b1220; --muted: #5f6b87; --card: #f8fbff;
+      --accent: #2e90fa; --accent-2: #00b3a4; --danger:#ef4444; --ok:#16a34a; --warn:#eab308;
+      --radius: 18px; --shadow: 0 8px 30px rgba(17, 24, 39, 0.08);
     }
     html, body { height: 100%; }
     body { margin: 0; background: var(--bg); color: var(--fg); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; line-height: 1.45; }
     header { padding: clamp(16px, 2.5vw, 28px) 20px 8px; text-align: center; }
-    h1 { font-family: "STIX Two Text", Georgia, serif; font-weight: 700; font-size: clamp(28px, 4vw, 40px); letter-spacing: .3px; margin: 0 0 4px 0; }
+    h1 { font-family: "STIX Two Text", Georgia, serif; font-weight: 700; font-size: clamp(28px, 4vw, 40px); margin: 0 0 4px 0; }
     .subtle { color: var(--muted); margin: 0; font-size: 14px; }
 
     .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 40px; }
-
     .card { background: var(--card); border: 1px solid rgba(46,144,250,.18); border-radius: var(--radius); box-shadow: var(--shadow); padding: clamp(14px, 2.2vw, 22px); }
 
-    /* Top controls */
     .toolbar { display:flex; gap:10px; justify-content: space-between; align-items:center; flex-wrap: nowrap; margin-bottom: 10px; }
     .left, .right { display:flex; gap:10px; align-items:center; flex-wrap: wrap; }
     .pill { border: 1px solid rgba(15,23,42,.10); background:#fff; border-radius: 999px; padding: 8px 12px; font-size: 14px; color: var(--muted); }
 
     .question { font-family: "STIX Two Text", Georgia, serif; font-size: clamp(18px, 2.5vw, 22px); }
 
-    /* IO area */
     .io-row { display:flex; flex-direction: column; gap: 10px; margin-top: 14px; }
     .btn-row { display:flex; gap:12px; flex-wrap: wrap; justify-content: center; }
     .btn-row button { flex:1; min-width:120px; }
@@ -62,15 +50,12 @@
 
     .result { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background:#fff; border:1px solid rgba(15,23,42,.12); }
 
-    /* Accuracy progress */
     .progress { height: 9px; border-radius: 999px; background: #e5e7eb; overflow: hidden; margin-top: 8px; }
     .bar { height: 100%; width:0%; background: linear-gradient(90deg, var(--ok), var(--accent-2), var(--accent)); transition: width .3s ease; }
 
-    /* Timer bar */
     .timewrap { margin: 8px 0 0; background:#f3f4f6; border-radius: 12px; border:1px solid rgba(0,0,0,.08); padding: 6px; }
     .timebar { height: 18px; border-radius: 10px; background: linear-gradient(90deg, #22c55e, #facc15, #f97316, #ef4444); }
 
-    /* Tables */
     .data-table { margin-top: 22px; }
     .data-table h2 { font-family: "STIX Two Text", Georgia, serif; font-size: 22px; margin: 0 0 10px; }
     .grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
@@ -91,7 +76,6 @@
   </header>
   <main class="container">
 
-    <!-- Question Card -->
     <section id="qcard" class="card">
       <div class="toolbar">
         <div class="left">
@@ -138,10 +122,9 @@
       <div class="progress" title="Accuracy (this question)"><div class="bar" id="accBar"></div></div>
     </section>
 
-    <!-- Big Data Table -->
     <section class="data-table">
       <h2>Data Box: Useful Equivalences</h2>
-      <p class="tiny">Everything you need to solve problems on this page. Values align with your packet.</p>
+      <p class="tiny">Grade 10–12 focus: SI prefixes, Time, Length, Area, Volume, Mass.</p>
       <div class="grid">
         <div>
           <table>
@@ -179,7 +162,8 @@
               <tr><td>1 AU ≈ 1.496e11 m</td><td>1 ly ≈ 9.46e15 m</td></tr>
             </tbody>
           </table>
-
+        </div>
+        <div>
           <table>
             <thead><tr><th colspan="2">Area</th></tr></thead>
             <tbody>
@@ -193,61 +177,15 @@
             <tbody>
               <tr><td>1 L = 1000 mL = 1000 cm³</td><td>1 m³ = 1000 L</td></tr>
               <tr><td>1 in³ = 16.387 cm³</td><td>1 ft³ = 28.3168 L</td></tr>
-              <tr><td>1 US gal = 231 in³ ≈ 3.78541 L</td><td>1 bbl (oil) = 42 US gal</td></tr>
+              <tr><td>1 US gal = 231 in³ ≈ 3.78541 L</td><td></td></tr>
             </tbody>
           </table>
-        </div>
-        <div>
+
           <table>
             <thead><tr><th colspan="2">Mass</th></tr></thead>
             <tbody>
               <tr><td>1 kg = 1000 g</td><td>1 lb = 453.59237 g (exact)</td></tr>
-              <tr><td>1 oz = 28.3495 g</td><td>1 t (metric) = 1000 kg</td></tr>
-              <tr><td>1 US ton = 2000 lb</td><td>1 u = 1.66054e-27 kg</td></tr>
-            </tbody>
-          </table>
-
-          <table>
-            <thead><tr><th colspan="2">Pressure</th></tr></thead>
-            <tbody>
-              <tr><td>1 atm = 101,325 Pa</td><td>1 atm = 760 mmHg ≈ 760 torr</td></tr>
-              <tr><td>1 atm = 1.01325 bar</td><td>1 psi = 6894.76 Pa</td></tr>
-            </tbody>
-          </table>
-
-          <table>
-            <thead><tr><th colspan="2">Energy</th></tr></thead>
-            <tbody>
-              <tr><td>1 cal = 4.184 J; 1 kcal = 4184 J</td><td>1 eV = 1.602e-19 J</td></tr>
-              <tr><td>1 kWh = 3.6e6 J</td><td>1 BTU ≈ 1055.06 J</td></tr>
-              <tr><td>1 ton TNT = 4.184e9 J</td><td></td></tr>
-            </tbody>
-          </table>
-
-          <table>
-            <thead><tr><th colspan="2">Power & Radiation</th></tr></thead>
-            <tbody>
-              <tr><td>1 W = 1 J/s</td><td>1 hp ≈ 746 W</td></tr>
-              <tr><td>1 Gy = 1 J/kg</td><td>1 rad = 0.01 Gy</td></tr>
-            </tbody>
-          </table>
-
-          <table>
-            <thead><tr><th colspan="2">Chemistry & Light</th></tr></thead>
-            <tbody>
-              <tr><td>Avogadro N<sub>A</sub> = 6.022e23 mol⁻¹</td><td></td></tr>
-              <tr><td>1 light-second = 2.998e8 m</td><td>60 light-sec = 1 light-min</td></tr>
-            </tbody>
-          </table>
-
-          <table>
-            <thead><tr><th colspan="2">Reference Properties</th></tr></thead>
-            <tbody>
-              <tr><td>Gasoline: 34.2 MJ/L</td><td>Ethanol: 30.0 MJ/L</td></tr>
-              <tr><td>Dry wood: 16 MJ/kg</td><td>Coal: 24 MJ/kg</td></tr>
-              <tr><td>Diesel: 35.8 MJ/L</td><td>Water density: 1.00 g/cm³</td></tr>
-              <tr><td>Mercury: 13.6 g/cm³</td><td>Lead: 11.34 g/cm³</td></tr>
-              <tr><td>Sucrose M = 342.30 g/mol</td><td>Glucose M = 180.16 g/mol</td></tr>
+              <tr><td>1 oz = 28.3495 g</td><td>1 t (US ton) = 2000 lb</td></tr>
             </tbody>
           </table>
         </div>
@@ -255,7 +193,7 @@
     </section>
 
     <footer>
-      Built for quick MCAT‑style unit analysis. <span class="tiny">Tip: aim &lt; 5% error.</span>
+      Built for quick unit conversions. <span class="tiny">Tip: aim &lt; 5% error.</span>
     </footer>
   </main>
 
@@ -266,10 +204,10 @@
     const roundTo = (x, n=4) => Number.parseFloat(x).toPrecision(n);
     const pct = x => (x*100).toFixed(2) + "%";
 
-    // Running stats
+    // Stats
     const stats = { attempts: 0, sumAbsRelErr: 0, within5: 0 };
 
-    // Countdown timer
+    // Timer
     let timerId = null, timeRemaining = 30, timeTotal = 30;
     const timeLeftEl = document.getElementById('timeLeft');
     const timerSelect = document.getElementById('timerSelect');
@@ -282,149 +220,92 @@
       timerId = setInterval(() => {
         timeRemaining -= 1;
         updateTimeUI();
-        if (timeRemaining <= 0) {
-          clearInterval(timerId);
-          revealAnswer(true);
-        }
+        if (timeRemaining <= 0) { clearInterval(timerId); revealAnswer(true); }
       }, 1000);
     }
-
     function updateTimeUI(){
       const pctLeft = Math.max(0, timeRemaining) / timeTotal;
-      timeLeftEl.textContent = Math.max(0, timeRemaining) + 's';
+      timeLeftEl.textContent = Math.max(0, timeRemaining) + 's'; // plain 's', not KaTeX
       timeBar.style.width = (pctLeft*100) + '%';
     }
 
-    // --- Problem Bank ---
-    // Each generator returns: { prompt, answer, unit, difficulty }
-
-    const G = {
-      L_per_gal: 3.78541,
-      in_per_ft: 12,
-      ft_per_yd: 3,
-      ft_per_mi: 5280,
-      cm_per_in: 2.54,
-      L_per_ft3: 28.3168,
-      in3_per_ft3: 1728,
-      cm3_per_in3: 16.387,
-      Pa_per_psi: 6894.757,
-      Pa_per_atm: 101325,
-      mmHg_per_atm: 760,
-      J_per_BTU: 1055.06,
-      J_per_kWh: 3.6e6,
-      NA: 6.02214076e23,
-      eV_to_J: 1.602176634e-19
+    // --- Conversions (Grade 10–12) ---
+    // Base units: m (length), s (time), m^2 (area), m^3 (volume), kg (mass)
+    const U = {
+      length: {
+        base: 'm',
+        units: { mm:1e-3, cm:1e-2, m:1, km:1e3, in:0.0254, ft:0.3048, yd:0.9144, mi:1609.344 }
+      },
+      time: {
+        base: 's',
+        units: { s:1, min:60, h:3600, day:86400 }
+      },
+      area: {
+        base: 'm^2',
+        units: { 'cm^2':1e-4, 'm^2':1, 'in^2':Math.pow(0.0254,2), 'ft^2':Math.pow(0.3048,2), 'yd^2':Math.pow(0.9144,2) }
+      },
+      volume: {
+        base: 'm^3',
+        units: { 'mL':1e-6, 'cm^3':1e-6, 'L':1e-3, 'm^3':1, 'in^3':Math.pow(0.0254,3), 'ft^3':Math.pow(0.3048,3), 'gal':0.00378541 }
+      },
+      mass: {
+        base: 'kg',
+        units: { mg:1e-6, g:1e-3, kg:1, oz:0.028349523125, lb:0.45359237, ton:907.18474 }
+      }
     };
 
-    // Helpers to format units into TeX
-    const tUnit = (s) => `\\mathrm{${s}}`;
+    const DISPLAY = {
+      length: ['mm','cm','m','km','in','ft','yd','mi'],
+      time: ['s','min','h','day'],
+      area: ['cm^2','m^2','in^2','ft^2','yd^2'],
+      volume: ['mL','cm^3','L','m^3','in^3','ft^3','gal'],
+      mass: ['mg','g','kg','oz','lb','ton']
+    };
 
-    function gen_atm_to_others(){
-      const atm = Number((rnd(1.2, 2.2)).toFixed(2));
-      const target = choice(['kPa','psi','mmHg']);
-      let val;
-      if (target==='kPa') val = atm*G.Pa_per_atm/1000;
-      if (target==='psi') val = atm*G.Pa_per_atm/G.Pa_per_psi;
-      if (target==='mmHg') val = atm*G.mmHg_per_atm;
-      return { prompt: `Convert \(${atm}\,${tUnit('atm')}\) to \(${tUnit(target)}\).`, answer: val, unit: target, difficulty: 'Intermediate' };
+    const tUnit = s => `\mathrm{${s}}`;
+
+    function convert(category, value, from, to){
+      const map = U[category].units;
+      // Convert to base (SI) then to target
+      const toBase = value * map[from];
+      const out = toBase / map[to];
+      return out;
     }
 
-    function gen_mL_to_in3_ft3(){
-      const mL = [250, 500, 750, 1000][Math.floor(Math.random()*4)];
-      const target = choice(['in^3','ft^3']);
-      const cm3 = mL; // 1 mL = 1 cm3
-      const in3 = cm3 / G.cm3_per_in3;
-      const ft3 = in3 / G.in3_per_ft3;
-      const val = target==='in^3' ? in3 : ft3;
-      return { prompt:`Convert \(${mL}\,${tUnit('mL')}\) to \(${tUnit(target)}\).`, answer: val, unit: target, difficulty: 'Intermediate' };
+    function randValueFor(cat){
+      switch(cat){
+        case 'length': return Number(rnd(0.5, 500).toFixed(2));
+        case 'time': return Number(rnd(5, 2000).toFixed(0));
+        case 'area': return Number(rnd(0.5, 200).toFixed(2));
+        case 'volume': return Number(rnd(0.5, 5000).toFixed(2));
+        case 'mass': return Number(rnd(0.5, 200).toFixed(2));
+      }
     }
 
-    function gen_flow_ft3min_to_Ls(){
-      const q = Number(rnd(1.5, 4.0).toFixed(2));
-      const Ls = q * G.L_per_ft3 / 60.0;
-      return { prompt:`Convert \(${q}\,${tUnit('ft^3/min')}\) to \(${tUnit('L/s')}\).`, answer: Ls, unit:'L/s', difficulty: 'Intermediate' };
-    }
-
-    function gen_density_gcm3_to_lbft3(){
-      const rho = [1.2, 1.5, 2.0][Math.floor(Math.random()*3)];
-      const lbft3 = rho * (1/453.59237) * Math.pow(2.54,3) * 1728;
-      return { prompt:`A sample is labelled \(${rho}\,${tUnit('g/cm^3')}\). Convert to ${tUnit('lb/ft^3')}.`, answer: lbft3, unit:'lb/ft^3', difficulty:'Intermediate' };
-    }
-
-    function gen_battery_Wh_to_kJ_BTU(){
-      const Wh = [60, 85, 100, 120][Math.floor(Math.random()*4)];
-      const target = choice(['kJ','BTU']);
-      const J = Wh*3600;
-      const val = (target==='kJ') ? (J/1000) : (J/G.J_per_BTU);
-      return { prompt:`\(${Wh}\,${tUnit('Wh')}\) as \(${tUnit(target)}\).`, answer: val, unit: target, difficulty:'Intermediate' };
-    }
-
-    function gen_eV_to_kJmol(){
-      const eV = [1.5, 2.0, 2.5, 3.0][Math.floor(Math.random()*4)];
-      const J_per_particle = eV*G.eV_to_J;
-      const J_per_mol = J_per_particle*G.NA;
-      const kJmol = J_per_mol/1000;
-      return { prompt:`Convert \(${eV}\,${tUnit('eV')}\) (per particle) to \(${tUnit('kJ/mol')}\).`, answer: kJmol, unit:'kJ/mol', difficulty:'Intermediate' };
-    }
-
-    function gen_bar_to_others(){
-      const bar = Number(rnd(0.6, 1.4).toFixed(3));
-      const target = choice(['atm','psi','torr']);
-      let val;
-      if (target==='atm') val = bar/1.01325;
-      if (target==='psi') val = bar*100000/G.Pa_per_psi;
-      if (target==='torr') val = bar*750.06;
-      return { prompt:`A transducer reads \(${bar}\,${tUnit('bar')}\). Report in \(${tUnit(target)}\).`, answer: val, unit: target, difficulty:'Advanced' };
-    }
-
-    function gen_power_to_energy(){
-      const kW = [0.75, 1.50, 2.00][Math.floor(Math.random()*3)];
-      const min = [15, 25, 40][Math.floor(Math.random()*3)];
-      const J = kW*1000 * min*60;
-      const target = choice(['BTU','kWh']);
-      const val = target==='BTU' ? (J/G.J_per_BTU) : (J/G.J_per_kWh);
-      return { prompt:`A \(${kW}\,${tUnit('kW')}\) heater runs for \(${min}\,${tUnit('min')}\). How many \(${tUnit(target)}\)?`, answer: val, unit: target, difficulty:'Advanced' };
-    }
-
-    function gen_barrels_to_m3(){
-      const bbl = [60, 90, 120, 200][Math.floor(Math.random()*4)];
-      const m3 = bbl * 42 * G.L_per_gal / 1000;
-      return { prompt:`How many \(${tUnit('m^3')}\) is \(${bbl}\,${tUnit('bbl')}\) (US oil)?`, answer: m3, unit:'m^3', difficulty:'Intermediate' };
-    }
-
-    function gen_conc_mg_per_dL_to_gL(){
-      const mgdL = [100, 150, 250, 350][Math.floor(Math.random()*4)];
-      const gL = (mgdL/1000) * 10; // mg/dL -> g/dL -> g/L
-      return { prompt:`\(${mgdL}\,${tUnit('mg/dL')}\) as \(${tUnit('g/L')}\).`, answer: gL, unit:'g/L', difficulty:'Intermediate' };
-    }
-
-    function gen_light_ns_to_m(){
-      const ns = [120, 250, 350, 500][Math.floor(Math.random()*4)];
-      const m = ns*1e-9 * 299_792_458;
-      return { prompt:`A light pulse spans \(${ns}\,${tUnit('ns')}\). Express its length in \(${tUnit('m')}\).`, answer: m, unit:'m', difficulty:'Challenge' };
+    function gen_simple(category){
+      const units = DISPLAY[category];
+      let from = choice(units), to = choice(units);
+      while (to === from) to = choice(units);
+      const val = randValueFor(category);
+      const answer = convert(category, val, from, to);
+      const prompt = `Convert \(${val}\,${tUnit(from)}\) to \(${tUnit(to)}\).`;
+      return { prompt, answer, unit: to, difficulty: 'Core' };
     }
 
     const BANK = [
-      gen_atm_to_others,
-      gen_mL_to_in3_ft3,
-      gen_flow_ft3min_to_Ls,
-      gen_density_gcm3_to_lbft3,
-      gen_battery_Wh_to_kJ_BTU,
-      gen_eV_to_kJmol,
-      gen_bar_to_others,
-      gen_power_to_energy,
-      gen_barrels_to_m3,
-      gen_conc_mg_per_dL_to_gL,
-      gen_light_ns_to_m
+      () => gen_simple('length'),
+      () => gen_simple('time'),
+      () => gen_simple('area'),
+      () => gen_simple('volume'),
+      () => gen_simple('mass')
     ];
 
-    // Current state
+    // State + UI
     let current = null;
-
     function renderQuestion(tex){
       const el = document.getElementById('questionText');
       el.textContent = '';
-      el.innerHTML = tex; // KaTeX auto-render will process
+      el.innerHTML = tex;
       renderMathInElement(el, {delimiters:[{left:'$$', right:'$$', display:true},{left:'\(', right:'\)', display:false}]});
     }
 
@@ -464,7 +345,6 @@
       `;
       accBar.style.width = acc.width;
 
-      // Update running stats
       stats.attempts += 1;
       stats.sumAbsRelErr += isFinite(relErr) ? relErr : 0;
       if (relErr <= 0.05) stats.within5 += 1;
@@ -480,14 +360,9 @@
       clearInterval(timerId);
       showResult(v);
     }
+    function revealAnswer(timedOut=false){ if (!current) return; clearInterval(timerId); showResult(Number.NaN, timedOut); }
 
-    function revealAnswer(timedOut=false){
-      if (!current) return;
-      clearInterval(timerId);
-      showResult(Number.NaN, timedOut);
-    }
-
-    // --- Wiring ---
+    // Events
     document.getElementById('newBtn').addEventListener('click', newQuestion);
     document.getElementById('checkBtn').addEventListener('click', checkAnswer);
     document.getElementById('revealBtn').addEventListener('click', () => revealAnswer(false));
