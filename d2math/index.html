@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Division 2 Mathematics – Mr. Merrick</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+  :root{
+    --ink:#606c71; --paper:#f9fafc; --brand1:#1A2980; --brand2:#26D0CE; --accent:#0AB9DC; --ink-2:#514a9d;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body { margin: 0; font-family: 'Cormorant', serif; color: var(--ink); line-height: 1.5; background: var(--paper); }
+
+  header { position: relative; text-align: center; padding: 1.5rem 1rem 1.5rem; background: linear-gradient(135deg,var(--brand1),var(--brand2)); color: white; box-shadow: 0 3px 8px rgba(0,0,0,0.12); }
+  header h1 { margin: 0; font-weight: 700; font-size: clamp(26px, 3.8vw, 40px); }
+  header p { margin-top: .4rem; font-size: 1.05rem; opacity: 0.9; }
+  .contact-icon { margin-top:.4rem; }
+  .contact-icon svg { fill: white; }
+
+  /* Quick-jump sticky nav */
+  .toc { position: sticky; top: 0; z-index: 10; background: linear-gradient(135deg,rgba(26,41,128,.97),rgba(38,208,206,.97)); padding: .4rem .8rem; box-shadow: 0 6px 14px rgba(0,0,0,.1); display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center; }
+  .toc a { --padx: .85rem; --pady: .4rem; color:#fff; font-weight:600; text-decoration:none; border:1px solid rgba(255,255,255,.45); padding: var(--pady) var(--padx); border-radius: 999px; backdrop-filter:saturate(140%) blur(4px); transition: transform .08s ease, background .2s ease; }
+  .toc a:hover{ background: rgba(255,255,255,.15); }
+  .toc a:active{ transform: scale(.98); }
+
+  main { max-width: 1000px; margin: .6rem auto; padding: 0 1rem 1.2rem; display: grid; gap: 1rem; }
+
+  section, article { background: white; border-radius: 10px; padding: 1rem 1.2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e8eaf2; }
+  section a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  section a:hover { color: var(--brand1); text-decoration: underline; }
+
+  h2 { color: var(--ink-2); font-weight: 600; border-bottom: 2px solid var(--brand1); padding-bottom: .2rem; margin: 0 0 .6rem; scroll-margin-top: 4.5rem; }
+  h3 { margin: .6rem 0 .4rem; color: var(--brand1); font-weight: 600; font-size: 1.05rem; }
+
+  ul { line-height: 1.4; margin: .4rem 0; padding-left: 1rem; }
+  li { margin: .2rem 0; }
+
+  /* In-class dropdowns */
+  details { border: 1px solid #e8eaf2; border-radius: 10px; padding: .6rem .8rem; margin:.6rem 0; box-shadow: 0 2px 8px rgba(0,0,0,.03); }
+  details > summary { list-style:none; cursor:pointer; display:flex; align-items:center; gap:.5rem; font-weight:700; color: var(--brand1); }
+  details > summary::-webkit-details-marker { display:none; }
+  details > summary::before{ content:'▸'; transition: transform .2s ease; }
+  details[open] > summary::before{ transform: rotate(90deg); }
+  .muted{ color:#7a8594; font-size:.95rem; }
+
+  footer { margin-top: 1.2rem; text-align: center; color: #777; font-size: .85rem; }
+
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} .toc a{transition:none} details > summary::before{transition:none} }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Division 2 Mathematics</h1>
+    <div class="contact-icon">
+      <a href="mailto:Merrick.fanning@renertschool.ca" aria-label="Email Mr. Merrick">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .02c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.99 6.98l-6.99 5.666-6.991-5.666h13.981zm.01 10h-14v-8.505l7 5.673 7-5.672v8.504z"/></svg>
+      </a>
+    </div>
+    <p>Mr. Merrick</p>
+  </header>
+
+  <!-- Quick jump buttons (sticky) -->
+  <nav class="toc" aria-label="Section quick links">
+    <a href="#mental-math">Mental Math</a>
+    <a href="#puzzles">Puzzles</a>
+    <a href="#games">Games</a>
+    <a href="#in-class">In‑Class Materials</a>
+    <a href="#contests">Contests</a>
+  </nav>
+
+  <main>
+    <!-- Mental Math -->
+    <section>
+      <h2 id="mental-math">Mental Math</h2>
+      <ul>
+        <li><a href="https://merrickmath.github.io/Mentalmath/PAT6.html" data-ext="true">PAT 6 Practice</a></li>
+        <li><a href="https://merrickmath.github.io/Mentalmath/Divisible.html" data-ext="true">Divisbility Shootout</a></li>
+        <li><a href="https://merrickmath.github.io/Mentalmath/Numberlinevectors.html" data-ext="true">Number Line Vectors</a></li>
+        <li><a href="https://merrickmath.github.io/Mentalmath/Divisors.html" data-ext="true">Divisor Counting Trainer</a></li>
+        <li><a href="https://merrickmath.github.io/Mentalmath/Shopping.html" data-ext="true">Shopping Math (Percentage/GST)</a></li>
+        <li><a href="https://merrickmath.github.io/Mentalmath/Rates.html" data-ext="true">Rates Problems</a></li>
+        <li><a href="https://merrickmath.github.io/Mentalmath/Statisticestimate.html" data-ext="true">Statistics Estimation</a></li>
+      </ul>
+    </section>
+
+    <!-- Puzzles -->
+    <section>
+      <h2 id="puzzles">Puzzles</h2>
+      <ul>
+        <li><a href="https://krazydad.com/tablet/puzzles.php" target="_blank" rel="noopener">Krazy Dad Interactive Puzzles</a></li>
+        <li><a href="https://www.puzzle-star-battle.com" target="_blank" rel="noopener">Logic Puzzles Galore</a></li>
+        <li><a href="https://mathpickle.com" target="_blank" rel="noopener">Math Pickle</a></li>
+        <li><a href="https://thegriddle.net" target="_blank" rel="noopener">The Griddle Logic Puzzles</a></li>
+        <li><a href="https://circle9puzzle.com" target="_blank" rel="noopener">Circle Moon Puzzles and Games</a></li>
+      </ul>
+    </section>
+
+    <!-- Games -->
+    <section>
+      <h2 id="games">Games</h2>
+      <ul>
+        <li><a href="https://merrickmath.github.io/Games/CoordinateGame.html" data-ext="true">Coordinate Dash</a></li>
+        <li><a href="https://merrickmath.github.io/Games/Primejumper.html" data-ext="true">Prime Jumper</a></li>
+        <li><a href="https://merrickmath.github.io/Games/Geometryblitz.html" data-ext="true">Geometry Blitz</a></li>
+        <li><a href="https://merrickmath.github.io/Games/Camelrace.html" data-ext="true">Camel Racing Simulation</a></li>
+        <li><a href="https://merrickmath.github.io/Games/Vectortarget.html" data-ext="true">Vector Target</a></li>
+        <li><a href="https://merrickmath.github.io/LinearAlgebra/Activities/Games/VectorRacing.pdf" data-ext="true">Vector Racing (Instructions)</a></li>
+        <li><a href="https://merrickmath.github.io/LinearAlgebra/Activities/Games/VectorWars.pdf" data-ext="true">Vector Battle (Instructions)</a></li>
+        <li><a href="https://playset.netlify.app" data-ext="true">Set Game</a></li>
+        <li><a href="https://www.mathplayground.com" target="_blank" rel="noopener">Math Playground</a></li>
+      </ul>
+    </section>
+
+    <!-- In‑Class Materials (NEW) -->
+    <section>
+      <h2 id="in-class">In‑Class Materials</h2>
+      <p class="muted">Drop‑downs below will collect handouts, slide decks, worksheets, and board notes. Add links as they’re ready.</p>
+
+      <details>
+        <summary>Grade 4/5 – 2025</summary>
+        <ul>
+          <li><a href="https://merrickmath.github.io/D2Math/G45/2025/AreaModel.pdf" data-ext="true">Area Model Multiplication</a></li>
+          <li><a href="https://merrickmath.github.io/D2Math/G45/2025/IntroFractions.pdf" data-ext="true">Intro to Fractions (Improper and Mixex Numbers)</a> 
+            | <a href="https://merrickmath.github.io/D2Math/G45/2025/IntroFractionsSoln.pdf" data-ext="true">Solutions</a> </li>
+          <li><a href="https://merrickmath.github.io/D2Math/G45/2025/AddingSubtracting.pdf" data-ext="true">Adding/Subtracting Fractions </a> 
+            | <a href="https://merrickmath.github.io/D2Math/G45/2025/AddingSubtractingSoln.pdf" data-ext="true">Solutions</a> </li>  
+          <li><a href="https://merrickmath.github.io/D2Math/G45/2025/Equivalent.pdf" data-ext="true">Equivalent Fractions </a> 
+             | <a href="https://merrickmath.github.io/D2Math/G45/2025/EquivalentSoln.pdf" data-ext="true">Solutions</a> </li>
+          <li><a href="https://merrickmath.github.io/D2Math/G45/2025/AddFractions.pdf" data-ext="true">Adding Fractions with Different Denominators </a> 
+            | <a href="https://merrickmath.github.io/D2Math/G45/2025/AddFractionsSoln.pdf" data-ext="true">Solutions</a> </li> 
+          <li><a href="https://merrickmath.github.io/D2Math/G45/2025/Algebranimals.pdf" data-ext="true">Algebranimals </a> 
+             | <a href="https://merrickmath.github.io/D2Math/G45/2025/AlgebranimalsSoln.pdf" data-ext="true">Solutions</a>  
+            </li>
+           <li><a href="https://merrickmath.github.io/D2Math/G45/2025/VennPuzzles.pdf" data-ext="true">Venn Puzzles </a> | 
+           <a href="https://merrickmath.github.io/D2Math/G45/2025/VennPuzzleBuilder.pdf" data-ext="true">Venn Puzzle Builder </a> </li>  
+          <li><a href="https://merrickmath.github.io/D2Math/G45/2025/BarProblems.pdf" data-ext="true"> Word Problems Practice </a> | 
+           <a href="https://merrickmath.github.io/D2Math/G45/2025/BarProblemsSoln.pdf" data-ext="true"> Answers </a> </li>
+          <li><a href="https://renertmath.github.io/Challenges/12Days2025.html">12 Days of ChrisMATH!</a></li>
+          <li><a href="https://www.mathsisfun.com/geometry/quadrilaterals-interactive.html"> Interactive Quadrilaterals </a></li>
+          <li><a href="https://merrickmath.github.io/D2Math/G45/2025/QuadrilateralPack.pdf" data-ext="true"> Quadrilateral Packet </a> | 
+           <a href="https://merrickmath.github.io/D2Math/G45/2025/QuadrilateralPackSoln.pdf" data-ext="true"> Answers </a> </li>
+          <li><a href="https://mathpickle.com/project/complete-the-quadrilateral/"> Complete the Quadrilateral (Math Pickle) </a></li>
+          <li><a href="https://www.iknowit.com/lessons/d-geometry-quadrilaterals.html"> Quadrilateral Quiz </a></li>
+          <li><a href="https://merrickmath.github.io/D2Math/G45/2025/QuadrilateralConstruct.pdf" data-ext="true"> Quadrilateral Constructions </a> | 
+           <a href="https://merrickmath.github.io/D2Math/G45/2025/QuadrilateralConstructSoln.pdf" data-ext="true"> Answers </a> </li>
+         
+          <li><a href="https://merrickmath.github.io/D2Math/G45/2025/QuadrilateralConstruct2.pdf" data-ext="true"> MORE Quadrilateral Constructions </a> | 
+           <a href="https://merrickmath.github.io/D2Math/G45/2025/QuadrilateralConstruct2Soln.pdf" data-ext="true"> Answers </a> </li>
+           
+          <li><a href="https://merrickmath.github.io/D2Math/G45/2025/QuadrilateralProject.pdf" data-ext="true"> Quadrilateral Project </a> </li>
+           <!---
+          <li><a href="https://merrickmath.github.io/D2Math/G45/2025/Algebranimals1.pdf" data-ext="true">More Algebranimals </a> 
+             | <a href="https://merrickmath.github.io/D2Math/G45/2025/Algebranimals1Soln.pdf" data-ext="true">Solutions</a>
+          ---> 
+        </ul>
+      </details>
+      
+
+      <details>
+        <summary>Grade 6 – 2025</summary>
+        <ul>
+          <li>
+            <a href="https://merrickmath.github.io/D2Math/G6/2025/Mixed2Variable.pdf" data-ext="true"> 2 Variable Algebra Word Problems </a> 
+            | <a href="https://merrickmath.github.io/D2Math/G6/2025/Mixed2VariableSoln.pdf" data-ext="true"> Solutions </a>
+          </li>
+          <li>
+            <a href="https://merrickmath.github.io/D2Math/G6/2025/AverageAlgebra.pdf" data-ext="true"> Average Algebra Problems </a> 
+            | <a href="https://merrickmath.github.io/D2Math/G6/2025/AverageAlgebraSoln.pdf" data-ext="true"> Solutions </a>
+          </li>
+
+         <li>
+            <strong>Math Bomb Puzzle I</strong>
+            <ul>
+              <li>
+                <a href="https://drive.google.com/file/d/1sNRvClcwRKk45xjRZ9_OpkoDQwvjCkk6/view?usp=sharing" target="_blank" rel="noopener">
+                  Video Link
+                </a>
+              </li>
+              <li>
+                <a href="https://merrickmath.github.io/MerrickMath-Locked/MathBombs/Bomb1/AnswerSheet.pdf" target="_blank" rel="noopener">
+                  Answer Sheet
+                </a>
+              </li>
+              <li>
+                <a href="https://merrickmath.github.io/MerrickMath-Locked/MathBombs/Bomb1/Manual.pdf" target="_blank" rel="noopener">
+                  Defusal Manual
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          
+          <li>
+            <a href="https://merrickmath.github.io/D2Math/G6/2025/RateRatioWordProblems.pdf" data-ext="true"> Rate and Ratio Word Problems </a> 
+            | <a href="https://merrickmath.github.io/D2Math/G6/2025/RateRatioWordProblemsSoln.pdf" data-ext="true"> Solutions </a>
+          </li>
+          <li>
+            <a href="https://merrickmath.github.io/D2Math/G6/2025/FactorPairs.pdf" data-ext="true"> Factor Pairs </a> 
+            | <a href="https://merrickmath.github.io/D2Math/G6/2025/FactorPairsSoln.pdf" data-ext="true"> Solutions </a>
+          </li>
+
+          <li><a href="https://merrickmath.github.io/D2Math/G6/2025/VennPuzzles.pdf" data-ext="true">Venn Puzzles </a> | 
+           <a href="https://merrickmath.github.io/D2Math/G45/2025/VennPuzzleBuilder.pdf" data-ext="true">Venn Puzzle Builder </a> </li>
+
+          <li><a href="https://merrickmath.github.io/D2Math/G6/2025/Algebranimals.pdf" data-ext="true">Algebranimals </a> 
+             | <a href="https://merrickmath.github.io/D2Math/G6/2025/AlgebranimalsSoln.pdf" data-ext="true">Solutions</a> </li>
+
+          <li><a href="https://merrickmath.github.io/D2Math/G6/2025/PenProb.pdf" data-ext="true">Penguin Probability </a> 
+             | <a href="https://merrickmath.github.io/D2Math/G6/2025/PenProbSoln.pdf" data-ext="true">Solutions</a> </li>
+
+          <li>
+            <strong>Math Bomb Puzzle II</strong>
+            <ul>
+              <li>
+                <a href="https://drive.google.com/file/d/1cT1IwXfkLLffIMMOU64j6Moiv0ZZHHEM/view?usp=sharing" target="_blank" rel="noopener">
+                  Video Link
+                </a>
+              </li>
+              <li>
+                <a href="https://merrickmath.github.io/MerrickMath-Locked/MathBombs/Bomb2/AnswerSheet.pdf" target="_blank" rel="noopener">
+                  Answer Sheet
+                </a>
+              </li>
+              <li>
+                <a href="https://merrickmath.github.io/MerrickMath-Locked/MathBombs/Bomb2/Manual.pdf" target="_blank" rel="noopener">
+                  Defusal Manual
+                </a>
+              </li>
+            </ul>
+          </li>
+          
+          <li><a href="https://renertmath.github.io/Challenges/12Days2025.html">12 Days of ChrisMATH!</a></li>
+          
+
+          <li>
+            <strong>Visual Proof Channels</strong>
+            <ul>
+              <li>
+                <a href="https://www.youtube.com/@ThinkTwiceLtu" target="_blank" rel="noopener">
+                  Think Twice Math
+                </a>
+              </li>
+              <li>
+                <a href="https://www.youtube.com/@MathVisualProofs" target="_blank" rel="noopener">
+                  Math Visual Proofs
+                </a>
+              </li>
+            </ul>
+          </li>
+
+           
+          <li><a href="https://merrickmath.github.io/D2Math/G6/2025/ArithmeticSums.pdf" data-ext="true">Arithemtic Sums </a> 
+             | <a href="https://merrickmath.github.io/D2Math/G6/2025/ArithmeticSumsSoln.pdf" data-ext="true">Solutions</a> </li>  
+
+          <li>
+            <strong>Math Bomb Puzzle III</strong>
+            <ul>
+              <li>
+                <a href="https://drive.google.com/file/d/1MbhyrcPuuTcAuLSfaHlEFtuk4LYQfXZR/view?usp=sharing" target="_blank" rel="noopener">
+                  Video Link
+                </a>
+              </li>
+              <li>
+                <a href="https://merrickmath.github.io/MerrickMath-Locked/MathBombs/Bomb5/AnswerSheet.pdf" target="_blank" rel="noopener">
+                  Answer Sheet
+                </a>
+              </li>
+              <li>
+                <a href="https://merrickmath.github.io/MerrickMath-Locked/MathBombs/Bomb5/Manual.pdf" target="_blank" rel="noopener">
+                  Defusal Manual
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          
+        </ul>
+      </details>
+    </section>
+
+    <!-- Contests -->
+    <section>
+      <h2 id="contests">Contests</h2>
+      <ul>
+        <li><a href="https://www.cemc.uwaterloo.ca/contests/past_contests.html" target="_blank" rel="noopener">CEMC Past Contests</a></li>
+        <li><a href="https://artofproblemsolving.com/wiki/index.php/AMC_Problems_and_Solutions" target="_blank" rel="noopener">AMC Problems and Solutions</a></li>
+        <li><a href="https://mathkangaroo.ca/samples/en" target="_blank" rel="noopener">Kangaroo Math Past Contests</a></li>
+        <li><a href="https://science.ucalgary.ca/mathematics-statistics/engagement/educational-outreach/math-nite" target="_blank" rel="noopener">Math Nite</a></li>
+        <li><a href="https://renertmath.github.io/renertrabbit.html" target="_blank" rel="noopener">Renert Rabbit</a></li>
+        <li><a href="https://artofproblemsolving.com/alcumus" target="_blank" rel="noopener">Alcumus</a></li>
+      </ul>
+    </section>
+
+    <footer>
+      <small>Last updated: <span id="last-updated">—</span></small>
+    </footer>
+  </main>
+
+  <script>
+  /* Last updated = date of the last GitHub commit that touched this page */
+  (async function () {
+    const target = document.querySelector('#last-updated');
+    if (!target) return;
+
+    const OWNER  = 'merrickmath';   // GitHub username or org
+    const REPO   = 'Div34Math';     // Repository name
+    const BRANCH = '';              // branch if needed
+    const siteBase = '/Div34Math/'; // adjust if site path differs
+
+    let path = window.location.pathname;
+    if (siteBase && path.startsWith(siteBase)) path = path.slice(siteBase.length);
+    path = path.replace(/^\/+/,'');
+    if (!path || path.endsWith('/')) path += 'index.html';
+
+    const commitURL = (filePath) => {
+      const u = new URL(`https://api.github.com/repos/${OWNER}/${REPO}/commits`);
+      u.searchParams.set('path', filePath);
+      u.searchParams.set('per_page', '1');
+      if (BRANCH) u.searchParams.set('sha', BRANCH);
+      return u.toString();
+    };
+
+    const fmt = (iso) => {
+      const d = new Date(iso);
+      const opts = { month: 'short', day: '2-digit', year: 'numeric' };
+      return { short: d.toLocaleDateString(undefined, opts), full: d.toLocaleString() };
+    };
+
+    try {
+      let res = await fetch(commitURL(path), { headers: { 'Accept': 'application/vnd.github+json' } });
+      if (!res.ok) throw new Error('GitHub API error');
+      const commits = await res.json();
+      let iso = commits?.[0]?.commit?.committer?.date || commits?.[0]?.commit?.author?.date;
+      if (!iso) {
+        const repoRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}`);
+        if (repoRes.ok) {
+          const repo = await repoRes.json();
+          iso = repo?.pushed_at || null;
+        }
+      }
+      if (!iso) iso = document.lastModified;
+      const { short, full } = fmt(iso);
+      target.textContent = short;
+      target.title = `Last update source time: ${full}`;
+    } catch (err) {
+      const { short, full } = fmt(document.lastModified);
+      target.textContent = short;
+      target.title = `Fallback from document.lastModified (${full})`;
+    }
+  })();
+
+  // Open external links with data-ext in a new tab (safety)
+  document.querySelectorAll('a[data-ext]')?.forEach(a=>{ a.setAttribute('target','_blank'); a.setAttribute('rel','noopener'); });
+  </script>
+</body>
+</html>
