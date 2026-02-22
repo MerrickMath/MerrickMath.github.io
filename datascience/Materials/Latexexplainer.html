@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Overleaf + LaTeX: Quick Start (Student Guide)</title>
+  <style>
+    :root{
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --muted: #475569;   /* slate-600 */
+      --text: #0f172a;    /* slate-900 */
+      --border: #e2e8f0;  /* slate-200 */
+      --accent: #1d4ed8;  /* blue-700 */
+      --accent-2: #0d9488;/* teal-600 */
+      --warn: #b45309;    /* amber-700 */
+      --danger: #b91c1c;  /* red-700 */
+      --code: #f3f4f6;    /* gray-100 */
+      --code-border: #e5e7eb; /* gray-200 */
+      --shadow: 0 2px 16px rgba(2,6,23,.06);
+      --radius: 14px;
+      --header-h: 72px;
+    }
+    html,body{height:100%}
+    *{box-sizing:border-box}
+
+    /* Typography: LaTeX-like serif stack */
+    body{
+      margin:0;
+      font-family: "Latin Modern Roman","Computer Modern Serif","CMU Serif","STIX Two Text","Times New Roman",Times,Georgia,serif;
+      color:var(--text);
+      background:var(--bg);
+      line-height:1.7;
+      scroll-behavior:smooth;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    h1,h2,h3{font-weight:600; letter-spacing:.2px}
+    h1{font-size:clamp(2rem,2.4vw+1rem,3rem); margin:.2rem 0 .25rem}
+    h2{font-size:clamp(1.25rem,1.2vw+1rem,1.6rem); margin:.35rem 0 .5rem}
+    h3{font-size:1.05rem; margin:1rem 0 .35rem}
+    p,li{color:#0b1220}
+    kbd{font-family: "CMU Typewriter Text","Nimbus Mono PS","Courier New",ui-monospace,Menlo,Consolas,monospace; border:1px solid var(--border); border-bottom-width:2px; padding:.05rem .3rem; border-radius:4px; background:#fff}
+
+    .container{max-width:1100px;margin:0 auto;padding:2rem 1.25rem 4rem}
+    header.site{position:sticky;top:0;background:rgba(255,255,255,.96);backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid var(--border);z-index:10}
+    .hero{padding:1.25rem 0}
+    .subtitle{color:var(--muted);font-size:1.02rem;margin:0 0 1rem}
+
+    /* TOC */
+    .toc{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0 0;padding:0}
+    .toc a{display:inline-block;padding:.5rem .85rem;border:1px solid var(--border);border-radius:999px;text-decoration:none;color:var(--text);background:#fff}
+    .toc a:hover{border-color:#cbd5e1}
+
+    main{display:grid;grid-template-columns:1fr;gap:1rem;margin-top:1.25rem}
+    @media (min-width:980px){main{grid-template-columns:1.1fr .9fr}}
+
+    section.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;box-shadow:var(--shadow)}
+    section.card[id]{scroll-margin-top:calc(var(--header-h) + 16px)}
+
+    /* callouts */
+    .callout{border-left:4px solid var(--accent);padding:.6rem .9rem;background:#f8fafc;border:1px solid var(--border);border-radius:10px}
+    .success{border-left-color:var(--accent-2)}
+    .warn{border-left-color:var(--warn)}
+    .danger{border-left-color:var(--danger)}
+
+    /* code */
+    .codeblock{position:relative;margin:.65rem 0 .9rem;border:1px solid var(--code-border);border-radius:12px;overflow:hidden}
+    .codeblock .bar{display:flex;align-items:center;gap:.5rem;padding:.45rem .7rem;background:#f8fafc;border-bottom:1px solid var(--code-border);font-size:.9rem;color:#334155}
+    .codeblock pre{margin:0;padding:1rem 1rem;background:var(--code);overflow-x:auto}
+    .codeblock code{font-family:"CMU Typewriter Text","Nimbus Mono PS","Courier New",ui-monospace,Menlo,Consolas,monospace; font-size:.95rem; white-space:pre; color:#0f172a}
+    .copy-btn{position:absolute;right:.5rem;top:.5rem;font-size:.85rem;padding:.35rem .55rem;border-radius:8px;border:1px solid var(--border);background:#fff;color:#0f172a;cursor:pointer}
+    .copy-btn:hover{border-color:#cbd5e1}
+
+    ul.checks{list-style:none;padding:0;margin:.4rem 0}
+    ul.checks li{margin:.25rem 0}
+    ul.checks li::before{content:"✓ ";color:var(--accent-2);margin-right:.35rem}
+
+    footer{margin-top:1.5rem;color:#64748b;font-size:.95rem;text-align:center}
+  </style>
+</head>
+<body>
+  <header class="site" id="top">
+    <div class="container hero">
+      <h1>Overleaf + LaTeX: Quick Start</h1>
+      <p class="subtitle">A clean, copy‑pasteable setup guide for students using Overleaf. No installs required.</p>
+      <nav class="toc" aria-label="Table of contents">
+        <a class="toc-link" href="#create">Account & first project</a>
+        <a class="toc-link" href="#template">Templates</a>
+        <a class="toc-link" href="#minimal">Minimal document</a>
+        <a class="toc-link" href="#structure">Structure & math</a>
+        <a class="toc-link" href="#figures">Figures & tables</a>
+        <a class="toc-link" href="#refs">Citations</a>
+        <a class="toc-link" href="#collab">Collaboration</a>
+        <a class="toc-link" href="#export">Export</a>
+        <a class="toc-link" href="#troubleshoot">Troubleshoot</a>
+        <a class="toc-link" href="#shortcuts">Tips</a>
+        <a class="toc-link" href="#local">Local install</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div style="display:grid;grid-template-columns:1fr;gap:1rem">
+
+      <!-- 1) Create -->
+      <section class="card" id="create">
+        <h2>1) Create your Overleaf account & first project</h2>
+        <ol style="padding-left:1.25rem; margin:.5rem 0 0">
+          <li>Go to <a href="https://www.overleaf.com" target="_blank" rel="noopener">overleaf.com</a> and sign up (school email recommended for institutional features).</li>
+          <li>Click <strong>New Project → Blank Project</strong>. Name it <em>my-first-latex</em>.</li>
+          <li>Overleaf shows an editor (left) and PDF preview (right). Press <kbd>Recompile</kbd> to build.</li>
+        </ol>
+        <p class="callout">Everything compiles in the cloud—no local LaTeX install needed.</p>
+      </section>
+
+      <!-- 2) Templates -->
+      <section class="card" id="template">
+        <h2>2) (Optional) Start from a template</h2>
+        <p>Use <em>New Project → Templates</em>. Try search terms like <em>article</em>, <em>IEEE</em>, <em>ACM</em>, <em>thesis</em>, or <em>homework</em>.</p>
+        <ul class="checks">
+          <li>Templates include common packages and structure.</li>
+          <li>You can still edit everything as normal LaTeX.</li>
+        </ul>
+      </section>
+
+      <!-- 3) Minimal -->
+      <section class="card" id="minimal">
+        <h2>3) Minimal LaTeX document</h2>
+        <p>Replace <code>main.tex</code> with the following and click <em>Recompile</em>:</p>
+        <div class="codeblock" data-code>
+          <div class="bar"><span style="opacity:.85">main.tex</span><button class="copy-btn" data-copy>Copy</button></div>
+<pre><code>\documentclass[11pt]{article}
+
+% Language & encoding
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+% Layout helpers
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}   % images
+\usepackage{amsmath,amssymb} % math
+\usepackage{hyperref}   % clickable refs
+
+\title{My First LaTeX Document}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+Hello, world! This is my first document on Overleaf.
+
+\section{Why LaTeX?}
+It produces beautiful PDFs and handles references, figures, and equations like $E=mc^2$.
+
+\section{A Display Equation}
+\begin{equation}
+  \int_{-\infty}^{\infty} e^{-x^2}\\,dx = \sqrt{\pi}
+\end{equation}
+
+\end{document}
+</code></pre>
+        </div>
+        <p class="callout success"><strong>Tip:</strong> Red errors usually mean a missing backslash <code>\\</code> or unmatched braces <code>{ }</code>.</p>
+      </section>
+
+      <!-- 4) Structure -->
+      <section class="card" id="structure">
+        <h2>4) Structure, math, and lists</h2>
+        <h3>Sections</h3>
+        <div class="codeblock" data-code>
+          <div class="bar"><span style="opacity:.85">Structure</span><button class="copy-btn" data-copy>Copy</button></div>
+<pre><code>% Preamble
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue}
+
+% Body
+\section{Intro}
+\subsection{Background}
+\subsubsection{Details}
+</code></pre>
+        </div>
+
+        <h3>Inline vs display math</h3>
+        <div class="codeblock" data-code>
+          <div class="bar"><span style="opacity:.85">Math</span><button class="copy-btn" data-copy>Copy</button></div>
+<pre><code>Inline: $a^2 + b^2 = c^2$.
+
+Display:
+\begin{equation}
+  \nabla \cdot \vec{E} = \frac{\rho}{\varepsilon_0}
+\end{equation}
+</code></pre>
+        </div>
+
+        <h3>Lists</h3>
+        <div class="codeblock" data-code>
+          <div class="bar"><span style="opacity:.85">Lists</span><button class="copy-btn" data-copy>Copy</button></div>
+<pre><code>\begin{itemize}
+  \item bullet 1
+  \item bullet 2
+\end{itemize}
+
+\begin{enumerate}
+  \item first
+  \item second
+\end{enumerate}
+</code></pre>
+        </div>
+      </section>
+
+      <!-- 5) Figures & tables -->
+      <section class="card" id="figures">
+        <h2>5) Figures and tables</h2>
+        <p>Upload images via <strong>Files</strong> (top left) or drag‑drop. PNG, JPG, and PDF work well. Reference with <code>\\label</code> and <code>\\ref</code>.</p>
+        <div class="codeblock" data-code>
+          <div class="bar"><span style="opacity:.85">Figure example</span><button class="copy-btn" data-copy>Copy</button></div>
+<pre><code>\usepackage{graphicx}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.7\linewidth]{diagram.png}
+  \caption{System diagram}
+  \label{fig:system}
+\end{figure}
+As shown in Figure~\ref{fig:system}, ...
+</code></pre>
+        </div>
+
+        <div class="codeblock" data-code>
+          <div class="bar"><span style="opacity:.85">Table example</span><button class="copy-btn" data-copy>Copy</button></div>
+<pre><code>\begin{table}[h]
+  \centering
+  \begin{tabular}{lcr}
+    \hline
+    Item & Qty & Price \\\\
+    \hline
+    Pencil & 3 & $1.50$ \\\\
+    Notebook & 1 & $2.00$ \\\\
+    \hline
+  \end{tabular}
+  \caption{Supplies}
+  \label{tab:supplies}
+\end{table}
+</code></pre>
+        </div>
+        <p class="callout warn"><strong>Note:</strong> File names are case‑sensitive. If your file is <code>diagram.PNG</code>, use that exact name.</p>
+      </section>
+
+      <!-- 6) References -->
+      <section class="card" id="refs">
+        <h2>6) Citations & bibliography (BibTeX)</h2>
+        <p>Create <code>refs.bib</code> and paste entries in BibTeX format. Cite them in your text:</p>
+        <div class="codeblock" data-code>
+          <div class="bar"><span style="opacity:.85">refs.bib</span><button class="copy-btn" data-copy>Copy</button></div>
+<pre><code>@article{einstein1905,
+  title={Zur Elektrodynamik bewegter K\"{o}rper},
+  author={Einstein, Albert},
+  journal={Annalen der Physik},
+  year={1905}
+}
+</code></pre>
+        </div>
+
+        <div class="codeblock" data-code>
+          <div class="bar"><span style="opacity:.85">main.tex (bibliography)</span><button class="copy-btn" data-copy>Copy</button></div>
+<pre><code>\usepackage[numbers]{natbib}  % or use biblatex
+\bibliographystyle{plainnat}
+
+In 1905, \citet{einstein1905} proposed...
+
+% Place these near the end of the document
+\bibliography{refs}
+</code></pre>
+        </div>
+        <details>
+          <summary>Using biblatex instead of natbib</summary>
+          <div class="codeblock" data-code>
+            <div class="bar"><span style="opacity:.85">biblatex setup</span><button class="copy-btn" data-copy>Copy</button></div>
+<pre><code>\usepackage[backend=biber,style=numeric]{biblatex}
+\addbibresource{refs.bib}
+
+As shown by \cite{einstein1905}...
+
+\printbibliography
+</code></pre>
+          </div>
+          <p class="callout">If you switch to <code>biber</code> (for biblatex), set the compiler to <em>XeLaTeX</em> or <em>LuaLaTeX</em> + <em>Biber</em> in <strong>Menu → Settings</strong>.</p>
+        </details>
+      </section>
+
+      <!-- 7) Collaboration -->
+      <section class="card" id="collab">
+        <h2>7) Collaboration, history & versions</h2>
+        <ul class="checks">
+          <li><strong>Share</strong>: Invite teammates with view or edit permissions.</li>
+          <li><strong>Review</strong>: Use comments and tracked changes in the <em>Review</em> panel.</li>
+          <li><strong>History</strong>: <em>Menu → History</em> to restore earlier versions.</li>
+          <li><strong>Branches</strong>: Duplicate a project to try big changes safely.</li>
+        </ul>
+      </section>
+
+      <!-- 8) Export -->
+      <section class="card" id="export">
+        <h2>8) Exporting & submitting</h2>
+        <ul class="checks">
+          <li><strong>Download PDF</strong>: Use the PDF menu (top‑right of preview) → <em>Download PDF</em>.</li>
+          <li><strong>Download source</strong>: <em>Menu → Download as ZIP</em> to keep all <code>.tex</code>, images, and <code>.bib</code> files.</li>
+          <li><strong>Journal/Conference</strong>: If a template says <code>\\documentclass{IEEEtran}</code> (etc.), keep their instructions unchanged.</li>
+        </ul>
+      </section>
+
+      <!-- 9) Troubleshooting -->
+      <section class="card" id="troubleshoot">
+        <h2>9) Troubleshooting</h2>
+        <h3>Common errors</h3>
+        <ul>
+          <li><strong>Undefined control sequence</strong>: A command or package is missing. Check spelling and packages.</li>
+          <li><strong>File not found</strong>: The filename (and extension) must match exactly. Re‑upload if needed.</li>
+          <li><strong>Label(s) may have changed</strong>: Recompile twice so cross‑references update.</li>
+        </ul>
+        <h3>Switching compilers</h3>
+        <p>For fonts/Unicode or certain packages, try <em>Menu → Settings → Compiler: XeLaTeX</em> (or LuaLaTeX). Recompile twice.</p>
+        <div class="callout danger"><strong>Stuck?</strong> Comment out recent edits to isolate the issue. Errors often point near, not at, the cause.</div>
+      </section>
+
+      <!-- 10) Tips -->
+      <section class="card" id="shortcuts">
+        <h2>10) Handy Overleaf tips & shortcuts</h2>
+        <ul>
+          <li><strong>Autocomplete</strong>: Type <code>\\sec</code> then press <kbd>Tab</kbd>.</li>
+          <li><strong>Symbols</strong>: Click the <em>π</em> icon for math symbols.</li>
+          <li><strong>Split editor</strong>: Right‑click a tab → <em>Open in split view</em>.</li>
+          <li><strong>Keyboard</strong>: <kbd>Ctrl/Cmd</kbd> + <kbd>S</kbd> forces recompile; <kbd>Ctrl/Cmd</kbd> + <kbd>L</kbd> jumps to line.</li>
+          <li><strong>Search in files</strong>: <kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd>.</li>
+        </ul>
+        <details>
+          <summary>Sample preamble for course reports</summary>
+          <div class="codeblock" data-code>
+            <div class="bar"><span style="opacity:.85">report preamble</span><button class="copy-btn" data-copy>Copy</button></div>
+<pre><code>\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue}
+</code></pre>
+          </div>
+        </details>
+      </section>
+
+      <!-- 11) Local install (NEW) -->
+      <section class="card" id="local">
+        <h2>11) Installing LaTeX locally (optional)</h2>
+        <p>Overleaf runs LaTeX in the cloud, but you can also install a full LaTeX distribution on your own computer to compile documents offline.</p>
+        <ul class="checks">
+          <li><a href="https://tug.org/mactex/" target="_blank" rel="noopener">Download MacTeX</a> (for macOS)</li>
+          <li><a href="https://miktex.org/download" target="_blank" rel="noopener">Download MiKTeX</a> (for Windows)</li>
+          <li><a href="https://www.tug.org/texlive/" target="_blank" rel="noopener">Download TeX Live</a> (multi‑platform, including Linux)</li>
+        </ul>
+        <p class="callout warn"><strong>Note:</strong> Local installations are large (often several GB) but useful if you need to work without internet or want custom compiler settings.</p>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="container">
+    <p>Made for students learning LaTeX on Overleaf. Copy any block above into your project.</p>
+  </footer>
+
+  <script>
+    // Smooth anchor scrolling that accounts for the sticky header
+    (function(){
+      function headerH(){
+        const h=document.querySelector('header.site');
+        return (h?h.getBoundingClientRect().height:72)+8;
+      }
+      function scrollToId(id){
+        const el=document.querySelector(id);
+        if(!el) return;
+        const y=window.scrollY+el.getBoundingClientRect().top-headerH();
+        window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+      }
+      document.querySelectorAll('.toc a').forEach(a=>{
+        a.addEventListener('click',e=>{
+          const href=a.getAttribute('href');
+          if(href&&href.startsWith('#')){
+            e.preventDefault();
+            scrollToId(href);
+            history.replaceState(null,'',href);
+          }
+        });
+      });
+    })();
+
+    // Copy-to-clipboard for code blocks
+    document.querySelectorAll('[data-copy]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const pre=btn.closest('[data-code]').querySelector('pre');
+        const text=pre.innerText;
+        navigator.clipboard.writeText(text).then(()=>{
+          const old=btn.textContent; btn.textContent='Copied!'; btn.disabled=true;
+          setTimeout(()=>{btn.textContent=old; btn.disabled=false;}, 1200);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
