@@ -267,10 +267,10 @@
     const target = document.getElementById('last-updated') || document.querySelector('#last-updated span');
     if (!target) return;
 
-    const OWNER  = 'merrickmath';   // GitHub username or org
-    const REPO   = 'Div34Math';     // Repository name (adjust if different)
-    const BRANCH = '';              // e.g. 'gh-pages' if needed
-    const siteBase = '/Div34Math/'; // adjust if site path differs
+    const OWNER  = 'MerrickMath';   // GitHub username or org
+    const REPO   = 'MerrickMath.github.io';     // Repository name
+    const BRANCH = '';              // leave blank for default branch (main)
+    const siteBase = '/'; // user site is served from root
 
     let path = window.location.pathname;
     if (siteBase && path.startsWith(siteBase)) path = path.slice(siteBase.length);
