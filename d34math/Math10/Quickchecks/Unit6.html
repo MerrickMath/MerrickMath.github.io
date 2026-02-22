@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Unit 6 Quick Check </title>
+  <style>
+    :root{
+      --bg:#fbfaf8; --panel:#ffffff; --ink:#161616;
+      --muted:#5f616d; --border:#ece7df;
+      --brand:#2563eb; --good:#15803d;
+    }
+  
+    /* Base */
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font:15px/1.45 "KaTeX_Main","Latin Modern Roman","Computer Modern",
+                       "STIX Two Text","Times New Roman",serif;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+  
+    /* Frame */
+    .container{max-width:880px; margin:0 auto; padding:16px}
+    header{
+      display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between;
+      gap:8px; margin-bottom:12px
+    }
+    header h1{margin:0; font-size:clamp(18px,2.4vw,22px); letter-spacing:.2px}
+    header .sub{color:var(--muted); font-size:12px}
+    .toolbar{display:flex; gap:8px; flex-wrap:wrap}
+    button{
+      border:1px solid var(--border); background:#fff;
+      padding:7px 10px; border-radius:10px; cursor:pointer; font-size:13px
+    }
+    button.brand{background:#eef3ff; border-color:#d8e2ff; color:#0c2a7a; font-weight:600}
+  
+    /* Cards / sections */
+    .card{
+      background:var(--panel); border:1px solid var(--border);
+      border-radius:12px; padding:14px 16px;
+      box-shadow:0 1px 6px rgba(0,0,0,.04); margin-bottom:12px
+    }
+    .card h2{margin:0 0 6px 0; font-size:16px}
+    .kicker{
+      color:var(--muted); font-size:11px; text-transform:uppercase;
+      letter-spacing:.35px; margin-bottom:6px
+    }
+    .divider{
+      height:1px; margin:8px 0;
+      background:linear-gradient(90deg, transparent, var(--border), transparent)
+    }
+  
+    /* Question rows */
+    .card > div{margin:6px 0}
+    .mc-choices{
+      display:grid; gap:6px; margin-top:6px;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    }
+    @media (min-width:700px){ .mc-choices{grid-template-columns:repeat(2,1fr)} }
+    @media (min-width:1000px){ .mc-choices{grid-template-columns:repeat(4,1fr)} }
+  
+    .choice{
+      display:flex; gap:6px; align-items:flex-start;
+      border:1px dashed var(--border); border-radius:8px;
+      padding:6px 8px; background:#fff; font-size:14px
+    }
+  
+    /* Answers */
+    .ans{color:var(--good); font-weight:600; margin-top:6px; font-size:14px}
+    .ans[hidden]{display:none!important}
+  
+    /* Answer key: hidden on screen, shown only when printing */
+    #answerKey{display:none}
+  
+    /* Print */
+    @media print {
+      .toolbar { display: none }
+      body { background:#fff }
+      .card { box-shadow:none }
+  
+      /* hide inline answers in quiz */
+      .ans { display:none !important }
+  
+      /* show compiled answer key on new page */
+      #answerKey {
+        display:block;
+        page-break-before:always;
+        font-size:14px;
+        padding:0 8px;
+      }
+      #answerKey h2 {
+        margin:0 0 8px 0;
+        font-size:16px;
+      }
+      #answerKey .ansItem{margin:4px 0}
+    }
+  </style>
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Unit 6 Quick Check</h1>
+        <div class="sub">Math with Mr. Merrick • Math 10</div>
+      </div>
+      <div class="toolbar">
+        <button id="generate" class="brand">🔀 Generate New Version</button>
+        <button id="toggleKey" aria-pressed="false">🧠 Show Answers</button>
+        <button id="printBtn">🖨️ Print</button>
+      </div>
+    </header>
+
+    <div id="quiz"></div>
+    <div id="answerKey"></div>
+  </div>
+
+  <script>
+    function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+    function typeset(el){ if(window.renderMathInElement){ window.renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false}],throwOnError:false}); } }
+
+    const BANK = [
+    {
+        title:'A. Multiple Choice',
+        note:'Select one option.',
+        items:[
+          {type:'mcgen', gen: genMCU6_Distance},
+          {type:'mcgen', gen: genMCU6_Midpoint},
+          {type:'mcgen', gen: genMCU6_SlopeTwoPoints},
+          {type:'mcgen', gen: genMCU6_ParallelSlopeFromGeneral},
+          {type:'mcgen', gen: genMCU6_PerpendicularSlopeFromSlope},
+          {type:'mcgen', gen: genMCU6_GeneralFormFromSlopeIntercept},
+          {type:'mcgen', gen: genMCU6_WhichHasYintNeg4},
+          {type:'mcgen', gen: genMCU6_SlopeFromGeneral},
+          {type:'mcgen', gen: genMCU6_Steepest},
+          {type:'mcgen', gen: genMCU6_PerpendicularThroughOrigin}
+        ]
+      },
+      {
+        title:'B. Numeric Response',
+        note:'Enter a number or a comma-separated pair as instructed.',
+        items:[
+          { type:'gen', gen: genNRU6_DistanceHalfInt },                 // numeric (single)
+          { type:'gen', gen: genNRU6_Midpoint },                        // numeric pair "(x,y)" — keep if acceptable; or swap to x-only if you prefer single
+          { type:'gen', gen: genNRU6_FindKGivenMidpoint },              // numeric (single)
+          { type:'gen', gen: genNRU6_LineThroughTwoPointsSlopeIntercept_NUM }, // "m,b"
+          { type:'gen', gen: genNRU6_XInterceptOnly_NUM },              // single number
+          { type:'gen', gen: genNRU6_ParallelLine_Conly_NUM },          // single number C'
+          { type:'gen', gen: genNRU6_CarSpeedIntercept_NUM }            // "m,b"
+        ]
+      },
+      {
+        title:'C. Written Response',
+        note:'Show full reasoning.',
+        items:[
+          { type:'gen', gen: genWRU6_DeriveDistance },
+          { type:'gen', gen: genWRU6_ParallelPerpProof },
+          { type:'gen', gen: genWRU6_PerpendicularBisector },
+          { type:'gen', gen: genWRU6_SectionRatio },
+          { type:'gen', gen: genWRU6_SlopeToGeneral },
+          { type:'gen', gen: genWRU6_PointPerpToGiven },
+          { type:'gen', gen: genWRU6_Collinearity },
+          { type:'gen', gen: genWRU6_InterceptGraphAndSlope },
+          { type:'gen', gen: genWRU6_TemperatureModel },
+          { type:'gen', gen: genWRU6_ThroughPointGivenSlopeAllForms },
+          { type:'gen', gen: genWRU6_FindKForParallel },
+          { type:'gen', gen: genWRU6_PointSlopeToIntercepts }
+        ]
+      },
+      {
+        title:'D. Enrichment',
+        note:'Challenge problems.',
+        items:[
+          { type:'gen', gen: genEU6_LatticePointsOnSegment },
+          { type:'gen', gen: genEU6_DistancePointToLine },
+          { type:'gen', gen: genEU6_TriangleAreaParam },
+          { type:'gen', gen: genEU6_DistanceBetweenParallels },
+          { type:'gen', gen: genEU6_SlopeRotationExplain },
+          { type:'gen', gen: genEU6_ConvertFormsAtXIntercept }
+        ]
+      }
+
+    ];
+
+    const quizEl = document.getElementById('quiz');
+
+    // ---------- MC helper utilities ----------
+    const ri = (a,b)=>Math.floor(Math.random()*(b-a+1))+a;     // random int in [a,b]
+    const sample = (arr)=>arr[ri(0,arr.length-1)];
+
+    // exact square extraction: n = s^2 * m  (m squarefree)
+    function extractSquare(n){
+      let s = 1, m = n, d = 2;
+      while (d*d <= m){
+        while (m % (d*d) === 0){ s *= d; m /= d*d; }
+        d++;
+      }
+      return { s, m };
+    }
+    // arithmetic series sum of multiples of k on [L,U]
+    function sumMultiples(k, L, U){
+      const a1 = Math.ceil(L/k)*k, an = Math.floor(U/k)*k;
+      if (a1 > an) return 0;
+      const n = Math.floor((an - a1)/k) + 1;
+      return n * (a1 + an) / 2;
+    }
+
+    function genWR_SimplifyMonomialRoot(){
+      const K = ri(30,150);
+      const a = ri(2,8), b = ri(2,8);
+      const outX = Math.floor(a/2), outY = Math.floor(b/2);
+      const remX = a%2, remY = b%2;
+      const { s, m } = extractSquare(K);
+      const outsideParts = [];
+      if (s>1) outsideParts.push(String(s));
+      if (outX>0) outsideParts.push(`x^{${outX}}`);
+      if (outY>0) outsideParts.push(`y^{${outY}}`);
+      const insideParts = [];
+      if (m>1) insideParts.push(String(m));
+      if (remX) insideParts.push('x');
+      if (remY) insideParts.push('y');
+      const outside = outsideParts.join('');
+      const inside = insideParts.length ? `\\sqrt{${insideParts.join('\\,')}}` : '';
+      const ans = outside && inside ? `${outside}${inside}` : (inside || outside || '1');
+    
+      return {
+        q: `Simplify $\\sqrt{${K}\\,x^{${a}}y^{${b}}}$ for $x,y\\ge 0$.`,
+        answer: `$${ans}$`
+      };
+    }
+
+    
+
+    function genWR_RationalizeSimple(){
+      // choose N with a square factor and C so it reduces nicely
+      const N = ri(18,80);
+      const C = ri(4,18);
+      const { s, m } = extractSquare(N);  // sqrt(N)=s*sqrt(m)
+      // c/sqrt(N) = c*s*sqrt(m)/N -> reduce rational factor
+      const num = C*s, den = N;
+      const g = gcd(num, den);
+      const num2 = num/g, den2 = den/g;
+      const ans = m===1 ? `\\dfrac{${num2}}{${den2}}` : `\\dfrac{${num2}\\sqrt{${m}}}{${den2}}`;
+    
+      return {
+        q: `Rationalize and simplify: $\\dfrac{${C}}{\\sqrt{${N}}}$.`,
+        answer: `$${ans}$`
+      };
+    }
+
+    function genWR_RepeatingToFraction(){
+      const I = ri(1,12);                // integer part
+      const r = sample([1,2]);           // period length
+      const d1 = ri(1,9), d2 = ri(0,9);
+      const R = r===1 ? d1 : (10*d1 + d2);
+      const pow = r===1 ? 10 : 100;      // 10^r
+      const denom = pow - 1;
+      const num = I*denom + R;           // I + R/(10^r-1) => (I(10^r-1)+R)/(10^r-1)
+      const g = gcd(num, denom);
+      const numS = (num/g), denS = (denom/g);
+    
+      return {
+        q: `Convert $${I}.\\overline{${r===1? d1 : `${d1}${d2}`}}$ to a fraction in simplest form.`,
+        answer: `$\\dfrac{${numS}}{${denS}}$`
+      };
+    }
+
+    function genWR_CuberootNegative(){
+      const a = ri(6,20);
+      return {
+        q: `Evaluate $\\sqrt[3]{-${a}^3}$.`,
+        answer: `$-${a}$`
+      };
+    }
+
+    function genWR_PrimeFactorizePairGcdLcm(){
+      // Build two numbers from small primes; ensure not both share all primes
+      const primes=[2,3,5,7,11,13,17,19];
+      function build(){
+        const ps = shuffle(primes.slice(0,5)).slice(0,ri(1,3));
+        let n=1, f={};
+        ps.forEach(p=>{
+          const e=ri(1,2);
+          f[p]=e; n*=p**e;
+        });
+        return {n,f};
+      }
+      let A=build(), B=build();
+      // avoid identical numbers
+      if (A.n===B.n) B=build();
+    
+      function fmt(f){
+        return Object.keys(f).sort((a,b)=>a-b).map(p=>{
+          const e=f[p]; return e===1? `${p}` : `${p}^{${e}}`;
+        }).join('\\cdot ');
+      }
+      // compute gcd/lcm from factorizations
+      const allP = Array.from(new Set([...Object.keys(A.f),...Object.keys(B.f)])).map(Number).sort((x,y)=>x-y);
+      let g=1, L=1;
+      allP.forEach(p=>{
+        const eA=A.f[p]||0, eB=B.f[p]||0;
+        const eg=Math.min(eA,eB), eL=Math.max(eA,eB);
+        if(eg>0) g*=p**eg;
+        if(eL>0) L*=p**eL;
+      });
+    
+      return {
+        q: `Prime factorize ${A.n} and ${B.n}. Hence determine $\\gcd$ and $\\mathrm{lcm}$.`,
+        answer: `$${A.n}=${fmt(A.f)},\\ \\ ${B.n}=${fmt(B.f)};\\ \\ \\gcd=${g},\\ \\mathrm{lcm}=${L}$`
+      };
+    }
+
+    function genWR_PerfectCubeAdjustment(){
+      const a=ri(0,3), b=ri(0,3), c=ri(0,3), d=ri(0,3);
+      const isSquare = (a%2===0)&&(b%2===0)&&(c%2===0)&&(d%2===0);
+      const isCube   = (a%3===0)&&(b%3===0)&&(c%3===0)&&(d%3===0);
+      // minimal exponents to reach multiples of 3
+      const need = e => (3 - (e%3))%3;
+      const ma=need(a), mb=need(b), mc=need(c), md=need(d);
+      const parts=[];
+      if(ma) parts.push(`2^{${ma}}`);
+      if(mb) parts.push(`3^{${mb}}`);
+      if(mc) parts.push(`5^{${mc}}`);
+      if(md) parts.push(`7^{${md}}`);
+      const m = parts.length? parts.join('\\cdot ') : '1';
+    
+      return {
+        q: `Let $N=2^{${a}}\\cdot 3^{${b}}\\cdot 5^{${c}}\\cdot 7^{${d}}$. Decide whether $N$ is a perfect square and/or a perfect cube. If not a cube, find the least positive integer $m$ so that $Nm$ is a perfect cube.`,
+        answer: `${isSquare? 'Square: yes':'Square: no'}, ${isCube? 'Cube: yes':'Cube: no'}, $m=${m}$`
+      };
+    }
+
+
+    function genWR_SimplifyRadicalFraction(){
+      // random but safe exponents (no negatives after division)
+      const A = ri(20, 40), B = ri(20, 40), C = ri(2, 12);
+      let p = ri(1, 3), q = ri(2, 4), r = ri(1, 3), s = ri(1, 3), t = ri(1, 2);
+    
+      // ensure x exponent stays ≥ 0 after p+r−t
+      if (p + r - t < 0) { r += (t - (p + r)); }
+    
+      // combine numeric coefficients as a reduced fraction
+      let num = A * B, den = C;
+      const g1 = gcd(num, den); num /= g1; den /= g1;
+    
+      // pull out perfect squares from numerator/denominator separately
+      const { s: sNum, m: mNum } = extractSquare(num);
+      const { s: sDen, m: mDen } = extractSquare(den);
+    
+      // variable exponents
+      const xExp = p + r - t, yExp = q + s;
+      const xOut = Math.floor(xExp / 2), yOut = Math.floor(yExp / 2);
+      const xIn  = xExp % 2,           yIn  = yExp % 2;
+    
+      // outside factor (numeric fraction * outside vars)
+      const outsideNum = (sDen > 1)
+        ? `\\dfrac{${sNum}}{${sDen}}`
+        : (sNum > 1 ? String(sNum) : '');
+      const outsideVars = [
+        xOut ? `x^{${xOut}}` : '',
+        yOut ? `y^{${yOut}}` : ''
+      ].filter(Boolean).join('');
+      const outside = [outsideNum, outsideVars].filter(Boolean).join('');
+    
+      // inside radicand (reduced numeric * leftover vars)
+      const insideNum = (mDen > 1)
+        ? `\\dfrac{${mNum}}{${mDen}}`
+        : (mNum > 1 ? String(mNum) : '');
+      const insideParts = [
+        insideNum,
+        xIn ? 'x' : '',
+        yIn ? 'y' : ''
+      ].filter(Boolean).join('\\,');
+    
+      const sqrtPart = insideParts ? `\\sqrt{${insideParts}}` : '';
+      let ansCore = `${outside}${sqrtPart}`;
+      if (!ansCore) ansCore = '1';
+    
+      // QUESTION: inline math only ($...$) — no \[...\]
+      const qTex =
+        `Simplify and write with radicals (no negative exponents): ` +
+        `$\\dfrac{\\sqrt{${A}x^{${p}}y^{${q}}}\\,\\cdot\\,\\sqrt{${B}x^{${r}}y^{${s}}}}{\\sqrt{${C}x^{${t}}}}\\; (x,y\\ge 0).$`;
+    
+      return {
+        q: qTex,
+        answer: `$${ansCore}$`
+      };
+    }
+
+
+    function genWR_SumMultiples2or3(){
+      let L = ri(100,300), U = ri(700,1200);
+      if (L>U) [L,U]=[U,L];
+    
+      const S2  = sumMultiples(2,L,U);
+      const S3  = sumMultiples(3,L,U);
+      const S6  = sumMultiples(6,L,U);
+      const total = S2 + S3 - S6;
+    
+      return {
+        q: `Find the sum of all integers between $${L}$ and $${U}$ inclusive that are multiples of $2$ or $3$.`,
+        answer: `$${total}$ \\; with\\; sums\\; S_2=${S2},\\ S_3=${S3},\\ S_6=${S6}.`
+      };
+    }
+
+    function genWR_Babylonian(){
+      const N = ri(50,150);
+      // start at integer guess x0 = floor(sqrt(N)) or a nearby integer
+      const x0 = Math.max(1, Math.floor(Math.sqrt(N)));
+      const x1 = 0.5*(x0 + N/x0);
+      const x2 = 0.5*(x1 + N/x1);
+      const approx = Math.round(x2*10000)/10000;
+      return {
+        q: `Use two iterations to approximate $\\sqrt{${N}}$ correct to four decimal places (start $x_0=${x0}$).`,
+        answer: `$x_1=${x1.toFixed(9)},\\ x_2=${x2.toFixed(9)};\\ \\sqrt{${N}}\\approx ${approx.toFixed(4)}$`
+      };
+    }
+
+
+    
+    
+    function isPrime(n){
+      if(n<2) return false;
+      if(n%2===0) return n===2;
+      for(let d=3; d*d<=n; d+=2) if(n%d===0) return false;
+      return true;
+    }
+    
+    function randPrime(min=50,max=300){
+      let n=ri(min,max);
+      while(!isPrime(n)) n=ri(min,max);
+      return n;
+    }
+    
+    function randComposite(min=50,max=300){
+      let n=ri(min,max);
+      while(isPrime(n)) n=ri(min,max);
+      return n;
+    }
+    
+    function gcd(a,b){ a=Math.abs(a); b=Math.abs(b);
+      while(b){ [a,b]=[b,a%b]; }
+      return a;
+    }
+    function lcm(a,b){ return Math.abs(a*b)/gcd(a,b); }
+    
+    function primeFactorization(n){
+      const f = {};
+      let d=2, x=n;
+      while(d*d<=x){
+        while(x%d===0){ f[d]=(f[d]||0)+1; x/=d; }
+        d+= (d===2?1:2);
+      }
+      if(x>1) f[x]=(f[x]||0)+1;
+      return f; // {prime: exp, ...}
+    }
+    function fmtFactorization(f){
+      const parts = Object.keys(f).sort((a,b)=>a-b).map(p=>{
+        const e=f[p];
+        return e===1? `${p}` : `${p}^{${e}}`;
+      });
+      return parts.join('\\cdot ');
+    }
+    
+    function squarefree(n){
+      const f=primeFactorization(n);
+      return Object.values(f).every(e=>e===1);
+    }
+
+    function genMC_Prime(){
+      const correct = randPrime(100,300);
+      const wrongs = new Set();
+      while(wrongs.size<3){ wrongs.add(randComposite(90,320)); }
+      const choices = [correct, ...wrongs].map(x=>`$${x}$`);
+      // shuffle while tracking correct index
+      const order = choices.map((_,i)=>i);
+      order.sort(()=>Math.random()-0.5);
+      const shuffled = order.map(i=>choices[i]);
+      const answerIndex = order.indexOf(0);
+      return { q:'Which of the following is a prime number?', choices:shuffled, answerIndex };
+    }
+
+    function genMC_PrimeFactorization(){
+      // build n with small primes
+      const primes=[2,3,5,7];
+      const exps = primes.map(p=>ri(0,2));
+      if(exps.every(e=>e===0)) exps[ri(0,3)]=1; // ensure >1
+      let n=1; exps.forEach((e,i)=>{ n*=Math.pow(primes[i],e); });
+      const f={}; primes.forEach((p,i)=>{ if(exps[i]>0) f[p]=exps[i]; });
+      const correct = `$${fmtFactorization(f)}$`;
+    
+      // plausible wrongs: tweak one exponent
+      const wrongs=[];
+      for(let k=0;k<3;k++){
+        const g={...f};
+        const keys=Object.keys(g);
+        if(keys.length===0){ g[2]=1; }
+        const pick = sample(keys.length?keys:['2']);
+        g[pick] = Math.max(1,(g[pick]||0) + (Math.random()<0.5?-1:1));
+        wrongs.push(`$${fmtFactorization(g)}$`);
+      }
+    
+      const choices=[correct,...wrongs];
+      const order = choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return {
+        q:'The prime factorization of $n$ (given) is',  // you can customize "n" text if desired
+        choices: order.map(i=>choices[i]),
+        answerIndex: order.indexOf(0)
+      };
+    }
+
+    function genMC_GCD(){
+      const g = sample([1,2,3,4,5,6]);
+      const a = g*ri(10,40);
+      const b = g*ri(10,40);
+      const correct = `$${g}$`;
+      const pool=[1,2,3,4,5,6,7,8,9].filter(x=>x!==g);
+      const wrongs = shuffle(pool).slice(0,3).map(x=>`$${x}$`);
+      const choices=[correct,...wrongs];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:`$\\gcd(${a},\\,${b})$ equals`, choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+    function genMC_LCM(){
+      let a=ri(6,20), b=ri(6,20);
+      const L = lcm(a,b);
+      const correct = `$${L}$`;
+      const wrongs = [
+        `$${a+b}$`, `$${a*b}$`, '$1$'
+      ];
+      const choices=[correct,...wrongs];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:`$\\mathrm{lcm}(${a},\\,${b})$ equals`, choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+    function genMC_PerfectSquare(){
+      const primes=[2,3,5];
+      const evenExp = ()=>2*ri(1,3);
+      const oddExp  = ()=>2*ri(1,3)-1;
+    
+      const correctParts = primes.map(p=>`${p}^{${evenExp()}}`);
+      const correct = `$${correctParts.join('\\cdot ')}$`;
+    
+      function wrong(){
+        const parts = primes.map(p=>`${p}^{${(Math.random()<0.5?oddExp():evenExp())}}`);
+        // force at least one odd
+        if(parts.every(s=>/^\d+\^\{[02468]\}$/.test(s.replace(/\\cdot/g,'')))){
+          const idx=ri(0,2);
+          const base=primes[idx];
+          parts[idx]=`${base}^{${oddExp()}}`;
+        }
+        return `$${parts.join('\\cdot ')}$`;
+      }
+      const choices=[correct, wrong(), wrong(), wrong()];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:'Which is a perfect square?', choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+    function genMC_PerfectCube(){
+      const primes=[2,3,5];
+      const mult3 = ()=>3*ri(1,3);
+      const not3  = ()=>3*ri(1,3)+(Math.random()<0.5?1:2);
+    
+      const correct = `$${primes.map(p=>`${p}^{${mult3()}}`).join('\\cdot ')}$`;
+      const wrong = ()=>`$${primes.map(p=>`${p}^{${not3()}}`).join('\\cdot ')}$`;
+    
+      const choices=[correct, wrong(), wrong(), wrong()];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:'Which is a perfect cube?', choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+    
+    function genMC_EntireRadical(){
+      const a = ri(2,9);
+      // choose b squarefree to mirror your style
+      let b = ri(10,30);
+      while(!squarefree(b)) b=ri(10,30);
+      const correct = `$\\sqrt{${a*a}\\cdot ${b}}$`;
+      const wrongs = [
+        `$\\sqrt{${a}\\cdot ${b}}$`,
+        `$\\sqrt{${Math.pow(a,3)}\\cdot ${b}}$`,
+        `$\\sqrt{${a*b}}$`
+      ];
+      const q = `Write $${a}\\sqrt{${b}}$ as an entire radical.`;
+      const choices=[correct,...wrongs];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q, choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+
+    // --- Which is a perfect fourth power? ---
+    function genMC_FourthPower(){
+      const a = ri(2,8);
+      const correct = `$${a**4}$`;
+      const wrongs = [`$${a**3}$`, `$${a**4 - 1}$`, `$${a**4 + ri(1,5)}$`];
+      const choices = [correct, ...wrongs];
+      const order = choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return {
+        q: 'Which of the following is a perfect fourth power?',
+        choices: order.map(i=>choices[i]),
+        answerIndex: order.indexOf(0)
+      };
+    }
+
+    
+    function genMC_MixedRadical(){
+      // pick n having a square factor
+      const k=ri(2,10), r=ri(2,10);
+      const n = (k*k)*r;
+      const correct = `$${k}\\sqrt{${r}}$`;
+      const wrongs = [
+        `$${k*r}\\sqrt{1}$`,
+        `$${k}\\sqrt{${k*k}}$`,
+        `$\\sqrt{${n}}$`
+      ];
+      const q = `Convert to mixed radical: $\\sqrt{${n}}$`;
+      const choices=[correct,...wrongs];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q, choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+
+    function genMC_SimplifyRootXY(){
+      let k = ri(50,120);
+      const a = ri(2,8), b = ri(2,8);
+      const outX = Math.floor(a/2), outY = Math.floor(b/2);
+      const remX = a%2, remY = b%2;
+      const insideParts = [String(k)];
+      if(remX) insideParts.push('x');
+      if(remY) insideParts.push('y');
+      const inside = insideParts.join('\\,');
+      const outside = [outX?`x^{${outX}}`:null, outY?`y^{${outY}}`:null].filter(Boolean).join('');
+      const correct = `$${outside?outside:''}\\sqrt{${inside}}$`.replace('^1','');
+    
+      const wrongs = [
+        `$${outside?outside:''}\\sqrt{${k}}$`,
+        `$${outside?outside:''}\\sqrt{${k}\\,y}$`,
+        `$\\sqrt{${k}}${outside?outside:''}$`
+      ];
+      const q = `Simplify $\\sqrt{${k}\\,x^{${a}}y^{${b}}}$ for $x,y\\ge 0$.`;
+      const choices=[correct,...wrongs];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q, choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+    function genMC_CuberootNeg(){
+      const a = ri(5,15);
+      const correct = `$-${a}$`;
+      const wrongs = [`$${a}$`, `$-${a+1}$`, `$-${a-1}$`];
+      const q = `$\\sqrt[3]{-${a**3}}$ equals`;
+      const choices=[correct,...wrongs];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q, choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+    function genMC_Irrational(){
+      const mns=[2,3,5,6,7,8,10,11,12,13,14,15,17,18,19];
+      const irr = `$\\sqrt{${sample(mns)}}$`;
+      const rat1 = `$0.\\overline{${ri(1,9)}${ri(1,9)}}$`;
+      const rat2 = `$\\dfrac{${ri(2,9)}}{${ri(10,20)}}$`;
+      const rat3 = `$${ri(1,9)}.${ri(10,99)}$`;
+      const choices = [irr, rat1, rat2, rat3];
+      const order = choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:'Which number is \\emph{irrational}?', choices: order.map(i=>choices[i]), answerIndex: order.indexOf(0) };
+    }
+
+
+    function genMC_SimplifyProductRoots(){
+      // choose a,b so ab has a square factor
+      const s = [4,9,16,25][ri(0,3)];
+      const t = ri(2,12);
+      const a = s; const b = t;
+      const ab = a*b;
+      // fully simplify √ab
+      let x=ab, out=1, d=2;
+      while(d*d<=x){
+        while(x%(d*d)===0){ out*=d; x/=d*d; }
+        d++;
+      }
+      const correct = `$${out>1?out:''}\\sqrt{${x}}$`.replace('^1','');
+      const wrongs = [`$\\sqrt{${ab}}$`, `$${out}\\sqrt{${ab}}$`, `$${out>1?out:''}\\sqrt{${a+b}}$`];
+      const q = `Simplify $\\sqrt{${a}}\\cdot \\sqrt{${b}}$.`;
+      const choices=[correct,...wrongs];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q, choices:order.map(i=>choices[i]), answerIndex:order.indexOf(0) };
+    }
+
+    // ---------- Numeric Response generators ----------
+
+    // NR1: gcd(a,b) where gcd is guaranteed and non-trivial
+    function genNR_GCD(){
+      // pick target gcd g and coprime multipliers u,v so gcd(gu, gv) = g
+      const g = ri(2, 12);
+      let u = ri(10, 60), v = ri(10, 60);
+      // force coprime u,v
+      while (gcd(u, v) !== 1) { u = ri(10, 60); v = ri(10, 60); }
+      const a = g * u, b = g * v;
+    
+      return {
+        q: `Calculate $\\gcd(${a},\\,${b})$.`,
+        answer: `$${g}$`
+      };
+    }
+    
+    // NR2: lcm of three integers where each is a divisor of a constructed L, so lcm(a,b,c)=L
+    function genNR_LCM3(){
+      // Build an L from small prime exponents
+      const e2 = ri(1,3), e3 = ri(0,2), e5 = ri(0,2), e7 = ri(0,2);
+      const L = (2**e2) * (3**e3) * (5**e5) * (7**e7);
+    
+      // Helper to pick a divisor by lowering exponents randomly
+      function pickDiv(){
+        const f2 = ri(0, e2), f3 = ri(0, e3), f5 = ri(0, e5), f7 = ri(0, e7);
+        return (2**f2) * (3**f3) * (5**f5) * (7**f7);
+      }
+      // Ensure not all equal tiny numbers; regenerate if too small/duplicate
+      let a = pickDiv(), b = pickDiv(), c = pickDiv();
+      for(let tries=0; tries<10 && new Set([a,b,c]).size<3; tries++){ a = pickDiv(); b = pickDiv(); c = pickDiv(); }
+    
+      return {
+        q: `Calculate $\\mathrm{lcm}(${a},\\,${b},\\,${c})$.`,
+        answer: `$${L}$`
+      };
+    }
+    
+    // NR3: Sum of exponents a+b+c+d when N is given as a numeric value with known prime exponents
+    function genNR_SumPrimeExponents(){
+      // choose exponents (allow 0 for variety, but not all zero)
+      let a = ri(0,3), b = ri(0,3), c = ri(0,3), d = ri(0,3);
+      if (a+b+c+d === 0) { // ensure not all zero
+        const slot = ri(0,3);
+        if (slot===0) a = 1; else if (slot===1) b = 1; else if (slot===2) c = 1; else d = 1;
+      }
+      const N = (2**a) * (3**b) * (5**c) * (7**d);
+      const sum = a + b + c + d;
+    
+      return {
+        q: `Let the prime factorization of $${N}$ be $2^{a}\\cdot 3^{b}\\cdot 5^{c}\\cdot 7^{d}$. Compute $a+b+c+d$.`,
+        answer: `$${sum}$`
+      };
+    }
+
+
+    function renderQuiz(){
+      // reset quiz and answer key
+      quizEl.innerHTML = '';
+      const keyEl = document.getElementById('answerKey');
+      if (keyEl) keyEl.innerHTML = '';
+    
+      let qCounter = 1;
+      const ansItems = []; // lines for the printed Answer Key
+    
+      BANK.forEach(sec=>{
+        const card = document.createElement('div');
+        card.className = 'card';
+        // NOTE: BANK uses "title", not "section"
+        card.innerHTML = `<h2>${sec.title || sec.section || ''}</h2>` +
+                         `<div class="divider"></div>`;
+    
+        sec.items.forEach(item=>{
+          // --- Legacy fixed MC (if any remain) ---
+          if (item.type === 'mc') {
+            const shuffled = shuffle(item.choices.slice());
+            const opts = shuffled.map((c,i)=>{
+              const letter = String.fromCharCode(65+i);
+              return `<div class="choice">(${letter}) <span class="math">${c}</span></div>`;
+            }).join('');
+    
+            card.innerHTML +=
+              `<div><strong>${qCounter}. </strong><span class="math">${item.q}</span></div>`+
+              `<div class="mc-choices">${opts}</div>`+
+              `<div class="ans math" hidden>Answer: ${item.answer}</div>`;
+    
+            ansItems.push(`<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${item.answer}</span></div>`);
+            qCounter++;
+          }
+    
+          // --- Generator-based Multiple Choice ---
+          else if (item.type === 'mcgen') {
+            let q, choices, answerIndex;
+            try {
+              ({ q, choices, answerIndex } = item.gen());
+            } catch {
+              q = 'Problem unavailable.'; choices = ['$A$','$B$','$C$','$D$']; answerIndex = 0;
+            }
+    
+            const opts = choices.map((c,i)=>{
+              const letter = String.fromCharCode(65+i);
+              return `<div class="choice">(${letter}) <span class="math">${c}</span></div>`;
+            }).join('');
+    
+            const correct = choices[answerIndex];
+    
+            card.innerHTML +=
+              `<div><strong>${qCounter}. </strong><span class="math">${q}</span></div>`+
+              `<div class="mc-choices">${opts}</div>`+
+              `<div class="ans math" hidden>Answer: ${correct}</div>`;
+    
+            ansItems.push(`<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${correct}</span></div>`);
+            qCounter++;
+          }
+    
+          // --- Generator-based numeric/written (returns {q, answer}) ---
+          else if (item.type === 'gen') {
+            let generated = { q:'Problem unavailable.', answer:'' };
+            try { generated = item.gen(); } catch {}
+            const { q, answer } = generated;
+    
+            card.innerHTML +=
+              `<div><strong>${qCounter}. </strong><span class="math">${q}</span></div>`+
+              `<div class="ans math" hidden>Answer: ${answer}</div>`;
+    
+            ansItems.push(`<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${answer}</span></div>`);
+            qCounter++;
+          }
+    
+          // --- Fallback for fixed text items (numeric/written) if any remain ---
+          else {
+            card.innerHTML +=
+              `<div><strong>${qCounter}. </strong><span class="math">${item.q || ''}</span></div>`+
+              `<div class="ans math" hidden>Answer: ${item.answer || ''}</div>`;
+            ansItems.push(`<div class="ansItem"><strong>${qCounter}.</strong> <span class="math">${item.answer || ''}</span></div>`);
+            qCounter++;
+          }
+        });
+    
+        quizEl.appendChild(card);
+      });
+    
+      // Build the printed Answer Key content
+      if (keyEl) {
+        keyEl.innerHTML = `<h2>Answer Key</h2>${ansItems.join('')}`;
+      }
+    
+      // Typeset math in both quiz and key
+      typeset(quizEl);
+      if (keyEl) typeset(keyEl);
+    }
+
+
+
+
+
+
+    function randomDivisorQuestion(){
+      const n = Math.floor(Math.random()*900+100); // random 100–999
+      // compute divisor count
+      let count=1, num=n, d=2;
+      while(num>1){
+        let exp=0;
+        while(num%d===0){ num/=d; exp++; }
+        if(exp>0) count*=(exp+1);
+        d++;
+        if(d*d>num){ if(num>1){count*=2; break;} }
+      }
+      return {
+        q: `Find the number of positive divisors of $${n}$.`,
+        answer: `${count}`
+      };
+    }
+
+    function randomMultiplesQuestion(){
+      const N = Math.floor(Math.random()*1000+500); // between 500 and 1500
+      const count = Array.from({length:N},(_,i)=>i+1)
+        .filter(k=>(k%3===0||k%4===0)&&k%5!==0).length;
+      return {
+        q: `How many positive integers $<${N}$ are multiples of $3$ or $4$ but not $5$?`,
+        answer: `${count}`
+      };
+    }
+
+    function randomSetQuestion(){
+      // choose an upper bound multiple of 5 between 500–2500
+      const N = Math.floor(Math.random()*1000+1500);  
+      // sums with formulas
+      const nA = Math.floor(N/5);
+      const sumA = 5*nA*(nA+1)/2;
+    
+      const nAB = Math.floor(N/10);
+      const sumAB = 10*nAB*(nAB+1)/2;
+    
+      const nB = Math.floor(N/2);
+      const sumB = 2*nB*(nB+1)/2;
+    
+      const sumAorB = sumA + sumB - sumAB;
+    
+      // (iv) count (B∩C)\A: multiples of 6 not multiples of 5
+      const countBC = Math.floor(N/6);
+      const countBCnotA = Array.from({length:countBC},(_,i) => (i+1)*6)
+        .filter(x => x%5 !== 0).length;
+    
+      // (v) sum of B not (A∪C): multiples of 2, exclude 5 or 3
+      const sumBnot = Array.from({length:nB},(_,i) => (i+1)*2)
+        .filter(x => x%3 !== 0 && x%5 !== 0)
+        .reduce((a,b) => a+b, 0);
+    
+      return {
+        q: `Let $A=\\{\\text{multiples of 5} \\le ${N}\\}$, \
+    $B=\\{\\text{multiples of 2} \\le ${N}\\}$, \
+    $C=\\{\\text{multiples of 3} \\le ${N}\\}$.<br>\
+    (i) $\\sum A$<br>\
+    (ii) $\\sum(A\\cap B)$<br>\
+    (iii) $\\sum(A\\cup B)$<br>\
+    (iv) $|(B\\cap C)\\setminus A|$<br>\
+    (v) $\\sum(B\\setminus(A\\cup C))$`,
+        answer:`(i) ${sumA}, (ii) ${sumAB}, (iii) ${sumAorB}, (iv) ${countBCnotA}, (v) ${sumBnot}`
+      };
+    }
+    
+    function randomDivisors360Question(){
+      // keep base number fixed at 360 but randomize asked properties
+      const divisors=[1,2,3,4,5,6,8,9,10,12,15,18,20,24,30,36,40,45,60,72,90,120,180,360];
+      const total=divisors.length;
+    
+      const even=divisors.filter(x=>x%2===0).length;
+      const mult4=divisors.filter(x=>x%4===0).length;
+      const mult9=divisors.filter(x=>x%9===0).length;
+    
+      const ans1=`${even}/${total}`;
+      const ans2=`(${mult4}/${total})^2`;
+      const ans3=`(${mult9}/${total})*(${mult9-1}/${total-1})`;
+      const ans4=`1-(${total-even}/${total})^2`;
+    
+      return {
+        q:`List all positive divisors of $360$. Then compute:<br>\
+    (i) $P(\\text{even})$<br>\
+    (ii) With replacement, both multiples of $4$<br>\
+    (iii) Without replacement, both multiples of $9$<br>\
+    (iv) With replacement, at least one multiple of $2$`,
+        answer:`(i) ${ans1}, (ii) ${ans2}, (iii) ${ans3}, (iv) ${ans4}`
+      };
+    }
+
+
+    function randomNumberSystemsInclusions(){
+      // helpers
+      const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+      const nonsquares=[2,3,5,6,7,8,10,11,12,13,14,15,17,18,19,21,22,23,26,27];
+    
+      // a) proper fraction p/q (reduced), 0<p<q  -> in Q, R
+      let p = Math.floor(Math.random()*8)+1;       // 1..9
+      let q = Math.floor(Math.random()*9)+2;       // 2..10
+      if(p>=q){ [p,q]=[1,3]; }                     // ensure proper
+      const g1=gcd(p,q); p/=g1; q/=g1;
+    
+      // b) terminating decimal with 1–3 places but not an integer -> in Q, R
+      const places = Math.floor(Math.random()*3)+1; // 1..3
+      const intPart = Math.floor(Math.random()*9);  // 0..8
+      const fracPart = Math.floor(Math.random()*(10**places-1))+1; // not all zeros
+      const bStr = `${intPart}.${String(fracPart).padStart(places,'0')}`;
+    
+      // c) negative integer -> in Z, Q, R (not N or W)
+      const cVal = -(Math.floor(Math.random()*9)+2); // -2..-10
+    
+      // d) natural number (by your convention N={1,2,3,...}) -> in N, W, Z, Q, R
+      const dVal = Math.floor(Math.random()*20)+1;   // 1..20
+    
+      // e) irrational: sqrt of non-square -> in R only
+      const m = nonsquares[Math.floor(Math.random()*nonsquares.length)];
+    
+      // Build prompt (i)–(v) on separate lines
+      const qText =
+        `For each value, state all sets it belongs to among $\\mathbb{N},\\mathbb{W},\\mathbb{Z},\\mathbb{Q},\\mathbb{R}$.<br>`+
+        `(i) $a=\\dfrac{${p}}{${q}}$<br>`+
+        `(ii) $b=${bStr}$<br>`+
+        `(iii) $c=${cVal}$<br>`+
+        `(iv) $d=${dVal}$<br>`+
+        `(v) $e=\\sqrt{${m}}$`;
+    
+      // Membership strings
+      const N='\\mathbb{N}', W='\\mathbb{W}', Z='\\mathbb{Z}', Q='\\mathbb{Q}', R='\\mathbb{R}';
+      const A = `${Q}, ${R}`;                         // proper fraction
+      const B = `${Q}, ${R}`;                         // terminating decimal
+      const C = `${Z}, ${Q}, ${R}`;                   // negative integer
+      const D = `${N}, ${W}, ${Z}, ${Q}, ${R}`;       // natural number
+      const E = `${R}`;                               // irrational sqrt
+    
+      const ansText =
+        `(i) $a\\in${A}$; `+
+        `(ii) $b\\in${B}$; `+
+        `(iii) $c\\in${C}$; `+
+        `(iv) $d\\in${D}$; `+
+        `(v) $e\\in${E}$`;
+    
+      return { q: qText, answer: ansText };
+    }
+
+    function genTF_SetInclusion(){
+      // Uses helpers ri() and sample() you already have.
+      const N='\\mathbb{N}', W='\\mathbb{W}', Z='\\mathbb{Z}', Q='\\mathbb{Q}', R='\\mathbb{R}';
+    
+      const roll = ri(1,10);
+      let expr, ans;
+    
+      switch (roll){
+        case 1: { // natural number
+          const n = ri(1,20);
+          expr = `${n}\\in${N}`;
+          ans  = 'True';
+          break;
+        }
+        case 2: { // negative not whole
+          const n = -ri(1,20);
+          expr = `${n}\\in${W}`;
+          ans  = 'False';
+          break;
+        }
+        case 3: { // rational fraction
+          const a = ri(1,9), b = ri(2,12);
+          expr = `\\frac{${a}}{${b}}\\in${Q}`;
+          ans  = 'True';
+          break;
+        }
+        case 4: { // repeating decimal is rational
+          const d = ri(1,9);
+          expr = `0.\\overline{${d}}\\in${Q}`;
+          ans  = 'True';
+          break;
+        }
+        case 5: { // irrational square root
+          const m = sample([2,3,5,6,7,10,11,13,14,15,17,19,21,22]);
+          expr = `\\sqrt{${m}}\\in${Q}`;
+          ans  = 'False';
+          break;
+        }
+        case 6: { // convention: 0 ∉ N, 1 ∈ N
+          const n = sample(['0','1']);
+          expr = `${n}\\in${N}`;
+          ans  = (n === '1') ? 'True' : 'False';
+          break;
+        }
+        case 7: { // subset truths
+          expr = `${N}\\subseteq${Z}`;
+          ans  = 'True';
+          break;
+        }
+        case 8: {
+          expr = `${Q}\\subseteq${Z}`;
+          ans  = 'False';
+          break;
+        }
+        case 9: {
+          expr = `${Z}\\subseteq${Q}`;
+          ans  = 'True';
+          break;
+        }
+        default: {
+          expr = `${Q}\\subseteq${R}`;
+          ans  = 'True';
+        }
+      }
+    
+      return {
+        q: `$${expr}$ (True/False)`,  // wrap in $...$ so KaTeX renders
+        answer: ans
+      };
+    }
+
+    function randomDivisorsTrailingZeroQuestion(){
+      // pick random number with at least one trailing zero (multiple of 10)
+      const base = ri(10,100);  // 10–100
+      const n = base * 10;      // ensures trailing zero
+    
+      // compute all divisors
+      const divisors = [];
+      for (let d=1; d<=n; d++){
+        if(n % d === 0) divisors.push(d);
+      }
+      const total = divisors.length;
+    
+      const even = divisors.filter(x => x % 2 === 0).length;
+      const mult4 = divisors.filter(x => x % 4 === 0).length;
+      const mult9 = divisors.filter(x => x % 9 === 0).length;
+    
+      const ans1 = `${even}/${total}`;
+      const ans2 = `(${mult4}/${total})^2`;
+      const ans3 = `(${mult9}/${total})*(${mult9-1}/${total-1})`;
+      const ans4 = `1-(${total-even}/${total})^2`;
+    
+      return {
+        q:`List all positive divisors of $${n}$. Then compute:<br>
+    (i) $P(\\text{even})$<br>
+    (ii) With replacement, both multiples of $4$<br>
+    (iii) Without replacement, both multiples of $9$<br>
+    (iv) With replacement, at least one multiple of $2$`,
+        answer:`(i) ${ans1}, (ii) ${ans2}, (iii) ${ans3}, (iv) ${ans4}`
+      };
+    }
+
+    /* =========================================================
+       UNIT 6 — Linear Relations (fully cleaned & consistent)
+       - Safe sign formatting (no "+-4", no missing "+")
+       - Single-draw intercepts; consistent LaTeX for lines
+       - Numeric Response answers are numeric-only
+       ========================================================= */
+    
+    /* ---------- Fraction + formatting helpers ---------- */
+    function frac(n, d){
+      if (d === 0) return { n: 1, d: 0 }; // guard; won't be used in our gens
+      const s = d < 0 ? -1 : 1;
+      n *= s; d = Math.abs(d);
+      const g = gcd(Math.abs(n), d);
+      return { n: n/g, d: d/g };
+    }
+    function fmtFrac(n,d){
+      if (d === 1) return `${n}`;
+      if (n === 0) return `0`;
+      return `\\dfrac{${n}}{${d}}`;
+    }
+    function fmtSignedInt(k){            // '', '+b', or '-b'
+      if (k === 0) return '';
+      return k > 0 ? `+${k}` : `${k}`;
+    }
+    function fmtSignedFrac(f){           // '', '+a/b', or '-a/b' (reduced)
+      const {n,d} = f;
+      if (n === 0) return '';
+      return n > 0 ? `+${fmtFrac(n,d)}` : `-${fmtFrac(Math.abs(n),d)}`;
+    }
+    function fmtMxPlusB(mFrac, bVal){    // $y = (m)x + b$ with clean signs and no +0
+      const mStr = fmtFrac(mFrac.n, mFrac.d);
+      const bStr = Number.isInteger(bVal) ? fmtSignedInt(bVal) : fmtSignedFrac(bVal);
+      return `$y=${mStr}x${bStr}$`.replace('+-','-');
+    }
+    function lineThroughTwoPoints(P,Q){  // returns {m,b} as fracs (reduced)
+      const dy = Q.y - P.y, dx = Q.x - P.x;
+      const m = frac(dy, dx);
+      const b = frac(P.y*m.d - m.n*P.x, m.d);  // from y = mx + b
+      return { m, b };
+    }
+    function slopeFromGeneral(A,B){      // Ax + By + C = 0 → y = (-A/B)x + (-C/B)
+      return frac(-A, B);
+    }
+    function perpSlope(m){               // m = n/d => -d/n
+      return frac(-m.d, m.n);
+    }
+    function eqFrac(a,b){ return a.n===b.n && a.d===b.d; }
+    function absFrac(a){ return { n: Math.abs(a.n), d: a.d }; }
+    function genPythagoreanPair(){ return sample([[3,4,5],[5,12,13],[8,15,17],[7,24,25],[9,40,41]]); }
+
+    // helper used below (keeps everything reduced)
+    function addFrac(a, b){ return frac(a.n*b.d + b.n*a.d, a.d*b.d); }
+
+    /* =====================================================
+       A. Multiple Choice
+       ===================================================== */
+    function genMCU6_Distance(){
+      const [a,b,c] = genPythagoreanPair();
+      const sx = ri(-5,5), sy = ri(-5,5);
+      const P = {x:sx, y:sy}, Q = {x:sx+a, y:sy+b};
+      const correct = `$${c}$`;
+      const wrongs  = [`$\\sqrt{${a*a+b*b}}$`, `$${a+b}$`, `$\\sqrt{${(a+b)**2}}$`];
+      const choices = [correct, ...wrongs];
+      const order   = choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:`The distance between $(${P.x},${P.y})$ and $(${Q.x},${Q.y})$ is`,
+               choices: order.map(i=>choices[i]), answerIndex: order.indexOf(0) };
+    }
+    
+    function genMCU6_Midpoint(){
+      const P={x:ri(-9,9), y:ri(-9,9)}, Q={x:ri(-9,9), y:ri(-9,9)};
+      const mx=(P.x+Q.x)/2, my=(P.y+Q.y)/2;
+      const correct = `$(${mx},${my})$`;
+      const wrongs  = [`$(${Q.x-P.x},${Q.y-P.y})$`,
+                       `$(${(Q.x-P.x)/2},${(Q.y-P.y)/2})$`,
+                       `$(${P.x},${Q.y})$`];
+      const choices=[correct,...wrongs];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:`The midpoint of $(${P.x},${P.y})$ and $(${Q.x},${Q.y})$ is`,
+               choices: order.map(i=>choices[i]), answerIndex: order.indexOf(0) };
+    }
+    
+    function genMCU6_SlopeTwoPoints(){
+      const x1=ri(-6,3), y1=ri(-3,6);
+      let dx=sample([2,3,4,5]); let dy=sample([-6,-4,-3,-2,2,3,4,6]);
+      const x2=x1+dx, y2=y1+dy;
+      const m=frac(dy,dx);
+      const correct = `$${fmtFrac(m.n,m.d)}$`;
+      const wrongs  = [`$${fmtFrac(-m.d,m.n)}$`, `$${fmtFrac(m.d,m.n)}$`, `$${fmtFrac(-m.n,m.d)}$`];
+      const choices=[correct,...wrongs];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:`The slope of the line through $(${x1},${y1})$ and $(${x2},${y2})$ is`,
+               choices: order.map(i=>choices[i]), answerIndex: order.indexOf(0) };
+    }
+    
+    function genMCU6_ParallelSlopeFromGeneral(){
+      let A=ri(-6,6); if(A===0) A=3;
+      let B=ri(-6,6); if(B===0) B=-4;
+      const C=ri(-9,9);
+      const m = slopeFromGeneral(A,B); // -A/B
+      const correct = `$${fmtFrac(m.n,m.d)}$`;
+      const choices = [correct, `$${fmtFrac(-m.n,m.d)}$`, `$${fmtFrac(B,A)}$`, `$${fmtFrac(-B,A)}$`];
+      const order   = choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      const gf = `$${A}x${fmtSignedInt(B)}y${fmtSignedInt(C)}=0$`;
+      return { q:`A line parallel to ${gf} has slope`,
+               choices: order.map(i=>choices[i]), answerIndex: order.indexOf(0) };
+    }
+    
+    function genMCU6_PerpendicularSlopeFromSlope(){
+      const m = frac(sample([-5,-4,-3,-2,-1,1,2,3,4,5]), sample([2,3,4,5]));
+      const b = ri(-6,6);  // single draw
+      const mp = perpSlope(m);
+      const prompt = `A line perpendicular to ${fmtMxPlusB(m, b)} has slope`;
+      const choices = [`$${fmtFrac(mp.n,mp.d)}$`, `$${fmtFrac(m.n,m.d)}$`, `$${fmtFrac(-m.n,m.d)}$`, `$${fmtFrac(mp.d,mp.n)}$`];
+      const order   = choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:prompt, choices: order.map(i=>choices[i]), answerIndex: order.indexOf(0) };
+    }
+    
+    function genMCU6_GeneralFormFromSlopeIntercept(){
+      const m = frac(sample([1,2,3,4,5,6]), sample([2,3,4]));
+      const b = ri(-6,6);
+      // y = (m.n/m.d)x + b -> move all to LHS in integers: m.n x - m.d y + b m.d = 0
+      const A = m.n, B = -m.d, C = b*m.d;
+      const correct = `$${A}x${fmtSignedInt(B)}y${fmtSignedInt(C)}=0$`;
+      const choices = [
+        correct,
+        `$${A}x${fmtSignedInt(-B)}y${fmtSignedInt(C)}=0$`,
+        `$${-A}x${fmtSignedInt(B)}y${fmtSignedInt(C)}=0$`,
+        `$${A}x${fmtSignedInt(B)}y${fmtSignedInt(-C)}=0$`
+      ];
+      const order=choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:`The general form of ${fmtMxPlusB(m,b)} is`,
+               choices: order.map(i=>choices[i]), answerIndex: order.indexOf(0) };
+    }
+    
+    function genMCU6_WhichHasYintNeg4(){
+      const choices = [
+        `$2y=3x-8$`,               // y = (3/2)x - 4  ✓
+        `$y+4=3x$`,                // y = 3x - 4      ✓ actually also -4; keep only one correct
+        `$y=-\\tfrac{1}{2}x-4$`,   // y-int -4        ✓ also correct; we need exactly one correct
+        `$x=4$`
+      ];
+      // To ensure a single correct answer, we hardcode four and set only one as correct.
+      const fixed = [`$2y=3x-8$`, `$y+4=3x$`, `$x=4$`, `$y=-\\tfrac{1}{2}x-1$`]; // only first has y-int -4
+      const order = fixed.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:`Which line has $y$-intercept $-4$?`,
+               choices: order.map(i=>fixed[i]), answerIndex: order.indexOf(0) };
+    }
+    
+    function genMCU6_SlopeFromGeneral(){
+      let A=ri(-6,6); if(A===0) A=3;
+      let B=ri(-6,6); if(B===0) B=-4;
+      const C=ri(-9,9);
+      const m=slopeFromGeneral(A,B);
+      const opt = [`$-${fmtFrac(A,B)}$`, `$${fmtFrac(A,B)}$`, `$-${fmtFrac(B,A)}$`, `$${fmtFrac(B,A)}$`];
+      const correctIdx = 0;
+      const order = opt.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:`In $${A}x${fmtSignedInt(B)}y${fmtSignedInt(C)}=0$ with $B\\neq0$, the slope is`,
+               choices: order.map(i=>opt[i]), answerIndex: order.indexOf(correctIdx) };
+    }
+    
+    function genMCU6_Steepest(){
+      const pool = shuffle([-5,-4,-3,-2,-1,1,2,9/4,3/2,4]).slice(0,4);
+      const mags = pool.map(x=>Math.abs(x));
+      const maxIdx = mags.indexOf(Math.max(...mags));
+      const choices = pool.map(v => Number.isInteger(v)? `$${v}$` : `$${fmtFrac(Math.round(v*4),4)}$`);
+      const order = choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:'Which slope is steepest?',
+               choices: order.map(i=>choices[i]), answerIndex: order.indexOf(maxIdx) };
+    }
+    
+    function genMCU6_PerpendicularThroughOrigin(){
+      const m  = frac(sample([2,3,4]), sample([3,4,5])); // given slope
+      const b  = ri(-5,5);                                // draw once
+      const mp = perpSlope(m);
+      const prompt = `A line perpendicular to ${fmtMxPlusB(m,b)} and through $(0,0)$ is`;
+      const choices = [
+        `$y=${fmtFrac(mp.n,mp.d)}x$`,
+        `$y=${fmtFrac(-mp.n,mp.d)}x$`,
+        `$y=${fmtFrac(m.n,m.d)}x$`,
+        `$y=${fmtFrac(-m.n,m.d)}x$`
+      ];
+      const order = choices.map((_,i)=>i).sort(()=>Math.random()-0.5);
+      return { q:prompt, choices: order.map(i=>choices[i]), answerIndex: order.indexOf(0) };
+    }
+    
+    /* =====================================================
+       B. Numeric Response  (answers are numeric only)
+       ===================================================== */
+    function genNRU6_DistanceHalfInt(){
+      // 3-4-5 centered at half-integers
+      const [a,b,c]=[4,3,5];
+      const x0=ri(-3,3), y0=ri(-2,2);
+      const P={x:x0-a/2, y:y0+b/2}, Q={x:x0+a/2, y:y0-b/2};
+      return { q:`Distance between $\\big(${P.x},\\,${P.y}\\big)$ and $\\big(${Q.x},\\,${Q.y}\\big)$.`,
+               answer:`$${c}$` };
+    }
+    
+    function genNRU6_Midpoint(){
+      const P={x:ri(-9,9), y:ri(-9,9)}, Q={x:ri(-9,9), y:ri(-9,9)};
+      const mx=(P.x+Q.x)/2, my=(P.y+Q.y)/2;
+      return { q:`Midpoint of $(${P.x},${P.y})$ and $(${Q.x},${Q.y})$.`,
+               answer:`$(${mx},${my})$` };
+    }
+    
+    function genNRU6_FindKGivenMidpoint(){
+      const Mx=ri(-5,5), My=ri(-5,5);
+      const y1=ri(-6,8), x2=ri(-4,6), y2=ri(-6,6);
+      const k = 2*Mx - x2;
+      return { q:`Find $k$ so that the midpoint of $(k,${y1})$ and $(${x2},${y2})$ is $(${Mx},${My})$.`,
+               answer:`$${k}$` };
+    }
+    
+   // 1) Line through two points — answer is a single number: m + b
+  function genNRU6_LineThroughTwoPointsSlopeIntercept_NUM(){
+    const P={x:ri(-6,6), y:ri(-6,6)}, Q={x:ri(-6,6), y:ri(-6,6)};
+    if (P.x===Q.x) Q.x += 1; // avoid vertical
+    const {m,b} = lineThroughTwoPoints(P,Q);
+    const sum = addFrac(m,b);
+    return {
+      q: `Line through $(${P.x},${P.y})$ and $(${Q.x},${Q.y})$. Enter $m+b$ as a single number.`,
+      answer: `$${fmtFrac(sum.n, sum.d)}$`
+    };
+  }
+
+    
+    // 2) Intercepts of Ax+By=C -> ask for ONLY the x-intercept (single number)
+    function genNRU6_XInterceptOnly_NUM(){
+      let A=ri(1,6), B=ri(1,6), C=ri(6,18);
+      const xI = frac(C,A);
+      return {
+        q:`For $${A}x+${B}y=${C}$, enter the $x$-intercept only.`,
+        answer:`$${fmtFrac(xI.n,xI.d)}$`
+      };
+    }
+    
+    // 3) Parallel line through point -> ask ONLY for the C' in Ax+By+C'=0 (single number)
+    // 2) Parallel line through point — ask for C in Ax+By+C=0 (single number)
+    function genNRU6_ParallelLine_Conly_NUM(){
+      let A=ri(-4,6); if(A===0) A=3;
+      let B=ri(-5,5); if(B===0) B=-2;
+      const Cshown = ri(-12,12); // shown only
+      const P={x:ri(-6,6), y:ri(-6,6)};
+      const C = -(A*P.x + B*P.y); // Ax0 + By0 + C = 0
+      return {
+        q:`Line parallel to $${A}x${fmtSignedInt(B)}y${fmtSignedInt(Cshown)}=0$ through $(${P.x},${P.y})$. In general form $${A}x${fmtSignedInt(B)}y+C=0$, enter $C$ only.`,
+        answer:`$${C}$`
+      };
+    }
+
+    
+    // 4) Car speed & intercept -> answer is "m,b" (both numeric), not an equation
+    // 3) Car speed & intercept — answer is a single number: m + b
+    function genNRU6_CarSpeedIntercept_NUM(){
+      const t1=ri(0,4), v1=ri(40,80);
+      const t2=t1+ri(1,3), v2=v1+ri(10,40);
+      const m = frac(v2-v1, t2-t1);
+      const b = frac(v1*m.d - m.n*t1, m.d);
+      const sum = addFrac(m,b);
+      return {
+        q:`A car passes $(${t1},${v1})$ and $(${t2},${v2})$. Enter $m+b$ as a single number (fraction OK).`,
+        answer:`$${fmtFrac(sum.n, sum.d)}$`
+      };
+    }
+
+    
+    /* =====================================================
+       C. Written Response
+       ===================================================== */
+    function genWRU6_DeriveDistance(){
+      const ans = `Let $P(x_1,y_1),Q(x_2,y_2)$. By Pythagoras on the right triangle with legs $|x_2-x_1|$ and $|y_2-y_1|$, \
+    $$PQ=\\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}.$$`;
+      return { q:`Derive the distance formula from Pythagoras.`, answer: ans };
+    }
+    
+    function genWRU6_ParallelPerpProof(){
+      const ans = `Write lines in general form $Ax+By+C=0$ and $A'x+B'y+C'=0$ with $B,B'\\neq0$. Then \
+    $m=-\\tfrac{A}{B}$, $m'=-\\tfrac{A'}{B'}$. Parallel $\\Rightarrow m=m'$. \
+    For non-vertical lines, direction vectors $(1,m)$ and $(1,m')$ are perpendicular iff $1+mm'=0\\Rightarrow mm'=-1$.`;
+      return { q:`Prove that parallel lines have equal slopes, and perpendicular slopes multiply to $-1$.`, answer: ans };
+    }
+    
+    function genWRU6_PerpendicularBisector(){
+      const A={x:ri(-4,2), y:ri(-4,2)}, B={x:A.x+ri(3,8), y:A.y+ri(2,7)};
+      const mid={x:(A.x+B.x)/2, y:(A.y+B.y)/2};
+      const mAB = frac(B.y-A.y, B.x-A.x);
+      const mPerp = perpSlope(mAB);
+      return { q:`Find the perpendicular bisector of segment $(${A.x},${A.y})$ to $(${B.x},${B.y})$.`,
+               answer:`$y-${mid.y}=${fmtFrac(mPerp.n,mPerp.d)}(x-${mid.x})$` };
+    }
+    
+    function genWRU6_SectionRatio(){
+      const A={x:ri(-2,2), y:ri(2,6)}, B={x:A.x+ri(3,7), y:A.y-ri(2,6)};
+      const r1=2, r2=3;
+      const Px = (r1*B.x + r2*A.x)/(r1+r2);
+      const Py = (r1*B.y + r2*A.y)/(r1+r2);
+      return { q:`Point $P$ divides $A(${A.x},${A.y})$ to $B(${B.x},${B.y})$ in ratio $${r1}:${r2}$. Find $P$.`,
+               answer:`$\\left(${Px},\\,${Py}\\right)$` };
+    }
+    
+    function genWRU6_SlopeToGeneral(){
+      const m = frac(-3,2), b = 4;
+      const A=m.n, B=-m.d, C=b*m.d;
+      return { q:`Convert $y=-\\tfrac{3}{2}x+4$ to general form with integer coefficients.`,
+               answer:`$${A}x${fmtSignedInt(B)}y${fmtSignedInt(C)}=0$` };
+    }
+    
+    function genWRU6_PointPerpToGiven(){
+      const P={x:ri(5,9), y:ri(-4,2)};
+      const givenM = frac(2,5);         // 0.4
+      const mPerp  = perpSlope(givenM); // -5/2
+      const b = frac(P.y*mPerp.d - mPerp.n*P.x, mPerp.d);
+      const A=mPerp.n, B=-mPerp.d, C=b.n;
+      return { q:`A line passes through $(${P.x},${P.y})$ and is perpendicular to $y=0.4x+9$. Write its equations (slope–intercept, point–slope, general).`,
+               answer:`Slope–intercept: ${fmtMxPlusB(mPerp,b)}; Point–slope: $y-${P.y}=${fmtFrac(mPerp.n,mPerp.d)}(x-${P.x})$; General: $${A}x${fmtSignedInt(B)}y${fmtSignedInt(C)}=0$` };
+    }
+    
+    function genWRU6_Collinearity(){
+      const A={x:-4,y:5}, B={x:0,y:3}, C={x:6,y:0};
+      const mAB = frac(B.y-A.y, B.x-A.x), mBC = frac(C.y-B.y, C.x-B.x);
+      const col = eqFrac(mAB,mBC) ? 'Yes' : 'No';
+      return { q:`Test collinearity of $A(-4,5),\\ B(0,3),\\ C(6,0)$.`,
+               answer:`$m_{AB}=${fmtFrac(mAB.n,mAB.d)},\\ m_{BC}=${fmtFrac(mBC.n,mBC.d)}$. Collinear? ${col}.` };
+    }
+    
+    function genWRU6_InterceptGraphAndSlope(){
+      const A=ri(1,5), B=ri(1,5), C=ri(4,16);
+      const xI=frac(C,A), yI=frac(C,B), m=frac(-A,B);
+      return { q:`Graph $${A}x${fmtSignedInt(-B)}y=${C}$ using intercepts and state the slope.`,
+               answer:`Intercepts $(${fmtFrac(xI.n,xI.d)},0)$ and $(0,${fmtFrac(yI.n,yI.d)})$; slope $m=${fmtFrac(m.n,m.d)}$.` };
+    }
+    
+    function genWRU6_TemperatureModel(){
+      const t1=13, T1=2, t2=16, T2=-10;
+      const m=frac(T2-T1,t2-t1); // -12/3 = -4
+      const b=frac(T1*m.d - m.n*t1, m.d); // 2 = -4*13 + b  => b = 54
+      return { q:`A freezer cools from $2^\\circ\\text{C}$ at 1 pm to $-10^\\circ\\text{C}$ at 4 pm. Find linear model, interpret slope.`,
+               answer:`$T(t)=${fmtFrac(m.n,m.d)}t${fmtSignedInt(b.n)}$. Slope $-4$ means temperature decreases $4^\\circ\\text{C}$ per hour.` };
+    }
+    
+    function genWRU6_ThroughPointGivenSlopeAllForms(){
+      const P={x:-2,y:5}, m=frac(-3,4);
+      const b=frac(P.y*m.d - m.n*P.x, m.d);
+      const A=m.n, B=-m.d, C=b.n;
+      return { q:`Line through $(-2,5)$ with slope $-\\tfrac{3}{4}$. Give slope–intercept, point–slope, general.`,
+               answer:`${fmtMxPlusB(m,b)}; $y-5=${fmtFrac(m.n,m.d)}(x+2)$; $${A}x${fmtSignedInt(B)}y${fmtSignedInt(C)}=0$` };
+    }
+    
+    function genWRU6_FindKForParallel(){
+      // parallel to 2x - 4y + 8 = 0  → slope 1/2
+      // y = (k-1)x + 3 parallel ↔ k-1 = 1/2 → k = 3/2
+      return { q:`For which $k$ is $y=(k-1)x+3$ parallel to $2x-4y+8=0$?`,
+               answer:`$\\dfrac{3}{2}$` };
+    }
+    
+    function genWRU6_PointSlopeToIntercepts(){
+      const m=frac(2,3), P={x:3,y:-1};
+      // y+1 = (2/3)(x-3) -> y = (2/3)x + b
+      const b = frac(P.y*m.d - m.n*P.x, m.d);
+      // x-intercept when y=0: 0 = m x + b → x = -b/m = (-b.n/b.d) * (m.d/m.n)
+      const xNum = -b.n*m.d, xDen = b.d*m.n; const xF = frac(xNum, xDen);
+      return { q:`Graph $y+1=\\tfrac{2}{3}(x-3)$ and find intercepts.`,
+               answer:`$x$-intercept $\\big(${fmtFrac(xF.n,xF.d)},0\\big)$; $y$-intercept $(0,${fmtFrac(b.n,b.d)})$.` };
+    }
+    
+    /* =====================================================
+       D. Enrichment
+       ===================================================== */
+    function genEU6_LatticePointsOnSegment(){
+      const A={x:2,y:3}, B={x:14,y:9};
+      const dx=Math.abs(B.x-A.x), dy=Math.abs(B.y-A.y);
+      const count=gcd(dx,dy)+1;
+      return { q:`Count integer lattice points on segment $A(2,3)$ to $B(14,9)$.`,
+               answer:`$${count}$ points (including endpoints).` };
+    }
+    
+    function genEU6_DistancePointToLine(){
+      const P={x:5,y:-1}; const A=3,B=-4,C=-12;
+      const num=Math.abs(A*P.x + B*P.y + C), den=Math.sqrt(A*A+B*B);
+      //  |15 + 4 - 12| / 5 = 7/5  (BUT original used 11/5; that was incorrect arithmetic.)
+      // Recompute with given: 3*5 -4*(-1) -12 = 15 + 4 -12 = 7 → 7/5.
+      return { q:`Find distance from $P(5,-1)$ to $3x-4y-12=0$.`,
+               answer:`$\\dfrac{7}{5}$` };
+    }
+    
+    function genEU6_TriangleAreaParam(){
+      const a = ri(1,6);
+      return { q:`Triangle formed by $x+${a}y=6$, $x=0$, $y=0$. Express area in terms of $a$.`,
+               answer:`Intercepts $(6,0)$ and $(0,\\tfrac{6}{${a}})$. Area $\\dfrac12\\cdot6\\cdot\\dfrac{6}{a}=\\dfrac{18}{a}$.` };
+    }
+    
+    function genEU6_DistanceBetweenParallels(){
+      const m = 2, b1 = ri(-3,3), sep = ri(3,7), b2 = b1 - sep;
+      const distNum = Math.abs(b1-b2), distDen = Math.sqrt(1+m*m); // √5
+      return { q:`Distance between ${fmtMxPlusB(frac(2,1), b1)} and ${fmtMxPlusB(frac(2,1), b2)}.`,
+               answer:`$\\dfrac{${distNum}}{\\sqrt{5}}$.` };
+    }
+    
+    function genEU6_SlopeRotationExplain(){
+      const ans = `In $y=mx+b$, the point $(0,b)$ is fixed. Changing $m$ changes rise per run, \
+    so the line rotates about the $y$-intercept.`;
+      return { q:`Explain why changing the slope rotates a line about the $y$-intercept.`, answer: ans };
+    }
+    
+    function genEU6_ConvertFormsAtXIntercept(){
+      const A=4, B=-5, C=20; // 4x - 5y = 20
+      const m=frac(-A,B), b=frac(-C,B); // slope-intercept
+      const xI=frac(C,A);
+      return { q:`Convert $4x-5y=20$ into slope–intercept form and point–slope form at the $x$-intercept.`,
+               answer:`Slope–intercept: ${fmtMxPlusB(m,b)}; Point–slope at $(${fmtFrac(xI.n,xI.d)},0)$: $y-0=${fmtFrac(m.n,m.d)}(x-${fmtFrac(xI.n,xI.d)})$.` };
+    }
+    
+
+
+    document.getElementById('generate').addEventListener('click', renderQuiz);
+    document.getElementById('toggleKey').addEventListener('click', (e)=>{
+      const pressed=e.currentTarget.getAttribute('aria-pressed')==='true';
+      e.currentTarget.setAttribute('aria-pressed', String(!pressed));
+      e.currentTarget.textContent=pressed?'🧠 Show Answers':'🙈 Hide Answers';
+      document.querySelectorAll('.ans').forEach(el=>{ el.toggleAttribute('hidden'); if(!el.hasAttribute('hidden')) typeset(el); });
+    });
+    document.getElementById('printBtn').addEventListener('click',()=>window.print());
+
+    document.addEventListener('DOMContentLoaded', renderQuiz);
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false}],throwOnError:false});"></script>
+</body>
+</html>
