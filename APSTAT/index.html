@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AP Statistics – Mr. Merrick</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+  body {
+    margin: 0;
+    font-family: 'Cormorant', serif;
+    color: #606c71;
+    line-height: 1.5;
+    background: #f9fafc;
+    font-size: 0.9rem;
+  }
+  header {
+    text-align: center;
+    padding: 1.2rem 1rem;
+    background: linear-gradient(135deg,#1A2980,#26D0CE);
+    color: white;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+  }
+  header h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: clamp(22px, 3vw, 32px);
+  }
+  header p { margin-top: .3rem; font-size: 0.9rem; opacity: 0.9; }
+  .contact-icon svg { fill: white; }
+
+  main { max-width: 1000px; margin: 1.2rem auto; padding: 0 1rem; display: grid; gap: 1rem; }
+
+  section, article {
+    background: white;
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border: 1px solid #e8eaf2;
+    font-size: 0.9rem;
+  }
+  section a { color: #0AB9DC; text-decoration: none; font-weight: 600; }
+  section a:hover { color: #1A2980; text-decoration: underline; }
+
+  h2 {
+    color: #514a9d;
+    font-weight: 600;
+    border-bottom: 2px solid #1A2980;
+    padding-bottom: .2rem;
+    margin: 0 0 .5rem;
+    font-size: 1.1rem;
+  }
+  h3 { margin: .5rem 0 .3rem; color: #1A2980; font-weight: 600; font-size: 0.95rem; }
+
+  ul { line-height: 1.4; margin: .3rem 0; padding-left: 1rem; font-size: 0.9rem; }
+  li { margin: .2rem 0; }
+
+  .quicklinks { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap: .5rem; margin: .5rem 0; }
+  .quicklinks a {
+    display: inline-block;
+    background: #e6f9fc;
+    color: #1A2980 !important;
+    padding: .4rem .6rem;
+    border-radius: 6px;
+    text-align: center;
+    border: 1px solid #b8ecf5;
+    font-size: .85rem;
+    transition: background .2s ease, transform .15s ease;
+  }
+  .quicklinks a:hover { background: #d0f3fa; transform: translateY(-1px); }
+
+  .exam-section { background: #B2D8CE; padding: .6rem .8rem; font-size: 0.9rem; }
+  blockquote { color: #819198; font-style: italic; margin: .5rem 0; padding-left: .7rem; border-left: 3px solid #ccc; }
+  .countdown { background: #fff3cd; border: 1px solid #ffe8a1; color: #7a5a00; padding: .6rem .9rem; border-radius: 8px; text-align: center; font-weight: 600; font-size: 1rem; box-shadow: 0 3px 6px rgba(0,0,0,0.05); margin: 0.5rem 0; }
+  footer { margin-top: 1rem; text-align: center; color: #777; font-size: .75rem; }
+
+  /* Collapsible details styling */
+  details.materials {
+    border: 1px solid #e8eaf2;
+    border-radius: 8px;
+    padding: .4rem .6rem;
+    margin: .4rem 0;
+    background: #fbfdff;
+  }
+  details.materials[open] { background: #f6fbff; }
+  details.materials summary {
+    cursor: pointer;
+    list-style: none;
+    font-weight: 700;
+    color: #1A2980;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  details.materials summary::-webkit-details-marker { display: none; }
+  .chev {
+    display: inline-block;
+    transition: transform .2s ease;
+  }
+  details[open] .chev { transform: rotate(90deg); }
+  .sublist { margin: .4rem 0 .2rem 1.2rem; padding-left: .6rem; }
+
+  .controls { display:flex; gap:.5rem; flex-wrap:wrap; margin: .4rem 0; }
+  .controls button {
+    background:#e6f9fc; border:1px solid #b8ecf5; color:#1A2980; border-radius:6px; padding:.35rem .6rem; font-weight:600; cursor:pointer;
+  }
+  .controls button:hover { background:#d0f3fa; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>AP Statistics</h1>
+    <div class="contact-icon">
+      <a href="mailto:Merrick.fanning@renertschool.ca">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+          <path d="M12 .02c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.99 6.98l-6.99 5.666-6.991-5.666h13.981zm.01 10h-14v-8.505l7 5.673 7-5.672v8.504z"/>
+        </svg>
+      </a>
+    </div>
+    <p>Mr. Merrick</p>
+  </header>
+
+  <main>
+    <div class="quicklinks">
+      <a href="https://apcentral.collegeboard.org/media/pdf/ap-statistics-course-at-a-glance.pdf" target="_blank">Course at a Glance</a>
+      <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam" target="_blank">Exam Info</a>
+      <a href="https://apcentral.collegeboard.org/courses/ap-statistics/exam/past-exam-questions" target="_blank">Past Exam Problems</a>
+    </div>
+
+    <div class="countdown" aria-live="polite">
+      <span id="exam-countdown">—</span>
+    </div>
+
+    <div style="border-left:4px solid #2f855a;background:#f6fffa;padding:.6rem .8rem;border-radius:6px;font-size:0.9rem">
+      <h2>The Exam</h2>
+      <p><strong>AP Statistics Exam:</strong> <u>Thursday, May 7, 2026 at 12:00 PM local time</u>.</p>
+      <p><a href="https://apstudents.collegeboard.org/about-ap-scores/score-distributions/ap-statistics" target="_blank">Exam Score Distributions</a></p>
+      <h3>What to Expect on Exam Day</h3>
+      <ul>
+        <li><strong>Section I:</strong> 40 multiple-choice questions — 90 minutes (50% of score)</li>
+        <li><strong>Section II:</strong> 6 free-response questions (including the Investigative Task) — 90 minutes (50% of score)</li>
+        <li>Bring an approved calculator and extra pencils.</li>
+      </ul>
+    </div>
+
+    <section>
+      <h2>Timeline & Homework</h2>
+      <ul>
+        <li><strong>September 3-10:</strong> Complete Unit 1 videos / problem sets.</li>
+        <li><strong>September 11-17:</strong> Complete Unit 1 extra problems.</li>
+        <li><strong>September 17-29:</strong> Complete Unit 2 videos / problem sets.</li>
+        <li><strong>October 1-13:</strong> Europe Trip (Finish Unit 2 AP classroom Videos)</li>
+        <li><strong>October 14-22:</strong> Finish all unit 2 materials</li>
+        <li><strong>October 22-31:</strong> Finish all unit 3 materials</li>
+        <li><strong>November 17-30:</strong> Finish all unit 4 materials (AP Classroom)</li>
+        <li><strong>November 30-December 16:</strong> Finish all unit 4 materials (Given in class)</li>
+        <li><strong>January 5-15:</strong> Finish all unit 5 materials (AP Classroom)</li>
+        <li><strong>January 16-25:</strong> Finish all unit 5 materials (In class Packets), Start Unit 6 AP Classroom Materials</li>
+        <li><strong>January 27- February 9:</strong> Finish all unit 6 AP Classroom Materials </li>
+        <li><strong>February 10 - February 23:</strong> Finish all unit 7 AP Classroom Materials </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Tests/Activites/Dates</h2>
+      <ul>
+        <li><strong>Unit 1:</strong> September 17</li>
+        <li><strong>Unit 2:</strong> October 23 </li>
+        <li><strong>Unit 3:</strong> November 5 </li>
+        <li><strong>Unit 4:</strong> December 15 </li>
+        <li><strong>Unit 4 (Restest):</strong> January 12 </li>
+        <li><strong>Unit 5:</strong> January 21 </li>
+        <li><strong>Unit 6:</strong> February 9 </li>
+        <li><strong>Unit 7:</strong> March 2</li>
+        <li><strong>Unit 8:</strong> March 16</li>
+        <li><strong>Unit 9:</strong> March 30</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>In-Class Materials</h2>
+
+      <div class="controls" aria-label="materials controls">
+        <button type="button" id="expand-all">Expand all</button>
+        <button type="button" id="collapse-all">Collapse all</button>
+      </div>
+
+      <details class="materials">
+        <summary><span class="chev">▶</span> Course Outline</summary>
+        <ul class="sublist">
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/D4Outline.pdf">Course Outline (PDF)</a></li>
+        </ul>
+      </details>
+
+      <details class="materials">
+        <summary><span class="chev">▶</span> Puzzles and Special Events</summary>
+        <ul class="sublist">
+          <li><a href="https://renertmath.github.io/Challenges/12Days2025.html">12 Days of ChrisMATH!</a></li>
+          <li><strong>Locked Out - Jurassic Park:</strong> 
+             <ul>
+                    <li><a href="https://merrickmath.github.io/APSTAT/materials/Extra/JurassicPuzzlePack.pdf">Puzzle Pack</a></li>
+                    <li><a href="https://merrickmath.github.io/APSTAT/materials/Extra/JurassicTabloids.pdf">Tabloids</a></li>
+                  </ul>
+             </li>
+
+          <!---   <li><strong>Locked Out - AMONG US:</strong> 
+             <ul>
+                    <li><a href="https://merrickmath.github.io/APSTAT/materials/Extra/AmongUsAnswerSheet.pdf">Puzzle Pack</a></li>
+                    <li><a href="https://merrickmath.github.io/APSTAT/materials/Extra/AmongUsTabloids.pdf">Clues</a></li>
+                  </ul>
+             </li> 
+                --->
+
+          <li><strong>Locked Out - Star Wars:</strong> 
+             <ul>
+                    <li><a href="https://merrickmath.github.io/Div34Math/Puzzles/StarWarsPuzzlePack.pdf">Puzzle Pack</a></li>
+                    <li><a href="https://merrickmath.github.io/Div34Math/Puzzles/StarWarsTabloids.pdf">Clues</a></li>
+                    <li><a href="https://merrickmath.github.io/Div34Math/Puzzles/GalaxyMap.pdf"> Galaxy Map</a></li>
+                  </ul>
+             </li> 
+          
+          <!--- <li><strong>Locked Out - Pokemon:</strong> 
+             <ul>
+                    <li><a href="https://merrickmath.github.io/APSTAT/materials/Extra/PokemonPack.pdf">Puzzle Pack</a></li>
+                    <li><a href="https://merrickmath.github.io/APSTAT/materials/Extra/PokemonTabloids.pdf">Tabloids</a></li>
+               <li><a href="https://merrickmath.github.io/APSTAT/materials/Extra/PokeDex.pdf">Pokedex</a></li>
+                    <li><a href="https://merrickmath.github.io/APSTAT/materials/Extra/pokemon.csv">Pokemon.csv </a> (also in datasets folder)</li>
+                    <li><a href="https://merrickmath.github.io/APSTAT/materials/Extra/pokeball.csv">Pokeball.csv </a> (also in datasets folder)</li>
+                    <!--- <li><a href="https://merrickmath.github.io/APSTAT/materials/Extra/Cheats.pdf">Cheat Sheets</a></li> 
+                  </ul> 
+             </li> ---> 
+          
+        </ul>
+      </details>
+
+      <details class="materials">
+        <summary><span class="chev">▶</span> Unit 1</summary>
+        <ul class="sublist">
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit1/Slides.pdf">Slides</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit1QuickNotes.pdf">Quick Notes</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit1/Describe.pdf">Describing Distributions</a>
+          | <a href="https://merrickmath.github.io/APSTAT/materials/Unit1/DescribeSoln.pdf">Solutions</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit1/Outliers.pdf">Identifying Outliers</a>
+          | <a href="https://merrickmath.github.io/APSTAT/materials/Unit1/OutliersSoln.pdf">Solutions</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit1/Estimate.pdf">Estimating Statistics</a></li>
+          <li><a href="https://merrickmath.github.io/Mentalmath/Statisticestimate.html">Estimating Statistics Practice App</a></li>
+        </ul>
+      </details>
+
+      <details class="materials">
+        <summary><span class="chev">▶</span> Unit 2</summary>
+        <ul class="sublist">
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit2/Slides.pdf">Slides</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit2QuickNotes.pdf">Quick Notes</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit2/VarianceCovariance.pdf">Variance Covariance and Correlation</a>
+          | <a href="https://merrickmath.github.io/APSTAT/materials/Unit2/VarianceCovarianceSoln.pdf">Solutions</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit2/LeastSquares.pdf">Least Squares Regression and R-squared</a>
+          | <a href="https://merrickmath.github.io/APSTAT/materials/Unit2/LeastSquaresSoln.pdf">Solutions</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit2/ExtraPractice.pdf">Extra Practice</a>
+          | <a href="https://merrickmath.github.io/APSTAT/materials/Unit2/ExtraPracticeSoln.pdf">Solutions</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit2/SlideExamples.pdf">Practice From Slides</a> </li>
+        </ul>
+      </details>
+
+      <details class="materials">
+        <summary><span class="chev">▶</span> Unit 3</summary>
+        <ul class="sublist">
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit3/Slides.pdf">Slides</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit3/QuickNotes.pdf">Quick Notes</a></li>
+        </ul>
+      </details>
+
+      <details class="materials">
+        <summary><span class="chev">▶</span> Unit 4</summary>
+        <ul class="sublist">
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit4/Slides.pdf">Slides</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit4/QuickNotes.pdf">Quick Notes</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit4/SetsProblems.pdf">Sets Problems</a>
+          | <a href="https://merrickmath.github.io/APSTAT/materials/Unit4/SetsProblemsSoln.pdf">Solutions</a> 
+          (these problems are from the Society of Actuaries: <a href="https://www.soa.org/globalassets/assets/Files/Edu/edu-exam-p-sample-quest.pdf">Exam P</a>)</li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit4/PenProb.pdf">Penguin Probability</a>
+          | <a href="https://merrickmath.github.io/APSTAT/materials/Unit4/PenProbSoln.pdf">Solutions</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit4/Math30Review.pdf">Math 30 Review</a>
+          | <a href="https://merrickmath.github.io/APSTAT/materials/Unit4/Math30ReviewSoln.pdf">Solutions</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit4/PracticeDec12.pdf">Practice From Decemeber 12</a>
+          | <a href="https://merrickmath.github.io/APSTAT/materials/Unit4/PracticeDec12Soln.pdf">Solutions</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit4/MorePractice.pdf">Practice From Decemeber 15</a>
+          | <a href="https://merrickmath.github.io/APSTAT/materials/Unit4/MorePracticeSoln.pdf">Solutions</a></li>
+           <li>
+                  Videos:
+                  <ul>
+                    <li><a href="https://www.youtube.com/watch?v=HZGCoVF3YvM&list=PLIhj5_pQwhMQfGZNQZREjDdJRt0t0sn51&index=6">Bayes Theorem (3 Blue 1 Brown)</a></li>
+                    <li><a href="https://www.youtube.com/watch?v=lG4VkPoG3ko&list=PLIhj5_pQwhMQfGZNQZREjDdJRt0t0sn51&index=7">Medical Test Paradox (3 Blue 1 Brown)</a></li>
+                    <li><a href="https://www.youtube.com/watch?v=zeJD6dqJ5lo&list=PLIhj5_pQwhMQfGZNQZREjDdJRt0t0sn51&index=1">Central Limit Theorem (3 Blue 1 Brown)</a></li>
+                    <li><a href="https://www.youtube.com/watch?v=KZeIEiBrT_w">Markov Chains (Veritasium)</a></li>
+                    <!--- <li><a href="https://www.youtube.com/watch?v=YtkIWDE36qU">Moser's Generalized Circle Problem (3 Blue 1 Brown)</a></li> ---> 
+                    <li><a href="https://www.youtube.com/watch?v=HBluLfX2F_k">Power Laws (Veritasium)</a></li>
+                    <li><a href="https://www.youtube.com/watch?v=8Ko3TdPy0TU&t=617s">Speed Running Minecraft - the Binomial Distribtion (Stand Up Maths)</a></li>
+                    <li><a href="https://www.youtube.com/watch?v=8idr1WZ1A7Q&list=PL4cNQ1YkG5WhQGmPnRe4vDUImh_nviriy"> Binomial Distribtions (3 Blue 1 Brown)</a></li>
+                    <li><a href="https://www.youtube.com/watch?v=cy8r7WSuT1I&list=PL4cNQ1YkG5WhQGmPnRe4vDUImh_nviriy&index=6"> Properties of Normal Distirbutions (3 Blue 1 Brown)</a></li>
+                    <li><a href="https://www.youtube.com/watch?v=kZTKuMBJP7Y"> Lotteries and Expected Value</a></li>
+                  </ul>
+                </li>
+         
+        </ul>
+      </details>
+
+      <details class="materials">
+        <summary><span class="chev">▶</span> Unit 5</summary>
+        <ul class="sublist">
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit5/Slides.pdf">Slides</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit5/QuickNotes.pdf">Quick Notes</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit5/SampleDistP.pdf">Sampling Distribution for sample proportion</a>
+          | <a href="https://merrickmath.github.io/APSTAT/materials/Unit5/SampleDistPSoln.pdf">Solutions</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit5/SampleDistMu.pdf">Sampling Distribution for sample mean</a>
+          | <a href="https://merrickmath.github.io/APSTAT/materials/Unit5/SampleDistMuSoln.pdf">Solutions</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit5/DifferenceProp.pdf">Sampling Distribution for difference of sample proportions.</a>
+          | <a href="https://merrickmath.github.io/APSTAT/materials/Unit5/DifferencePropSoln.pdf">Solutions</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit5/DifferenceMean.pdf">Sampling Distribution for difference of sample means</a>
+          | <a href="https://merrickmath.github.io/APSTAT/materials/Unit5/DifferenceMeanSoln.pdf">Solutions</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit5/StandardErrors.pdf">When parameters are unknown</a>
+          | <a href="https://merrickmath.github.io/APSTAT/materials/Unit5/StandardErrorsSoln.pdf">Solutions</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit5/Practice.pdf">Extra Practice</a>
+          | <a href="https://merrickmath.github.io/APSTAT/materials/Unit5/PracticeSoln.pdf">Solutions</a></li>
+          <li>
+                 Videos:
+                 <ul>
+                    <li><a href="https://www.youtube.com/watch?v=zeJD6dqJ5lo&list=PL4cNQ1YkG5WhQGmPnRe4vDUImh_nviriy&index=5"> The Central Limit Theorem (3 Blue 1 Brown)</a></li>
+                 </ul>
+          </li> 
+        </ul>
+      </details>
+
+      <details class="materials">
+      <summary><span class="chev">▶</span> Unit 6</summary>
+      <ul class="sublist">
+        <li><strong>Confidence Intervals</strong>
+          <ul>
+            <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit6/ZIntervalP.pdf">One-Sample Z-Intervals Practice</a>
+            | <a href="https://merrickmath.github.io/APSTAT/materials/Unit6/ZIntervalPSoln.pdf">Solutions</a></li>
+            <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit6/EarthWater.pdf">Estimating the Proportion of Water on Earth</a></li>
+            <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit6/RequiredSampleSizeP.pdf">Required Sample Size for a Margin of Error</a>
+            | <a href="https://merrickmath.github.io/APSTAT/materials/Unit6/RequiredSampleSizePSoln.pdf">Solutions</a></li>
+            <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit6/ConfidenceMeaning.pdf">The Meaning of Confidence</a></li>
+            <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit6/2SampleZInterval.pdf">Two Sample Z-interval for Difference in Proportions</a>
+            | <a href="https://merrickmath.github.io/APSTAT/materials/Unit6/2SampleZIntervalSoln.pdf">Solutions</a></li>
+          </ul>
+        </li>
+        <li><strong>Hypothesis Testing</strong>
+          <ul>
+            <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit6/TastingTea.pdf">The Lady Tasting Tea Hypothesis Testing Intro</a>
+            | <a href="https://merrickmath.github.io/APSTAT/materials/Unit6/TastingTeaSoln.pdf">Solutions</a></li>
+            <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit6/InferenceSteps.pdf">Steps for Statistical Inference</a></li>
+            <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit6/Errors.pdf"> Errors and Power</a>
+            | <a href="https://merrickmath.github.io/APSTAT/materials/Unit6/ErrorsSoln.pdf">Solutions</a></li>
+            <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit6/2SampleZTest.pdf">Two Sample Z-Test for Difference in Proportions</a>
+            | <a href="https://merrickmath.github.io/APSTAT/materials/Unit6/2SampleZTestSoln.pdf">Solutions</a></li>
+          </ul>
+        </li>
+        <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit6/Slides.pdf">Slides</a></li>
+        <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit6/QuickNotes.pdf">Quick Notes</a></li>
+        <li><a href="https://mcspeedrun.com/wp-content/uploads/2025/08/dream.pdf">Minecraft Speedrunning Article (Optional)</a></li>
+      </ul>
+    </details>
+
+      <details class="materials">
+        <summary><span class="chev">▶</span> Unit 7</summary>
+        <ul class="sublist">
+          <ul class="sublist">
+        <li><strong>Confidence Intervals</strong>
+          <ul>
+            <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit7/ZTIntervals.pdf">One-Sample Z and t intervals</a>
+            | <a href="https://merrickmath.github.io/APSTAT/materials/Unit7/ZTIntervalsSoln.pdf">Solutions</a></li>
+            <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit7/ZTIntervalsTwoSample.pdf">Two-Sample Z and t intervals</a>
+            | <a href="https://merrickmath.github.io/APSTAT/materials/Unit7/ZTIntervalsTwoSampleSoln.pdf">Solutions</a></li>
+            <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit7/RequiredSampleSizeMu.pdf">Required Sample Size for Estimation</a>
+            | <a href="https://merrickmath.github.io/APSTAT/materials/Unit7/RequiredSampleSizeMuSoln.pdf">Solutions</a></li>
+          </ul>
+        </li>
+        <li><strong>Hypothesis Testing</strong>
+          <ul>
+            <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit7/ZTtests.pdf"> One-Sample Z and t tests</a>
+            | <a href="https://merrickmath.github.io/APSTAT/materials/Unit7/ZTtestsSoln.pdf">Solutions</a></li>
+            <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit7/ZTtestsTwoSample.pdf"> Two-Sample Z and t tests</a>
+            | <a href="https://merrickmath.github.io/APSTAT/materials/Unit7/ZTtestsTwoSampleSoln.pdf">Solutions</a></li>
+          </ul>
+        </li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit7/Pairedt.pdf"> Matched Pairs Intervals and Tests</a>
+            | <a href="https://merrickmath.github.io/APSTAT/materials/Unit7/PairedtSoln.pdf">Solutions</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit7/Slides.pdf">Slides</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit7/QuickNotes.pdf">Quick Notes</a></li>
+        </ul>
+      </details>
+
+      <details class="materials">
+        <summary><span class="chev">▶</span> Unit 8</summary>
+        <ul class="sublist">
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit8.pdf">Slides</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit8QuickNotes.pdf">Quick Notes</a></li>
+        </ul>
+      </details>
+
+      <details class="materials">
+        <summary><span class="chev">▶</span> Unit 9</summary>
+        <ul class="sublist">
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit9/Slides.pdf">Slides</a></li>
+          <li><a href="https://merrickmath.github.io/APSTAT/materials/Unit9/QuickNotes.pdf">Quick Notes</a></li>
+        </ul>
+      </details>
+
+
+    <!-- Statistics YouTube Binge (drop this under the Unit 9 details, inside the In-Class Materials section) -->
+    <details class="materials">
+      <summary><span class="chev">▶</span> Statistics YouTube Binge 🍿</summary>
+    
+      <ul class="sublist">
+        <li>
+          <strong>Probability & Bayes</strong>
+          <ul>
+            <li><a href="https://www.youtube.com/watch?v=HZGCoVF3YvM&list=PLIhj5_pQwhMQfGZNQZREjDdJRt0t0sn51&index=6" target="_blank" rel="noopener">Bayes Theorem (3Blue1Brown)</a></li>
+            <li><a href="https://www.youtube.com/watch?v=lG4VkPoG3ko&list=PLIhj5_pQwhMQfGZNQZREjDdJRt0t0sn51&index=7" target="_blank" rel="noopener">Medical Test Paradox (3Blue1Brown)</a></li>
+          </ul>
+        </li>
+    
+        <li>
+          <strong>Sampling & Distribution Big Ideas</strong>
+          <ul>
+            <li><a href="https://www.youtube.com/watch?v=zeJD6dqJ5lo&list=PLIhj5_pQwhMQfGZNQZREjDdJRt0t0sn51&index=1" target="_blank" rel="noopener">Central Limit Theorem (3Blue1Brown)</a></li>
+          </ul>
+        </li>
+    
+        <li>
+          <strong>Binomial & Normal (but make it fun)</strong>
+          <ul>
+            <li><a href="https://www.youtube.com/watch?v=8Ko3TdPy0TU&t=617s" target="_blank" rel="noopener">Speedrunning Minecraft — Binomial Distribution (Stand-up Maths)</a></li>
+            <li><a href="https://www.youtube.com/watch?v=8idr1WZ1A7Q&list=PL4cNQ1YkG5WhQGmPnRe4vDUImh_nviriy" target="_blank" rel="noopener">Binomial Distributions (3Blue1Brown)</a></li>
+            <li><a href="https://www.youtube.com/watch?v=cy8r7WSuT1I&list=PL4cNQ1YkG5WhQGmPnRe4vDUImh_nviriy&index=6" target="_blank" rel="noopener">Properties of Normal Distributions (3Blue1Brown)</a></li>
+          </ul>
+        </li>
+    
+        <li>
+          <strong>Randomness in the Wild</strong>
+          <ul>
+            <li><a href="https://www.youtube.com/watch?v=KZeIEiBrT_w" target="_blank" rel="noopener">Markov Chains (Veritasium)</a></li>
+            <li><a href="https://www.youtube.com/watch?v=HBluLfX2F_k" target="_blank" rel="noopener">Power Laws (Veritasium)</a></li>
+            <li><a href="https://www.youtube.com/watch?v=kZTKuMBJP7Y" target="_blank" rel="noopener">Lotteries and Expected Value</a></li>
+          </ul>
+        </li>
+      </ul>
+    </details>
+
+    </section>
+
+    <section>
+      <h2>Class Resources</h2>
+      <ul>
+        <li><a href="https://merrickmath.github.io/APSTAT/materials/PastExamsByUnit.html">Past Exams Problems Tagged By Unit</a></li>
+        <li><a href="https://drive.google.com/drive/folders/1SAwh7_BTf8Mkrvddb032jgdsNS6mII9f?usp=sharing">Class Datasets</a></li>
+        <li><a href="https://www.jbstatistics.com">JBStatistics</a></li>
+        <li><a href="https://www.khanacademy.org/math/ap-statistics">Khan Academy: AP Statistics</a></li>
+        <li><a href="https://www.stapplet.com">Statistics Apps (Stapplet)</a></li>
+        <li><a href="https://www.r-project.org">R download</a></li>
+        <li><a href="https://www.rstudio.com/products/rstudio/download/">R Studio download</a></li>
+      </ul>
+    </section>
+
+    <footer class="site-footer">
+      <small>Last updated: <span id="last-updated">—</span></small>
+    </footer>
+  </main>
+
+  <script>
+    // Countdown to exam: Thursday, May 7, 2026 at 12:00 PM local time
+    (function(){
+      const el = document.getElementById('exam-countdown');
+      if(!el) return;
+      const target = new Date(2026, 4, 7, 12, 0, 0);
+      const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+      function render(){
+        const now = new Date();
+        const diff = target - now;
+        if (diff <= 0) {
+          el.textContent = '0 Days until the exam';
+          return;
+        }
+        const days = Math.ceil(diff / MS_PER_DAY);
+        el.textContent = days + ' Days until the exam';
+      }
+
+      render();
+      setInterval(render, 60 * 60 * 1000);
+    })();
+
+    // Last updated from GitHub commit
+    (async function () {
+      const target = document.getElementById('last-updated') || document.querySelector('#last-updated span');
+      if (!target) return;
+
+      const OWNER  = 'merrickmath';
+      const REPO   = 'Div34Math';
+      const BRANCH = '';
+      const siteBase = '/Div34Math/';
+
+      let path = window.location.pathname;
+      if (siteBase && path.startsWith(siteBase)) path = path.slice(siteBase.length);
+      path = path.replace(/^\/+/, '');
+      if (!path || path.endsWith('/')) path += 'index.html';
+
+      const commitURL = (filePath) => {
+        const u = new URL(`https://api.github.com/repos/${OWNER}/${REPO}/commits`);
+        u.searchParams.set('path', filePath);
+        u.searchParams.set('per_page', '1');
+        if (BRANCH) u.searchParams.set('sha', BRANCH);
+        return u.toString();
+      };
+
+      const fmt = (iso) => {
+        const d = new Date(iso);
+        const opts = { month: 'short', day: '2-digit', year: 'numeric' };
+        return { short: d.toLocaleDateString(undefined, opts), full: d.toLocaleString() };
+      };
+
+      try {
+        let res = await fetch(commitURL(path), { headers: { 'Accept': 'application/vnd.github+json' } });
+        if (!res.ok) throw new Error('GitHub API error');
+        const commits = await res.json();
+        let iso = commits?.[0]?.commit?.committer?.date || commits?.[0]?.commit?.author?.date;
+
+        if (!iso) {
+          const repoRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}`);
+          if (repoRes.ok) {
+            const repo = await repoRes.json();
+            iso = repo?.pushed_at || null;
+          }
+        }
+
+        if (!iso) iso = document.lastModified;
+        const { short, full } = fmt(iso);
+        target.textContent = short;
+        target.title = `Last update source time: ${full}`;
+      } catch (err) {
+        const { short, full } = fmt(document.lastModified);
+        target.textContent = short;
+        target.title = `Fallback from document.lastModified (${full})`;
+      }
+    })();
+
+    // Expand / Collapse all controls for details elements
+    (function(){
+      const expandBtn = document.getElementById('expand-all');
+      const collapseBtn = document.getElementById('collapse-all');
+      const allDetails = () => Array.from(document.querySelectorAll('details.materials'));
+      if (!expandBtn || !collapseBtn) return;
+
+      expandBtn.addEventListener('click', () => allDetails().forEach(d => d.open = true));
+      collapseBtn.addEventListener('click', () => allDetails().forEach(d => d.open = false));
+    })();
+  </script>
+
+</body>
+</html>
