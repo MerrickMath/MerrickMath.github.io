@@ -4,10 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mathematics with Mr. Merrick</title>
-  <!-- Use Cormorant font for elegant math styling -->
+  <!-- Use STIX Two Text font (as in your original) -->
   <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    
   :root{
     --bg:#ffffff;
     --surface:#ffffff;
@@ -28,6 +27,17 @@
   .container{max-width:1100px;margin:14px auto 56px;padding:0 20px;}
   header{display:grid;gap:8px;justify-items:center;text-align:center;margin:8px 0 20px;}
   header .quote{font-size:1.05rem;color:var(--muted);max-width:70ch;margin:0;font-style:italic;font-family:'Cormorant', serif;}
+
+  /* --- Rotating quote additions --- */
+  header .quote{transition: opacity .35s ease;}
+  header .quote.is-fading{opacity:0;}
+  .quote-rotator{display:grid;gap:10px;justify-items:center;}
+  /* --- Rotating quote additions --- */
+  header .quote{transition: opacity .35s ease;}
+  header .quote.is-fading{opacity:0;}
+  .quote-rotator{display:grid;gap:10px;justify-items:center;}
+  /* --- End rotating quote additions --- */
+
   .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;}
   section{grid-column:span 12;background:var(--surface);border:1px solid #e5e7eb;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 18px 10px;}
   @media (min-width:860px){section{grid-column:span 4;}}
@@ -48,7 +58,7 @@
   </style>
 </head>
 <body>
-<!-- body content remains the same -->
+
 <div class="title-wrap">
   <!-- Gaussian SVG -->
   <svg class="title-logo" version="1.1" xmlns="http://www.w3.org/2000/svg" width="210" height="100" viewBox="0 0 210 100" role="img" aria-label="Gaussian distribution">
@@ -74,7 +84,10 @@
 
 <div class="container">
   <header>
-    <p class="quote"><em>“The enchanting charms of this sublime science reveal only to those who have the courage to go deeply into it.”</em> — Carl Friedrich Gauss</p>
+    <!-- Rotating quote replaces your single static quote -->
+    <div class="quote-rotator" aria-live="polite">
+      <p class="quote" id="quoteText"></p>
+</div>
   </header>
 
   <main id="main" class="grid" aria-label="Main sections">
@@ -88,6 +101,7 @@
         <!--- <li class="linkitem"><a href="https://merrickmath.github.io/LinearAlgebra/" data-ext="true" aria-label="Linear Algebra"><span>Linear Algebra</span><span class="badge">Elective</span></a></li> -->
       </ul>
     </section>
+
     <section aria-labelledby="sec-games">
       <h2 id="sec-games">Games</h2>
       <ul class="linklist">
@@ -99,6 +113,7 @@
         <li class="linkitem"><a href="https://merrickmath.github.io/Games/Vectortarget.html" data-ext="true"><span>Vector Target</span></a></li>
       </ul>
     </section>
+
     <section aria-labelledby="sec-contests">
       <h2 id="sec-contests">Contests</h2>
       <ul class="linklist">
@@ -109,6 +124,7 @@
         <li class="linkitem"><a href="https://renertmath.github.io/renertrabbit.html" target="_blank" rel="noopener"><span>Renert Rabbit</span></a></li>
       </ul>
     </section>
+
     <section aria-labelledby="sec-challenges">
       <h2 id="sec-challenges">Challenges</h2>
       <ul class="linklist">
@@ -120,6 +136,7 @@
         <li class="linkitem"><a href="https://renertmath.github.io/RenertMath-PumpkinBomb2021/" data-ext="true"><span>Pumpkin BOMB Challenge 2021</span></a></li>
       </ul>
     </section>
+
     <section aria-labelledby="sec-more">
       <h2 id="sec-more">More Cool Stuff</h2>
       <ul class="linklist">
@@ -136,6 +153,49 @@
   </main>
   <footer></footer>
 </div>
+
+<!-- Quote rotation script -->
+<script>
+(function () {
+  // Add as many quotes as you want here:
+  const quotes = [
+    { text: "The enchanting charms of this sublime science reveal only to those who have the courage to go deeply into it.", author: "Carl Friedrich Gauss" },
+    { text: "Pure mathematics is, in its way, the poetry of logical ideas.", author: "Albert Einstein" },
+    { text: "Mathematics is the music of reason.", author: "James Joseph Sylvester" },
+    { text: "In mathematics the art of proposing a question must be held of higher value than solving it.", author: "Georg Cantor" }
+  ];
+
+  const quoteEl = document.getElementById("quoteText");
+  if (!quoteEl || quotes.length === 0) return;
+
+  let i = Math.floor(Math.random() * quotes.length);
+  const ROTATE_MS = 8000; // change timing here
+
+  function render(index) {
+    const q = quotes[index];
+    quoteEl.innerHTML = `<em>“${q.text}”</em> — ${q.author}`;
+  }
+
+  function next() {
+    quoteEl.classList.add("is-fading");
+    window.setTimeout(() => {
+      i = (i + 1) % quotes.length;
+      render(i);
+      quoteEl.classList.remove("is-fading");
+    }, 350);
+  }
+
+  // Initial paint
+  render(i);
+
+  // Auto-rotate (no controls)
+  if (quotes.length > 1) {
+    window.setInterval(next, ROTATE_MS);
+  }
+})();
+</script>
+
+<!-- Your original scroll-to-top-on-load script (kept) -->
 <script>
 (function(){
   const nav = performance.getEntriesByType('navigation')[0];
@@ -145,6 +205,7 @@
     window.addEventListener('pageshow', function (e) { if (e.persisted || isReload) { window.scrollTo(0,0); } });
   }
 })();
-</script>  
+</script>
+
 </body>
 </html>
