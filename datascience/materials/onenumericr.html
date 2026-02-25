@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Visualizing One Numeric Variable in R — Hands-On Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#ffffff; --panel:#ffffff; --ink:#0f172a; --muted:#475569; --brand:#1d4ed8; --accent:#059669;
+      --chip:#f1f5f9; --border:#e2e8f0; --code:#f8fafc;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "STIX Two Text","Times New Roman",Times,serif}
+    a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
+    code,pre,kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono","Courier New",monospace}
+    .wrap{max-width:1000px;margin:0 auto;padding:24px}
+    h1{font-size:28px;margin:0 0 8px}
+    h2{font-size:24px;margin:22px 0 8px}
+    h3{font-size:18px;margin:18px 0 8px}
+    .lead{font-size:18px}
+    .panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px}
+    .chip{display:inline-block;background:var(--chip);border:1px solid var(--border);padding:2px 8px;border-radius:999px;font-size:12px}
+    pre{background:var(--code);border:1px solid var(--border);border-radius:10px;padding:12px;overflow:auto}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px}
+    .viz{background:var(--chip);border:1px solid var(--border);border-radius:14px;padding:10px}
+    .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .footer{margin:28px 0 8px;color:var(--muted);font-size:14px}
+  </style>
+</head>
+<body>
+  <header class="panel" style="position:sticky;top:0;z-index:10;backdrop-filter:saturate(1.2) blur(6px)">
+    <div class="wrap" style="padding:8px 24px">
+      <h1>Visualizing One Numeric Variable in R</h1>
+      <div class="controls">
+        <span class="chip">Live demo data</span>
+        <label>Shape:
+          <select id="shape">
+            <option value="normal">Unimodal (Normal-ish)</option>
+            <option value="skew">Right-skewed (Log-normal)</option>
+            <option value="bimodal">Bimodal (mixture)</option>
+            <option value="outliers">Unimodal + outliers</option>
+          </select>
+        </label>
+        <label>n = <input id="n" type="range" min="50" max="2000" value="400" step="50"> <strong id="nval">400</strong></label>
+        <label>Bins = <input id="bins" type="range" min="5" max="60" value="30"> <strong id="binsval">30</strong></label>
+        <button id="regen" class="chip" title="Regenerate sample">Regenerate</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="panel">
+      <p class="lead"><strong>Numeric (quantitative) variable:</strong> values where arithmetic is meaningful (mean, differences). Examples: height (cm), income ($), reaction time (ms). Below are the most reliable plots for understanding the <em>distribution</em> of one numeric variable—each with copy-pasteable R code.</p>
+    </section>
+
+    <section id="hist" class="grid">
+      <div class="panel">
+        <h2>1) Histogram</h2>
+        <p>Best first look at shape (modality), center, spread, skewness. Pick a sensible number of bins—too few hides structure; too many adds noise.</p>
+        <div id="viz-hist" class="viz" role="img" aria-label="Interactive histogram"></div>
+        <details><summary>R / ggplot2</summary>
+<pre><code class="language-r">library(tidyverse)
+tibble(x) %>%
+  ggplot(aes(x)) +
+  geom_histogram(bins = 30, fill = "#93c5fd", color = "white") +
+  labs(title = "Histogram", x = "x", y = "Count") +
+  theme_minimal(base_size = 12)</code></pre>
+        </details>
+      </div>
+    </section>
+
+    <section id="density" class="grid">
+      <div class="panel">
+        <h2>2) Density plot (KDE)</h2>
+        <p>Smoothed estimate of the distribution. The bandwidth controls smoothness; too small → wiggly, too large → over-smoothed.</p>
+        <div id="viz-density" class="viz" role="img" aria-label="Interactive density plot"></div>
+        <details><summary>R / ggplot2</summary>
+<pre><code class="language-r">ggplot(tibble(x), aes(x)) +
+  geom_density(adjust = 1.1, fill = "#c7d2fe", color = NA) +
+  labs(title = "Density (KDE)", x = "x", y = "Density") +
+  theme_minimal()</code></pre>
+        </details>
+      </div>
+    </section>
+
+    <section id="box" class="grid">
+      <div class="panel">
+        <h2>3) Box plot</h2>
+        <p>Summarizes five numbers (min, Q1, median, Q3, max). Points beyond whiskers are <em>outside 1.5×IQR</em> and flagged as outliers.</p>
+        <div id="viz-box" class="viz" role="img" aria-label="Interactive box plot"></div>
+        <details><summary>R / ggplot2</summary>
+<pre><code class="language-r">ggplot(tibble(x), aes(y = x)) +
+  geom_boxplot(width = .25, fill = "#e9d5ff") +
+  coord_flip() +
+  labs(y = "x", x = NULL, title = "Box plot") +
+  theme_minimal()</code></pre>
+        </details>
+      </div>
+    </section>
+
+    <section id="dot" class="grid">
+      <div class="panel">
+        <h2>4) Strip / Dot plot</h2>
+        <p>Shows every observation. Use jitter + transparency to reveal overlap. Best for ≤ a few hundred points.</p>
+        <div id="viz-dot" class="viz" role="img" aria-label="Interactive dot plot"></div>
+        <details><summary>R / ggplot2</summary>
+<pre><code class="language-r">ggplot(tibble(x), aes(x = 1, y = x)) +
+  geom_jitter(width = .08, alpha = .35, height = 0, color = "#60a5fa") +
+  labs(x = NULL, y = "x", title = "Strip (dot) plot") +
+  theme_minimal()</code></pre>
+        </details>
+      </div>
+    </section>
+
+    <section id="ecdf" class="grid">
+      <div class="panel">
+        <h2>5) ECDF (Empirical CDF)</h2>
+        <p>At any value <em>t</em>, the ECDF shows the fraction ≤ <em>t</em>. Great for reading medians/quantiles and for comparing groups.</p>
+        <div id="viz-ecdf" class="viz" role="img" aria-label="Interactive ECDF"></div>
+        <details><summary>R / ggplot2</summary>
+<pre><code class="language-r">ggplot(tibble(x), aes(x)) +
+  stat_ecdf(geom = "step") +
+  labs(x = "x", y = "F(x)", title = "ECDF") +
+  theme_minimal()</code></pre>
+        </details>
+      </div>
+    </section>
+
+    <section id="bins" class="panel">
+      <h2>Choosing the number of bins (histograms)</h2>
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr><th style="text-align:left;border:1px solid var(--border);padding:6px;background:#f8fafc">Rule</th><th style="text-align:left;border:1px solid var(--border);padding:6px;background:#f8fafc">Formula</th><th style="text-align:left;border:1px solid var(--border);padding:6px;background:#f8fafc">Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td style="border:1px solid var(--border);padding:6px">Sturges</td><td style="border:1px solid var(--border);padding:6px"><code>bins = ⌈log2(n) + 1⌉</code></td><td style="border:1px solid var(--border);padding:6px">Simple; under-bins large samples</td></tr>
+          <tr><td style="border:1px solid var(--border);padding:6px">Freedman–Diaconis</td><td style="border:1px solid var(--border);padding:6px"><code>binwidth = 2·IQR·n^(−1/3)</code></td><td style="border:1px solid var(--border);padding:6px">Robust to outliers; good default</td></tr>
+          <tr><td style="border:1px solid var(--border);padding:6px">Scott</td><td style="border:1px solid var(--border);padding:6px"><code>binwidth = 3.5·σ·n^(−1/3)</code></td><td style="border:1px solid var(--border);padding:6px">Assumes near-normality</td></tr>
+        </tbody>
+      </table>
+<details><summary>R helper for FD binwidth</summary>
+<pre><code class="language-r">fd_bw <- function(x){ 2 * IQR(x) / length(x)^(1/3) }
+ggplot(tibble(x), aes(x)) +
+  geom_histogram(binwidth = fd_bw(x))</code></pre>
+</details>
+    </section>
+
+    <section id="tips" class="panel">
+      <h2>Pitfalls & tips</h2>
+      <ul>
+        <li><strong>Axis starts:</strong> Counts should include zero on the y-axis; density/ECDF don’t need a zero baseline.</li>
+        <li><strong>Outliers:</strong> Inspect with box/strip plots before summarizing with means.</li>
+        <li><strong>Skew:</strong> Consider log scale for positive, right-skewed variables; always annotate units.</li>
+        <li><strong>Overplotting:</strong> Use jitter/alpha for dots; summarize with histogram/density when n is large.</li>
+      </ul>
+    </section>
+
+    <section id="refs" class="panel">
+      <h2>References</h2>
+      <ul>
+        <li>Wickham, H. <em>ggplot2: Elegant Graphics for Data Analysis</em></li>
+        <li>Wickham &amp; Grolemund, <em>R for Data Science</em> (2e)</li>
+      </ul>
+    </section>
+
+    <div class="footer">Made with ❤️ for R users. Copy, tweak, and ship.</div>
+  </main>
+
+  <!-- D3 for on-page visuals -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script>
+    const $ = sel => document.querySelector(sel);
+    const W = 680, H = 260, M = {t:20,r:20,b:35,l:40};
+    const innerW = W - M.l - M.r, innerH = H - M.t - M.b;
+
+    function randn(n, m=0, s=1){ return d3.range(n).map(()=> d3.randomNormal(m, s)()); }
+    function rlogn(n, mu=0, sd=0.6){ return d3.range(n).map(()=> d3.randomLogNormal(mu, sd)()); }
+    function sampleData(shape, n){
+      if(shape==='normal') return randn(n,0,1);
+      if(shape==='skew') return rlogn(n,0,0.6);
+      if(shape==='bimodal'){
+        const n1=Math.floor(n*0.55), n2=n-n1;
+        return randn(n1,-1,0.6).concat(randn(n2,1.4,0.5));
+      }
+      if(shape==='outliers'){
+        const core = randn(n-6,0,1);
+        return core.concat([-4.5,-3.8,3.9,4.3,5.6,6.5]);
+      }
+      return randn(n,0,1);
+    }
+    function niceExtent(x){ const e = d3.extent(x); const pad = (e[1]-e[0])*0.05; return [e[0]-pad, e[1]+pad]; }
+    function kde(kernel, X){ return V => X.map(x => [x, d3.mean(V, v => kernel(x - v))]); }
+    const kEpan = k => v => Math.abs(v/=k) <= 1 ? 0.75 * (1 - v*v) / k : 0;
+
+    function frame(sel, yLabel){
+      const svg = d3.select(sel).html("")
+        .append("svg").attr("viewBox",`0 0 ${W} ${H}`).attr("role","img");
+      const g = svg.append("g").attr("transform",`translate(${M.l},${M.t})`);
+      g.append("g").attr("class","x-axis").attr("transform",`translate(0,${innerH})`);
+      g.append("g").attr("class","y-axis");
+      g.append("text").attr("x",-innerH/2).attr("y",-28)
+        .attr("transform","rotate(-90)").attr("text-anchor","middle").text(yLabel);
+      return g;
+    }
+
+    function renderAll(){
+      const shape = $('#shape').value;
+      const n = +$('#n').value; $('#nval').textContent = n;
+      const binsN = +$('#bins').value; $('#binsval').textContent = binsN;
+      const x = sampleData(shape, n);
+      const xdom = niceExtent(x);
+
+      // Histogram
+      (function(){
+        const g = frame('#viz-hist','Count');
+        const xScale = d3.scaleLinear().domain(xdom).range([0, innerW]);
+        const bins = d3.bin().domain(xScale.domain()).thresholds(binsN)(x);
+        const yScale = d3.scaleLinear().domain([0, d3.max(bins, d=>d.length)]).nice().range([innerH, 0]);
+        g.select('.x-axis').call(d3.axisBottom(xScale));
+        g.select('.y-axis').call(d3.axisLeft(yScale).ticks(5));
+        g.selectAll('rect').data(bins).join('rect')
+          .attr('x', d=>xScale(d.x0)+1)
+          .attr('y', d=>yScale(d.length))
+          .attr('width', d=>Math.max(0, xScale(d.x1)-xScale(d.x0)-2))
+          .attr('height', d=>innerH - yScale(d.length))
+          .attr('fill', '#93c5fd').attr('stroke', '#ffffff');
+      })();
+
+      // Density (KDE)
+      (function(){
+        const g = frame('#viz-density','Density');
+        const xScale = d3.scaleLinear().domain(xdom).range([0, innerW]);
+        const bw = 1.06 * (d3.deviation(x) || 1) * Math.pow(n, -1/5); // Silverman
+        const X = d3.range(xdom[0], xdom[1], (xdom[1]-xdom[0])/200);
+        const dens = kde(kEpan(bw), X)(x);
+        const yScale = d3.scaleLinear().domain([0, d3.max(dens, d=>d[1])*1.05]).range([innerH, 0]);
+        g.select('.x-axis').call(d3.axisBottom(xScale));
+        g.select('.y-axis').call(d3.axisLeft(yScale).ticks(5));
+        g.append('path').datum(dens)
+          .attr('d', d3.area().x(d=>xScale(d[0])).y0(innerH).y1(d=>yScale(d[1])))
+          .attr('fill','#c7d2fe');
+        g.append('path').datum(dens)
+          .attr('d', d3.line().x(d=>xScale(d[0])).y(d=>yScale(d[1])))
+          .attr('fill','none').attr('stroke','#1d4ed8');
+      })();
+
+      // Box plot
+      (function(){
+        const g = frame('#viz-box','');
+        const xScale = d3.scaleLinear().domain(xdom).range([0, innerW]);
+        const sorted = x.slice().sort(d3.ascending);
+        const q1 = d3.quantileSorted(sorted, 0.25),
+              q2 = d3.quantileSorted(sorted, 0.50),
+              q3 = d3.quantileSorted(sorted, 0.75);
+        const iqr = q3 - q1;
+        const low = Math.max(xdom[0], q1 - 1.5*iqr);
+        const high = Math.min(xdom[1], q3 + 1.5*iqr);
+        const y0 = innerH/2 - 18, y1 = innerH/2 + 18;
+        g.select('.x-axis').call(d3.axisBottom(xScale));
+        g.select('.y-axis').remove();
+        g.append('line').attr('x1', xScale(low)).attr('x2', xScale(high)).attr('y1', innerH/2).attr('y2', innerH/2).attr('stroke', '#475569');
+        g.append('rect').attr('x', xScale(q1)).attr('y', y0).attr('width', xScale(q3)-xScale(q1)).attr('height', y1-y0)
+          .attr('fill', '#e9d5ff').attr('stroke', '#7c3aed');
+        g.append('line').attr('x1', xScale(q2)).attr('x2', xScale(q2)).attr('y1', y0).attr('y2', y1)
+          .attr('stroke', '#7c3aed').attr('stroke-width',2);
+        const out = x.filter(v => v < low || v > high);
+        g.selectAll('circle').data(out).enter().append('circle')
+          .attr('cx', d=>xScale(d)).attr('cy', innerH/2).attr('r', 2.5).attr('fill', '#7c3aed').attr('opacity',0.85);
+      })();
+
+      // Strip / Dot plot
+      (function(){
+        const g = frame('#viz-dot','');
+        const xScale = d3.scaleLinear().domain(xdom).range([0, innerW]);
+        const y = innerH/2;
+        g.select('.x-axis').call(d3.axisBottom(xScale));
+        g.select('.y-axis').remove();
+        const jitter = d3.randomNormal(0, 6);
+        g.selectAll('circle').data(x).enter().append('circle')
+          .attr('cx', d=>xScale(d)).attr('cy', ()=> y + jitter())
+          .attr('r', 2.2).attr('fill', '#60a5fa').attr('opacity', 0.45);
+      })();
+
+      // ECDF
+      (function(){
+        const g = frame('#viz-ecdf','F(x)');
+        const xScale = d3.scaleLinear().domain(xdom).range([0, innerW]);
+        const sorted = x.slice().sort(d3.ascending);
+        const n1 = sorted.length;
+        const step = sorted.map((v,i)=>[v,(i+1)/n1]);
+        const yScale = d3.scaleLinear().domain([0,1]).range([innerH,0]);
+        g.select('.x-axis').call(d3.axisBottom(xScale));
+        g.select('.y-axis').call(d3.axisLeft(yScale).ticks(5));
+        g.append('path').datum(step)
+          .attr('d', d3.line().x(d=>xScale(d[0])).y(d=>yScale(d[1])).curve(d3.curveStepAfter))
+          .attr('fill','none').attr('stroke','#334155').attr('stroke-width',1.6);
+      })();
+    }
+
+    ['shape','n','bins'].forEach(id => document.getElementById(id).addEventListener('input', renderAll));
+    document.getElementById('regen').addEventListener('click', renderAll);
+    renderAll();
+  </script>
+</body>
+</html>

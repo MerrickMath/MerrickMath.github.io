@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Visualizing Two Numeric Variables in R — Hands-On Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#ffffff; --panel:#ffffff; --ink:#0f172a; --muted:#475569; --brand:#1d4ed8; --accent:#059669;
+      --chip:#f1f5f9; --border:#e2e8f0; --code:#f8fafc;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "STIX Two Text","Times New Roman",Times,serif}
+    h1{font-size:28px;margin:0 0 8px}
+    h2{font-size:24px;margin:22px 0 8px}
+    .lead{font-size:18px}
+    .wrap{max-width:1000px;margin:0 auto;padding:24px}
+    .panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:20px}
+    .viz{background:var(--chip);border:1px solid var(--border);border-radius:14px;padding:10px}
+    .chip{display:inline-block;background:var(--chip);border:1px solid var(--border);padding:2px 8px;border-radius:999px;font-size:12px}
+    pre{background:var(--code);border:1px solid var(--border);border-radius:10px;padding:12px;overflow:auto}
+    .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .footer{margin:28px 0 8px;color:var(--muted);font-size:14px}
+    .mini-note{color:var(--muted);font-size:14px;margin-top:6px}
+  </style>
+</head>
+<body>
+  <header class="panel" style="position:sticky;top:0;z-index:10;backdrop-filter:saturate(1.2) blur(6px)">
+    <div class="wrap" style="padding:8px 24px">
+      <h1>Visualizing Two Numeric Variables in R</h1>
+      <div class="controls">
+        <span class="chip">Live demo data</span>
+        <label>n = <input id="n" type="range" min="50" max="5000" value="800" step="50"> <strong id="nval">800</strong></label>
+        <label>Noise (sd ε) = <input id="noise" type="range" min="0.1" max="2.5" value="0.8" step="0.1"> <strong id="noiseval">0.8</strong></label>
+        <button id="regen" class="chip">Regenerate</button>
+      </div>
+      <div class="mini-note">Data generating process: <code>y = 1.5·x + ε</code>, where <code>x ~ N(0,1)</code> and <code>ε ~ N(0, sd)</code>.</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="panel">
+      <p class="lead">With <strong>two numeric variables</strong> (say <code>x</code> and <code>y</code>), we visualize their <em>relationship</em>: trends, clusters, correlation, and outliers. Start with a <strong>scatter plot</strong>, add a <strong>trend line</strong> for structure, and switch to <strong>hexbin</strong> when there’s heavy overplotting.</p>
+    </section>
+
+    <section id="scatter" class="panel">
+      <h2>1) Scatter plot</h2>
+      <div id="viz-scatter" class="viz" role="img" aria-label="Scatter plot"></div>
+      <div id="corr-readout" class="mini-note"></div>
+      <details><summary>R / ggplot2</summary>
+<pre><code class="language-r">library(tidyverse)
+set.seed(1)
+n <- 800
+x <- rnorm(n)
+y <- 1.5*x + rnorm(n, sd = 0.8)
+df <- tibble(x, y)
+
+ggplot(df, aes(x, y)) +
+  geom_point(alpha = 0.6, color = "#2563eb") +
+  labs(title = "Scatter plot", x = "x", y = "y") +
+  theme_minimal()</code></pre>
+      </details>
+    </section>
+
+    <section id="smooth" class="panel">
+      <h2>2) Scatter + smoother</h2>
+      <p>Add a model or smoother (linear, LOESS, GAM) to reveal patterns hidden by noise. Below we show a linear fit.</p>
+      <div id="viz-smooth" class="viz" role="img" aria-label="Scatter with regression line"></div>
+      <details><summary>R / ggplot2</summary>
+<pre><code class="language-r">ggplot(df, aes(x, y)) +
+  geom_point(alpha = 0.5, color = "#2563eb") +
+  geom_smooth(method = "lm", se = TRUE, color = "#dc2626") +
+  labs(title = "Scatter with linear regression line", x = "x", y = "y") +
+  theme_minimal()
+
+# LOESS (nonlinear trend)
+ggplot(df, aes(x, y)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "loess", se = TRUE) +
+  theme_minimal()</code></pre>
+      </details>
+    </section>
+
+    <section id="hexbin" class="panel">
+      <h2>3) Large n: hexbin / 2D density</h2>
+      <p>With thousands of points, scatter plots overplot. <strong>Hexbin</strong> discretizes space into hexagons and colors by count. (Alternative: 2D density contours.)</p>
+      <div id="viz-hex" class="viz" role="img" aria-label="Hexbin plot"></div>
+      <details><summary>R / ggplot2</summary>
+<pre><code class="language-r"># Hexbin (requires hexbin package usually installed with ggplot2)
+ggplot(df, aes(x, y)) +
+  geom_hex() +
+  coord_equal() +
+  theme_minimal()
+
+# 2D density contours
+ggplot(df, aes(x, y)) +
+  geom_point(alpha = 0.15) +
+  geom_density_2d(color = "red") +
+  theme_minimal()</code></pre>
+      </details>
+    </section>
+
+    <section id="cor" class="panel">
+      <h2>4) Correlation</h2>
+      <p>Pearson’s <code>r</code> (−1…+1) summarizes linear association. Always pair with a plot—nonlinear patterns can fool correlation.</p>
+<pre><code class="language-r">cor(df$x, df$y)                 # Pearson correlation
+cor(df$x, df$y, method="spearman")  # Spearman (rank-based)</code></pre>
+    </section>
+
+    <section class="panel">
+      <h2>Pitfalls & tips</h2>
+      <ul>
+        <li><strong>Overplotting:</strong> Use alpha blending or hexbin/density plots.</li>
+        <li><strong>Outliers:</strong> They can dominate regression and correlation; inspect residuals.</li>
+        <li><strong>Nonlinearity:</strong> Try LOESS/GAM smoothers; check residual patterns.</li>
+        <li><strong>Scale/units:</strong> If scales differ a lot, consider standardizing; always label units.</li>
+      </ul>
+    </section>
+
+    <div class="footer">Made with ❤️ for R users. Copy, tweak, and ship.</div>
+  </main>
+
+  <!-- Load D3 and the hexbin plugin (required for hexbin). Order matters: plugin after D3. -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-hexbin@0.2"></script>
+  <script>
+    const W=680,H=300,M={t:20,r:20,b:35,l:45};
+    const innerW=W-M.l-M.r, innerH=H-M.t-M.b;
+    const $=sel=>document.querySelector(sel);
+
+    function sampleData(n, noise=0.8){
+      const xn = d3.range(n).map(()=> d3.randomNormal(0,1)());
+      const eps = d3.range(n).map(()=> d3.randomNormal(0,noise)());
+      const yn = xn.map((v,i)=> 1.5*v + eps[i]);
+      return xn.map((v,i)=>({x:v, y:yn[i]}));
+    }
+    function axesFrame(sel){
+      const svg=d3.select(sel).html("")
+        .append("svg").attr("viewBox",`0 0 ${W} ${H}`);
+      const g=svg.append("g").attr("transform",`translate(${M.l},${M.t})`);
+      g.append("g").attr("class","x-axis").attr("transform",`translate(0,${innerH})`);
+      g.append("g").attr("class","y-axis");
+      return {svg,g};
+    }
+    function pearsonR(data){
+      const n=data.length;
+      const mx=d3.mean(data,d=>d.x), my=d3.mean(data,d=>d.y);
+      const sx=Math.sqrt(d3.mean(data,d=>(d.x-mx)**2));
+      const sy=Math.sqrt(d3.mean(data,d=>(d.y-my)**2));
+      const cov=d3.mean(data,d=>(d.x-mx)*(d.y-my));
+      return cov/(sx*sy);
+    }
+
+    function renderAll(){
+      const n=+$('#n').value; $('#nval').textContent=n;
+      const noise=+$('#noise').value; $('#noiseval').textContent=noise.toFixed(1);
+      const data=sampleData(n, noise);
+
+      const xdom=d3.extent(data,d=>d.x), ydom=d3.extent(data,d=>d.y);
+      const xScale=d3.scaleLinear().domain(xdom).nice().range([0,innerW]);
+      const yScale=d3.scaleLinear().domain(ydom).nice().range([innerH,0]);
+
+      // 1) Scatter
+      (function(){
+        const {g}=axesFrame('#viz-scatter');
+        g.select('.x-axis').call(d3.axisBottom(xScale));
+        g.select('.y-axis').call(d3.axisLeft(yScale));
+        g.selectAll('circle').data(data).enter().append('circle')
+          .attr('cx',d=>xScale(d.x)).attr('cy',d=>yScale(d.y))
+          .attr('r',3).attr('fill','#2563eb').attr('opacity',0.6);
+        const r = pearsonR(data);
+        $('#corr-readout').textContent = `Pearson r ≈ ${r.toFixed(3)} (live)`;
+      })();
+
+      // 2) Scatter + linear regression line
+      (function(){
+        const {g}=axesFrame('#viz-smooth');
+        g.select('.x-axis').call(d3.axisBottom(xScale));
+        g.select('.y-axis').call(d3.axisLeft(yScale));
+        g.selectAll('circle').data(data).enter().append('circle')
+          .attr('cx',d=>xScale(d.x)).attr('cy',d=>yScale(d.y))
+          .attr('r',2.5).attr('fill','#2563eb').attr('opacity',0.5);
+
+        // OLS line y = a + b x
+        const xbar=d3.mean(data,d=>d.x), ybar=d3.mean(data,d=>d.y);
+        const b = d3.sum(data,d=>(d.x-xbar)*(d.y-ybar)) / d3.sum(data,d=>(d.x-xbar)**2);
+        const a = ybar - b*xbar;
+        const pts=[xdom[0], xdom[1]].map(x=>({x, y:a + b*x}));
+        g.append('line')
+          .attr('x1', xScale(pts[0].x)).attr('y1', yScale(pts[0].y))
+          .attr('x2', xScale(pts[1].x)).attr('y2', yScale(pts[1].y))
+          .attr('stroke', '#dc2626').attr('stroke-width', 2);
+      })();
+
+      // 3) Hexbin (requires d3-hexbin plugin)
+      (function(){
+        const sel = '#viz-hex';
+        d3.select(sel).selectAll("*").remove();
+        const svg = d3.select(sel).append("svg").attr("viewBox", `0 0 ${W} ${H}`);
+        const g = svg.append("g").attr("transform", `translate(${M.l},${M.t})`);
+
+        g.append("g").attr("class","x-axis").attr("transform",`translate(0,${innerH})`).call(d3.axisBottom(xScale));
+        g.append("g").attr("class","y-axis").call(d3.axisLeft(yScale));
+
+        const hex = d3.hexbin()
+          .x(d => xScale(d.x))
+          .y(d => yScale(d.y))
+          .radius(12)
+          .extent([[0,0],[innerW,innerH]]);
+
+        const bins = hex(data);
+        const maxCount = d3.max(bins, d => d.length) || 1;
+        const color = d3.scaleSequential(d3.interpolateBlues).domain([0, maxCount]);
+
+        g.append("g").selectAll("path").data(bins).enter().append("path")
+          .attr("d", hex.hexagon())
+          .attr("transform", d => `translate(${d.x},${d.y})`)
+          .attr("fill", d => color(d.length))
+          .attr("stroke", "white")
+          .attr("stroke-width", 0.6);
+      })();
+    }
+
+    document.getElementById('n').addEventListener('input', renderAll);
+    document.getElementById('noise').addEventListener('input', renderAll);
+    document.getElementById('regen').addEventListener('click', renderAll);
+    renderAll();
+  </script>
+</body>
+</html>
