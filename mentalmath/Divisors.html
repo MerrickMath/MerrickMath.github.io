@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Divisor Trainer</title>
+  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --panel: #ffffff;
+      --muted: #475569;
+      --text: #0f172a;
+      --accent: #0ea5e9;
+      --accent-2: #8b5cf6;
+      --chip: #f1f5f9;
+      --line: #e2e8f0;
+      --shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; background:var(--bg); color:var(--text);
+      font-family:'STIX Two Text', Georgia, serif;
+    }
+    .container{max-width:900px;margin:0 auto;padding:20px}
+    header {
+      display: flex;
+      justify-content: center;  /* center horizontally */
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    h1{margin:0;font-size:1.8rem;letter-spacing:.3px;font-weight:700}
+    .timer{font-variant-numeric:tabular-nums;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 10px;display:inline-flex;gap:8px;align-items:center;font-size:14px}
+    .timer .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 8px var(--accent-2)}
+    .controls{display:flex;gap:6px}
+    button,select,input[type="text"]{
+      appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--text);
+      padding:6px 12px;border-radius:8px;font-size:14px;cursor:pointer;
+      transition:background .2s ease, transform .1s ease;
+    }
+    button:hover{background:#e0f2fe}
+    button:active{transform:translateY(1px)}
+    button.primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border:none;font-weight:700}
+    .toolbar{display:grid;gap:10px;margin-bottom:14px}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;box-shadow:var(--shadow)}
+    .chip{background:var(--chip);border:1px dashed var(--line);padding:4px 8px;border-radius:999px;font-size:13px;color:var(--muted)}
+    .game-tile{
+      display:block;text-align:center;font-size:2.4rem;font-weight:700;letter-spacing:.5px;
+      padding:30px;margin:20px auto;border-radius:18px;cursor:pointer;
+      background:linear-gradient(160deg,rgba(14,165,233,.15),rgba(139,92,246,.15));
+      box-shadow:var(--shadow);
+      transition:transform .12s ease;
+    }
+    .game-tile:hover{transform:translateY(-2px);}
+    .meta{display:grid;gap:8px;font-size:15px;margin-top:14px}
+    .fact{display:grid;grid-template-columns:130px 1fr;gap:6px;align-items:baseline}
+    .fact .k{color:var(--muted)}
+    .footer{margin-top:16px;color:var(--muted);font-size:12px;text-align:center}
+    #solutionPanel { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>— Divisor Trainer —</h1>
+    </header>
+
+
+
+    <section class="toolbar">
+      <!-- Row 1: primes, max exp, seed, timer, Generate -->
+      <div class="panel" id="row1" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+        <span style="color:var(--muted);margin-right:6px">Primes:</span>
+        <label class="chip"><input type="checkbox" id="p2" checked> 2</label>
+        <label class="chip"><input type="checkbox" id="p3" checked> 3</label>
+        <label class="chip"><input type="checkbox" id="p5" checked> 5</label>
+        <label class="chip"><input type="checkbox" id="p7" checked> 7</label>
+        <label class="chip"><input type="checkbox" id="p11"> 11</label>
+        <label class="chip"><input type="checkbox" id="p13"> 13</label>
+    
+        <span class="chip">Max exp:
+          <select id="maxExp">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3" selected>3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </span>
+    
+        <span class="chip">Seed:
+          <input id="seed" type="text" placeholder="random"
+                 style="border:0;background:transparent;outline:none;width:120px">
+        </span>
+    
+        <!-- Timer stays on the right -->
+        <div class="timer" id="timer" style="margin-left:auto">
+          <span class="dot"></span><span id="clock">00:00</span>
+        </div>
+    
+        <!-- Generate now lives on the same card -->
+        <button id="genBtn" class="primary" style="margin-left:8px">Generate</button>
+      </div>
+    </section>
+
+
+
+    <div id="numberTile" class="game-tile">Click Generate</div>
+
+    <section class="panel" id="solutionPanel">
+      <div style="font-weight:700;margin-bottom:8px">Solution</div>
+      <div id="solutionBody"></div>
+      <div id="divisorsRow" class="fact" style="margin-top:10px"><div class="k">Divisors (<span id="dCount">0</span>):</div><div id="divisors"></div></div>
+    </section>
+
+    <div class="footer">Click the number to reveal its factorization and divisors.</div>
+  </div>
+
+  <script>
+    const clockEl=document.getElementById('clock');
+    let running=false,t0=0,accum=0,rafId=null;
+    const fmt=ms=>{const s=Math.floor(ms/1000),m=Math.floor(s/60);return String(m).padStart(2,'0')+":"+String(s%60).padStart(2,'0');};
+    function tick(){if(!running) return;const now=performance.now();clockEl.textContent=fmt(accum+(now-t0));rafId=requestAnimationFrame(tick);} 
+
+
+    const primesAll=[2,3,5,7,11,13];
+    function powBigInt(p,e){let r=1n,P=BigInt(p);for(let i=0;i<e;i++)r*=P;return r;}
+    function product(arr){return arr.reduce((a,b)=>a*b,1n);}
+    function seededRng(seedStr){let h=2166136261>>>0;for(let i=0;i<seedStr.length;i++){h^=seedStr.charCodeAt(i);h=Math.imul(h,16777619);}let x=(h^0x9e3779b9)>>>0;return ()=> (x=(Math.imul(x,1664525)+1013904223)>>>0)/2**32;}
+
+    function pickExponents(maxExp,rng){
+      const selected=primesAll.filter(p=>document.getElementById('p'+p).checked);
+      if(!selected.length){alert('Select at least one prime.');return null;}
+      const exps={};let nonZero=0;
+      for(const p of selected){const e=Math.floor((rng?rng():Math.random())*(maxExp+1));exps[p]=e;if(e>0) nonZero++;}
+      if(nonZero===0){const pi=selected[Math.floor((rng?rng():Math.random())*selected.length)];exps[pi]=1;}
+      return exps;
+    }
+
+    function restartTimer() {
+      // stop any previous run
+      running = false;
+      if (rafId) cancelAnimationFrame(rafId);
+    
+      // reset and start
+      accum = 0;
+      clockEl.textContent = '00:00';
+      running = true;
+      t0 = performance.now();
+      tick();
+    }
+
+    
+    function allDivisors(exps){
+      const entries=Object.entries(exps).map(([p,e])=>({p:Number(p),e})).sort((a,b)=>a.p-b.p);
+      const res=[];function dfs(i,acc){if(i===entries.length){res.push(acc);return;}const {p,e}=entries[i];let mul=1n;for(let k=0;k<=e;k++){dfs(i+1,acc*mul);mul*=BigInt(p);}}
+      dfs(0,1n);return res.sort((a,b)=>a<b?-1:a>b?1:0);
+    }
+
+    function renderMeta(exps){
+      const metas=document.getElementById('solutionBody'); metas.innerHTML='';
+      const parts=Object.entries(exps).sort((a,b)=>a[0]-b[0]).map(([p,e])=>`${p}<sup>${e}</sup>`);
+      const primes=Object.keys(exps).map(Number).sort((a,b)=>a-b);
+      const nVal=product(primes.map(p=>powBigInt(p,exps[p])));
+      const dCount=Object.values(exps).reduce((a,e)=>a*(BigInt(e)+1n),1n);
+      metas.innerHTML=`
+        <div class="fact"><div class="k">Factorization</div><div><strong>n</strong> = ${parts.join(' · ')}</div></div>
+        <div class="fact"><div class="k">Value</div><div><code>${nVal.toString()}</code></div></div>
+        <div class="fact"><div class="k"># Divisors</div><div><code>${dCount.toString()}</code></div></div>
+      `;
+      return nVal;
+    }
+
+    function renderDivisors(list){
+      document.getElementById('dCount').textContent=list.length;
+      document.getElementById('divisors').textContent=list.join(', ');
+    }
+
+    function generate(){
+      restartTimer(); // ⏱️ auto-start the clock on each Generate
+    
+      const maxExp = parseInt(document.getElementById('maxExp').value, 10);
+      const seed   = document.getElementById('seed').value.trim();
+      const rng    = seed ? seededRng(seed) : null;
+    
+      const exps = pickExponents(maxExp, rng);
+      if (!exps) return;
+    
+      const nVal = renderMeta(exps);
+      const divs = allDivisors(exps);
+    
+      window.__state = { exps, divs, nVal };
+      document.getElementById('numberTile').textContent = nVal.toString();
+    
+      // Show divisors immediately after Generate
+      renderDivisors(divs);
+    }
+    
+    document.getElementById('genBtn').onclick=generate;
+
+    function toggleSolution(open) {
+      const sol = document.getElementById('solutionPanel');
+      if (!sol) return;
+    
+      // Is it currently hidden (inline OR via CSS)?
+      const currentlyHidden =
+        sol.style.display === 'none' || getComputedStyle(sol).display === 'none';
+    
+      const shouldOpen = (typeof open === 'boolean') ? open : currentlyHidden;
+    
+      // 🔧 Explicitly override the CSS rule when opening
+      sol.style.display = shouldOpen ? 'block' : 'none';
+    
+      if (shouldOpen && window.__state) {
+        renderMeta(window.__state.exps);
+        renderDivisors(window.__state.divs);
+      }
+    }
+
+    
+    document.getElementById('numberTile').onclick = () => toggleSolution();
+
+    
+  </script>
+</body>
+</html>

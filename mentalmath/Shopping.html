@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shopping Math — Interactive (Sales + GST)</title>
+  <style>
+    :root{
+      --bg:#fafafa;
+      --card:#ffffff; 
+      --muted:#4b5563;
+      --text:#111827;
+      --accent:#1d4ed8;
+      --accent-weak:#e0e7ff;
+      --ok:#15803d;
+      --error:#b91c1c;
+      --border:#e5e7eb;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"Latin Modern Roman","Computer Modern Serif",Georgia,Cambria,"Times New Roman",Times,serif;font-size:14px;}
+    .wrap{max-width:900px;margin:0 auto;padding:20px}
+    h1,h2{line-height:1.2;margin:0 0 8px;font-family:"Latin Modern Roman","Computer Modern Serif",Georgia,serif}
+    h1{font-size:1.6rem;text-align:center;margin-bottom:12px}
+    h2{font-size:1.1rem;}
+    p{color:var(--muted);font-size:13px}
+    .card{background:var(--card);box-shadow:0 1px 4px rgba(0,0,0,.05);border-radius:8px;padding:12px;border:1px solid var(--border);margin-top:10px}
+    .toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+    button{border:1px solid var(--border);border-radius:6px;padding:6px 10px;background:white;color:var(--text);cursor:pointer;transition:background .15s ease; font-family:inherit;font-size:13px}
+    button:hover{background:#f9fafb}
+    .btn-primary{background:var(--accent);color:white;border-color:var(--accent)}
+    .btn-primary:hover{filter:brightness(1.03)}
+    .pill{display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border:1px solid var(--border);border-radius:999px;background:#f8fafc;color:var(--muted);font-size:.75rem}
+    .mono{font-family:"Latin Modern Mono","Courier New",monospace;font-size:13px}
+    .problem{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px dashed var(--border)}
+    .problem:last-child{border-bottom:0}
+    .idx{opacity:.7;min-width:2ch}
+    .solution{display:none;color:var(--ok);font-size:13px}
+    .formula{font-family:"Latin Modern Mono","Courier New",monospace;color:#065f46;background:#ecfdf5;border:1px solid #bbf7d0;padding:6px;border-radius:8px;font-size:13px}
+    .footer{margin-top:16px;font-size:12px;color:#6b7280}
+    .tag{padding:2px 6px;border-radius:999px;background:var(--accent-weak);color:var(--accent);border:1px solid var(--border);font-size:.75rem}
+    input[type="text"]{outline:none;padding:4px 6px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--text);min-width:120px;font-size:13px}
+    .stack{display:flex;flex-direction:column;gap:4px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>— Shopping Math — </h1>
+      <p class="muted">Practice calculating <b>sales</b> and <b>GST</b> in your head — fast. Alberta GST is assumed to be <b>5%</b>.</p>
+      <div class="toolbar">
+        <button id="btn-new" class="btn-primary" title="Generate a fresh random set">New Set</button>
+        <button id="btn-toggle">Show Solutions</button>
+        <button id="btn-check">Quick Check</button>
+        <span class="pill">Set: <span id="seed-label" class="mono"></span></span>
+      </div>
+    </header>
+
+    <section class="card" id="review-sales">
+      <h2>(Sales) Quick Review</h2>
+      <p>Example: A $120 jacket at 20% off. First find <span class="mono">10%</span>, then double it to get <span class="mono">20%</span>, subtract from the original price.</p>
+      <div class="formula">
+        <div>10% of 120 = 120 ÷ 10 = 12</div>
+        <div>20% of 120 = 2 × 12 = 24</div>
+        <div>Discounted price = 120 − 24 = <b>$96</b></div>
+      </div>
+    </section>
+
+    <section class="card" id="sales-only">
+      <h2>Sale price (no GST yet)</h2>
+      <p class="muted">Type your answer to self‑check.</p>
+      <div id="list-sales"></div>
+    </section>
+
+    <section class="card" id="review-gst">
+      <h2>(Goods and Services Tax) Quick Review</h2>
+      <div class="formula">10% of $88 = $8.80 → 5% of $88 = $4.40. Final price = price + GST.</div>
+    </section>
+
+    <section class="card" id="gst-only">
+      <h2>Find 5% GST (on listed price)</h2>
+      <div id="list-gst"></div>
+    </section>
+
+    <section class="card" id="all-together">
+      <h2>Final Sale Price (discount then +5% GST)</h2>
+      <div id="list-final"></div>
+    </section>
+
+    <section class="card" id="challenge">
+      <h2>Challenge</h2>
+      <div class="stack">
+        <div><b>I)</b> If you add GST <i>then</i> apply the discount, do you get the same result?</div>
+        <details>
+          <summary>Show reasoning</summary>
+          <p class="muted">Let original price be <i>P</i>, discount rate <i>d</i>, GST rate <i>g</i>. Discount‑then‑GST gives <span class="mono">P × (1 − d) × (1 + g)</span>. GST‑then‑discount gives <span class="mono">P × (1 + g) × (1 − d)</span>. Multiplication is commutative, so the two are equal.</p>
+        </details>
+      </div>
+    </section>
+
+    <div class="footer">Tip: Use <b>New Set</b> for fresh numbers. Toggle <b>Show/Hide Solutions</b> any time. GST is 5% (Alberta).</div>
+  </div>
+
+  <script>
+    const GST_RATE = 0.05;
+    const rng = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+    const toMoney = (n) => "$" + Number(n).toFixed(2);
+    const discounted = (price, pct) => price * (1 - pct/100);
+    const gstOn = (price) => +(price * GST_RATE).toFixed(2);
+
+    const makeRow = (idx, text, solText) => {
+      const row = document.createElement('div');
+      row.className = 'problem';
+      const left = document.createElement('div');
+      left.innerHTML = `<span class="idx">${idx}.</span> ${text}`;
+      const right = document.createElement('div');
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'ans';
+      input.className = 'mono';
+      const sol = document.createElement('div');
+      sol.className = 'solution mono';
+      sol.textContent = solText;
+      right.appendChild(input);
+      right.appendChild(sol);
+      row.appendChild(left);
+      row.appendChild(right);
+      input.addEventListener('keydown', (e)=>{ if(e.key==='Enter') quickJudge(input, solText); });
+      return {row, input, sol};
+    }
+
+    const approxMoneyEqual = (typed, correct) => {
+      const cleaned = (s)=> String(s).replace(/[^0-9.\-]/g,'');
+      const t = parseFloat(cleaned(typed));
+      const c = parseFloat(cleaned(correct));
+      if (isNaN(t) || isNaN(c)) return false;
+      return Math.abs(t - c) <= 0.01;
+    }
+
+    const quickJudge = (input, solText) => {
+      const ok = approxMoneyEqual(input.value, solText);
+      input.style.outline = ok ? `2px solid var(--ok)` : `2px solid var(--error)`;
+      input.style.background = ok ? '#ecfdf5' : '#fef2f2';
+      setTimeout(()=>{ input.style.outline = ''; }, 600);
+    }
+
+    function genSalesSet(){
+      const prices = [130, 85, 37, 65, 130, 120];
+      const discounts = [20, 20, 20, 30, 30, 15];
+      return prices.map((p,i)=>({ price: Math.max(5, p + rng(-5,5)), pct: discounts[i] }));
+    }
+    function genGSTSet(){
+      return [140, 25, 94, 424].map(v => Math.max(5, v + rng(-8,8)));
+    }
+    function genFinalSet(){
+      return [
+        {price:110, pct:20},
+        {price:80, pct:20},
+        {price:300, pct:30},
+        {price:120, pct:20},
+        {price:140, pct:20},
+        {price:240, pct:20},
+      ].map(obj=> ({...obj, price: Math.max(10, obj.price + rng(-10,10))}));
+    }
+
+    function renderAll(){
+      const seed = Math.random().toString(36).slice(2,8).toUpperCase();
+      document.getElementById('seed-label').textContent = seed;
+      const salesList = document.getElementById('list-sales');
+      salesList.innerHTML = '';
+      const sales = genSalesSet();
+      window._sales_nodes = [];
+      sales.forEach((q, i)=>{
+        const price = q.price; const pct = q.pct;
+        const after = +(price - price*pct/100).toFixed(2);
+        const {row, input, sol} = makeRow(i+1, `A ${toMoney(price)} item at ${pct}% off`, toMoney(after));
+        salesList.appendChild(row);
+        window._sales_nodes.push({input, sol});
+      });
+
+      const gstList = document.getElementById('list-gst');
+      gstList.innerHTML = '';
+      const gstItems = genGSTSet();
+      window._gst_nodes = [];
+      gstItems.forEach((price, i)=>{
+        const gst = gstOn(price);
+        const {row, input, sol} = makeRow(i+1, `GST (5%) on ${toMoney(price)}`, toMoney(gst));
+        gstList.appendChild(row);
+        window._gst_nodes.push({input, sol});
+      });
+
+      const finalList = document.getElementById('list-final');
+      finalList.innerHTML = '';
+      const finals = genFinalSet();
+      window._final_nodes = [];
+      finals.forEach((q, i)=>{
+        const after = +(discounted(q.price, q.pct)).toFixed(2);
+        const gst = gstOn(after);
+        const total = +(after + gst).toFixed(2);
+        const {row, input, sol} = makeRow(i+1, `Final sale price for a ${toMoney(q.price)} item at ${q.pct}% off (then +5% GST)`, toMoney(total));
+        finalList.appendChild(row);
+        window._final_nodes.push({input, sol});
+      });
+
+      hideSolutions();
+      document.getElementById('btn-toggle').textContent = 'Show Solutions';
+    }
+
+    function showSolutions(){ document.querySelectorAll('.solution').forEach(el=> el.style.display = 'block'); }
+    function hideSolutions(){ document.querySelectorAll('.solution').forEach(el=> el.style.display = 'none'); }
+    function toggleSolutions(){
+      const anyHidden = Array.from(document.querySelectorAll('.solution')).some(el=> el.style.display==='none');
+      if(anyHidden){ showSolutions(); this.textContent = 'Hide Solutions'; }
+      else { hideSolutions(); this.textContent = 'Show Solutions'; }
+    }
+
+    function quickCheckAll(){
+      const all = [...(window._sales_nodes||[]), ...(window._gst_nodes||[]), ...(window._final_nodes||[])];
+      all.forEach(({input, sol})=> quickJudge(input, sol.textContent));
+    }
+
+    document.getElementById('btn-new').addEventListener('click', renderAll);
+    document.getElementById('btn-toggle').addEventListener('click', toggleSolutions);
+    document.getElementById('btn-check').addEventListener('click', quickCheckAll);
+
+    renderAll();
+  </script>
+</body>
+</html>

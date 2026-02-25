@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Statistic Estimation Game — Math with Mr. Merrick</title>
+  <!-- LaTeX-like typography: STIX Two Text approximates TeX body; Source Sans 3 for UI -->
+  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #fafbff;
+      --panel: #ffffff;
+      --ink: #1d2330;
+      --muted: #667085;
+      --accent: #6a5acd; /* slate blue */
+      --accent-2: #ff6b6b; /* coral */
+      --accent-3: #00b894; /* teal */
+      --accent-4: #f7b500; /* sunflower */
+      --ring: rgba(106,90,205,.35);
+      --shadow: 0 10px 24px rgba(0,0,0,.08), 0 2px 8px rgba(0,0,0,.06);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--ink);
+      font-family:"STIX Two Text", Georgia, serif; 
+      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1100px; margin:32px auto; padding:0 16px}
+    header{
+      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px;
+    }
+    .title{
+      font-weight:700; letter-spacing:.2px; font-size: clamp(20px, 2.6vw, 30px);
+      display:flex; align-items:center; gap:10px
+    }
+    .title small{font-family:"Source Sans 3", system-ui, -apple-system, Segoe UI, Roboto, sans-serif; font-weight:700; color:var(--muted); letter-spacing:.3px}
+    .pill{
+      font-family:"Source Sans 3", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      font-weight:700; font-size:12px; letter-spacing:.35px; text-transform:uppercase;
+      background:linear-gradient(135deg, var(--accent), var(--accent-2)); color:white; padding:6px 10px; border-radius:999px;
+    }
+    .panel{
+      background:var(--panel); border-radius:var(--radius); box-shadow:var(--shadow);
+    }
+    .grid{
+      display:grid; grid-template-columns: 1.2fr .8fr; gap:20px; align-items:stretch;
+    }
+    @media (max-width: 940px){ .grid{ grid-template-columns: 1fr; } }
+
+    /* Canvas Card */
+    .card{ padding:18px 18px 8px; position:relative; overflow:hidden; }
+    .canvas-holder{ height: 460px; border-radius:14px; background: linear-gradient(180deg,#ffffff, #f5f7ff);
+      border:1px solid #eef0ff; position:relative; }
+    svg{ display:block; width:100%; height:100%; }
+
+    /* Controls */
+    .controls{ padding:16px; display:grid; gap:12px; }
+    .seg{
+      display:flex; gap:8px; background:#f1f3ff; padding:6px; border-radius:999px; width:max-content;
+      border:1px solid #e4e7ff;
+    }
+    .seg button{ 
+      font-family:"Source Sans 3", system-ui, -apple-system, Segoe UI, Roboto, sans-serif; 
+      font-weight:600; font-size:14px; letter-spacing:.2px;
+      padding:8px 14px; border-radius:999px; border:0; background:transparent; color:#3b3f55; cursor:pointer;
+    }
+    .seg button.active{ background:white; color:var(--ink); box-shadow:0 2px 10px rgba(0,0,0,.08); }
+    .row{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+    .btn{
+      --bgc: linear-gradient(135deg,var(--accent), var(--accent-2));
+      font-family:"Source Sans 3", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      font-weight:700; letter-spacing:.2px; 
+      background: var(--bgc); color:white; border:0; padding:10px 14px; border-radius:12px; cursor:pointer;
+      box-shadow: 0 6px 14px rgba(106,90,205,.28);
+      transition: transform .05s ease; 
+    }
+    .btn:active{ transform: translateY(1px); }
+    .btn.ghost{ background:#fff; color:var(--ink); border:1px solid #e5e7f5; box-shadow:none; }
+
+    /* Inputs */
+    .stats{ padding:12px 16px 18px; display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; }
+    @media (max-width: 520px){ .stats{ grid-template-columns: 1fr; } }
+    .field{ display:grid; gap:6px; }
+    label{ font-family:"Source Sans 3", system-ui, -apple-system, Segoe UI, Roboto, sans-serif; font-size:13px; color:var(--muted); }
+    input[type=number]{
+      font-family:"STIX Two Text", Georgia, serif; font-size:16px; padding:10px 12px; border-radius:12px; border:1px solid #e5e7f1; background:white; color:var(--ink);
+      outline:none;
+    }
+    input[type=number]:focus{ border-color: var(--accent); box-shadow: 0 0 0 6px var(--ring); }
+    .help{ font-size:12px; color:var(--muted); }
+
+    /* Feedback */
+    .feedback{ padding:14px 16px 18px; border-top:1px dashed #e6e8f6; display:grid; gap:10px; }
+    .score{ font-family:"Source Sans 3", system-ui, -apple-system, Segoe UI, Roboto, sans-serif; font-weight:700; }
+    .tag{ padding:2px 8px; border-radius:999px; font-weight:700; font-size:12px; display:inline-block; }
+    .ok{ background:rgba(0,184,148,.15); color:#006c5e; }
+    .warn{ background:rgba(247,181,0,.18); color:#644900; }
+    .bad{ background:rgba(255,107,107,.18); color:#8a1b1b; }
+
+    footer{ margin-top:18px; text-align:center; color:var(--muted); font-family:"Source Sans 3", system-ui, sans-serif; font-size:13px; }
+    a{ color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">Estimating Statistics <span class="pill">Mean • Median • Mode • SD</span> <small>— Math with Mr. Merrick</small></div>
+      <div class="row">
+        <div class="seg" role="tablist" aria-label="Plot type">
+          <button id="btn-hist" class="active" aria-selected="true" role="tab">Histogram</button>
+          <button id="btn-dot" role="tab" aria-selected="false">Dot plot</button>
+        </div>
+        <button class="btn" id="btn-new" title="Generate a fresh random dataset">New dataset</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="panel card" aria-labelledby="chart-title">
+        <h2 id="chart-title" class="help" style="margin:6px 6px 10px">Estimate the statistics from the chart.</h2>
+        <div class="canvas-holder">
+          <svg id="chart" viewBox="0 0 900 460" aria-label="data chart"></svg>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <div class="controls">
+          <div class="row" style="justify-content:space-between">
+            <div>
+              <div class="help">Distribution style</div>
+              <div class="seg">
+                <button id="dist-auto" class="active">Mixed</button>
+                <button id="dist-normal">Normal</button>
+                <button id="dist-skew">Skewed</button>
+                <button id="dist-bimodal">Bimodal</button>
+                <button id="dist-uniform">Uniform</button>
+              </div>
+            </div>
+            <button class="btn ghost" id="btn-reveal">Reveal answers</button>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="field">
+            <label for="guess-mean">Mean</label>
+            <input id="guess-mean" type="number" step="0.1" placeholder="e.g., 10.5">
+          </div>
+          <div class="field">
+            <label for="guess-median">Median</label>
+            <input id="guess-median" type="number" step="0.1" placeholder="e.g., 10.0">
+          </div>
+          <div class="field">
+            <label for="guess-mode">Mode</label>
+            <input id="guess-mode" type="number" step="0.1" placeholder="e.g., 9.0">
+          </div>
+          <div class="field">
+            <label for="guess-range">Range</label>
+            <input id="guess-range" type="number" step="0.1" placeholder="e.g., 8.0">
+          </div>
+          <div class="field">
+            <label for="guess-sd">Standard deviation</label>
+            <input id="guess-sd" type="number" step="0.1" placeholder="e.g., 2.5">
+          </div>
+        </div>
+
+        <div class="controls" style="padding-top:0">
+          <div class="row">
+            <button class="btn" id="btn-check">Check my estimates</button>
+            <button class="btn ghost" id="btn-reset">Reset</button>
+          </div>
+        </div>
+
+        <div class="feedback" id="feedback" aria-live="polite"></div>
+      </aside>
+    </div>
+
+    <footer>
+      Pro tip: try switching to <strong>Dot plot</strong> for skew and bimodal data.
+    </footer>
+  </div>
+
+<script>
+(function(){
+  const svg = document.getElementById('chart');
+  const W = 900, H = 460, pad = {t:16, r:18, b:64, l:48};
+  let plotType = 'hist';
+  let distMode = 'auto';
+  let data = [], stats = {};
+
+  // Utility helpers
+  const rand = Math.random;
+  const rnd = (a,b)=> a + (b-a)*rand();
+  const choice = arr => arr[Math.floor(rand()*arr.length)];
+
+  function niceTicks(min, max, count=6){
+    const span = Math.max(1e-9, max-min);
+    const step = Math.pow(10, Math.floor(Math.log10(span/count)));
+    const err = (count*step)/span;
+    let factor = 1;
+    if (err <= 0.15) factor = 10; else if (err <= 0.35) factor = 5; else if (err <= 0.75) factor = 2;
+    const niceStep = step*factor;
+    const t0 = Math.ceil(min/niceStep)*niceStep;
+    const ticks=[]; for(let t=t0; t<=max+1e-9; t+=niceStep) ticks.push(+t.toFixed(10));
+    return {ticks, step:niceStep};
+  }
+
+  // Data generators
+  function genNormal(n, mu, sigma){
+    const out=[]; for(let i=0;i<n;i++){ // Box-Muller
+      let u=0,v=0; while(u===0) u=rand(); while(v===0) v=rand();
+      const z = Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+      out.push(mu + sigma*z);
+    } return out;
+  }
+  function genSkewed(n){
+    const base = genNormal(n, 1.2, 0.35).map(x=> Math.exp(x));
+    const min=Math.min(...base), max=Math.max(...base);
+    return base.map(x=> 10*(x-min)/(max-min));
+  }
+  function genBimodal(n){
+    const mu1=rnd(3,7), mu2=mu1+rnd(3.8,6.2);
+    const s1=rnd(0.6,1.4), s2=rnd(0.6,1.4);
+    const out=[]; for(let i=0;i<n;i++) out.push( (rand()<.5? (mu1 + genNormal(1,0,s1)[0]): (mu2 + genNormal(1,0,s2)[0])) );
+    return out;
+  }
+  function genUniform(n){
+    const a=rnd(2,6), b=a+rnd(6,10); const out=[]; for(let i=0;i<n;i++) out.push(rnd(a,b)); return out;
+  }
+
+  function randomDataset(){
+    const n = Math.floor(rnd(45, 120));
+    const which = distMode==='auto' ? choice(['normal','skew','bimodal','uniform']) : distMode;
+    let x=[];
+    if (which==='normal') x = genNormal(n, rnd(6,14), rnd(1.2, 3.0));
+    else if (which==='skew') x = genSkewed(n);
+    else if (which==='bimodal') x = genBimodal(n);
+    else x = genUniform(n);
+    x = x.map(v=> +v.toFixed(2));
+    return x;
+  }
+
+  // Stats
+  function computeStats(x){
+    const n=x.length;
+    const mean = x.reduce((a,b)=>a+b,0)/n;
+    const sorted = [...x].sort((a,b)=>a-b);
+    const median = (n%2? sorted[(n-1)/2] : (sorted[n/2-1]+sorted[n/2])/2);
+    const min=Math.min(...x), max=Math.max(...x);
+    const range = max - min;
+    const k = Math.max(6, Math.round(Math.log2(n)+1));
+    const binW = (max-min)/k;
+    const bins = Array.from({length:k}, (_,i)=>({i, lo:min+i*binW, hi:min+(i+1)*binW, c:0}));
+    x.forEach(v=>{
+      let bi = Math.floor((v-min)/binW); if (bi===k) bi=k-1; bins[bi].c++;
+    });
+    const top = bins.reduce((m,b)=> b.c>m.c?b:m, bins[0]);
+    const mode = (top.lo+top.hi)/2;
+    const variance = x.reduce((s,v)=> s + (v-mean)*(v-mean), 0) / n;
+    const sd = Math.sqrt(variance);
+    return {n, mean, median, mode, sd, min, max, range};
+  }
+
+  // Rendering helpers
+  function clearSVG(){ while(svg.firstChild) svg.removeChild(svg.firstChild); }
+  function axisBottom(scale, y){
+    const g = el('g', {transform:`translate(0,${y})`});
+    const {ticks} = niceTicks(scale.min, scale.max, 6);
+    ticks.forEach(t=>{
+      const x = mapX(scale, t);
+      g.appendChild(el('line',{x1:x, x2:x, y1:0, y2:6, stroke:'#98a2b3'}));
+      const tx = el('text',{x, y:22, 'text-anchor':'middle', fill:'#475467', 'font-family':'Source Sans 3, system-ui, sans-serif', 'font-size':12});
+      tx.textContent = formatNum(t);
+      g.appendChild(tx);
+    });
+    g.appendChild(el('line',{x1:mapX(scale, scale.min), x2:mapX(scale, scale.max), y1:0, y2:0, stroke:'#98a2b3'}));
+    return g;
+  }
+  function axisLeft(scale, x){
+    const g = el('g', {transform:`translate(${x},0)`});
+    const {ticks} = niceTicks(scale.min, scale.max, 4);
+    ticks.forEach(t=>{
+      const y = mapY(scale, t);
+      g.appendChild(el('line',{x1:0, x2:-6, y1:y, y2:y, stroke:'#98a2b3'}));
+      const tx = el('text',{x:-10, y:y+4, 'text-anchor':'end', fill:'#475467', 'font-family':'Source Sans 3, system-ui, sans-serif', 'font-size':12});
+      tx.textContent = formatNum(t);
+      g.appendChild(tx);
+    });
+    return g;
+  }
+  function el(tag, attrs={}){ const e=document.createElementNS('http://www.w3.org/2000/svg', tag); for(const k in attrs) e.setAttribute(k, attrs[k]); return e; }
+  function mapX(scale, v){ return pad.l + (v-scale.min)/(scale.max-scale.min) * (W - pad.l - pad.r); }
+  function mapY(scale, v){ return pad.t + (1 - (v-scale.min)/(scale.max-scale.min)) * (H - pad.t - pad.b); }
+  function formatNum(x){
+    const s = Math.abs(x) < 1e-6 ? '0' : (Math.abs(x) < 10 ? x.toFixed(1) : x.toFixed(0));
+    return s.replace(/\.0$/, '');
+  }
+
+  function annotateBinWidth(text){
+    // Under the x-axis, centered
+    const label = el('text', {
+      x: W/2,
+      y: H - 8,
+      'text-anchor':'middle',
+      fill:'#3b3f55',
+      'font-family':'Source Sans 3, system-ui, sans-serif',
+      'font-size':24,
+      'font-weight':600
+    });
+    label.textContent = text;
+    svg.appendChild(label);
+  }
+
+  function draw(){
+    clearSVG();
+    const {min,max} = stats;
+    const xScale = {min: min-0.05*(max-min), max: max+0.05*(max-min)};
+
+    // fill gradient for bars/dots
+    const grad = el('linearGradient', {id:'barGrad', x1:'0%', y1:'0%', x2:'0%', y2:'100%'});
+    grad.appendChild(el('stop',{offset:'0%', 'stop-color':'var(--accent)'}));
+    grad.appendChild(el('stop',{offset:'100%', 'stop-color':'var(--accent-3)'}));
+    const defs = el('defs'); defs.appendChild(grad); svg.appendChild(defs);
+
+    if (plotType==='hist') {
+      const bw = drawHistogram(xScale);
+      svg.appendChild(axisBottom(xScale, H-pad.b));
+      annotateBinWidth(`Bin width ≈ ${bw.toFixed(2)}`);
+    } else {
+      const bw = drawDotplot(xScale);
+      svg.appendChild(axisBottom(xScale, H-pad.b));
+      annotateBinWidth(`Dot bin width ≈ ${bw.toFixed(2)}`);
+    }
+  }
+
+  function drawHistogram(xScale){
+    const n = data.length, k = Math.max(6, Math.round(Math.log2(n)+1));
+    const binW = (stats.max-stats.min)/k;
+    const bins = Array.from({length:k},(_,i)=>({
+      lo: stats.min + i*binW,
+      hi: stats.min + (i+1)*binW,
+      c: 0
+    }));
+    data.forEach(v=>{ let bi=Math.floor((v-stats.min)/binW); if(bi===k) bi=k-1; bins[bi].c++; });
+
+    const yMax = Math.max(...bins.map(b=>b.c));
+    const yScale = {min:0, max:yMax};
+
+    const g = el('g',{}); svg.appendChild(g);
+
+    bins.forEach(b=>{
+      const x = mapX(xScale, b.lo) + 1; // small gap
+      const w = mapX(xScale, b.hi) - mapX(xScale, b.lo) - 2;
+      const y = mapY(yScale, b.c);
+      const h = (H - pad.t - pad.b) - (y - pad.t);
+      const rect = el('rect', {x, y, width:w, height:h, rx:8, fill:'url(#barGrad)'});
+      rect.setAttribute('opacity', 0.9);
+      g.appendChild(rect);
+    });
+
+    // left axis
+    svg.appendChild(axisLeft({min:0, max:yMax}, pad.l));
+    return binW;
+  }
+
+  function drawDotplot(xScale){
+    // Stack dots within small bins so they don't overlap
+    const radius = 5;
+    const step = (stats.max-stats.min)/40; // 40 bins
+    const bins = new Map();
+    data.forEach(v=>{
+      const key = Math.floor((v-stats.min)/step);
+      bins.set(key, (bins.get(key)||0)+1);
+    });
+
+    const maxStack = Math.max(...[...bins.values(), 1]);
+    const yScale = {min:0, max:maxStack};
+
+    const g = el('g',{}); svg.appendChild(g);
+
+    // baseline
+    g.appendChild(el('line',{x1:pad.l, x2:W-pad.r, y1:H-pad.b, y2:H-pad.b, stroke:'#98a2b3'}));
+
+    // dots
+    const yBase = H - pad.b - radius - 1;
+    const yStep = radius*2 + 2;
+    const binCounts = {};
+    data.forEach(v=>{
+      const key = Math.floor((v-stats.min)/step);
+      binCounts[key] = (binCounts[key]||0) + 1;
+      const stackIndex = binCounts[key]-1;
+      const cx = mapX(xScale, v);
+      const cy = yBase - stackIndex*yStep;
+      const c = el('circle',{cx, cy, r:radius, fill:'url(#barGrad)', stroke:'rgba(0,0,0,.06)'});
+      g.appendChild(c);
+    });
+
+    // left axis (counts)
+    svg.appendChild(axisLeft(yScale, pad.l));
+    return step;
+  }
+
+  // Interaction
+  function newData(){
+    data = randomDataset();
+    stats = computeStats(data);
+    draw();
+    document.getElementById('feedback').innerHTML = '';
+    ['mean','median','mode','sd','range'].forEach(k=> document.getElementById('guess-'+k).value='');
+  }
+
+  function setActive(elm, group){
+    group.querySelectorAll('button').forEach(b=> b.classList.remove('active'));
+    elm.classList.add('active');
+  }
+
+  function check(){
+    const g = {
+      mean: parseFloat(document.getElementById('guess-mean').value),
+      median: parseFloat(document.getElementById('guess-median').value),
+      mode: parseFloat(document.getElementById('guess-mode').value),
+      range: parseFloat(document.getElementById('guess-range').value),
+      sd: parseFloat(document.getElementById('guess-sd').value)
+    };
+    const fb = document.getElementById('feedback');
+    const missing = Object.entries(g).filter(([k,v])=> isNaN(v)).map(([k])=>k);
+    if (missing.length){ fb.innerHTML = `<div class="help">Enter values for: <strong>${missing.join(', ')}</strong>.</div>`; return; }
+
+    function grade(key, guess, truth){
+      let scale;
+      if(key==='sd') scale = stats.sd || 1;
+      else if(key==='range') scale = stats.range || (stats.max-stats.min) || 1;
+      else scale = stats.sd || (stats.max-stats.min) || 1;
+      const err = Math.abs(guess-truth);
+      const z = err / (scale);
+      let tag='bad', msg='Needs work';
+      if (z <= 0.15) { tag='ok'; msg='Excellent!'; }
+      else if (z <= 0.35) { tag='warn'; msg='Close!'; }
+      return {err, z, tag, msg};
+    }
+
+    const rows = [
+      ['Mean', g.mean, stats.mean, 'mean'],
+      ['Median', g.median, stats.median, 'median'],
+      ['Mode', g.mode, stats.mode, 'mode'],
+      ['Range', g.range, stats.range, 'range'],
+      ['Std. Dev.', g.sd, stats.sd, 'sd']
+    ].map(([label, guess, truth, key])=>{
+      const {err, z, tag, msg} = grade(key, guess, truth);
+      return `<div><span class="tag ${tag}">${msg}</span> <span class="score">${label}:</span> you were off by <strong>${err.toFixed(2)}</strong> (≈ ${(z*100).toFixed(0)}% of ${key==='sd'?'SD': key==='range'?'range':'SD'}). <span class="help">True = ${truth.toFixed(2)}</span></div>`
+    }).join('');
+
+    fb.innerHTML = rows;
+  }
+
+  function reveal(){
+    const fb = document.getElementById('feedback');
+    fb.innerHTML = `
+      <div class="score">Answers</div>
+      <div>Mean = <strong>${stats.mean.toFixed(2)}</strong></div>
+      <div>Median = <strong>${stats.median.toFixed(2)}</strong></div>
+      <div>Mode ≈ <strong>${stats.mode.toFixed(2)}</strong></div>
+      <div>Range = <strong>${stats.range.toFixed(2)}</strong></div>
+      <div>Standard deviation = <strong>${stats.sd.toFixed(2)}</strong></div>
+      <div class="help">Dataset size n = ${stats.n}</div>
+    `;
+  }
+
+  // Event wiring
+  document.getElementById('btn-hist').addEventListener('click', (e)=>{ plotType='hist'; setActive(e.target, e.target.parentElement); draw(); });
+  document.getElementById('btn-dot').addEventListener('click', (e)=>{ plotType='dot'; setActive(e.target, e.target.parentElement); draw(); });
+  document.getElementById('btn-new').addEventListener('click', newData);
+  document.getElementById('btn-check').addEventListener('click', check);
+  document.getElementById('btn-reveal').addEventListener('click', reveal);
+  document.getElementById('btn-reset').addEventListener('click', ()=>{
+    ['mean','median','mode','sd','range'].forEach(k=> document.getElementById('guess-'+k).value='');
+    document.getElementById('feedback').innerHTML='';
+  });
+
+  // Distribution toggles
+  const distButtons = {
+    auto: document.getElementById('dist-auto'),
+    normal: document.getElementById('dist-normal'),
+    skew: document.getElementById('dist-skew'),
+    bimodal: document.getElementById('dist-bimodal'),
+    uniform: document.getElementById('dist-uniform')
+  };
+  Object.entries(distButtons).forEach(([key,btn])=>{
+    btn.addEventListener('click',()=>{
+      distMode = key; setActive(btn, btn.parentElement); newData();
+    })
+  });
+
+  // Init
+  newData();
+})();
+</script>
+</body>
+</html>
