@@ -48,13 +48,59 @@
   footer { margin-top: 1.2rem; text-align: center; color: #777; font-size: .85rem; }
 
   @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} .toc a{transition:none} details > summary::before{transition:none} }
+
+  /* ── Password Modal ── */
+  #pw-overlay{
+    display:none; position:fixed; inset:0; z-index:9999;
+    background:rgba(15,23,42,.55); backdrop-filter:blur(4px);
+    align-items:center; justify-content:center;
+  }
+  #pw-overlay.active{ display:flex; }
+  #pw-box{
+    background:#fff; border-radius:14px; padding:2rem 2.2rem;
+    box-shadow:0 20px 60px rgba(0,0,0,.2); max-width:340px; width:90%;
+    text-align:center; font-family:'Cormorant',serif;
+  }
+  #pw-box h3{ margin:0 0 .5rem; color:var(--brand1); font-size:1.3rem; }
+  #pw-box p{ color:#6b7280; font-size:.9rem; margin:0 0 1rem; }
+  #pw-input{
+    width:100%; padding:.55rem .8rem; border:1.5px solid #d1d5db; border-radius:8px;
+    font-size:1rem; font-family:inherit; outline:none; transition:border .2s;
+  }
+  #pw-input:focus{ border-color:var(--brand1); }
+  #pw-error{ color:#dc2626; font-size:.82rem; margin:.4rem 0 0; min-height:1.1em; }
+  .pw-btns{ display:flex; gap:.6rem; margin-top:1rem; }
+  .pw-btns button{
+    flex:1; padding:.55rem; border-radius:8px; font-family:inherit;
+    font-size:.95rem; font-weight:600; cursor:pointer; border:1.5px solid #d1d5db;
+    transition:background .15s, border-color .15s;
+  }
+  #pw-confirm{ background:var(--brand1); color:#fff; border-color:var(--brand1); }
+  #pw-confirm:hover{ filter:brightness(1.1); }
+  #pw-cancel{ background:#fff; color:#374151; }
+  #pw-cancel:hover{ background:#f3f4f6; }
   </style>
 </head>
 <body>
+
+  <!-- ── Password Modal ── -->
+  <div id="pw-overlay" role="dialog" aria-modal="true" aria-labelledby="pw-title">
+    <div id="pw-box">
+      <h3 id="pw-title">🔒 Protected Content</h3>
+      <p>Enter the class password to open this resource.</p>
+      <input id="pw-input" type="password" placeholder="Password" autocomplete="off" />
+      <div id="pw-error" aria-live="polite"></div>
+      <div class="pw-btns">
+        <button id="pw-cancel">Cancel</button>
+        <button id="pw-confirm">Open</button>
+      </div>
+    </div>
+  </div>
+
   <header>
     <h1>Division 2 Mathematics</h1>
     <div class="contact-icon">
-      <a href="mailto:Merrick.fanning@renertschool.ca" aria-label="Email Mr. Merrick">
+      <a href="/cdn-cgi/l/email-protection#efa28a9d9d868c84c1898e8181868188af9d8a818a9d9b9c8c87808083c18c8e" aria-label="Email Mr. Merrick">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .02c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.99 6.98l-6.99 5.666-6.991-5.666h13.981zm.01 10h-14v-8.505l7 5.673 7-5.672v8.504z"/></svg>
       </a>
     </div>
@@ -299,7 +345,7 @@
     </footer>
   </main>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   /* Last updated = date of the last GitHub commit that touched this page */
   (async function () {
     const target = document.querySelector('#last-updated');
@@ -354,8 +400,69 @@
     }
   })();
 
-  // Open external links with data-ext in a new tab (safety)
-  document.querySelectorAll('a[data-ext]')?.forEach(a=>{ a.setAttribute('target','_blank'); a.setAttribute('rel','noopener'); });
+
+  // ── Password Gate for data-ext links ──────────────────────────────────────
+  (function(){
+    const CORRECT = 'password314'; // ← change this to update the password
+    const SESSION_KEY = 'mm_auth';
+
+    const overlay    = document.getElementById('pw-overlay');
+    const input      = document.getElementById('pw-input');
+    const errorEl    = document.getElementById('pw-error');
+    const confirmBtn = document.getElementById('pw-confirm');
+    const cancelBtn  = document.getElementById('pw-cancel');
+
+    let pendingHref = null;
+
+    function isAuthed(){ return sessionStorage.getItem(SESSION_KEY) === '1'; }
+    function markAuthed(){ sessionStorage.setItem(SESSION_KEY, '1'); }
+
+    function openModal(href){
+      pendingHref = href;
+      errorEl.textContent = '';
+      input.value = '';
+      overlay.classList.add('active');
+      setTimeout(()=> input.focus(), 50);
+    }
+
+    function closeModal(){
+      overlay.classList.remove('active');
+      pendingHref = null;
+      input.value = '';
+      errorEl.textContent = '';
+    }
+
+    function tryUnlock(){
+      if(input.value === CORRECT){
+        markAuthed();
+        const href = pendingHref;
+        closeModal();
+        if(href) window.open(href, '_blank', 'noopener');
+      } else {
+        errorEl.textContent = 'Incorrect password — try again.';
+        input.select();
+      }
+    }
+
+    // Intercept every data-ext link
+    document.querySelectorAll('a[data-ext="true"]').forEach(a => {
+      a.addEventListener('click', function(e){
+        e.preventDefault();
+        const href = this.getAttribute('href');
+        if(isAuthed()){
+          window.open(href, '_blank', 'noopener');
+        } else {
+          openModal(href);
+        }
+      });
+    });
+
+    confirmBtn.addEventListener('click', tryUnlock);
+    cancelBtn.addEventListener('click', closeModal);
+    input.addEventListener('keydown', e => { if(e.key === 'Enter') tryUnlock(); });
+    overlay.addEventListener('click', e => { if(e.target === overlay) closeModal(); });
+  })();
+  // Open external links with data-ext in a new tab (safely) — replaced by the password gate above
   </script>
 </body>
 </html>
