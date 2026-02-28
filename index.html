@@ -4,13 +4,18 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mathematics with Mr. Merrick</title>
-  <!-- Use STIX Two Text font (as in your original) -->
+
+  <!-- Redirect -->
+  <meta http-equiv="refresh" content="0; url=https://merrickmath.vercel.app" />
+  <link rel="canonical" href="https://merrickmath.vercel.app" />
+
+  <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
   :root{
     --bg:#ffffff;
     --surface:#ffffff;
-    --surface-alt:#f4f6ff;
     --text:#0f172a;
     --muted:#475569;
     --indigo:#5459AC;
@@ -20,188 +25,63 @@
     --radius:18px;
   }
 
-  body,.page-header,.main-content,header,footer{background:var(--bg) !important;border:0 !important;}
-  body{margin:0;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-family:'STIX Two Text', serif;color:var(--text);line-height:1.6;}
-  .banner{width:100%;background:linear-gradient(135deg,#648DB3,#5459AC,#52357B);color:#fff;padding:12px 10px;}
-  .banner__inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:center;}
-  .banner__title{margin:0;font-weight:700;font-size:clamp(22px,3vw,36px);letter-spacing:.2px;text-align:center;font-family:'STIX Two Text', serif;}
-  .container{max-width:1100px;margin:14px auto 56px;padding:0 20px;}
-  header{display:grid;gap:8px;justify-items:center;text-align:center;margin:8px 0 20px;}
-  header .quote{font-size:clamp(1.1rem, 2vw, 1.25rem);color:var(--muted);max-width:70ch;margin:0;font-style:italic;font-family:'STIX Two Text', serif;}
+  body{margin:0;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+       font-family:'STIX Two Text', serif;color:var(--text);line-height:1.6;background:var(--bg);}
 
-  /* --- Rotating quote additions --- */
-  header .quote{transition: opacity .35s ease;}
-  header .quote.is-fading{opacity:0;}
-  .quote-rotator{display:grid;gap:10px;justify-items:center;}
-  /* --- End rotating quote additions --- */
-
-  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;}
-  section{grid-column:span 12;background:var(--surface);border:1px solid #e5e7eb;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 18px 10px;animation:fadeUp .6s ease both;} 
-  @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-  @media (min-width:860px){section{grid-column:span 4;}}
-  section h2{margin:2px 2px 12px;font-size:clamp(1.3rem,2.4vw,1.7rem);font-weight:400;letter-spacing:.2px;color:var(--indigo);border-bottom:2px solid #e8eafc;padding-bottom:.2rem;font-family:'STIX Two Text', serif;}
-  ul.linklist{list-style:none;padding:0;margin:0;display:grid;gap:8px;}
-  .linkitem a{display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;color:var(--indigo);background:var(--surface-alt);padding:10px 12px;border-radius:12px;border:1px solid var(--ring);transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;outline-offset:3px;font-weight:600;}
-  .linkitem a:hover,.linkitem a:focus{transform:translateY(-1px);box-shadow:0 10px 18px rgba(2,6,23,.10);border-color:var(--indigo);background:#e9ecff;}
-.badge{display:inline-block;font-size:.72rem;letter-spacing:.15px;line-height:1;padding:6px 8px;border-radius:999px;background:#eef1fb;color:var(--purple);border:1px solid var(--ring);}
-  .badge.active{background:#ede8ff;color:var(--purple);}
-  footer{margin-top:28px;text-align:center;color:var(--muted);font-size:.9rem;font-family:'STIX Two Text', serif;}
   .title-wrap{text-align:center;margin:8px 0 8px;}
   .title-logo{display:block;width:450px;height:auto;margin:0 auto -10px;}
-  .page-title{margin:0;font-weight:400;text-align:center;font-size:clamp(28px, 4vw, 44px);color:var(--indigo);line-height:1.2;font-family:'STIX Two Text', serif;}.email-link{display:inline-block;margin-top:.15em;color:inherit;text-decoration:none;}
-  .email-link:focus{outline:2px solid var(--ring);outline-offset:3px;border-radius:8px;}
-  .my-svg-icon{fill:currentColor;vertical-align:middle;width:24px;height:24px;}
-  .email-link:hover{color:var(--purple);} 
+  .page-title{margin:0;font-weight:400;text-align:center;font-size:clamp(28px, 4vw, 44px);
+              color:var(--indigo);line-height:1.2;font-family:'STIX Two Text', serif;}
+
+  .redirect-note{
+    max-width: 780px;
+    margin: 18px auto 0;
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    border: 1px solid #e5e7eb;
+    box-shadow: var(--shadow);
+    background: var(--surface);
+    color: var(--muted);
+    text-align: center;
+  }
+  .redirect-note a{color:var(--indigo);font-weight:700;text-decoration:none;}
+  .redirect-note a:hover,.redirect-note a:focus{text-decoration:underline;}
   </style>
+
+  <noscript>
+    <meta http-equiv="refresh" content="0; url=https://merrickmath.vercel.app" />
+  </noscript>
 </head>
+
 <body>
-
-<div class="title-wrap">
-  <!-- Gaussian SVG -->
-  <svg class="title-logo" version="1.1" xmlns="http://www.w3.org/2000/svg" width="210" height="100" viewBox="0 0 210 100" role="img" aria-label="Gaussian distribution">
-    <title>Gaussian distribution</title>
-    <polyline fill="#ED1C24" points="78.549,84.75 81.549,84.75 80.049,89.25 "/>
-    <polyline fill="#ED1C24" points="128.529,84.75 131.529,84.75 130.029,89.25 "/>
-    <polyline fill="#39B54A" points="103.539,84.75 106.539,84.75 105.039,89.25 "/>
-    <line fill="none" stroke="#000000" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="5" y1="82.482" x2="204.96" y2="82.482"/>
-    <line fill="none" stroke="#ED1C24" stroke-width="0.75" stroke-linecap="round" x1="80.049" y1="35.037" x2="80.049" y2="85.587"/>
-    <line fill="none" stroke="#ED1C24" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="130.029" y1="34.994" x2="130.029" y2="85.587"/>
-    <line fill="none" stroke="#39B54A" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="105.039" y1="4.189" x2="105.039" y2="85.587"/>
-    <path fill="none" stroke="#0071BC" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M5.078,82.456c4.511-0.019,9.021-0.058,13.53-0.175c4.312-0.113,8.639-0.297,12.923-0.836c4.536-0.572,8.991-1.522,13.261-3.25c4.255-1.723,8.016-4.334,11.491-7.389c3.378-2.968,6.334-6.613,8.934-10.324c2.676-3.817,5.156-7.777,7.458-11.854c2.372-4.2,4.644-8.458,6.896-12.729c2.208-4.187,4.419-8.368,6.715-12.502c2.244-4.042,4.669-8.055,7.508-11.674c1.471-1.875,3.092-3.546,4.906-5.054c1.765-1.467,3.896-2.293,6.126-2.468c2.262-0.177,4.408,0.98,6.232,2.234c1.866,1.283,3.42,3.086,4.861,4.844c2.973,3.619,5.365,7.744,7.704,11.822c2.267,3.953,4.362,8.014,6.489,12.049c2.24,4.25,4.479,8.502,6.841,12.682c2.29,4.056,4.69,8.058,7.354,11.858c2.731,3.898,5.724,7.564,9.159,10.809c3.378,3.188,7.235,5.673,11.417,7.527c4.024,1.785,8.44,2.759,12.768,3.305c4.449,0.563,8.912,0.803,13.39,0.938c4.426,0.135,8.856,0.164,13.284,0.185c0.227,0,0.449,0.002,0.674,0.003"/>
-    <path fill="#39B54A" d="M105.691,93.879c-0.131,0.248-0.438,0.549-0.907,0.549c-0.286,0-0.553-0.105-0.689-0.347v0.384c0,0.354,0.013,0.934,0.071,1.193h-0.516c-0.064-0.195-0.091-0.658-0.091-1.167v-3.279h0.573v1.864c0,0.488,0.202,0.895,0.711,0.895c0.378,0,0.646-0.269,0.75-0.529c0.033-0.084,0.052-0.188,0.052-0.299v-1.931h0.573v2.289c0,0.345,0.066,0.481,0.302,0.495l-0.047,0.417c-0.072,0.021-0.104,0.026-0.201,0.026c-0.281,0-0.508-0.157-0.562-0.562L105.691,93.879L105.691,93.879z"/>
-    <!-- (trimmed: rest of small label glyphs retained in original) -->
-  </svg>
-  <h1 class="page-title">Mathematics with Mr. Merrick</h1>
-  <a href="mailto:merrickfanning@renertschool.ca" class="email-link" aria-label="Email Merrick Fanning">
-    <svg class="my-svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path d="M12 .02c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.99 6.98l-6.99 5.666-6.991-5.666h13.981zm.01 10h-14v-8.505l7 5.673 7-5.672v8.504z"/>
+  <div class="title-wrap">
+    <!-- Gaussian SVG -->
+    <svg class="title-logo" version="1.1" xmlns="http://www.w3.org/2000/svg" width="210" height="100" viewBox="0 0 210 100" role="img" aria-label="Gaussian distribution">
+      <title>Gaussian distribution</title>
+      <polyline fill="#ED1C24" points="78.549,84.75 81.549,84.75 80.049,89.25 "/>
+      <polyline fill="#ED1C24" points="128.529,84.75 131.529,84.75 130.029,89.25 "/>
+      <polyline fill="#39B54A" points="103.539,84.75 106.539,84.75 105.039,89.25 "/>
+      <line fill="none" stroke="#000000" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="5" y1="82.482" x2="204.96" y2="82.482"/>
+      <line fill="none" stroke="#ED1C24" stroke-width="0.75" stroke-linecap="round" x1="80.049" y1="35.037" x2="80.049" y2="85.587"/>
+      <line fill="none" stroke="#ED1C24" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="130.029" y1="34.994" x2="130.029" y2="85.587"/>
+      <line fill="none" stroke="#39B54A" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="105.039" y1="4.189" x2="105.039" y2="85.587"/>
+      <path fill="none" stroke="#0071BC" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M5.078,82.456c4.511-0.019,9.021-0.058,13.53-0.175c4.312-0.113,8.639-0.297,12.923-0.836c4.536-0.572,8.991-1.522,13.261-3.25c4.255-1.723,8.016-4.334,11.491-7.389c3.378-2.968,6.334-6.613,8.934-10.324c2.676-3.817,5.156-7.777,7.458-11.854c2.372-4.2,4.644-8.458,6.896-12.729c2.208-4.187,4.419-8.368,6.715-12.502c2.244-4.042,4.669-8.055,7.508-11.674c1.471-1.875,3.092-3.546,4.906-5.054c1.765-1.467,3.896-2.293,6.126-2.468c2.262-0.177,4.408,0.98,6.232,2.234c1.866,1.283,3.42,3.086,4.861,4.844c2.973,3.619,5.365,7.744,7.704,11.822c2.267,3.953,4.362,8.014,6.489,12.049c2.24,4.25,4.479,8.502,6.841,12.682c2.29,4.056,4.69,8.058,7.354,11.858c2.731,3.898,5.724,7.564,9.159,10.809c3.378,3.188,7.235,5.673,11.417,7.527c4.024,1.785,8.44,2.759,12.768,3.305c4.449,0.563,8.912,0.803,13.39,0.938c4.426,0.135,8.856,0.164,13.284,0.185c0.227,0,0.449,0.002,0.674,0.003"/>
+      <path fill="#39B54A" d="M105.691,93.879c-0.131,0.248-0.438,0.549-0.907,0.549c-0.286,0-0.553-0.105-0.689-0.347v0.384c0,0.354,0.013,0.934,0.071,1.193h-0.516c-0.064-0.195-0.091-0.658-0.091-1.167v-3.279h0.573v1.864c0,0.488,0.202,0.895,0.711,0.895c0.378,0,0.646-0.269,0.75-0.529c0.033-0.084,0.052-0.188,0.052-0.299v-1.931h0.573v2.289c0,0.345,0.066,0.481,0.302,0.495l-0.047,0.417c-0.072,0.021-0.104,0.026-0.201,0.026c-0.281,0-0.508-0.157-0.562-0.562L105.691,93.879L105.691,93.879z"/>
     </svg>
-  </a>
-</div>
 
-<div class="container">
-  <header>
-    <!-- Rotating quote replaces your single static quote -->
-    <div class="quote-rotator" aria-live="polite">
-      <p class="quote" id="quoteText"></p>
-</div>
-  </header>
+    <h1 class="page-title">Mathematics with Mr. Merrick</h1>
 
-  <main id="main" class="grid" aria-label="Main sections">
-    <section aria-labelledby="sec-courses">
-      <h2 id="sec-courses">Current Courses</h2>
-      <ul class="linklist">
-        <li class="linkitem"><a href="apstat/" data-ext="true" aria-label="AP Statistics"><span>AP Statistics</span><span class="badge active" aria-hidden="true">Active</span></a></li>
-        <li class="linkitem"><a href="datascience/" data-ext="true" aria-label="Data Science"><span>Data Science</span><span class="badge">Elective</span></a></li>
-        <li class="linkitem"><a href="d34math/" data-ext="true" aria-label="D3 Math"><span>Division 3 Mathematics</span><span class="badge active" aria-hidden="true">Active</span></a></li>
-        <li class="linkitem"><a href="d2math/" data-ext="true" aria-label="D2 Math"><span>Division 2 Mathematics</span><span class="badge active" aria-hidden="true">Active</span></a></li>
-        <!--- <li class="linkitem"><a href="https://merrickmath.github.io/linearalgebra/" data-ext="true" aria-label="Linear Algebra"><span>Linear Algebra</span><span class="badge">Elective</span></a></li> -->
-      </ul>
-    </section>
+    <div class="redirect-note" role="status" aria-live="polite">
+      Redirecting to the new site… If you are not redirected,
+      <a href="https://merrickmath.vercel.app">click here</a>.
+    </div>
+  </div>
 
-    <section aria-labelledby="sec-games">
-      <h2 id="sec-games">Games</h2>
-      <ul class="linklist">
-        <li class="linkitem"><a href="games/Primejumper.html" data-ext="true"><span>Prime Jumper</span></a></li>
-        <li class="linkitem"><a href="games/Camelrace.html" data-ext="true"><span>Camel Racing Simulation</span></a></li>
-        <li class="linkitem"><a href="games/CoordinateGame.html" data-ext="true"><span>Coordinate Dash</span></a></li>
-        <li class="linkitem"><a href="games/Graphblitz.html" data-ext="true"><span>Graph Blitz</span></a></li>
-        <li class="linkitem"><a href="games/Geometryblitz.html" data-ext="true"><span>Geometry Blitz</span></a></li>
-        <li class="linkitem"><a href="games/Vectortarget.html" data-ext="true"><span>Vector Target</span></a></li>
-      </ul>
-    </section>
-
-    <section aria-labelledby="sec-contests">
-      <h2 id="sec-contests">Contests</h2>
-      <ul class="linklist">
-        <li class="linkitem"><a href="https://www.cemc.uwaterloo.ca/contests/past_contests.html" target="_blank" rel="noopener"><span>CEMC Past Contests</span></a></li>
-        <li class="linkitem"><a href="https://artofproblemsolving.com/wiki/index.php/AMC_Problems_and_Solutions" target="_blank" rel="noopener"><span>AMC Problems and Solutions</span></a></li>
-        <li class="linkitem"><a href="https://mathkangaroo.ca/samples/en" target="_blank" rel="noopener"><span>Kangaroo Math Past Contests</span></a></li>
-        <li class="linkitem"><a href="https://science.ucalgary.ca/mathematics-statistics/engagement/educational-outreach/math-nite" target="_blank" rel="noopener"><span>Math Nite</span></a></li>
-        <li class="linkitem"><a href="https://renertmath.github.io/renertrabbit.html" target="_blank" rel="noopener"><span>Renert Rabbit</span></a></li>
-      </ul>
-    </section>
-
-    <section aria-labelledby="sec-challenges">
-      <h2 id="sec-challenges">Challenges</h2>
-      <ul class="linklist">
-        <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath.github.io-PokemonChallenge/" data-ext="true"><span>Pokemon Challenge</span></a></li>
-        <li class="linkitem"><a href="https://merrickmath.github.io/Merrickmath.github.io-MasterChefCalc/" data-ext="true"><span>Master Chef Calculus</span></a></li>
-        <li class="linkitem"><a href="https://renertmath.github.io/RenertMath-CelebrateMath/" data-ext="true"><span>COL Challenge 2020</span></a></li>
-        <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath.github.io-PythonProject/" data-ext="true"><span>Python Project</span></a></li>
-        <li class="linkitem"><a href="https://merrickmath.github.io/MerrickMath.github.io-PumpkinBomb/" data-ext="true"><span>Pumpkin BOMB Challenge 2020</span></a></li>
-        <li class="linkitem"><a href="https://renertmath.github.io/RenertMath-PumpkinBomb2021/" data-ext="true"><span>Pumpkin BOMB Challenge 2021</span></a></li>
-      </ul>
-    </section>
-
-    <section aria-labelledby="sec-more">
-      <h2 id="sec-more">More Cool Stuff</h2>
-      <ul class="linklist">
-        <li class="linkitem"><a href="https://www.3blue1brown.com" target="_blank" rel="noopener"><span>3 Blue 1 Brown</span></a></li>
-        <li class="linkitem"><a href="https://www.veritasium.com" target="_blank" rel="noopener"><span>Veritasium</span></a></li>
-        <li class="linkitem"><a href="https://www.youtube.com/user/standupmaths" target="_blank" rel="noopener"><span>Stand Up Maths</span></a></li>
-        <li class="linkitem"><a href="https://www.youtube.com/numberphile" target="_blank" rel="noopener"><span>Numberphile</span></a></li>
-        <li class="linkitem"><a href="https://krazydad.com/tablet/puzzles.php" target="_blank" rel="noopener"><span>Krazy Dad Interactive Puzzles</span></a></li>
-        <li class="linkitem"><a href="https://www.puzzle-star-battle.com" target="_blank" rel="noopener"><span>Logic Puzzles Galore</span></a></li>
-        <li class="linkitem"><a href="https://mathpickle.com" target="_blank" rel="noopener"><span>Math Pickle</span></a></li>
-        <li class="linkitem"><a href="https://www.datacamp.com" target="_blank" rel="noopener"><span>DataCamp</span></a></li>
-      </ul>
-    </section>
-  </main>
-  <!--- <footer> Merrick Fanning · Built with curiosity</footer> ---> 
-</div>
-
-<!-- Quote rotation script -->
-<script>
-(function () {
-  // Add as many quotes as you want here:
-  const quotes = [
-    { text: "The enchanting charms of this sublime science reveal only to those who have the courage to go deeply into it.", author: "Carl Friedrich Gauss" },
-    { text: "In mathematics the art of proposing a question must be held of higher value than solving it.", author: "Georg Cantor" },
-    { text: "The Magic you're looking for is in the work you're avoiding.", author: "Chris Williamson" }
-  ];
-
-  const quoteEl = document.getElementById("quoteText");
-  if (!quoteEl || quotes.length === 0) return;
-
-  let i = Math.floor(Math.random() * quotes.length);
-  const ROTATE_MS = 8000; // change timing here
-
-  function render(index) {
-    const q = quotes[index];
-    quoteEl.innerHTML = `<em>“${q.text}”</em> — ${q.author}`;
-  }
-
-  function next() {
-    quoteEl.classList.add("is-fading");
-    window.setTimeout(() => {
-      i = (i + 1) % quotes.length;
-      render(i);
-      quoteEl.classList.remove("is-fading");
-    }, 350);
-  }
-
-  // Initial paint
-  render(i);
-
-  // Auto-rotate (no controls)
-  if (quotes.length > 1) {
-    window.setInterval(next, ROTATE_MS);
-  }
-})();
-</script>
-
-<!-- Your original scroll-to-top-on-load script (kept) -->
-<script>
-(function(){
-  const nav = performance.getEntriesByType('navigation')[0];
-  const isReload = nav && (nav.type === 'reload' || nav.type === 'back_forward');
-  if (!location.hash) {
-    window.addEventListener('load', function () { window.scrollTo(0,0); });
-    window.addEventListener('pageshow', function (e) { if (e.persisted || isReload) { window.scrollTo(0,0); } });
-  }
-})();
-</script>
-
+  <!-- JS redirect fallback -->
+  <script>
+    (function () {
+      try { location.replace("https://merrickmath.vercel.app"); } catch (e) {}
+    })();
+  </script>
 </body>
 </html>
